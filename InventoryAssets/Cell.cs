@@ -5,7 +5,7 @@ namespace Main.InventoryAssets;
 
 public class Cell
 {
-    public DNA dna;
+    public DNA Dna;
     private byte promote; //indicates the quantity of the genes or smth like that
     private byte operate; //indicates the start of the gene segment
 
@@ -46,32 +46,39 @@ public class Cell
      */
     private void GenerateCellStat()
     {
+        promote = 150;
+        operate = 95;
     }
 
     public Cell()
     {
         RandomNumberGenerator random = new RandomNumberGenerator();
-        dna = new DNA(random);
+        Dna = new DNA(random);
         promote = (byte)random.RandfRange(0, 255);
         operate = (byte)random.RandfRange(0, 255);
+        GenerateCellStat();
     }
 
     public String GetDnaString()
     {
-        return dna.ToString();
+        return Dna.ToString();
     }
 
     public DNA GetDna()
     {
-        return dna;
+        return Dna;
     }
 
     /**
-     * Reads the DNA and returns an array of tuples with the first element [byte] being the mrna strand and the second [int] being the quanity;
+     * Reads the DNA and returns an array of tuples with the first element [byte] being the mrna strand and the second [int] being the quantity;
      */
 #nullable enable
     public (byte, int)[]? SendRibosome()
     {
+        foreach (AcidBases b in Dna)
+        {
+        }
+
         byte rnaPolymerase;
 
         return null;

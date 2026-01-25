@@ -1,13 +1,18 @@
 using Godot;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using Main.InventoryAssets;
-using static System.Security.Cryptography.RandomNumberGenerator;
 
 //using AcidBases = System.;
-public partial class DNA : GodotObject
+public partial class DNA : IEnumerable<AcidBases>
 {
     private ulong _binaryString;
     private bool _realDNA;
+
+    const int
+        DnaLength = 32; //im hard coding this because if I increase the dna size I'll need a different structure meaning any solution here will immediately become obsolete. 
+
 
     public DNA(RandomNumberGenerator hi)
     {
@@ -35,6 +40,11 @@ public partial class DNA : GodotObject
         return result;
     }
 
+    public String toString()
+    {
+        return GetDnaString(_binaryString);
+    }
+
     /**
      * Used for dna segments
      */
@@ -51,11 +61,18 @@ public partial class DNA : GodotObject
         return result;
     }
 
-    public String getDNAString()
+    public String GetDnaString()
     {
         return GetDnaString(_binaryString);
     }
 
+    System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
+
+    public IEnumerator<AcidBases> GetEnumerator()
+    {
+        for (var i = 0; i < DnaLength; i++)
+            yield return GetDnaAtIndex(i);
+    }
 
     public DNA Clone()
     {
@@ -65,5 +82,17 @@ public partial class DNA : GodotObject
     public bool getRealDNA()
     {
         return _realDNA;
+    }
+
+
+    public AcidBases GetDnaAtIndex(int index)
+    {
+        if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "index is less than zero");
+        if (index >= DnaLength)
+            throw new ArgumentOutOfRangeException(nameof(index), "index is greater than the max index");
+
+        ulong temp = 3ul << (index * 2); //something like 0000000000000000000000110000000000000000
+        temp &= _binaryString;
+        return (AcidBases)(temp >> (index * 2)); //I love this system so much
     }
 }
