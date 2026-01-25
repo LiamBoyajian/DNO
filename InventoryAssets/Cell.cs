@@ -1,5 +1,6 @@
 using System;
 using Godot;
+
 namespace Main.InventoryAssets;
 
 public abstract class Cell
@@ -15,6 +16,7 @@ public abstract class Cell
     /**
      * Returns a clone of the DNA.
      * testing this dumb commit thing because it's using the wrong account for some reason test2
+     *okay google gemini is helping out and honestly putting in the work
      */
     public DNA getDNA()
     {
