@@ -6,7 +6,8 @@ public enum AcidBases
     T = 1,
     G = 2,
     C = 3
-    
+    //test
+    //second test
 }
 
 

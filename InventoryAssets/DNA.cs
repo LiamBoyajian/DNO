@@ -6,14 +6,22 @@ using static System.Security.Cryptography.RandomNumberGenerator;
 public partial class DNA : GodotObject
 {
     private ulong _binaryString;
+    private bool _realDNA;
     
     public DNA(RandomNumberGenerator hi)
     {
+        _realDNA = true;
         _binaryString = ((ulong)hi.Randi()) << 32;
         _binaryString += (ulong)hi.Randi();
     }
 
-    public String GetDna(ulong binaryString)
+    private DNA(ulong binaryString)
+    {
+        _realDNA = false;
+        _binaryString = binaryString;
+    }
+
+    public String GetDnaString(ulong binaryString)
     {
         String result = "";
         ulong temp = _binaryString;
@@ -25,6 +33,12 @@ public partial class DNA : GodotObject
 
         return result;
     }
-    
-    
+    public DNA Clone()
+    {
+        return new DNA(_binaryString);
+    }
+    public bool getRealDNA()
+    {
+        return _realDNA;
+    }
 }
