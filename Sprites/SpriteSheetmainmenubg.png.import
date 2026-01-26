@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dgtdfadof3rd5"
-path="res://.godot/imported/test.png-b0712df8a6f37a5c76b2fd923e5a9475.ctex"
+uid="uid://4y67x67ebby6"
+path="res://.godot/imported/SpriteSheetmainmenubg.png-849859d27d3dd2456a3cea7a6f82c46d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Tiles/test.png"
-dest_files=["res://.godot/imported/test.png-b0712df8a6f37a5c76b2fd923e5a9475.ctex"]
+source_file="res://Sprites/SpriteSheetmainmenubg.png"
+dest_files=["res://.godot/imported/SpriteSheetmainmenubg.png-849859d27d3dd2456a3cea7a6f82c46d.ctex"]
 
 [params]
 

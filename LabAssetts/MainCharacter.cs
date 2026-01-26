@@ -6,20 +6,25 @@ public partial class MainCharacter : CharacterBody2D
 {
     private const float Speed = 75.0f;
 
+
     //public const float JumpVelocity = -400.0f;
     private AnimatedSprite2D _mainChar;
     public DNA dna = new DNA(new RandomNumberGenerator());
-    private Node _inventory;
+    private Control _inventory;
 
     public override void _Ready()
     {
         _mainChar = GetNode<AnimatedSprite2D>("mainChar");
-        _inventory = ResourceLoader.Load<PackedScene>("res://Source/Inventory.tscn").Instantiate();
-        _inventory.SetIndexed("z_index", 10);
+        _inventory = (Control)ResourceLoader.Load<PackedScene>("res://Source/Inventory.tscn").Instantiate();
 
-        Console.WriteLine(dna.GetDnaString());
-        Console.WriteLine(dna.toString());
-        Console.WriteLine("At index 1: " + (AcidBases)dna.GetDnaAtIndex(1) + "\n");
+        GetTree().Root.CallDeferred(Node.MethodName.AddChild, _inventory);
+
+        _inventory.Set("z_index", 10);
+        _inventory.Hide();
+
+        //Console.WriteLine(dna.GetDnaString());
+        //Console.WriteLine(dna.toString());
+        //Console.WriteLine("At index 1: " + (AcidBases)dna.GetDnaAtIndex(1) + "\n");
         foreach (AcidBases b in dna)
         {
             if (b == AcidBases.G)
@@ -86,20 +91,41 @@ public partial class MainCharacter : CharacterBody2D
 
         Velocity = velocity;
         MoveAndSlide();
-        if (Input.IsKeyPressed(Key.Tab))
+    }
+
+    public override void _Input(InputEvent @event)
+    {
+        //@event. 
+        if (@event.IsActionPressed("Inventory"))
         {
             _setInventory();
+            return;
         }
     }
 
     private void _setInventory()
     {
-        if (_inventory.GetIndex() <= 0)
-        {
-        }
-        else
-        {
-            //_inventory.SetIndexed("z_index", -10);
-        }
+        //_inventory.Show();
+        _inventory.Set("visible", !_inventory.Get("visible").AsBool());
     }
+
+    // Considering for a mouse free interaction with items. More QOL than anything. Finishing later. If not implemented in months delete...
+    //public static Node _getNearestNode(Tree tree, Vector2 position)
+    //{
+    //    if(tree == null)
+    //        return null;
+    //    Node nearest = null;
+    //    Node main = tree.FindChild("main",false); 
+    //    foreach (Node n in main.GetChildren())
+    //    { //I'm like 90 
+    //        if( || nearest == null)
+    //        {
+    //            nearest = n;
+    //        }
+    //    }
+    //    
+    //    
+    //    
+    //    return result;
+    //}
 }

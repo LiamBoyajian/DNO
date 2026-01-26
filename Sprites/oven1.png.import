@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://doxv8nmt8kk5s"
-path="res://.godot/imported/Ground1.png-c26be104f4b1d2126797665abaa64908.ctex"
+uid="uid://dxshvtlfyoutx"
+path="res://.godot/imported/oven1.png-9edc0c1d490ecf0b4c5ba3f0ceb54bcd.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Tiles/Ground1.png"
-dest_files=["res://.godot/imported/Ground1.png-c26be104f4b1d2126797665abaa64908.ctex"]
+source_file="res://Sprites/oven1.png"
+dest_files=["res://.godot/imported/oven1.png-9edc0c1d490ecf0b4c5ba3f0ceb54bcd.ctex"]
 
 [params]
 
