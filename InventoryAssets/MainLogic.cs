@@ -2,6 +2,7 @@ using Godot;
 using System;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using Main.Package;
 
 
 public partial class MyInventory : Container
@@ -38,6 +39,9 @@ public partial class MyInventory : Container
         //_generateBoxesVisual(1014);
 
         //Console.WriteLine("child count of me: "+_me.GetChildCount());
+        CricketVisuals.GenerateSpriteGrid<Sprite2D>(_boxBase, _boxBase.Texture.GetSize(), _boxPadding, 9999, _me,
+            _me.Size);
+
         const int boxRequestCount = 1000;
         _generateBoxesVisual(
             boxRequestCount); //TODO make a nice version using a more accurate count instead of a random int.

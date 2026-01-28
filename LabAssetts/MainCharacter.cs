@@ -27,14 +27,6 @@ public partial class MainCharacter : CharacterBody2D
         //Console.WriteLine("At index 1: " + (AcidBases)dna.GetDnaAtIndex(1) + "\n");
         foreach (AcidBases b in dna)
         {
-            if (b == AcidBases.G)
-                Console.ForegroundColor = ConsoleColor.Green;
-            if (b == AcidBases.A)
-                Console.ForegroundColor = ConsoleColor.Red;
-            if (b == AcidBases.C)
-                Console.ForegroundColor = ConsoleColor.Yellow;
-            if (b == AcidBases.T)
-                Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write(b);
         }
 
