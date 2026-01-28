@@ -10,7 +10,8 @@ public partial class DNA : IEnumerable<AcidBases>
     private ulong _binaryString;
     private bool _realDNA;
 
-    const int
+
+    public const int
         DnaLength = 32; //im hard coding this because if I increase the dna size I'll need a different structure meaning any solution here will immediately become obsolete. 
 
 
@@ -94,5 +95,10 @@ public partial class DNA : IEnumerable<AcidBases>
         ulong temp = 3ul << (index * 2); //something like 0000000000000000000000110000000000000000
         temp &= _binaryString;
         return (AcidBases)(temp >> (index * 2)); //I love this system so much
+    }
+
+    public int GetLength()
+    {
+        return DnaLength;
     }
 }

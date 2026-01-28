@@ -1,12 +1,21 @@
 using System;
 using System.Runtime.InteropServices.JavaScript;
 using Godot;
+using Main.InventoryAssets;
 
 namespace Main.Package;
 
 public class CricketVisuals
 {
     //[SuppressMessage("ReSharper", "PossibleLossOfFraction")]
+
+    /**
+         * Function used to generate sprites in a grid pattern (left to right descending).
+         * Argument [int count] sprites to be added to the scene.
+         * Return [int result] value that holds the number of sprites which could not be created. Total requested - Total made.
+         *
+         *
+         */
     public static int GenerateSpriteGrid<TG>(Node sprite, Vector2 spriteSize, int spritePadding, int count,
         Node container, Vector2 containerSize)
     {
@@ -52,5 +61,35 @@ public class CricketVisuals
         }
 
         return result;
+    }
+
+    public static int SetAcidBases(Container container, DNA dna)
+    {
+        //consider adding a check for the correct sprite, would break otherwise.
+        var index = 0;
+        var containerChildren = container.GetChildren();
+
+        foreach (var b in dna)
+        {
+            if (containerChildren.Count == index)
+                break;
+
+            if (containerChildren[index] is AnimatedSprite2D)
+            {
+                AnimatedSprite2D current = (AnimatedSprite2D)containerChildren[index];
+                Console.WriteLine(b.ToString());
+                current.SetAnimation(b.ToString());
+            }
+            else
+            {
+                throw new ArgumentException("container children contains not AnimatedSprite2D");
+            }
+
+            //end
+            ++index;
+        }
+
+
+        return 0;
     }
 }

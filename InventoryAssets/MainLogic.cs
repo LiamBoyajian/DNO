@@ -68,14 +68,7 @@ public partial class MyInventory : Container
         return (Sprite2D)clickedBox;
     }
 
-    /**
-         * Function used to generate inventory box sprites in a grid pattern (left to right descending).
-         * Argument [int count] boxes to be added to the scene.
-         * Return [int result] value that holds the number of boxes which could not be created. Total requested - Total made.
-         * Uses _boxDiameter, paddingLR, _boxPadding, _me, _boxCount : used for formatting
-         * Adds new boxes to parent=_me.
-         *
-         */
+
     [SuppressMessage("ReSharper", "PossibleLossOfFraction")]
     private int _generateBoxesVisual(int count)
     {

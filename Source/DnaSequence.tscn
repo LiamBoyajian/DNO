@@ -1,0 +1,74 @@
+[gd_scene load_steps=8 format=3 uid="uid://c170spcs4nixq"]
+
+[ext_resource type="Script" uid="uid://bl64njfl54p8x" path="res://Source/AcidDisplay.cs" id="1_wrpp5"]
+[ext_resource type="Texture2D" uid="uid://s4mk1yykyl3s" path="res://Sprites/bases.png" id="2_2vtas"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0x571"]
+atlas = ExtResource("2_2vtas")
+region = Rect2(0, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x77mg"]
+atlas = ExtResource("2_2vtas")
+region = Rect2(108, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wbt4k"]
+atlas = ExtResource("2_2vtas")
+region = Rect2(72, 0, 36, 36)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a286x"]
+atlas = ExtResource("2_2vtas")
+region = Rect2(36, 0, 36, 36)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_nrbwa"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0x571")
+}],
+"loop": true,
+"name": &"A",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x77mg")
+}],
+"loop": true,
+"name": &"C",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wbt4k")
+}],
+"loop": true,
+"name": &"G",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a286x")
+}],
+"loop": true,
+"name": &"T",
+"speed": 5.0
+}]
+
+[node name="DnaSequence" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Container" type="Container" parent="."]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+script = ExtResource("1_wrpp5")
+
+[node name="AcidLetterBase" type="AnimatedSprite2D" parent="."]
+visible = false
+sprite_frames = SubResource("SpriteFrames_nrbwa")
+animation = &"A"

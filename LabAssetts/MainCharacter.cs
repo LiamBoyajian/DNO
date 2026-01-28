@@ -25,7 +25,7 @@ public partial class MainCharacter : CharacterBody2D
         //Console.WriteLine(dna.GetDnaString());
         //Console.WriteLine(dna.toString());
         //Console.WriteLine("At index 1: " + (AcidBases)dna.GetDnaAtIndex(1) + "\n");
-        foreach (AcidBases b in dna)
+        foreach (var b in dna)
         {
             Console.Write(b);
         }
