@@ -12,6 +12,9 @@ public partial class MainCharacter : CharacterBody2D
     public DNA dna = new DNA(new RandomNumberGenerator());
     private Control _inventory;
 
+    [Signal]
+    public delegate void OpenedSignalEventHandler(Vector2 position);
+
     public override void _Ready()
     {
         _mainChar = GetNode<AnimatedSprite2D>("mainChar");
@@ -21,16 +24,6 @@ public partial class MainCharacter : CharacterBody2D
 
         _inventory.Set("z_index", 10);
         _inventory.Hide();
-
-        //Console.WriteLine(dna.GetDnaString());
-        //Console.WriteLine(dna.toString());
-        //Console.WriteLine("At index 1: " + (AcidBases)dna.GetDnaAtIndex(1) + "\n");
-        foreach (var b in dna)
-        {
-            Console.Write(b);
-        }
-
-        Console.WriteLine("\nat index 20: " + (AcidBases)dna.GetDnaAtIndex(20));
     }
 
     public override void _PhysicsProcess(double delta)
@@ -38,13 +31,6 @@ public partial class MainCharacter : CharacterBody2D
         Vector2 velocity = Velocity;
 
         //Console.WriteLine(_inventory.Get("z_index"));
-
-        if (velocity.Equals(new Vector2(0, 0)) && Input.IsKeyPressed(Key.E))
-        {
-            //if(!Input.IsKeyPressed(Key.E)) 
-            _mainChar.SetAnimation("IdleBack");
-            return;
-        }
 
 
         // Get the input direction and handle the movement/deceleration.
@@ -74,7 +60,7 @@ public partial class MainCharacter : CharacterBody2D
         }
         else
         {
-            if (velocity.Y == 0f)
+            if (velocity.Y == 0f && _mainChar.Animation != "IdleBack")
             {
                 //_mainChar.SetAnimation("IdleBack");
                 _mainChar.SetAnimation("IdleFront");
@@ -93,6 +79,16 @@ public partial class MainCharacter : CharacterBody2D
             _setInventory();
             return;
         }
+        else
+        {
+            if (this.Velocity.Equals(new Vector2(0, 0)) && @event.IsActionPressed("Open Nearest Object"))
+            {
+                //if(!Input.IsKeyPressed(Key.E)) 
+                _mainChar.SetAnimation("IdleBack");
+                EmitSignal(SignalName.OpenedSignal, this.Position);
+                return;
+            }
+        }
     }
 
     private void _setInventory()
@@ -101,6 +97,10 @@ public partial class MainCharacter : CharacterBody2D
         _inventory.Set("visible", !_inventory.Get("visible").AsBool());
     }
 
+    public void OpenScene(string scene)
+    {
+        GetTree().Root.AddChild(ResourceLoader.Load<PackedScene>(scene).Instantiate());
+    }
     // Considering for a mouse free interaction with items. More QOL than anything. Finishing later. If not implemented in months delete...
     //public static Node _getNearestNode(Tree tree, Vector2 position)
     //{
