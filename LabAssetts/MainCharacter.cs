@@ -1,6 +1,7 @@
-using Godot;
 using System;
-using Main.InventoryAssets;
+using Godot;
+
+namespace Main.LabAssetts;
 
 public partial class MainCharacter : CharacterBody2D
 {
@@ -11,6 +12,7 @@ public partial class MainCharacter : CharacterBody2D
     private AnimatedSprite2D _mainChar;
     public DNA dna = new DNA(new RandomNumberGenerator());
     private Control _inventory;
+    private Node _sceneDna;
 
     [Signal]
     public delegate void OpenedSignalEventHandler(Vector2 position);
@@ -77,7 +79,6 @@ public partial class MainCharacter : CharacterBody2D
         if (@event.IsActionPressed("Inventory"))
         {
             _setInventory();
-            return;
         }
         else
         {
@@ -85,8 +86,19 @@ public partial class MainCharacter : CharacterBody2D
             {
                 //if(!Input.IsKeyPressed(Key.E)) 
                 _mainChar.SetAnimation("IdleBack");
-                EmitSignal(SignalName.OpenedSignal, this.Position);
-                return;
+                if (_sceneDna == null)
+                {
+                    //Console.WriteLine("this: " + this.ToString());
+                    EmitSignal(MainCharacter.SignalName.OpenedSignal,
+                        _mainChar
+                            .GlobalPosition); //I don't know why using 'this.' returns 0,0 so might be something to watch
+                }
+                else
+                {
+                    GetTree().Root.RemoveChild(_sceneDna);
+                    _sceneDna.Free();
+                    _sceneDna = null;
+                }
             }
         }
     }
@@ -97,27 +109,9 @@ public partial class MainCharacter : CharacterBody2D
         _inventory.Set("visible", !_inventory.Get("visible").AsBool());
     }
 
-    public void OpenScene(string scene)
+    private void OpenScene(string scene)
     {
-        GetTree().Root.AddChild(ResourceLoader.Load<PackedScene>(scene).Instantiate());
+        _sceneDna = ResourceLoader.Load<PackedScene>(scene).Instantiate();
+        GetTree().Root.AddChild(_sceneDna);
     }
-    // Considering for a mouse free interaction with items. More QOL than anything. Finishing later. If not implemented in months delete...
-    //public static Node _getNearestNode(Tree tree, Vector2 position)
-    //{
-    //    if(tree == null)
-    //        return null;
-    //    Node nearest = null;
-    //    Node main = tree.FindChild("main",false); 
-    //    foreach (Node n in main.GetChildren())
-    //    { //I'm like 90 
-    //        if( || nearest == null)
-    //        {
-    //            nearest = n;
-    //        }
-    //    }
-    //    
-    //    
-    //    
-    //    return result;
-    //}
 }

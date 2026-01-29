@@ -21,9 +21,10 @@ public partial class Pc : AnimatedSprite2D
 
     public void OnOpenedSignal(Vector2 position)
     {
-        var posDifference = this.Position - position;
-        var temp = this.SpriteFrames.GetFrameTexture("On", 0).GetSize();
-        if (posDifference.Length() > temp.Length()) //TODO positions are relative or something
+        var posDifference = this.GlobalPosition - position;
+        var pcSprite = this.SpriteFrames.GetFrameTexture("On", 0).GetSize();
+        if (Math.Abs(posDifference.X) < pcSprite.X / 2 &&
+            Math.Abs(posDifference.Y) < pcSprite.Y / 2) //TODO positions are relative or something
         {
             EmitSignalOpenPc("res://Source/DnaSequence.tscn");
         }

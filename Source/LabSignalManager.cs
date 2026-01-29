@@ -9,8 +9,9 @@ public partial class LabSignalManager : Node2D
         var player = GetNode<CharacterBody2D>("CharacterBody2D");
         var pc = GetNode<AnimatedSprite2D>("PC");
 
-        player.Connect(MainCharacter.SignalName.OpenedSignal, new Callable(pc, Pc.MethodName.OnOpenedSignal));
-        pc.Connect(Pc.SignalName.OpenPc, new Callable(player, MainCharacter.MethodName.OpenScene));
+        player.Connect(Main.LabAssetts.MainCharacter.SignalName.OpenedSignal,
+            new Callable(pc, Pc.MethodName.OnOpenedSignal));
+        pc.Connect(Pc.SignalName.OpenPc, new Callable(player, Main.LabAssetts.MainCharacter.MethodName.OpenScene));
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
