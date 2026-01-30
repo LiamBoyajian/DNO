@@ -11,3 +11,30 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+# --- Godot Core ---
+.godot/
+*.uid
+*.import
+# Note: You generally KEEP .import files, but some devs ignore 
+# specific imported assets. For now, keep them unless they cause issues.
+
+# --- C# / .NET / IDEs ---
+bin/
+obj/
+*.sln
+*.csproj
+*.user
+*.suo
+*.pdb
+.vs/
+.idea/
+.rider/
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
+
+# --- Build Exports ---
+export/
+build/
