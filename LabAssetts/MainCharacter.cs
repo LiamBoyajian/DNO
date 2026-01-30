@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Main.InventoryAssets;
 
 namespace Main.LabAssetts;
 
@@ -11,7 +12,8 @@ public partial class MainCharacter : CharacterBody2D
     //public const float JumpVelocity = -400.0f;
     private AnimatedSprite2D _mainChar;
     public DNA dna = new DNA(new RandomNumberGenerator());
-    private Control _inventory;
+    private Control _visualInventory;
+    private Inventory _inventory;
     private Node _sceneDna;
 
     [Signal]
@@ -20,19 +22,19 @@ public partial class MainCharacter : CharacterBody2D
     public override void _Ready()
     {
         _mainChar = GetNode<AnimatedSprite2D>("mainChar");
-        _inventory = (Control)ResourceLoader.Load<PackedScene>("res://Source/Inventory.tscn").Instantiate();
+        _visualInventory = (Control)ResourceLoader.Load<PackedScene>("res://Source/Inventory.tscn").Instantiate();
 
-        GetTree().Root.CallDeferred(Node.MethodName.AddChild, _inventory);
+        GetTree().Root.CallDeferred(Node.MethodName.AddChild, _visualInventory);
 
-        _inventory.Set("z_index", 10);
-        _inventory.Hide();
+        _visualInventory.Set("z_index", 10);
+        _visualInventory.Hide();
     }
 
     public override void _PhysicsProcess(double delta)
     {
         Vector2 velocity = Velocity;
 
-        //Console.WriteLine(_inventory.Get("z_index"));
+        //Console.WriteLine(_visualInventory.Get("z_index"));
 
 
         // Get the input direction and handle the movement/deceleration.
@@ -105,8 +107,8 @@ public partial class MainCharacter : CharacterBody2D
 
     private void _setInventory()
     {
-        //_inventory.Show();
-        _inventory.Set("visible", !_inventory.Get("visible").AsBool());
+        //_visualInventory.Show();
+        _visualInventory.Set("visible", !_visualInventory.Get("visible").AsBool());
     }
 
     private void OpenScene(string scene)
