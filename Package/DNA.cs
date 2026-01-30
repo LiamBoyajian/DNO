@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Main.InventoryAssets;
 
 //using AcidBases = System.;
-public partial class DNA : IEnumerable<AcidBases>
+public partial class DNA : IEnumerable<AcidBases> 
 {
     private ulong _binaryString;
     private bool _realDNA;

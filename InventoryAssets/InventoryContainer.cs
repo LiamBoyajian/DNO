@@ -6,49 +6,52 @@ namespace Main.InventoryAssets;
 
 public partial class InventoryContainer : Inventory
 {
-    private AnimatedSprite2D _animatedSprite = animatedSprite;
-    private Container _container = container;
 
-    public InventoryContainer() : base(12)
+    private Container _container;
+    private TextureButton _button;
+    private int _slots;
+    public InventoryContainer(Container container, int slots, TextureButton button) : base(12)
     {
         
+        _slots = slots < 0 ? slots : throw new ArgumentException("slots is < 0");
+        _container = container ?? throw new ArgumentNullException(nameof(container), "Container is null");
+        _button = button ?? throw new ArgumentNullException(nameof(button), "button is null");
         //implement
     }
-    public InventoryContainer(int max, Container container, AnimatedSprite2D animatedSprite) : base(max)
+
+    public int GenNodeGrid(int max, Vector2 slotSize)
     {
-        _buttonBase.Show();
-            CricketVisuals.GenerateNodeGrid(_buttonBase,
-            _acidLetter.SpriteFrames.GetFrameTexture("A", 0).GetSize(), 1, dna.GetLength(), _container,
+        //NEEDS to use containers.............
+        _button.Show();
+        var result = CricketVisuals.GenerateNodeGrid(_button,
+            slotSize, 1, _slots, _container,
             _container.Size);
-            _buttonBase.Hide();
         
-            var index = 0;
-            var containerChildren = _container.GetChildren();
-    }
-    
-
-        foreach (var b in dna)
-    {
-        if (containerChildren.Count == index)
-            break;
-
-        if (containerChildren[index] is TextureButton)
-        {
-            var current = (TextureButton)containerChildren[index];
-            //Console.WriteLine(b.ToString());
-            current.TextureNormal = _acidLetter.SpriteFrames.GetFrameTexture(b.ToString(), 0);
-            current.TextureHover = _acidLetter.SpriteFrames.GetFrameTexture(b.ToString(), 1);
-            current.TexturePressed = _acidLetter.SpriteFrames.GetFrameTexture(b.ToString(), 2);
-        }
-        else
-        {
-            throw new ArgumentException("container children contains not AnimatedSprite2D");
-        }
-
-        //end
-        ++index;
+        _button.Hide();
+        return result;
     }
 
-
-    _acidLetter.Hide();
+   
+    //public void UpdateButtonIcons(Sprite2D normal, Sprite2D hover, Sprite2D pressed)
+    //{
+    //    var containerChildren = _container.GetChildren();
+    //    foreach (var child in containerChildren){
+    //        
+    //        if (child is not TextureButton button)
+    //            throw new ArgumentException("container children contains not AnimatedSprite2D");
+    //
+    //        //_animatedSprite.SpriteFrames.GetFrameCount(_animatedSprite.Animation);
+    //            
+    //            //Passing an animated sprite is convenient. 
+    //            button.TextureNormal = normal.Texture;
+    //            button.TextureHover = hover.Texture;
+    //            button.TexturePressed = hover.Texture; 
+    //    }
+    //    //_animatedSprite.Hide();
+    //}
+    //
+    //public void UpdateButtonIcons(AnimatedSprite2D animSprite)
+    //{
+    //    
+    //}
 }
