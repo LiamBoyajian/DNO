@@ -40,7 +40,7 @@ public partial class MyInventory : Container
 
         //Console.WriteLine("child count of me: "+_me.GetChildCount());
         CricketVisuals.GenerateNodeGrid(_boxBase, _boxBase.Texture.GetSize(), _boxPadding, 9999, _me,
-            _me.Size);
+            _me.Size, null);
 
         const int boxRequestCount = 1000;
         _generateBoxesVisual(

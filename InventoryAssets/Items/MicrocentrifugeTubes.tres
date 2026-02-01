@@ -1,0 +1,54 @@
+[gd_resource type="SpriteFrames" load_steps=6 format=3 uid="uid://ctv0ow5k2ubj7"]
+
+[ext_resource type="Texture2D" uid="uid://c0ao6rqnt3j4e" path="res://Sprites/MicrocentrifugeTube.png" id="1_sh5bn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_r8qir"]
+atlas = ExtResource("1_sh5bn")
+region = Rect2(28, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dc5w6"]
+atlas = ExtResource("1_sh5bn")
+region = Rect2(0, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_li6xh"]
+atlas = ExtResource("1_sh5bn")
+region = Rect2(84, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tc01q"]
+atlas = ExtResource("1_sh5bn")
+region = Rect2(56, 0, 28, 28)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_r8qir")
+}],
+"loop": true,
+"name": &"Cell",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dc5w6")
+}],
+"loop": true,
+"name": &"DNA",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_li6xh")
+}],
+"loop": true,
+"name": &"Empty",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tc01q")
+}],
+"loop": true,
+"name": &"Seed",
+"speed": 5.0
+}]

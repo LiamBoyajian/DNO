@@ -12,9 +12,9 @@ public partial class MainCharacter : CharacterBody2D
     //public const float JumpVelocity = -400.0f;
     private AnimatedSprite2D _mainChar;
     public DNA dna = new DNA(new RandomNumberGenerator());
-    private Control _visualInventory;
-    private Inventory _inventory;
+    private InventoryContainer _inventory;
     private Node _sceneDna;
+    //private object _mouseSlot;
 
     [Signal]
     public delegate void OpenedSignalEventHandler(Vector2 position);
@@ -22,12 +22,18 @@ public partial class MainCharacter : CharacterBody2D
     public override void _Ready()
     {
         _mainChar = GetNode<AnimatedSprite2D>("mainChar");
-        _visualInventory = (Control)ResourceLoader.Load<PackedScene>("res://Source/Inventory.tscn").Instantiate();
 
-        GetTree().Root.CallDeferred(Node.MethodName.AddChild, _visualInventory);
+        GenerateInventory();
+        this.CallDeferred(Node.MethodName.AddChild, _inventory);
+        _inventory.Hide();
+        //Console.WriteLine("Childcount: " + this.GetParent().GetChildren());
+        //_visualInventory = (Control)ResourceLoader.Load<PackedScene>("res://Source/Inventory.tscn").Instantiate();
 
-        _visualInventory.Set("z_index", 10);
-        _visualInventory.Hide();
+        //_inventory.Set("z_index", 10);
+        //_inventory.Hide();
+
+        //_visualInventory.Set("z_index", 10);
+        //_visualInventory.Hide();
     }
 
     public override void _PhysicsProcess(double delta)
@@ -77,43 +83,67 @@ public partial class MainCharacter : CharacterBody2D
 
     public override void _Input(InputEvent @event)
     {
-        //@event. 
         if (@event.IsActionPressed("Inventory"))
         {
             _setInventory();
+            return;
         }
-        else
+
+        if (@event.IsActionPressed("Click"))
         {
-            if (this.Velocity.Equals(new Vector2(0, 0)) && @event.IsActionPressed("Open Nearest Object"))
+            return;
+        }
+
+        if (this.Velocity.Equals(new Vector2(0, 0)) && @event.IsActionPressed("Open Nearest Object"))
+        {
+            //if(!Input.IsKeyPressed(Key.E)) 
+            _mainChar.SetAnimation("IdleBack");
+            if (_sceneDna == null)
             {
-                //if(!Input.IsKeyPressed(Key.E)) 
-                _mainChar.SetAnimation("IdleBack");
-                if (_sceneDna == null)
-                {
-                    //Console.WriteLine("this: " + this.ToString());
-                    EmitSignal(MainCharacter.SignalName.OpenedSignal,
-                        _mainChar
-                            .GlobalPosition); //I don't know why using 'this.' returns 0,0 so might be something to watch
-                }
-                else
-                {
-                    GetTree().Root.RemoveChild(_sceneDna);
-                    _sceneDna.Free();
-                    _sceneDna = null;
-                }
+                //Console.WriteLine("this: " + this.ToString());
+                EmitSignal(MainCharacter.SignalName.OpenedSignal,
+                    _mainChar
+                        .GlobalPosition); //I don't know why using 'this.' returns 0,0 so might be something to watch
             }
+            else
+            {
+                GetTree().Root.RemoveChild(_sceneDna);
+                _sceneDna.Free();
+                _sceneDna = null;
+            }
+
+            return;
         }
     }
 
     private void _setInventory()
     {
-        //_visualInventory.Show();
-        _visualInventory.Set("visible", !_visualInventory.Get("visible").AsBool());
+        _inventory.ToggleVisible();
     }
 
     private void OpenScene(string scene)
     {
         _sceneDna = ResourceLoader.Load<PackedScene>(scene).Instantiate();
         GetTree().Root.AddChild(_sceneDna);
+    }
+
+    private void GenerateInventory()
+    {
+        var tempTextureButton = new TextureButton();
+        tempTextureButton.TextureNormal = GetNode<AnimatedSprite2D>("_box").SpriteFrames.GetFrameTexture("Black", 0);
+        tempTextureButton.TextureHover = GetNode<AnimatedSprite2D>("_box").SpriteFrames.GetFrameTexture("Selected", 0);
+        tempTextureButton.TexturePressed =
+            GetNode<AnimatedSprite2D>("_box").SpriteFrames.GetFrameTexture("Selected", 0);
+
+        tempTextureButton.ToggleMode = true;
+        //tempTextureButton.
+
+        var tempContainer = new Container();
+        tempContainer.Size = new Vector2(410, 360);
+        tempContainer.GlobalPosition = new Vector2(0, 0);
+
+        _inventory = new InventoryContainer(tempContainer, 10, tempTextureButton);
+        _inventory.GenNodeGrid(tempTextureButton.TextureNormal.GetSize());
+        //_inventory.Hide();
     }
 }

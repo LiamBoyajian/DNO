@@ -24,7 +24,7 @@ public partial class AcidDisplay : Control
         _buttonBase.Show();
         CricketVisuals.GenerateNodeGrid(_buttonBase,
             _acidLetter.SpriteFrames.GetFrameTexture("A", 0).GetSize(), 1, dna.GetLength(), _container,
-            _container.Size);
+            _container.Size, null);
         _buttonBase.Hide();
 
         var index = 0;

@@ -12,16 +12,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Main" type="Container" parent="."]
-layout_mode = 0
-offset_right = 430.0
-offset_bottom = 360.0
-script = ExtResource("1_ntc87")
-
-[node name="_boxBase" type="Sprite2D" parent="Main"]
+[node name="_box" type="Sprite2D" parent="."]
 visible = false
 position = Vector2(22, 22)
 texture = ExtResource("2_sq8oh")
+
+[node name="Main" type="Container" parent="."]
+layout_mode = 0
+offset_right = 454.0
+offset_bottom = 360.0
+script = ExtResource("1_ntc87")
 
 [node name="CharInv" type="Container" parent="."]
 layout_mode = 0

@@ -3,8 +3,9 @@ using System.Collections;
 using Godot;
 
 namespace Main.InventoryAssets;
+
 /**
- * Can be used for any object that has storage. Nodes are required so extending node for each item or using sub children is required. 
+ * Can be used for any object that has storage. Nodes are required so extending node for each item or using sub children is required.
  */
 public partial class Inventory(int max) : Node
 {
@@ -12,35 +13,36 @@ public partial class Inventory(int max) : Node
     private ArrayList _array = new ArrayList();
     private int _maxItems = max; //create a new inventory to upgrade... or I'll make an addition system im not sure.
 
-    public Node SwapAtIndex(int index, Node givenNode)
+    public Item<TRemove> SwapAtIndex<TI, TRemove>(int index, Item<TI> item)
     {
-        var result = RemoveNode(index);
-        AddNode(index, givenNode);
-        return result;
+        var result = RemoveNode<TRemove>(index);
+        AddNode(index, item);
+        return (Item<TRemove>)result;
     }
 
-    public int AddNode(Node node)
+    public int AddNode<TI>(Item<TI> item)
     {
         if (_ensureCapacity()) return -1;
-        return _array.Add(node);
+        return _array.Add(item);
     }
 
-    public int AddNode(int index, Node node)
+    public int AddNode<TI>(int index, Item<TI> item)
     {
         if (_ensureCapacity()) return -1;
-        _array.Insert(index, node);
+        _array.Insert(index, item);
         return index;
     }
-    
-    public Node RemoveNode(int index)
+
+    public Node RemoveNode<TI>(int index)
     {
-        if (_array.Count == 0) throw new ArgumentOutOfRangeException(nameof(index),"Inventory already empty.") ;
-        if (index >= _array.Count) throw new IndexOutOfRangeException("Index is greater than the Inventory size or negative.");
+        if (_array.Count == 0) throw new ArgumentOutOfRangeException(nameof(index), "Inventory already empty.");
+        if (index >= _array.Count)
+            throw new IndexOutOfRangeException("Index is greater than the Inventory size or negative.");
         var result = (Node)_array[index];
         _array.RemoveAt(index);
         return result;
     }
-    
+
     private bool _ensureCapacity()
     {
         return _array.Count >= _maxItems;
@@ -50,8 +52,18 @@ public partial class Inventory(int max) : Node
     {
         return -1; //unimplemented
     }
+
     public int Sort()
     {
         return -1; //unimplemented
     }
+
+    public int Count()
+    {
+        return _array.Count;
+    }
+    //public ArrayList Clone()
+    //{
+    //    return (ArrayList) _array.Clone(); //this might be terrible I haven't checked
+    //}
 }

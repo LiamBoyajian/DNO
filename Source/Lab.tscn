@@ -1,9 +1,10 @@
-[gd_scene load_steps=52 format=3 uid="uid://eljyd8ypochx"]
+[gd_scene load_steps=57 format=3 uid="uid://eljyd8ypochx"]
 
 [ext_resource type="Script" uid="uid://mbfgk43cyys1" path="res://LabAssetts/MainCharacter.cs" id="1_mim5p"]
 [ext_resource type="Script" uid="uid://djxi50ndwxqt7" path="res://Source/LabSignalManager.cs" id="1_y6m64"]
 [ext_resource type="Texture2D" uid="uid://dg6vihqdcckbp" path="res://LabAssetts/BaseChar1.png" id="2_qytnw"]
 [ext_resource type="Texture2D" uid="uid://hw54h7njepk0" path="res://LabAssetts/oven1.png" id="3_qytnw"]
+[ext_resource type="Texture2D" uid="uid://dstfxasgreu37" path="res://Sprites/itemBox-sheet.png" id="4_ognkn"]
 [ext_resource type="Texture2D" uid="uid://cjolt7fmvvfqy" path="res://LabAssetts/pcDNA.png" id="5_7hs1q"]
 [ext_resource type="Script" uid="uid://bau4wkpkfxva1" path="res://Source/Pc.cs" id="6_ognkn"]
 [ext_resource type="Texture2D" uid="uid://b383d6trel7h2" path="res://LabAssetts/Grower.png" id="6_rk17r"]
@@ -66,6 +67,45 @@ animations = [{
 }],
 "loop": true,
 "name": &"Walk",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_qhm7t"]
+atlas = ExtResource("4_ognkn")
+region = Rect2(36, 1, 34, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_khogo"]
+atlas = ExtResource("4_ognkn")
+region = Rect2(1, 1, 34, 34)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hdim4"]
+atlas = ExtResource("4_ognkn")
+region = Rect2(71, 1, 34, 34)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_klfij"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_qhm7t")
+}],
+"loop": true,
+"name": &"Black",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_khogo")
+}],
+"loop": true,
+"name": &"Red",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hdim4")
+}],
+"loop": true,
+"name": &"Selected",
 "speed": 5.0
 }]
 
@@ -370,12 +410,16 @@ position = Vector2(59, 114)
 sprite_frames = SubResource("SpriteFrames_8xsak")
 animation = &"IdleFront"
 
+[node name="_box" type="AnimatedSprite2D" parent="CharacterBody2D"]
+visible = false
+position = Vector2(-26, 4)
+sprite_frames = SubResource("SpriteFrames_klfij")
+animation = &"Black"
+
 [node name="Boiler" type="AnimatedSprite2D" parent="."]
 position = Vector2(26, 116)
 sprite_frames = SubResource("SpriteFrames_rk17r")
 animation = &"Off"
-
-[node name="Area2D" type="Area2D" parent="Boiler"]
 
 [node name="PC" type="AnimatedSprite2D" parent="."]
 position = Vector2(102, 116)

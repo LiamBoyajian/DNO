@@ -17,12 +17,13 @@ public class CricketVisuals
          *
          */
     public static int GenerateNodeGrid(Node node, Vector2 nodeSize, int nodePadding, int count,
-        Node container, Vector2 containerSize)
+        Node container, Vector2 containerSize, int? paddingLr)
     {
         //container.Get("position");
         var nodeCount = 0;
         var result = count;
-        var paddingLr = (int)(containerSize.X % (nodeSize.X + nodePadding) / 2);
+        paddingLr ??= (int)(containerSize.X % (nodeSize.X + nodePadding) / 2);
+        //var paddingLr = 0;//; I might add this back later. Basically just controls justification
 
 
         var nextBoxCoordinate =
@@ -44,17 +45,17 @@ public class CricketVisuals
                 return result; // No space remaining
 
 
-            var newnode = node.Duplicate();
-            newnode.Name = "node" + nodeCount;
+            var newNode = node.Duplicate();
+            newNode.Name = "node" + nodeCount;
 
             ++nodeCount;
             --result;
 
-            newnode.Set("position", nextBoxCoordinate);
+            newNode.Set("position", nextBoxCoordinate);
 
-            nextBoxCoordinate.X += nodeSize.X;
+            nextBoxCoordinate.X += nodeSize.X + nodePadding;
 
-            container.AddChild(newnode);
+            container.AddChild(newNode);
         }
 
         return result;
