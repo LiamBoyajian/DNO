@@ -26,27 +26,13 @@ public partial class MainCharacter : CharacterBody2D
         GenerateInventory();
         this.CallDeferred(Node.MethodName.AddChild, _inventory);
         _inventory.Hide();
-        //Console.WriteLine("Childcount: " + this.GetParent().GetChildren());
-        //_visualInventory = (Control)ResourceLoader.Load<PackedScene>("res://Source/Inventory.tscn").Instantiate();
-
-        //_inventory.Set("z_index", 10);
-        //_inventory.Hide();
-
-        //_visualInventory.Set("z_index", 10);
-        //_visualInventory.Hide();
     }
 
     public override void _PhysicsProcess(double delta)
     {
         Vector2 velocity = Velocity;
 
-        //Console.WriteLine(_visualInventory.Get("z_index"));
-
-
-        // Get the input direction and handle the movement/deceleration.
-        // As good practice, you should replace UI actions with custom gameplay actions.
         Vector2 direction = new Vector2(Input.GetAxis("ui_left", "ui_right"), Input.GetAxis("ui_up", "ui_down"));
-        //Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
         if (direction != Vector2.Zero)
         {
             velocity.X = direction.X * Speed;
@@ -83,24 +69,39 @@ public partial class MainCharacter : CharacterBody2D
 
     public override void _Input(InputEvent @event)
     {
+        //TODO implement a dictionary for inputs to methods
         if (@event.IsActionPressed("Inventory"))
         {
             _setInventory();
             return;
         }
 
+        if (@event.IsActionPressed("ui_text_clear_carets_and_selection"))
+        {
+            _inventory.ClearPressedButtons();
+            return;
+        }
+
         if (@event.IsActionPressed("Click"))
         {
+            //if (_inventory == null) return;
+            if (_inventory.GetPressedButton() == null)
+            {
+                Console.WriteLine("Did not click a button");
+            }
+            else
+            {
+                Console.WriteLine("Clicked Box: " + _inventory.GetPressedButton().ToString());
+            }
+
             return;
         }
 
         if (this.Velocity.Equals(new Vector2(0, 0)) && @event.IsActionPressed("Open Nearest Object"))
         {
-            //if(!Input.IsKeyPressed(Key.E)) 
             _mainChar.SetAnimation("IdleBack");
             if (_sceneDna == null)
             {
-                //Console.WriteLine("this: " + this.ToString());
                 EmitSignal(MainCharacter.SignalName.OpenedSignal,
                     _mainChar
                         .GlobalPosition); //I don't know why using 'this.' returns 0,0 so might be something to watch
@@ -136,7 +137,6 @@ public partial class MainCharacter : CharacterBody2D
             GetNode<AnimatedSprite2D>("_box").SpriteFrames.GetFrameTexture("Selected", 0);
 
         tempTextureButton.ToggleMode = true;
-        //tempTextureButton.
 
         var tempContainer = new Container();
         tempContainer.Size = new Vector2(410, 360);
@@ -144,6 +144,5 @@ public partial class MainCharacter : CharacterBody2D
 
         _inventory = new InventoryContainer(tempContainer, 10, tempTextureButton);
         _inventory.GenNodeGrid(tempTextureButton.TextureNormal.GetSize());
-        //_inventory.Hide();
     }
 }

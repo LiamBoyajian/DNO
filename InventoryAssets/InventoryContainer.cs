@@ -21,10 +21,14 @@ public partial class InventoryContainer : Inventory
 
         this.AddChild(_container);
         this.AddChild(_button);
+        _playerInventoryButtons = new ButtonGroup();
+        _playerInventoryButtons.SetName("playerInventoryButtons");
         //this.AddChild(_buttonGroup);
         //_playerInventoryButtons.
     }
 
+
+    //Required by Godot
     public InventoryContainer() : this((new Container()), 1, new TextureButton())
     {
     }
@@ -38,14 +42,14 @@ public partial class InventoryContainer : Inventory
             _container.Size, new int?(0));
         _button.Hide();
 
-
-        foreach (var button in _container.GetChildren())
+        foreach (var node in _container.GetChildren())
         {
-            button.AddToGroup(nameof(_playerInventoryButtons));
+            if (node is not (TextureButton))
+                throw new ArrayTypeMismatchException();
+
+            TextureButton textureButton = node as TextureButton;
+            textureButton.ButtonGroup = _playerInventoryButtons;
         }
-
-
-        _playerInventoryButtons = ((TextureButton)_container.GetChildren()[0]).GetButtonGroup();
 
         return result;
     }
@@ -69,26 +73,10 @@ public partial class InventoryContainer : Inventory
     {
         return _playerInventoryButtons.GetPressedButton();
     }
-    //public void UpdateButtonIcons(Sprite2D normal, Sprite2D hover, Sprite2D pressed)
-    //{
-    //    var containerChildren = _container.GetChildren();
-    //    foreach (var child in containerChildren){
-    //        
-    //        if (child is not TextureButton button)
-    //            throw new ArgumentException("container children contains not AnimatedSprite2D");
-    //
-    //        //_animatedSprite.SpriteFrames.GetFrameCount(_animatedSprite.Animation);
-    //            
-    //            //Passing an animated sprite is convenient. 
-    //            button.TextureNormal = normal.Texture;
-    //            button.TextureHover = hover.Texture;
-    //            button.TexturePressed = hover.Texture; 
-    //    }
-    //    //_animatedSprite.Hide();
-    //}
-    //
-    //public void UpdateButtonIcons(AnimatedSprite2D animSprite)
-    //{
-    //    
-    //}
+
+    public void ClearPressedButtons()
+    {
+        if (_playerInventoryButtons.GetPressedButton() == null) return;
+        _playerInventoryButtons.GetPressedButton().SetPressed(false);
+    }
 }
