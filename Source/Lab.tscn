@@ -1,9 +1,10 @@
-[gd_scene load_steps=57 format=3 uid="uid://eljyd8ypochx"]
+[gd_scene load_steps=63 format=3 uid="uid://eljyd8ypochx"]
 
 [ext_resource type="Script" uid="uid://ce03glqlcgu1q" path="res://LabAssetts/MainCharacter.cs" id="1_mim5p"]
 [ext_resource type="Script" uid="uid://biybq8g6qxxmp" path="res://Source/LabSignalManager.cs" id="1_y6m64"]
 [ext_resource type="Texture2D" uid="uid://dg6vihqdcckbp" path="res://LabAssetts/BaseChar1.png" id="2_qytnw"]
 [ext_resource type="Texture2D" uid="uid://hw54h7njepk0" path="res://LabAssetts/oven1.png" id="3_qytnw"]
+[ext_resource type="Texture2D" uid="uid://c0ao6rqnt3j4e" path="res://Sprites/MicrocentrifugeTube.png" id="4_4vl0c"]
 [ext_resource type="Texture2D" uid="uid://dstfxasgreu37" path="res://Sprites/itemBox-sheet.png" id="4_ognkn"]
 [ext_resource type="Texture2D" uid="uid://cjolt7fmvvfqy" path="res://LabAssetts/pcDNA.png" id="5_7hs1q"]
 [ext_resource type="Script" uid="uid://cnage7m6cadfd" path="res://Source/Pc.cs" id="6_ognkn"]
@@ -67,6 +68,57 @@ animations = [{
 }],
 "loop": true,
 "name": &"Walk",
+"speed": 5.0
+}]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_klfij"]
+atlas = ExtResource("4_4vl0c")
+region = Rect2(28, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ai1mn"]
+atlas = ExtResource("4_4vl0c")
+region = Rect2(0, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k4cmc"]
+atlas = ExtResource("4_4vl0c")
+region = Rect2(56, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jg60c"]
+atlas = ExtResource("4_4vl0c")
+region = Rect2(84, 0, 28, 28)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_wurmn"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_klfij")
+}],
+"loop": true,
+"name": &"Cell",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ai1mn")
+}],
+"loop": true,
+"name": &"DNA",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k4cmc")
+}],
+"loop": true,
+"name": &"Plant",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jg60c")
+}],
+"loop": true,
+"name": &"Vial",
 "speed": 5.0
 }]
 
@@ -406,9 +458,15 @@ script = ExtResource("1_mim5p")
 
 [node name="mainChar" type="AnimatedSprite2D" parent="CharacterBody2D"]
 z_index = 2
-position = Vector2(59, 114)
+position = Vector2(127, 129)
+scale = Vector2(3, 3)
 sprite_frames = SubResource("SpriteFrames_8xsak")
 animation = &"IdleFront"
+
+[node name="Vial" type="AnimatedSprite2D" parent="CharacterBody2D"]
+position = Vector2(-55, -22)
+sprite_frames = SubResource("SpriteFrames_wurmn")
+animation = &"Vial"
 
 [node name="_box" type="AnimatedSprite2D" parent="CharacterBody2D"]
 visible = false
@@ -417,7 +475,8 @@ sprite_frames = SubResource("SpriteFrames_klfij")
 animation = &"Black"
 
 [node name="Boiler" type="AnimatedSprite2D" parent="."]
-position = Vector2(26, 116)
+position = Vector2(36, 149)
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_rk17r")
 animation = &"Off"
 
@@ -429,13 +488,15 @@ frame_progress = 0.17404349
 script = ExtResource("6_ognkn")
 
 [node name="Grower" type="AnimatedSprite2D" parent="."]
-position = Vector2(148, 102)
+position = Vector2(172, 120)
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_6vegd")
 animation = &"Growing"
 
 [node name="Plant" type="AnimatedSprite2D" parent="."]
 z_index = -1
-position = Vector2(151, 98)
+position = Vector2(181, 112)
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_qhm7t")
 animation = &"SoyPlant"
-frame_progress = 0.08568218
+frame_progress = 0.371723

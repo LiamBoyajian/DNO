@@ -6,7 +6,7 @@ namespace Main.LabAssetts;
 
 public partial class MainCharacter : CharacterBody2D
 {
-    private const float Speed = 75.0f;
+    private const float Speed = 150.0f;
 
 
     //public const float JumpVelocity = -400.0f;
@@ -14,6 +14,7 @@ public partial class MainCharacter : CharacterBody2D
     public DNA dna = new DNA(new RandomNumberGenerator());
     private InventoryContainer _inventory;
     private Node _sceneDna;
+
     //private object _mouseSlot;
 
     [Signal]
@@ -22,10 +23,16 @@ public partial class MainCharacter : CharacterBody2D
     public override void _Ready()
     {
         _mainChar = GetNode<AnimatedSprite2D>("mainChar");
-
         GenerateInventory();
         this.CallDeferred(Node.MethodName.AddChild, _inventory);
         _inventory.Hide();
+        Sprite2D temp = new Sprite2D();
+        temp.Texture = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("DNA", 0);
+        while (-1 != _inventory.AddItem(new Item<DNA>(temp, new DNA(new RandomNumberGenerator()))))
+        {
+        }
+
+        ;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -72,6 +79,7 @@ public partial class MainCharacter : CharacterBody2D
         //TODO implement a dictionary for inputs to methods
         if (@event.IsActionPressed("Inventory"))
         {
+            _inventory.ClearPressedButtons();
             _setInventory();
             return;
         }

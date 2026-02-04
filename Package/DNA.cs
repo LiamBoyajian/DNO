@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using Main.InventoryAssets;
 
 //using AcidBases = System.;
-public partial class DNA : IEnumerable<AcidBases> 
+public partial class DNA : IEnumerable<AcidBases>
 {
     private ulong _binaryString;
     private bool _realDNA;
@@ -41,7 +41,7 @@ public partial class DNA : IEnumerable<AcidBases>
         return result;
     }
 
-    public String toString()
+    public String ToString()
     {
         return GetDnaString(_binaryString);
     }
@@ -71,8 +71,9 @@ public partial class DNA : IEnumerable<AcidBases>
 
     public IEnumerator<AcidBases> GetEnumerator()
     {
+        DNA snapshot = this.Clone();
         for (var i = 0; i < DnaLength; i++)
-            yield return GetDnaAtIndex(i);
+            yield return GetDnaAtIndex(snapshot, i);
     }
 
     public DNA Clone()
@@ -94,6 +95,17 @@ public partial class DNA : IEnumerable<AcidBases>
 
         ulong temp = 3ul << (index * 2); //something like 0000000000000000000000110000000000000000
         temp &= _binaryString;
+        return (AcidBases)(temp >> (index * 2)); //I love this system so much
+    }
+
+    public AcidBases GetDnaAtIndex(DNA givenDna, int index)
+    {
+        if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "index is less than zero");
+        if (index >= DnaLength)
+            throw new ArgumentOutOfRangeException(nameof(index), "index is greater than the max index");
+
+        ulong temp = 3ul << (index * 2); //something like 0000000000000000000000110000000000000000
+        temp &= givenDna._binaryString;
         return (AcidBases)(temp >> (index * 2)); //I love this system so much
     }
 
