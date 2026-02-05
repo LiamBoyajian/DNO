@@ -227,7 +227,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
             return null;
         _bufferSlot = SwapAtIndex(GetPressedButton().GetIndex(), _bufferSlot);
         UpdateItemsDisplay(); //Visual update
-        EmitSignal(nameof(UpdatedBufferSlotEventHandler));
+        EmitSignal(SignalName.UpdatedBufferSlot);
         return _bufferSlot;
     }
 

@@ -26,6 +26,11 @@ public partial class MainCharacter : CharacterBody2D
         _mainChar = GetNode<AnimatedSprite2D>("mainChar");
         GenerateInventory();
         this.CallDeferred(Node.MethodName.AddChild, _inventory);
+        
+        _spriteOnMouse = new Sprite2D();
+        _spriteOnMouse.Name = "SpriteOnMouse";
+        this.AddChild(_spriteOnMouse);
+        
         _inventory.Hide();
         _inventory.UpdatedBufferSlot += ShowHoldingItem;
     }
@@ -34,7 +39,7 @@ public partial class MainCharacter : CharacterBody2D
     public override void _PhysicsProcess(double delta)
     {
         //Update mouseSprite pos
-
+        _spriteOnMouse.GlobalPosition = GetViewport().GetMousePosition();
 
         Vector2 velocity = Velocity;
 
