@@ -1,4 +1,4 @@
-[gd_scene load_steps=63 format=3 uid="uid://eljyd8ypochx"]
+[gd_scene load_steps=67 format=3 uid="uid://eljyd8ypochx"]
 
 [ext_resource type="Script" uid="uid://ce03glqlcgu1q" path="res://LabAssetts/MainCharacter.cs" id="1_mim5p"]
 [ext_resource type="Script" uid="uid://biybq8g6qxxmp" path="res://Source/LabSignalManager.cs" id="1_y6m64"]
@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://cnage7m6cadfd" path="res://Source/Pc.cs" id="6_ognkn"]
 [ext_resource type="Texture2D" uid="uid://cc27bh4y3onni" path="res://LabAssetts/Grower.png" id="6_rk17r"]
 [ext_resource type="Texture2D" uid="uid://cefs0g3ayffob" path="res://LabAssetts/PlantGrowth.png" id="7_qlutr"]
+[ext_resource type="Texture2D" uid="uid://cnx3au7b5lf1i" path="res://Sprites/BankerLampSheet.png" id="11_2iyuy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q3tof"]
 atlas = ExtResource("2_qytnw")
@@ -450,23 +451,58 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_wurmn"]
+atlas = ExtResource("11_2iyuy")
+region = Rect2(0, 0, 20, 20)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_coj65"]
+atlas = ExtResource("11_2iyuy")
+region = Rect2(20, 0, 20, 20)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_l42qy"]
+animations = [{
+"frames": [{
+"duration": 5.0,
+"texture": SubResource("AtlasTexture_wurmn")
+}, {
+"duration": 20.0,
+"texture": SubResource("AtlasTexture_coj65")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wurmn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_coj65")
+}],
+"loop": true,
+"name": &"default_1",
+"speed": 5.0
+}]
+
 [node name="main" type="Node2D"]
 script = ExtResource("1_y6m64")
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]
+position = Vector2(98, 177)
 script = ExtResource("1_mim5p")
 
 [node name="mainChar" type="AnimatedSprite2D" parent="CharacterBody2D"]
 z_index = 2
-position = Vector2(127, 129)
-scale = Vector2(3, 3)
+position = Vector2(115, 147)
+scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_8xsak")
 animation = &"IdleFront"
 
 [node name="Vial" type="AnimatedSprite2D" parent="CharacterBody2D"]
+visible = false
 position = Vector2(-55, -22)
 sprite_frames = SubResource("SpriteFrames_wurmn")
-animation = &"Vial"
+animation = &"Plant"
 
 [node name="_box" type="AnimatedSprite2D" parent="CharacterBody2D"]
 visible = false
@@ -475,28 +511,34 @@ sprite_frames = SubResource("SpriteFrames_klfij")
 animation = &"Black"
 
 [node name="Boiler" type="AnimatedSprite2D" parent="."]
-position = Vector2(36, 149)
+position = Vector2(139, 328)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_rk17r")
 animation = &"Off"
 
 [node name="PC" type="AnimatedSprite2D" parent="."]
-position = Vector2(102, 116)
+position = Vector2(136, 279)
 sprite_frames = SubResource("SpriteFrames_jc4c4")
 animation = &"On-Animated"
-frame_progress = 0.17404349
+frame_progress = 0.4044736
 script = ExtResource("6_ognkn")
 
 [node name="Grower" type="AnimatedSprite2D" parent="."]
-position = Vector2(172, 120)
+position = Vector2(277, 298)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_6vegd")
 animation = &"Growing"
 
 [node name="Plant" type="AnimatedSprite2D" parent="."]
 z_index = -1
-position = Vector2(181, 112)
+position = Vector2(285, 290)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_qhm7t")
 animation = &"SoyPlant"
-frame_progress = 0.371723
+frame_progress = 0.47152698
+
+[node name="Lamp" type="AnimatedSprite2D" parent="."]
+position = Vector2(290, 218)
+scale = Vector2(2, 2)
+sprite_frames = SubResource("SpriteFrames_l42qy")
+frame_progress = 0.7201215

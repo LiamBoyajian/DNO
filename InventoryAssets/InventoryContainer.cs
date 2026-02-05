@@ -6,7 +6,7 @@ using Main.Package;
 
 namespace Main.InventoryAssets;
 
-public partial class Inventory(int max) : Node
+public partial class Inventory<TI>(int max) : Node
 {
     //Consider replacing with a new object; something like item or something. Maybe not needed...
     protected ArrayList Array = new ArrayList();
@@ -17,37 +17,43 @@ public partial class Inventory(int max) : Node
             : throw new ArgumentException(
                 "max is < 0"); //create a new inventory to upgrade... or I'll make an addition system im not sure.
 
-    public Item<TRemove> SwapAtIndex<TI, TRemove>(int index, Item<TI> item)
+    public TI SwapAtIndex(int index, TI item)
     {
         var result = RemoveItem(index);
         AddItem(index, item);
-        return (Item<TRemove>)result;
+        return result;
     }
 
-    public int AddItem<TI>(Item<TI> item)
+    public int AddItem(TI item)
     {
-        if (_ensureCapacity()) return -1;
+        if (EnsureCapacity()) return -1;
         return Array.Add(item);
     }
 
-    public int AddItem<TI>(int index, Item<TI> item)
+    public int AddItem(int index, TI item)
     {
-        if (_ensureCapacity()) return -1;
+        if (EnsureCapacity()) return -1;
         Array.Insert(index, item);
         return index;
     }
 
-    public ItemSprite RemoveItem(int index)
+    public TI RemoveItem(int index)
     {
+        //TODO might be broken I havent tested
         if (Array.Count == 0) throw new ArgumentOutOfRangeException(nameof(index), "Inventory already empty.");
         if (index >= Array.Count)
             throw new IndexOutOfRangeException("Index is greater than the Inventory size or negative.");
-        var result = (ItemSprite)Array[index];
+
+
+        var result = (TI)Array[index];
         Array.RemoveAt(index);
         return result;
     }
 
-    private bool _ensureCapacity()
+    /**
+     * Returns true if there is no space remaining
+     */
+    public bool EnsureCapacity()
     {
         return Array.Count >= MaxItems;
     }
@@ -73,12 +79,13 @@ public partial class Inventory(int max) : Node
     }
 }
 
-//My personal implementation
-public partial class InventoryContainer : Inventory
+//My personal implementation of inventory : uses itemSprite
+public partial class InventoryContainer : Inventory<ItemTexture>
 {
     private Container _container;
     private TextureButton _button;
     private ButtonGroup _playerInventoryButtons;
+    private ItemTexture _bufferSlot = null;
 
     public InventoryContainer(Container container, int slots, TextureButton button) : base(slots)
     {
@@ -115,22 +122,37 @@ public partial class InventoryContainer : Inventory
             if (node is not (TextureButton))
                 throw new ArrayTypeMismatchException();
 
+
             TextureButton textureButton = node as TextureButton;
+
+            Sprite2D spriteHolder = new Sprite2D();
+            spriteHolder.Name = "SpriteHolder";
+            spriteHolder.Position = new Vector2(_button.GetTextureNormal().GetSize().X / 2,
+                _button.GetTextureNormal().GetSize().Y / 2); //center it
+            textureButton.AddChild(spriteHolder);
+
             textureButton.ButtonGroup = _playerInventoryButtons;
         }
 
+        UpdateItemsDisplay();
         return result;
     }
 
     public void Show()
     {
         _container.Visible = true;
-        DisplayItems();
     }
 
     public void Hide()
     {
         _container.Visible = false;
+
+        //No Space
+        if (EnsureCapacity())
+        {
+            //leave the buffer full but the currently held item should immediately refresh on inventory open
+        }
+        //Return to previous slot or dump into open slot
     }
 
     public void ToggleVisible()
@@ -157,18 +179,62 @@ public partial class InventoryContainer : Inventory
         _playerInventoryButtons.GetPressedButton().SetPressed(false);
     }
 
-    private void DisplayItems()
+    private void UpdateItemsDisplay()
     {
-        for (int i = 0; i < MaxItems; i++)
+        for (int i = 0; i < MaxItems && i < Array.Count; i++)
         {
-            ItemSprite temp = (ItemSprite)base.Array[i];
+            Console.WriteLine("ForEach: " + Array[i]);
+            ItemTexture temp = Array[i] as ItemTexture;
             if (temp == null) continue;
-            Sprite2D currentSprite = new Sprite2D();
-            currentSprite.Texture = temp.Sprite.Texture;
-            currentSprite.Show();
-            _container.GetChild(i).AddChild(currentSprite); //TODO not good
+
+            Sprite2D currentItemSprite = _container.GetChild(i).GetNode<Sprite2D>("SpriteHolder");
+
+            if (currentItemSprite == null) continue;
+            if (temp.Texture == null)
+            {
+                //nothing in this slot 
+                currentItemSprite.SetTexture(null);
+            }
+            else
+            {
+                //something in this slot
+                currentItemSprite.SetTexture(temp.Texture);
+            }
         }
 
         return;
+    }
+
+    /**
+     * Returns null if no item was at given location. If there is an item then the item is swapped out.
+     */
+    //TODO 2
+    public ItemTexture GrabItem()
+    {
+        if (GetPressedButton() is null)
+            return null;
+
+        int index = GetPressedButton().GetIndex(); //index of the currently selected button --> 1to1 with the array
+        Console.WriteLine("index" + index);
+        return _bufferSlot = Array[index] as ItemTexture;
+    }
+
+    /**
+     * This refreshes the slot
+     */
+    public ItemTexture LoadBufferSlot()
+    {
+        if (GetPressedButton() is null)
+            return null;
+        Console.WriteLine("Array: " + Array[GetPressedButton().GetIndex()]);
+        Console.WriteLine("Buffer: " + _bufferSlot);
+        _bufferSlot = SwapAtIndex(GetPressedButton().GetIndex(), _bufferSlot);
+        Console.WriteLine("Array: " + Array[GetPressedButton().GetIndex()]);
+        Console.WriteLine("Buffer: " + _bufferSlot);
+        //Console.WriteLine("InArray: "+Array[GetPressedButton().GetIndex()]);
+        Console.WriteLine("Buffer: " + _bufferSlot);
+
+        UpdateItemsDisplay();
+        return _bufferSlot;
     }
 }

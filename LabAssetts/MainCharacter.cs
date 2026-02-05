@@ -26,13 +26,6 @@ public partial class MainCharacter : CharacterBody2D
         GenerateInventory();
         this.CallDeferred(Node.MethodName.AddChild, _inventory);
         _inventory.Hide();
-        Sprite2D temp = new Sprite2D();
-        temp.Texture = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("DNA", 0);
-        while (-1 != _inventory.AddItem(new Item<DNA>(temp, new DNA(new RandomNumberGenerator()))))
-        {
-        }
-
-        ;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -84,25 +77,15 @@ public partial class MainCharacter : CharacterBody2D
             return;
         }
 
-        if (@event.IsActionPressed("ui_text_clear_carets_and_selection"))
-        {
-            _inventory.ClearPressedButtons();
-            return;
-        }
+        //if (@event.IsActionPressed("ui_text_clear_carets_and_selection"))
+        //{
+        //    _inventory.ClearPressedButtons();
+        //    return;
+        //}
 
         if (@event.IsActionPressed("Click"))
         {
-            //if (_inventory == null) return;
-            if (_inventory.GetPressedButton() == null)
-            {
-                Console.WriteLine("Did not click a button");
-            }
-            else
-            {
-                Console.WriteLine("Clicked Box: " + _inventory.GetPressedButton().ToString());
-            }
-
-            return;
+            CallDeferred("OnLeftClick");
         }
 
         if (this.Velocity.Equals(new Vector2(0, 0)) && @event.IsActionPressed("Open Nearest Object"))
@@ -138,6 +121,7 @@ public partial class MainCharacter : CharacterBody2D
 
     private void GenerateInventory()
     {
+        //Just called near the start and I put all my testing code in here. 
         var tempTextureButton = new TextureButton();
         tempTextureButton.TextureNormal = GetNode<AnimatedSprite2D>("_box").SpriteFrames.GetFrameTexture("Black", 0);
         tempTextureButton.TextureHover = GetNode<AnimatedSprite2D>("_box").SpriteFrames.GetFrameTexture("Selected", 0);
@@ -151,6 +135,40 @@ public partial class MainCharacter : CharacterBody2D
         tempContainer.GlobalPosition = new Vector2(0, 0);
 
         _inventory = new InventoryContainer(tempContainer, 10, tempTextureButton);
+
+
+        Texture2D temp = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("DNA", 0);
+        Texture2D temp2 = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("Plant", 0);
+
+        _inventory.AddItem(null);
+        _inventory.AddItem(null);
+        _inventory.AddItem(null);
+        _inventory.AddItem(null);
+        _inventory.AddItem(new Item<DNA>(temp2, new DNA(new RandomNumberGenerator())));
+        while (-1 != _inventory.AddItem(new Item<DNA>(temp, new DNA(new RandomNumberGenerator()))))
+            ; //Remove after testing
+
         _inventory.GenNodeGrid(tempTextureButton.TextureNormal.GetSize());
+    }
+
+    private void OnLeftClick()
+    {
+        Console.WriteLine("Pressed: " + _inventory.GetPressedButton()); //TODO first click doesnt work?
+        if (_inventory.LoadBufferSlot() == null)
+            _inventory.ClearPressedButtons();
+
+        //if (_inventory == null) return;
+        if (_inventory.GetPressedButton() == null)
+        {
+            Console.WriteLine("Did not click a button");
+        }
+        else
+        {
+            Console.WriteLine("Clicked Box: " + _inventory.GetPressedButton().ToString());
+            //_inventory.GrabItem(); //Then assign this item's texture to the mouse
+            //Console.WriteLine("Mouse Pos" + GetViewport().GetMousePosition());
+        }
+
+        return;
     }
 }
