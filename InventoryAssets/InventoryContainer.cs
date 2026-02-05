@@ -1,15 +1,17 @@
 using System;
 using System.Collections;
+using System.Text.RegularExpressions;
 using Godot;
 using Godot.NativeInterop;
 using Main.Package;
 
 namespace Main.InventoryAssets;
 
-public partial class Inventory<TI>(int max) : Node
+public partial class Inventory<[MustBeVariant] TI>(int max) : Node
 {
     //Consider replacing with a new object; something like item or something. Maybe not needed...
-    protected ArrayList Array = new ArrayList();
+
+    protected Godot.Collections.Array<TI> Array = new Godot.Collections.Array<TI>();
 
     protected int
         MaxItems = max > 0
@@ -27,7 +29,8 @@ public partial class Inventory<TI>(int max) : Node
     public int AddItem(TI item)
     {
         if (EnsureCapacity()) return -1;
-        return Array.Add(item);
+        Array.Add(item);
+        return Array.IndexOf(item);
     }
 
     public int AddItem(int index, TI item)
@@ -45,7 +48,7 @@ public partial class Inventory<TI>(int max) : Node
             throw new IndexOutOfRangeException("Index is greater than the Inventory size or negative.");
 
 
-        var result = (TI)Array[index];
+        var result = Array[index];
         Array.RemoveAt(index);
         return result;
     }
@@ -73,12 +76,13 @@ public partial class Inventory<TI>(int max) : Node
         return Array.Count;
     }
 
-    public ArrayList ToArrayList()
-    {
-        return Array.Clone() as ArrayList;
-    }
+    //public ArrayList ToArrayList()
+    //{
+    //    return Array.CopyTo();
+    //}
 }
 
+//------------------------------------------------------------------------------------------
 //My personal implementation of inventory : uses itemSprite
 public partial class InventoryContainer : Inventory<ItemTexture>
 {
@@ -98,10 +102,13 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         this.AddChild(_button);
         _playerInventoryButtons = new ButtonGroup();
         _playerInventoryButtons.SetName("playerInventoryButtons");
+        _playerInventoryButtons.Pressed += OnGroupButtonPressed;
         //this.AddChild(_buttonGroup);
         //_playerInventoryButtons.
     }
 
+    [Signal]
+    public delegate void UpdatedBufferSlotEventHandler();
 
     //Required by Godot
     public InventoryContainer() : this((new Container()), 1, new TextureButton())
@@ -136,6 +143,11 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
         UpdateItemsDisplay();
         return result;
+    }
+
+    private void OnGroupButtonPressed(BaseButton button)
+    {
+        LoadBufferSlot();
     }
 
     public void Show()
@@ -179,7 +191,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         _playerInventoryButtons.GetPressedButton().SetPressed(false);
     }
 
-    private void UpdateItemsDisplay()
+    public void UpdateItemsDisplay()
     {
         for (int i = 0; i < MaxItems && i < Array.Count; i++)
         {
@@ -205,41 +217,22 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         return;
     }
 
-    /**
-     * Returns null if no item was at given location. If there is an item then the item is swapped out.
-     */
-    //TODO 2
-    public ItemTexture GrabItem()
-    {
-        if (GetPressedButton() is null)
-            return null;
-
-        int index = GetPressedButton().GetIndex(); //index of the currently selected button --> 1to1 with the array
-        Console.WriteLine("index" + index);
-        return _bufferSlot = Array[index] as ItemTexture;
-    }
 
     /**
      * This refreshes the slot
      */
-    public ItemTexture LoadBufferSlot()
+    protected ItemTexture LoadBufferSlot()
     {
         if (GetPressedButton() is null)
             return null;
-        Console.WriteLine("Array: " + Array[GetPressedButton().GetIndex()]);
-        Console.WriteLine("Buffer: " + _bufferSlot);
-        
         _bufferSlot = SwapAtIndex(GetPressedButton().GetIndex(), _bufferSlot);
-        //var temp = _bufferSlot;
-        //_bufferSlot = Array[GetPressedButton().GetIndex()] as ItemTexture;
-        //Array[GetPressedButton().GetIndex()] = temp;
-        
-        Console.WriteLine("Array: " + Array[GetPressedButton().GetIndex()]);
-        Console.WriteLine("Buffer: " + _bufferSlot);
-        //Console.WriteLine("InArray: "+Array[GetPressedButton().GetIndex()]);
-        Console.WriteLine("Buffer: " + _bufferSlot);
+        UpdateItemsDisplay(); //Visual update
+        EmitSignal(nameof(UpdatedBufferSlotEventHandler));
+        return _bufferSlot;
+    }
 
-        UpdateItemsDisplay();
+    public ItemTexture GetBufferSlot()
+    {
         return _bufferSlot;
     }
 }

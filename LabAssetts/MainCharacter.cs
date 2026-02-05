@@ -14,6 +14,7 @@ public partial class MainCharacter : CharacterBody2D
     public DNA dna = new DNA(new RandomNumberGenerator());
     private InventoryContainer _inventory;
     private Node _sceneDna;
+    private Sprite2D _spriteOnMouse;
 
     //private object _mouseSlot;
 
@@ -26,10 +27,15 @@ public partial class MainCharacter : CharacterBody2D
         GenerateInventory();
         this.CallDeferred(Node.MethodName.AddChild, _inventory);
         _inventory.Hide();
+        _inventory.UpdatedBufferSlot += ShowHoldingItem;
     }
+
 
     public override void _PhysicsProcess(double delta)
     {
+        //Update mouseSprite pos
+
+
         Vector2 velocity = Velocity;
 
         Vector2 direction = new Vector2(Input.GetAxis("ui_left", "ui_right"), Input.GetAxis("ui_up", "ui_down"));
@@ -85,7 +91,6 @@ public partial class MainCharacter : CharacterBody2D
 
         if (@event.IsActionPressed("Click"))
         {
-            OnLeftClick();
             //CallDeferred("OnLeftClick");
         }
 
@@ -107,6 +112,11 @@ public partial class MainCharacter : CharacterBody2D
 
             return;
         }
+    }
+
+    private void ShowHoldingItem()
+    {
+        _spriteOnMouse.Texture = _inventory.GetBufferSlot()?.Texture;
     }
 
     private void _setInventory()
@@ -150,26 +160,5 @@ public partial class MainCharacter : CharacterBody2D
             ; //Remove after testing
 
         _inventory.GenNodeGrid(tempTextureButton.TextureNormal.GetSize());
-    }
-
-    private void OnLeftClick()
-    {
-        Console.WriteLine("Pressed: " + _inventory.GetPressedButton()); //TODO first click doesnt work?
-        if (_inventory.LoadBufferSlot() == null)
-            _inventory.ClearPressedButtons();
-
-        //if (_inventory == null) return;
-        if (_inventory.GetPressedButton() == null)
-        {
-            Console.WriteLine("Did not click a button");
-        }
-        else
-        {
-            Console.WriteLine("Clicked Box: " + _inventory.GetPressedButton().ToString());
-            //_inventory.GrabItem(); //Then assign this item's texture to the mouse
-            //Console.WriteLine("Mouse Pos" + GetViewport().GetMousePosition());
-        }
-
-        return;
     }
 }

@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using Main.InventoryAssets;
 
 public partial class Pc : AnimatedSprite2D
 {
@@ -9,8 +10,11 @@ public partial class Pc : AnimatedSprite2D
     [Signal]
     public delegate void OpenPcEventHandler(string scene);
 
+    private InventoryContainer _myInventory;
+
     public override void _Ready()
     {
+        _myInventory = new InventoryContainer();
         //_area2D = GetNode<Area2D>("Area2D");
     }
 

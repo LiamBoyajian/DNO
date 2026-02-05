@@ -511,13 +511,13 @@ sprite_frames = SubResource("SpriteFrames_klfij")
 animation = &"Black"
 
 [node name="Boiler" type="AnimatedSprite2D" parent="."]
-position = Vector2(139, 328)
-scale = Vector2(2, 2)
+visible = false
+position = Vector2(140, 343)
 sprite_frames = SubResource("SpriteFrames_rk17r")
 animation = &"Off"
 
 [node name="PC" type="AnimatedSprite2D" parent="."]
-position = Vector2(136, 279)
+position = Vector2(157, 315)
 sprite_frames = SubResource("SpriteFrames_jc4c4")
 animation = &"On-Animated"
 frame_progress = 0.4044736
@@ -541,4 +541,4 @@ frame_progress = 0.47152698
 position = Vector2(290, 218)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_l42qy")
-frame_progress = 0.7201215
+frame_progress = 0.76518357
