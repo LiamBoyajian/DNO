@@ -185,12 +185,12 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         {
             Console.WriteLine("ForEach: " + Array[i]);
             ItemTexture temp = Array[i] as ItemTexture;
-            if (temp == null) continue;
+            //if (temp == null ) continue;
 
             Sprite2D currentItemSprite = _container.GetChild(i).GetNode<Sprite2D>("SpriteHolder");
 
-            if (currentItemSprite == null) continue;
-            if (temp.Texture == null)
+            if (currentItemSprite == null) throw new Exception("SpriteHolder is null");
+            if (temp == null || temp.Texture == null)
             {
                 //nothing in this slot 
                 currentItemSprite.SetTexture(null);
@@ -228,7 +228,12 @@ public partial class InventoryContainer : Inventory<ItemTexture>
             return null;
         Console.WriteLine("Array: " + Array[GetPressedButton().GetIndex()]);
         Console.WriteLine("Buffer: " + _bufferSlot);
+        
         _bufferSlot = SwapAtIndex(GetPressedButton().GetIndex(), _bufferSlot);
+        //var temp = _bufferSlot;
+        //_bufferSlot = Array[GetPressedButton().GetIndex()] as ItemTexture;
+        //Array[GetPressedButton().GetIndex()] = temp;
+        
         Console.WriteLine("Array: " + Array[GetPressedButton().GetIndex()]);
         Console.WriteLine("Buffer: " + _bufferSlot);
         //Console.WriteLine("InArray: "+Array[GetPressedButton().GetIndex()]);

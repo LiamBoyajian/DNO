@@ -85,7 +85,8 @@ public partial class MainCharacter : CharacterBody2D
 
         if (@event.IsActionPressed("Click"))
         {
-            CallDeferred("OnLeftClick");
+            OnLeftClick();
+            //CallDeferred("OnLeftClick");
         }
 
         if (this.Velocity.Equals(new Vector2(0, 0)) && @event.IsActionPressed("Open Nearest Object"))
