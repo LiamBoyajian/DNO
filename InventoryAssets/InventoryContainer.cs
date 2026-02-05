@@ -195,7 +195,6 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     {
         for (int i = 0; i < MaxItems && i < Array.Count; i++)
         {
-            Console.WriteLine("ForEach: " + Array[i]);
             ItemTexture temp = Array[i] as ItemTexture;
             //if (temp == null ) continue;
 
