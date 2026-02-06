@@ -234,4 +234,14 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     {
         return _bufferSlot;
     }
+
+    /**
+     * Returns a references to the ItemTexture in bufferslot and removes bufferslot's own reference
+     */
+    public ItemTexture TakeBufferItem()
+    {
+        ItemTexture result = GetBufferSlot();
+        _bufferSlot = null;
+        return result;
+    }
 }

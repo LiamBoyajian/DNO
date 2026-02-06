@@ -16,7 +16,7 @@ public partial class MainCharacter : CharacterBody2D
     private Node _sceneDna;
     private Sprite2D _spriteOnMouse;
 
-    private Node _sceneHeadNode; 
+    private Node _sceneHeadNode;
     //private object _mouseSlot;
 
     [Signal]
@@ -24,29 +24,28 @@ public partial class MainCharacter : CharacterBody2D
 
     [Signal]
     public delegate void RequestNearestDeviceEventHandler(Vector2 position);
-    
+
     public override void _Ready()
     {
         _mainChar = GetNode<AnimatedSprite2D>("mainChar");
         GenerateInventory();
         this.CallDeferred(Node.MethodName.AddChild, _inventory);
-        
+
         _spriteOnMouse = new Sprite2D();
         _spriteOnMouse.Name = "SpriteOnMouse";
         this.AddChild(_spriteOnMouse);
         _spriteOnMouse.ZIndex = 10;
         _inventory.Hide();
         _inventory.UpdatedBufferSlot += ShowHoldingItem;
-        
-        _sceneHeadNode =  GetTree().Root.GetChild<Node>(0); //should be "main" atm
-        _
+
+        _sceneHeadNode = GetTree().Root.GetChild<Node>(0); //should be "main" atm
     }
 
 
     public override void _PhysicsProcess(double delta)
     {
         //Update mouseSprite pos
-        if(_spriteOnMouse.Texture != null) //TODO make only when holding left click down.
+        if (_spriteOnMouse.Texture != null) //TODO make only when holding left click down.
             _spriteOnMouse.GlobalPosition = GetViewport().GetMousePosition();
 
         Vector2 velocity = Velocity;
