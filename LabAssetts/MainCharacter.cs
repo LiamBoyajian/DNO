@@ -153,17 +153,18 @@ public partial class MainCharacter : CharacterBody2D
 
         _inventory = new InventoryContainer(tempContainer, 10, tempTextureButton);
 
-
-        Texture2D temp = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("DNA", 0);
-        Texture2D temp2 = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("Plant", 0);
-
-        _inventory.AddItem(null);
-        _inventory.AddItem(null);
-        _inventory.AddItem(null);
-        _inventory.AddItem(null);
-        _inventory.AddItem(new Item<DNA>(temp2, new DNA(new RandomNumberGenerator())));
-        while (-1 != _inventory.AddItem(new Item<DNA>(temp, new DNA(new RandomNumberGenerator()))))
-            ; //Remove after testing
+        //Removable:
+        
+        //Texture2D temp = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("DNA", 0);
+        //Texture2D temp2 = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("Plant", 0);
+        
+        //_inventory.AddItem(null);
+        //_inventory.AddItem(null);
+        //_inventory.AddItem(null);
+        //_inventory.AddItem(null);
+        //_inventory.AddItem(new Item<DNA>(temp2, new DNA(new RandomNumberGenerator())));
+        //while (-1 != _inventory.AddItem(new Item<DNA>(temp, new DNA(new RandomNumberGenerator()))))
+        //    ; //Remove after testing
 
         _inventory.GenNodeGrid(tempTextureButton.TextureNormal.GetSize());
     }

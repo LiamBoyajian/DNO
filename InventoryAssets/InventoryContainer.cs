@@ -19,28 +19,28 @@ public partial class Inventory<[MustBeVariant] TI>(int max) : Node
             : throw new ArgumentException(
                 "max is < 0"); //create a new inventory to upgrade... or I'll make an addition system im not sure.
 
-    public TI SwapAtIndex(int index, TI item)
+    protected TI SwapAtIndex(int index, TI item)
     {
         var result = RemoveItem(index);
         AddItem(index, item);
         return result;
     }
 
-    public int AddItem(TI item)
+    protected int AddItem(TI item)
     {
         if (EnsureCapacity()) return -1;
         Array.Add(item);
         return Array.IndexOf(item);
     }
 
-    public int AddItem(int index, TI item)
+    protected int AddItem(int index, TI item)
     {
         if (EnsureCapacity()) return -1;
         Array.Insert(index, item);
         return index;
     }
 
-    public TI RemoveItem(int index)
+    protected TI RemoveItem(int index)
     {
         //TODO might be broken I havent tested
         if (Array.Count == 0) throw new ArgumentOutOfRangeException(nameof(index), "Inventory already empty.");
@@ -89,7 +89,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     private Container _container;
     private TextureButton _button;
     private ButtonGroup _playerInventoryButtons;
-    private ItemTexture _bufferSlot = null;
+    private ItemTexture _bufferSlot = null; //Basically a free storage slot that also lets outside users interact with it. manipulated based on the clicked button.  
 
     public InventoryContainer(Container container, int slots, TextureButton button) : base(slots)
     {
@@ -238,10 +238,10 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     /**
      * Returns a references to the ItemTexture in bufferslot and removes bufferslot's own reference
      */
-    public ItemTexture TakeBufferItem()
+    public ItemTexture TakeBufferItem(ItemTexture item)
     {
         ItemTexture result = GetBufferSlot();
-        _bufferSlot = null;
+        _bufferSlot = item;//nullable
         return result;
     }
 }

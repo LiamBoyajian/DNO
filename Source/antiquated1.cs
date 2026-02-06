@@ -2,7 +2,7 @@ using Godot;
 using System;
 using Main.InventoryAssets;
 
-public partial class Pc : AnimatedSprite2D
+public partial class antiquated1 : AnimatedSprite2D
 {
     // Called when the node enters the scene tree for the first time.
     //private Area2D _area2D;

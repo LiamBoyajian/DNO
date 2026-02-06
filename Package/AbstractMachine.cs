@@ -7,7 +7,7 @@ public abstract partial class AbstractMachine : Node
 {
     protected AnimatedSprite2D Sprite;
     protected InventoryContainer Inventory;
-
+    
 
     public Vector2 GetSpriteSize()
     {
@@ -16,8 +16,16 @@ public abstract partial class AbstractMachine : Node
         return Sprite.SpriteFrames.GetFrameTexture(Sprite.Animation, Sprite.Frame).GetSize();
     }
 
-    public ItemTexture TakeMyBufferItem()
+    /**
+     * Returns the machine's former buffer item and puts the item argument into its buffer slot
+     */
+    public ItemTexture SwapBufferItem(ItemTexture item)
     {
-        return Inventory.TakeBufferItem();
+        return Inventory.TakeBufferItem(item);
+    }
+
+    public void ToggleInventory()
+    {
+        Inventory.ToggleVisible();
     }
 }
