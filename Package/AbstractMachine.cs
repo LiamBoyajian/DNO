@@ -1,3 +1,5 @@
+using System;
+using System.Reflection.PortableExecutable;
 using Godot;
 using Main.InventoryAssets;
 
@@ -7,16 +9,16 @@ namespace Main.Package;
  * Extend this class for each machine and place that script onto the machine directly.
  * Sprite size should be uniform across all frames
  */
-public abstract partial class AbstractMachine : Node
+public abstract partial class AbstractMachine : AnimatedSprite2D
 {
-    protected AnimatedSprite2D Sprite;
+    //protected AnimatedSprite2D Sprite;
     protected InventoryContainer Inventory;
 
     public Vector2 GetSpriteSize()
     {
-        if (Sprite == null)
+        if (base.GetSpriteFrames() == null)
             return new Vector2(0, 0);
-        return Sprite.SpriteFrames.GetFrameTexture(Sprite.Animation, Sprite.Frame).GetSize();
+        return base.SpriteFrames.GetFrameTexture(base.Animation, 0).GetSize();
     }
 
     /**
@@ -32,15 +34,13 @@ public abstract partial class AbstractMachine : Node
         Inventory.ToggleVisible();
     }
 
-    public AnimatedSprite2D GetSprite()
+    public void ShowInventory()
     {
-        return Sprite;
+        Inventory.Show();
     }
 
-    public Vector2 GetSpritePosition()
+    public void HideInventory()
     {
-        if (Sprite == null)
-            return Vector2.Zero;
-        return Sprite.Position;
+        Inventory.Hide();
     }
 }

@@ -7,7 +7,7 @@ using Main.Package;
 
 namespace Main.InventoryAssets;
 
-public partial class Inventory<[MustBeVariant] TI>(int max) : Node
+public partial class Inventory<[MustBeVariant] TI>(int max) : Container
 {
     //Consider replacing with a new object; something like item or something. Maybe not needed...
 
@@ -21,12 +21,15 @@ public partial class Inventory<[MustBeVariant] TI>(int max) : Node
 
     protected TI SwapAtIndex(int index, TI item)
     {
+        if (index < 0 || index >= Array.Count)
+            return item;
         var result = Array[index];
         Array[index] = item;
         return result;
     }
 
-    protected int AddItem(TI item)
+    //todo make protected
+    public int AddItem(TI item)
     {
         if (EnsureCapacity()) return -1;
         Array.Add(item);
@@ -86,7 +89,7 @@ public partial class Inventory<[MustBeVariant] TI>(int max) : Node
 //My personal implementation of inventory : uses itemSprite
 public partial class InventoryContainer : Inventory<ItemTexture>
 {
-    private Container _container;
+    //private Container _container;
     private TextureButton _button;
     private ButtonGroup _playerInventoryButtons;
 
@@ -94,14 +97,16 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         _bufferSlot =
             null; //Basically a free storage slot that also lets outside users interact with it. manipulated based on the clicked button.  
 
-    public InventoryContainer(Container container, int slots, TextureButton button) : base(slots)
+    public InventoryContainer(Vector2 size, int slots, TextureButton button) : base(slots)
     {
-        _container = container ?? throw new ArgumentNullException(nameof(container), "Container is null");
+        Size = size;
+        GlobalPosition = new Vector2(0, 0);
+
         _button = button ?? throw new ArgumentNullException(nameof(button), "button is null");
 
         _button.Hide();
 
-        this.AddChild(_container);
+        //this.AddChild(_container);
         this.AddChild(_button);
         _playerInventoryButtons = new ButtonGroup();
         _playerInventoryButtons.SetName("playerInventoryButtons");
@@ -114,7 +119,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     public delegate void UpdatedBufferSlotEventHandler();
 
     //Required by Godot
-    public InventoryContainer() : this((new Container()), 1, new TextureButton())
+    public InventoryContainer() : this(Vector2.One, 1, new TextureButton())
     {
     }
 
@@ -123,11 +128,11 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         //NEEDS to use containers.............
         _button.Show();
         var result = CricketVisuals.GenerateNodeGrid(_button,
-            slotSize, 1, MaxItems, _container,
-            _container.Size, new int?(0));
+            slotSize, 1, MaxItems, this,
+            this.Size, new int?(0));
         _button.Hide();
 
-        foreach (var node in _container.GetChildren())
+        foreach (var node in this.GetChildren())
         {
             if (node is not (TextureButton))
                 throw new ArrayTypeMismatchException();
@@ -153,14 +158,14 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         LoadBufferSlot();
     }
 
-    public void Show()
+    public new void Show()
     {
-        _container.Visible = true;
+        Visible = true;
     }
 
-    public void Hide()
+    public new void Hide()
     {
-        _container.Visible = false;
+        Visible = false;
 
         //No Space
         if (EnsureCapacity())
@@ -173,7 +178,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     public void ToggleVisible()
     {
         //if (_container.Visible) 
-        if (_container.Visible)
+        if (Visible)
         {
             Hide();
         }
@@ -201,7 +206,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
             ItemTexture temp = Array[i] as ItemTexture;
             //if (temp == null ) continue;
 
-            Sprite2D currentItemSprite = _container.GetChild(i).GetNode<Sprite2D>("SpriteHolder");
+            Sprite2D currentItemSprite = GetChild(i).GetNode<Sprite2D>("SpriteHolder");
 
             if (currentItemSprite == null) throw new Exception("SpriteHolder is null");
             if (temp == null || temp.Texture == null)
@@ -246,5 +251,31 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         ItemTexture result = GetBufferSlot();
         _bufferSlot = item; //nullable
         return result;
+    }
+
+    /**
+     * I thought it is nice to make containers in the editor to see the size in scene and wanted to make a way for the inventory to "steal" those stats.
+     */
+    public void CopyValues(Container container, bool destroyContainer)
+    {
+        if (container == null) return;
+        Position = container.Position;
+        Size = container.Size;
+        this.TopLevel = container.TopLevel;
+        if (destroyContainer)
+            container.QueueFree();
+    }
+
+    /**
+     * TODO remove later -- for dev testing
+     */
+    public Godot.Collections.Array<ItemTexture> GetArray()
+    {
+        return Array;
+    }
+
+    public Godot.Collections.Array<BaseButton> GetButtons()
+    {
+        return _playerInventoryButtons.GetButtons();
     }
 }

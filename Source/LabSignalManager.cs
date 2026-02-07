@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using Main.LabAssetts;
 using Main.Package;
 using Main.Source;
 
@@ -12,35 +13,20 @@ public partial class LabSignalManager : Node2D
     // Called when the node enters the scene tree for the first time.
 
     public Machines MachinesStruct;
-
-    [Signal]
-    public delegate void NearestMachineEventHandler(Node machine);
-    //TODO make a machine class
-
+    private MainCharacter _player;
 
     public override void _Ready()
     {
-        //get a reference to everything in the scene.
-        //** I could make an array to get everything but there might be trash in there or I would need to enforce some rule about what can go in there.
-        //Otherwise I need to find everything manually. Or I can do the array and check the type of the object and also check the nearest object which I am also in bounds of.
-
-        var arrayOfNodesInScene = GetChildren();
-        var player =
+        _player =
             GetNode<CharacterBody2D>(
-                "CharacterBody2D"); //Can leave separate since it's useful to have this particular reference
-        //arrayOfNodesInScene.Remove(player);
+                    "CharacterBody2D") as
+                MainCharacter; //Can leave separate since it's useful to have this particular reference
 
-        //Should catch a signal from player being the request for the nearest object
+        if (_player == null) throw new MissingFieldException("Player not found in scene. ", nameof(_player));
+        _player.RequestNearestDevice += HandlePlayerOpen;
+
+        var arrayOfNodesInScene = GetChild(0).GetChildren();
         MachinesStruct = new Machines(arrayOfNodesInScene);
-        foreach (ref readonly var machine in MachinesStruct.Elements.AsSpan())
-        {
-            Console.WriteLine(machine);
-        }
-        //var pc = GetNode<AnimatedSprite2D>("Pc"); //TODO replace
-        //arrayOfNodesInScene;
-        //player.Connect(Main.LabAssetts.MainCharacter.SignalName.OpenedSignal,
-        //    new Callable(pc, antiquated1.MethodName.OnOpenedSignal));
-        //pc.Connect(antiquated1.SignalName.OpenPc, new Callable(player, Main.LabAssetts.MainCharacter.MethodName.OpenScene));
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -50,5 +36,18 @@ public partial class LabSignalManager : Node2D
 
     public void HandlePlayerOpen(Vector2 playerPos)
     {
+        var i = 0;
+        foreach (ref readonly var machine in MachinesStruct.Elements.AsSpan())
+        {
+            var posDifference = machine.Position - playerPos;
+            if (Math.Abs(posDifference.X) < machine.Size.X / 2 && Math.Abs(posDifference.Y) < machine.Size.Y / 2)
+            {
+                //can't use index, can't use name, can't use reference.
+                Console.WriteLine(posDifference);
+                _player.CatchMachine(GetChild(0).GetChildren()[i] as AbstractMachine);
+            }
+
+            ++i;
+        }
     }
 }

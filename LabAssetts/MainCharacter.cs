@@ -1,6 +1,7 @@
 using System;
 using Godot;
 using Main.InventoryAssets;
+using Main.Package;
 
 namespace Main.LabAssetts;
 
@@ -15,12 +16,10 @@ public partial class MainCharacter : CharacterBody2D
     private InventoryContainer _inventory;
     private Node _sceneDna;
     private Sprite2D _spriteOnMouse;
-
+    private AbstractMachine _machine;
     private Node _sceneHeadNode;
     //private object _mouseSlot;
 
-    [Signal]
-    public delegate void OpenedSignalEventHandler(Vector2 position);
 
     [Signal]
     public delegate void RequestNearestDeviceEventHandler(Vector2 position);
@@ -105,9 +104,8 @@ public partial class MainCharacter : CharacterBody2D
             _mainChar.SetAnimation("IdleBack");
             if (_sceneDna == null)
             {
-                EmitSignal(MainCharacter.SignalName.OpenedSignal,
-                    _mainChar
-                        .GlobalPosition); //I don't know why using 'this.' returns 0,0 so might be something to watch
+                EmitSignal(MainCharacter.SignalName.RequestNearestDevice,
+                    GlobalPosition); //I don't know why using 'this.' returns 0,0 so might be something to watch
             }
             else
             {
@@ -151,13 +149,13 @@ public partial class MainCharacter : CharacterBody2D
         tempContainer.Size = new Vector2(410, 360);
         tempContainer.GlobalPosition = new Vector2(0, 0);
 
-        _inventory = new InventoryContainer(tempContainer, 10, tempTextureButton);
-
+        _inventory = new InventoryContainer(new Vector2(410, 50), 10, tempTextureButton);
+        _inventory.TopLevel = true;
         //Removable:
-        
+
         //Texture2D temp = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("DNA", 0);
         //Texture2D temp2 = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("Plant", 0);
-        
+
         //_inventory.AddItem(null);
         //_inventory.AddItem(null);
         //_inventory.AddItem(null);
@@ -167,5 +165,11 @@ public partial class MainCharacter : CharacterBody2D
         //    ; //Remove after testing
 
         _inventory.GenNodeGrid(tempTextureButton.TextureNormal.GetSize());
+    }
+
+    public void CatchMachine(AbstractMachine machine)
+    {
+        _machine = machine;
+        _machine.ShowInventory();
     }
 }

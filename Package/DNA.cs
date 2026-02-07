@@ -1,10 +1,11 @@
-using Godot;
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using Godot;
 using Main.InventoryAssets;
 
 //using AcidBases = System.;
+namespace Main.Package;
+
 public partial class DNA : IEnumerable<AcidBases>
 {
     private ulong _binaryString;
@@ -41,15 +42,15 @@ public partial class DNA : IEnumerable<AcidBases>
         return result;
     }
 
-    public String ToString()
+    public override string ToString()
     {
         return GetDnaString(_binaryString);
     }
 
     /**
-     * Used for dna segments
-     */
-    public static String GetDNAString(byte binaryString)
+ * Used for dna segments
+ */
+    public static string GetDnaString(byte binaryString)
     {
         String result = "";
         byte temp = binaryString;
@@ -81,7 +82,7 @@ public partial class DNA : IEnumerable<AcidBases>
         return new DNA(_binaryString);
     }
 
-    public bool getRealDNA()
+    public bool GetRealDna()
     {
         return _realDNA;
     }

@@ -31,7 +31,7 @@ public struct Machines
             var machineSprite = machines[i];
             if (machineSprite == null) continue;
 
-            Elements[i] = new SizePos(machineSprite.GetSpritePosition(), machineSprite.GetSpriteSize());
+            Elements[i] = new SizePos(machineSprite.GetGlobalPosition(), machineSprite.GetSpriteSize());
         }
     }
 
@@ -42,8 +42,7 @@ public struct Machines
         {
             var machineSprite = machines[i] as AbstractMachine;
             if (machineSprite == null) continue;
-
-            Elements[i] = new SizePos(machineSprite.GetSpritePosition(), machineSprite.GetSpriteSize());
+            Elements[i] = new SizePos(machineSprite.GetGlobalPosition(), machineSprite.GetSpriteSize());
         }
     }
 }
