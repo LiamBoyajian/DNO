@@ -3,11 +3,14 @@ using Main.InventoryAssets;
 
 namespace Main.Package;
 
+/**
+ * Extend this class for each machine and place that script onto the machine directly.
+ * Sprite size should be uniform across all frames
+ */
 public abstract partial class AbstractMachine : Node
 {
     protected AnimatedSprite2D Sprite;
     protected InventoryContainer Inventory;
-    
 
     public Vector2 GetSpriteSize()
     {
@@ -27,5 +30,17 @@ public abstract partial class AbstractMachine : Node
     public void ToggleInventory()
     {
         Inventory.ToggleVisible();
+    }
+
+    public AnimatedSprite2D GetSprite()
+    {
+        return Sprite;
+    }
+
+    public Vector2 GetSpritePosition()
+    {
+        if (Sprite == null)
+            return Vector2.Zero;
+        return Sprite.Position;
     }
 }

@@ -1,13 +1,12 @@
-[gd_scene load_steps=67 format=3 uid="uid://eljyd8ypochx"]
+[gd_scene load_steps=66 format=3 uid="uid://eljyd8ypochx"]
 
 [ext_resource type="Script" uid="uid://ce03glqlcgu1q" path="res://LabAssetts/MainCharacter.cs" id="1_mim5p"]
 [ext_resource type="Script" uid="uid://biybq8g6qxxmp" path="res://Source/LabSignalManager.cs" id="1_y6m64"]
 [ext_resource type="Texture2D" uid="uid://dg6vihqdcckbp" path="res://LabAssetts/BaseChar1.png" id="2_qytnw"]
 [ext_resource type="Texture2D" uid="uid://hw54h7njepk0" path="res://LabAssetts/oven1.png" id="3_qytnw"]
 [ext_resource type="Texture2D" uid="uid://c0ao6rqnt3j4e" path="res://Sprites/MicrocentrifugeTube.png" id="4_4vl0c"]
-[ext_resource type="Texture2D" uid="uid://gbxv2h118uol" path="res://Sprites/itemBox-sheet.png" id="4_ognkn"]
+[ext_resource type="Texture2D" uid="uid://dstfxasgreu37" path="res://Sprites/itemBox-sheet.png" id="4_ognkn"]
 [ext_resource type="Texture2D" uid="uid://cjolt7fmvvfqy" path="res://LabAssetts/pcDNA.png" id="5_7hs1q"]
-[ext_resource type="Script" uid="uid://cnage7m6cadfd" path="res://Source/Pc.cs" id="6_ognkn"]
 [ext_resource type="Texture2D" uid="uid://cc27bh4y3onni" path="res://LabAssetts/Grower.png" id="6_rk17r"]
 [ext_resource type="Texture2D" uid="uid://cefs0g3ayffob" path="res://LabAssetts/PlantGrowth.png" id="7_qlutr"]
 [ext_resource type="Texture2D" uid="uid://cnx3au7b5lf1i" path="res://Sprites/BankerLampSheet.png" id="11_2iyuy"]
@@ -516,12 +515,11 @@ position = Vector2(140, 343)
 sprite_frames = SubResource("SpriteFrames_rk17r")
 animation = &"Off"
 
-[node name="PC" type="AnimatedSprite2D" parent="."]
+[node name="Pc" type="AnimatedSprite2D" parent="."]
 position = Vector2(157, 315)
 sprite_frames = SubResource("SpriteFrames_jc4c4")
 animation = &"On-Animated"
 frame_progress = 0.4044736
-script = ExtResource("6_ognkn")
 
 [node name="Grower" type="AnimatedSprite2D" parent="."]
 position = Vector2(277, 298)

@@ -1,5 +1,7 @@
 using Godot;
 using System;
+using Main.Package;
+using Main.Source;
 
 
 /**
@@ -8,6 +10,8 @@ using System;
 public partial class LabSignalManager : Node2D
 {
     // Called when the node enters the scene tree for the first time.
+
+    public Machines MachinesStruct;
 
     [Signal]
     public delegate void NearestMachineEventHandler(Node machine);
@@ -24,23 +28,27 @@ public partial class LabSignalManager : Node2D
         var player =
             GetNode<CharacterBody2D>(
                 "CharacterBody2D"); //Can leave separate since it's useful to have this particular reference
-        arrayOfNodesInScene.Remove(player);
+        //arrayOfNodesInScene.Remove(player);
 
         //Should catch a signal from player being the request for the nearest object
-        foreach (var node in arrayOfNodesInScene)
+        MachinesStruct = new Machines(arrayOfNodesInScene);
+        foreach (ref readonly var machine in MachinesStruct.Elements.AsSpan())
         {
-            //TODO make a machine class that this method can use the as operator with
+            Console.WriteLine(machine);
         }
-
-        var pc = GetNode<AnimatedSprite2D>("PC"); //TODO replace
+        //var pc = GetNode<AnimatedSprite2D>("Pc"); //TODO replace
         //arrayOfNodesInScene;
-        player.Connect(Main.LabAssetts.MainCharacter.SignalName.OpenedSignal,
-            new Callable(pc, antiquated1.MethodName.OnOpenedSignal));
-        pc.Connect(antiquated1.SignalName.OpenPc, new Callable(player, Main.LabAssetts.MainCharacter.MethodName.OpenScene));
+        //player.Connect(Main.LabAssetts.MainCharacter.SignalName.OpenedSignal,
+        //    new Callable(pc, antiquated1.MethodName.OnOpenedSignal));
+        //pc.Connect(antiquated1.SignalName.OpenPc, new Callable(player, Main.LabAssetts.MainCharacter.MethodName.OpenScene));
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
+    {
+    }
+
+    public void HandlePlayerOpen(Vector2 playerPos)
     {
     }
 }

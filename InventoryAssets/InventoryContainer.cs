@@ -21,8 +21,8 @@ public partial class Inventory<[MustBeVariant] TI>(int max) : Node
 
     protected TI SwapAtIndex(int index, TI item)
     {
-        var result = RemoveItem(index);
-        AddItem(index, item);
+        var result = Array[index];
+        Array[index] = item;
         return result;
     }
 
@@ -89,7 +89,10 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     private Container _container;
     private TextureButton _button;
     private ButtonGroup _playerInventoryButtons;
-    private ItemTexture _bufferSlot = null; //Basically a free storage slot that also lets outside users interact with it. manipulated based on the clicked button.  
+
+    private ItemTexture
+        _bufferSlot =
+            null; //Basically a free storage slot that also lets outside users interact with it. manipulated based on the clicked button.  
 
     public InventoryContainer(Container container, int slots, TextureButton button) : base(slots)
     {
@@ -241,7 +244,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     public ItemTexture TakeBufferItem(ItemTexture item)
     {
         ItemTexture result = GetBufferSlot();
-        _bufferSlot = item;//nullable
+        _bufferSlot = item; //nullable
         return result;
     }
 }
