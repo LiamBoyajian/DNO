@@ -14,6 +14,7 @@ public abstract partial class AbstractMachine : AnimatedSprite2D
     //protected AnimatedSprite2D Sprite;
     protected InventoryContainer Inventory;
 
+
     public Vector2 GetSpriteSize()
     {
         if (base.GetSpriteFrames() == null)
@@ -42,5 +43,10 @@ public abstract partial class AbstractMachine : AnimatedSprite2D
     public void HideInventory()
     {
         Inventory.Hide();
+    }
+
+    public override void _Ready()
+    {
+        this.AddChild(Inventory);
     }
 }

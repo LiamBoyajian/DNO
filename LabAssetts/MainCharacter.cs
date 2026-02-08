@@ -16,7 +16,7 @@ public partial class MainCharacter : CharacterBody2D
     private InventoryContainer _inventory;
     private Node _sceneDna;
     private Sprite2D _spriteOnMouse;
-    private AbstractMachine _machine;
+    private AbstractMachine _openMachine;
     private Node _sceneHeadNode;
     //private object _mouseSlot;
 
@@ -99,21 +99,17 @@ public partial class MainCharacter : CharacterBody2D
             //CallDeferred("OnLeftClick");
         }
 
-        if (this.Velocity.Equals(new Vector2(0, 0)) && @event.IsActionPressed("Open Nearest Object"))
+        if (@event.IsActionPressed("Open Nearest Object") && this.Velocity.Equals(new Vector2(0, 0)))
         {
-            _mainChar.SetAnimation("IdleBack");
-            if (_sceneDna == null)
+            if (_openMachine == null)
             {
                 EmitSignal(MainCharacter.SignalName.RequestNearestDevice,
                     GlobalPosition); //I don't know why using 'this.' returns 0,0 so might be something to watch
-            }
-            else
-            {
-                GetTree().Root.RemoveChild(_sceneDna);
-                _sceneDna.Free();
-                _sceneDna = null;
+                return;
             }
 
+            _openMachine.HideInventory();
+            _openMachine = null;
             return;
         }
     }
@@ -169,7 +165,7 @@ public partial class MainCharacter : CharacterBody2D
 
     public void CatchMachine(AbstractMachine machine)
     {
-        _machine = machine;
-        _machine.ShowInventory();
+        _openMachine = machine;
+        _openMachine.ShowInventory();
     }
 }

@@ -11,7 +11,8 @@ public partial class Inventory<[MustBeVariant] TI>(int max) : Container
 {
     //Consider replacing with a new object; something like item or something. Maybe not needed...
 
-    protected Godot.Collections.Array<TI> Array = new Godot.Collections.Array<TI>();
+    protected TI[] Array = new TI[max];
+    protected int _count = 0;
 
     protected int
         MaxItems = max > 0
@@ -19,9 +20,48 @@ public partial class Inventory<[MustBeVariant] TI>(int max) : Container
             : throw new ArgumentException(
                 "max is < 0"); //create a new inventory to upgrade... or I'll make an addition system im not sure.
 
+    protected bool Place(int index, TI item)
+    {
+        if (index >= MaxItems || index < 0 || _count >= MaxItems || Array[index] != null) return false;
+        Array[index] = item;
+        ++_count;
+        return true;
+    }
+
+    protected int Add(TI item)
+    {
+        if (_count >= MaxItems) return -1;
+        for (var i = 0; i < MaxItems; i++)
+            if (Place(i, item))
+                return i;
+        throw new InvalidOperationException(); //Not possible
+    }
+
+    protected TI RemoveAt(int index)
+    {
+        if (_count == 0) return default;
+        var result = Array[index];
+        Array[index] = default;
+        --_count;
+        return result; //not possible
+    }
+
+    /**
+     * Slow
+     */
+    protected bool Add(int index, TI item)
+    {
+        if (_count >= MaxItems) return false;
+        if (_count == 0) return Place(index, item);
+        var temp = RemoveAt(index);
+        Place(index, item);
+        for (var i = 0; Place(i, temp); i++) ;
+        return true;
+    }
+
     protected TI SwapAtIndex(int index, TI item)
     {
-        if (index < 0 || index >= Array.Count)
+        if (index < 0 || index >= Array.Length)
             return item;
         var result = Array[index];
         Array[index] = item;
@@ -31,37 +71,22 @@ public partial class Inventory<[MustBeVariant] TI>(int max) : Container
     //todo make protected
     public int AddItem(TI item)
     {
-        if (EnsureCapacity()) return -1;
-        Array.Add(item);
-        return Array.IndexOf(item);
+        if (_count >= Array.Length) return -1;
+        return Add(item);
     }
 
     protected int AddItem(int index, TI item)
     {
-        if (EnsureCapacity()) return -1;
-        Array.Insert(index, item);
-        return index;
+        return Add(index, item) ? index : -1;
     }
 
     protected TI RemoveItem(int index)
     {
-        //TODO might be broken I havent tested
-        if (Array.Count == 0) throw new ArgumentOutOfRangeException(nameof(index), "Inventory already empty.");
-        if (index >= Array.Count)
+        if (_count >= MaxItems) throw new ArgumentOutOfRangeException(nameof(index), "Inventory already empty.");
+        if (index >= _count)
             throw new IndexOutOfRangeException("Index is greater than the Inventory size or negative.");
-
-
-        var result = Array[index];
-        Array.RemoveAt(index);
-        return result;
-    }
-
-    /**
-     * Returns true if there is no space remaining
-     */
-    public bool EnsureCapacity()
-    {
-        return Array.Count >= MaxItems;
+        return RemoveAt(index);
+        ;
     }
 
     public int Search()
@@ -76,7 +101,7 @@ public partial class Inventory<[MustBeVariant] TI>(int max) : Container
 
     public int Count()
     {
-        return Array.Count;
+        return _count;
     }
 
     //public ArrayList ToArrayList()
@@ -117,6 +142,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
     [Signal]
     public delegate void UpdatedBufferSlotEventHandler();
+
 
     //Required by Godot
     public InventoryContainer() : this(Vector2.One, 1, new TextureButton())
@@ -166,18 +192,10 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     public new void Hide()
     {
         Visible = false;
-
-        //No Space
-        if (EnsureCapacity())
-        {
-            //leave the buffer full but the currently held item should immediately refresh on inventory open
-        }
-        //Return to previous slot or dump into open slot
     }
 
     public void ToggleVisible()
     {
-        //if (_container.Visible) 
         if (Visible)
         {
             Hide();
@@ -201,24 +219,17 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
     public void UpdateItemsDisplay()
     {
-        for (int i = 0; i < MaxItems && i < Array.Count; i++)
+        for (var i = 0; i < MaxItems; i++)
         {
-            ItemTexture temp = Array[i] as ItemTexture;
-            //if (temp == null ) continue;
+            ItemTexture temp = Array[i];
 
             Sprite2D currentItemSprite = GetChild(i).GetNode<Sprite2D>("SpriteHolder");
 
             if (currentItemSprite == null) throw new Exception("SpriteHolder is null");
-            if (temp == null || temp.Texture == null)
-            {
-                //nothing in this slot 
-                currentItemSprite.SetTexture(null);
-            }
-            else
-            {
-                //something in this slot
-                currentItemSprite.SetTexture(temp.Texture);
-            }
+            //Console.WriteLine("uhhh " + temp);
+            //something in this slot
+            //nothing in this slot 
+            currentItemSprite.SetTexture(temp?.Texture);
         }
 
         return;
@@ -264,18 +275,5 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         this.TopLevel = container.TopLevel;
         if (destroyContainer)
             container.QueueFree();
-    }
-
-    /**
-     * TODO remove later -- for dev testing
-     */
-    public Godot.Collections.Array<ItemTexture> GetArray()
-    {
-        return Array;
-    }
-
-    public Godot.Collections.Array<BaseButton> GetButtons()
-    {
-        return _playerInventoryButtons.GetButtons();
     }
 }
