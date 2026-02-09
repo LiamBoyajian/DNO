@@ -118,11 +118,13 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     protected TextureButton Button;
     protected ButtonGroup PlayerInventoryButtons;
     protected InventoryContainer ConnectedInventoryContainer;
-
     protected ItemTexture
         BufferSlot =
             null; //Basically a free storage slot that also lets outside users interact with it. manipulated based on the clicked button.  
 
+    [Signal]
+    public delegate void SlotSwappedEventHandler();
+    
     public InventoryContainer(Vector2 size, int slots, TextureButton button) : base(slots)
     {
         Size = size;
@@ -182,6 +184,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
     private void OnGroupButtonPressed(BaseButton button)
     {
+        EmitSignal(nameof(SlotSwapped));
         LoadBufferSlot();
     }
 
@@ -209,12 +212,19 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
     public BaseButton GetPressedButton()
     {
-        return PlayerInventoryButtons.GetPressedButton();
+        return PlayerInventoryButtons?.GetPressedButton();
     }
 
     public void ClearPressedButtons()
     {
         if (PlayerInventoryButtons.GetPressedButton() == null) return;
+        if (BufferSlot != null)
+        {
+            if(Place(GetPressedButton().GetIndex(), BufferSlot))
+                AddItem(BufferSlot);
+            BufferSlot = null;
+        }
+        
         PlayerInventoryButtons.GetPressedButton().SetPressed(false);
     }
 
@@ -282,39 +292,27 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     /**
      * Creates a reference to another inventory in each respective inventory
      */
-    public bool LinkInventories(InventoryContainer container)
+    //public bool LinkInventories(InventoryContainer container)
+    //{
+    //    if (container == null) return false;
+    //
+    //    SeverInventoryConnections();
+    //    container.SeverInventoryConnections();
+    //
+    //    ConnectedInventoryContainer = container;
+    //    container.PlayerInventoryButtons.Pressed += HandleConnectionClick;
+    //
+    //    container.ConnectedInventoryContainer = this;
+    //    PlayerInventoryButtons.Pressed += container.HandleConnectionClick;
+    //
+    //    return true;
+    //}
+
+    public void SlotSwap()
     {
-        if (container == null) return false;
-
-        SeverInventoryConnections();
-        container.SeverInventoryConnections();
-
-        ConnectedInventoryContainer = container;
-        container.PlayerInventoryButtons.Pressed += HandleConnectionClick;
-
-        container.ConnectedInventoryContainer = this;
-        PlayerInventoryButtons.Pressed += container.HandleConnectionClick;
-
-        return true;
-    }
-
-    private void HandleConnectionClick(BaseButton button)
-    {
-        Console.WriteLine("HYA");
-        
+            
     }
     
-    public void SeverInventoryConnections()
-    {
-        if (ConnectedInventoryContainer != null)
-        {
-            PlayerInventoryButtons.Pressed -= ConnectedInventoryContainer.HandleConnectionClick;
-            ConnectedInventoryContainer.PlayerInventoryButtons.Pressed -= HandleConnectionClick;
-            ConnectedInventoryContainer.ConnectedInventoryContainer = null;
-        }
-
-        ConnectedInventoryContainer = null;
-    }
 
 
     /**

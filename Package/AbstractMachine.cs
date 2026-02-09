@@ -16,6 +16,8 @@ public abstract partial class AbstractMachine()
     //protected InventoryContainer Inventory;
     protected InventoryContainer Inventory;
 
+    [Signal]
+    public delegate void SlotSwappedEventHandler();
     public Vector2 GetSpriteSize()
     {
         if (SpriteFrames == null)
@@ -30,8 +32,26 @@ public abstract partial class AbstractMachine()
     {
         return Inventory?.TakeBufferItem(item);
     }
+
+    public void PassSlotSwappedEvent()
+    {
+        EmitSignal(nameof(SlotSwapped));
+    }
+    
+    
     //I need a method that reemits the signal from inventory and also i need to somehow handle the bufferslot swapping.
     public override void _Ready()
     {
+        Inventory.SlotSwapped += PassSlotSwappedEvent;
+    }
+
+    public void ClearPressedButton()
+    {
+        Inventory.ClearPressedButtons();
+    }
+
+    public void CatchSlotSwap()
+    {
+        
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Reflection.PortableExecutable;
 using Godot;
 using Main.InventoryAssets;
 using Main.Package;
@@ -14,6 +15,7 @@ public partial class MainCharacter : CharacterBody2D
     private AnimatedSprite2D _mainChar;
     public DNA dna = new DNA(new RandomNumberGenerator());
     private InventoryContainer _inventory;
+    private AbstractMachine _openMachine;
     private Node _sceneDna;
     private Sprite2D _spriteOnMouse;
     private Node _sceneHeadNode;
@@ -163,7 +165,21 @@ public partial class MainCharacter : CharacterBody2D
 
     public void CatchMachine(AbstractMachine machine)
     {
-        machine.Show();
-        _inventory.LinkInventories(null);
+        _openMachine = machine;
+        _inventory.SlotSwapped += _openMachine.CatchSlotSwap;
+        _openMachine.SlotSwapped += _inventory.SlotSwap;
+    }
+    public void HandleItemEvent()
+    {
+        
+    }
+    public void CloseMachine()
+    {
+        if (_openMachine == null) return;
+        
+        _inventory.SlotSwapped -= _openMachine.CatchSlotSwap; 
+        _openMachine.SlotSwapped -= _inventory.SlotSwap;
+        
+        _openMachine = null;
     }
 }
