@@ -115,11 +115,12 @@ public partial class Inventory<[MustBeVariant] TI>(int max) : Container
 public partial class InventoryContainer : Inventory<ItemTexture>
 {
     //private Container _container;
-    private TextureButton _button;
-    private ButtonGroup _playerInventoryButtons;
+    protected TextureButton Button;
+    protected ButtonGroup PlayerInventoryButtons;
+    protected InventoryContainer ConnectedInventoryContainer;
 
-    private ItemTexture
-        _bufferSlot =
+    protected ItemTexture
+        BufferSlot =
             null; //Basically a free storage slot that also lets outside users interact with it. manipulated based on the clicked button.  
 
     public InventoryContainer(Vector2 size, int slots, TextureButton button) : base(slots)
@@ -127,15 +128,15 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         Size = size;
         GlobalPosition = new Vector2(0, 0);
 
-        _button = button ?? throw new ArgumentNullException(nameof(button), "button is null");
+        Button = button ?? throw new ArgumentNullException(nameof(button), "button is null");
 
-        _button.Hide();
+        Button.Hide();
 
         //this.AddChild(_container);
-        this.AddChild(_button);
-        _playerInventoryButtons = new ButtonGroup();
-        _playerInventoryButtons.SetName("playerInventoryButtons");
-        _playerInventoryButtons.Pressed += OnGroupButtonPressed;
+        this.AddChild(Button);
+        PlayerInventoryButtons = new ButtonGroup();
+        PlayerInventoryButtons.SetName("playerInventoryButtons");
+        PlayerInventoryButtons.Pressed += OnGroupButtonPressed;
         //this.AddChild(_buttonGroup);
         //_playerInventoryButtons.
     }
@@ -152,11 +153,11 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     public int GenNodeGrid(Vector2 slotSize)
     {
         //NEEDS to use containers.............
-        _button.Show();
-        var result = CricketVisuals.GenerateNodeGrid(_button,
+        Button.Show();
+        var result = CricketVisuals.GenerateNodeGrid(Button,
             slotSize, 1, MaxItems, this,
             this.Size, new int?(0));
-        _button.Hide();
+        Button.Hide();
 
         foreach (var node in this.GetChildren())
         {
@@ -168,11 +169,11 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
             Sprite2D spriteHolder = new Sprite2D();
             spriteHolder.Name = "SpriteHolder";
-            spriteHolder.Position = new Vector2(_button.GetTextureNormal().GetSize().X / 2,
-                _button.GetTextureNormal().GetSize().Y / 2); //center it
+            spriteHolder.Position = new Vector2(Button.GetTextureNormal().GetSize().X / 2,
+                Button.GetTextureNormal().GetSize().Y / 2); //center it
             textureButton.AddChild(spriteHolder);
 
-            textureButton.ButtonGroup = _playerInventoryButtons;
+            textureButton.ButtonGroup = PlayerInventoryButtons;
         }
 
         UpdateItemsDisplay();
@@ -208,13 +209,13 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
     public BaseButton GetPressedButton()
     {
-        return _playerInventoryButtons.GetPressedButton();
+        return PlayerInventoryButtons.GetPressedButton();
     }
 
     public void ClearPressedButtons()
     {
-        if (_playerInventoryButtons.GetPressedButton() == null) return;
-        _playerInventoryButtons.GetPressedButton().SetPressed(false);
+        if (PlayerInventoryButtons.GetPressedButton() == null) return;
+        PlayerInventoryButtons.GetPressedButton().SetPressed(false);
     }
 
     public void UpdateItemsDisplay()
@@ -243,15 +244,15 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     {
         if (GetPressedButton() is null)
             return null;
-        _bufferSlot = SwapAtIndex(GetPressedButton().GetIndex(), _bufferSlot);
+        BufferSlot = SwapAtIndex(GetPressedButton().GetIndex(), BufferSlot);
         UpdateItemsDisplay(); //Visual update
         EmitSignal(SignalName.UpdatedBufferSlot);
-        return _bufferSlot;
+        return BufferSlot;
     }
 
     public ItemTexture GetBufferSlot()
     {
-        return _bufferSlot;
+        return BufferSlot;
     }
 
     /**
@@ -260,7 +261,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     public ItemTexture TakeBufferItem(ItemTexture item)
     {
         ItemTexture result = GetBufferSlot();
-        _bufferSlot = item; //nullable
+        BufferSlot = item; //nullable
         return result;
     }
 
@@ -275,5 +276,55 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         this.TopLevel = container.TopLevel;
         if (destroyContainer)
             container.QueueFree();
+    }
+    //Need a new method for swapping between containers...
+
+    /**
+     * Creates a reference to another inventory in each respective inventory
+     */
+    public bool LinkInventories(InventoryContainer container)
+    {
+        if (container == null) return false;
+
+        SeverInventoryConnections();
+        container.SeverInventoryConnections();
+
+        ConnectedInventoryContainer = container;
+        container.PlayerInventoryButtons.Pressed += HandleConnectionClick;
+
+        container.ConnectedInventoryContainer = this;
+        PlayerInventoryButtons.Pressed += container.HandleConnectionClick;
+
+        return true;
+    }
+
+    private void HandleConnectionClick(BaseButton button)
+    {
+        Console.WriteLine("HYA");
+    }
+
+    public void SeverInventoryConnections()
+    {
+        if (ConnectedInventoryContainer != null)
+        {
+            PlayerInventoryButtons.Pressed -= ConnectedInventoryContainer.HandleConnectionClick;
+            ConnectedInventoryContainer.PlayerInventoryButtons.Pressed -= HandleConnectionClick;
+            ConnectedInventoryContainer.ConnectedInventoryContainer = null;
+        }
+
+        ConnectedInventoryContainer = null;
+    }
+
+
+    /**
+     * Needs to be able to swap buffer items.
+     * -Does not necessarily need a link to the container but that would make the most sense and allow for the easiest communication
+     *  Buffer slot mimics a cursor in my implementation
+     *  When one inv has a filled bufferSlot then the next time the other inv has its bufferSlot filled:
+     *      When a pressed signal is received from the other inv then the current inv gives its bufferslot item
+     *      to the other inv's pressed button's inv slot, then takes the item that was there and puts it in its buffer slot again.
+     */
+    public void SwapBufferSlots()
+    {
     }
 }

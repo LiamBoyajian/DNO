@@ -9,17 +9,18 @@ namespace Main.Package;
  * Extend this class for each machine and place that script onto the machine directly.
  * Sprite size should be uniform across all frames
  */
-public abstract partial class AbstractMachine : AnimatedSprite2D
+public abstract partial class AbstractMachine(Vector2 size, int slots, TextureButton button)
+    : InventoryContainer(size, slots, button)
 {
     //protected AnimatedSprite2D Sprite;
-    protected InventoryContainer Inventory;
-
+    //protected InventoryContainer Inventory;
+    public AnimatedSprite2D AnimatedSprite;
 
     public Vector2 GetSpriteSize()
     {
-        if (base.GetSpriteFrames() == null)
+        if (AnimatedSprite.GetSpriteFrames() == null)
             return new Vector2(0, 0);
-        return base.SpriteFrames.GetFrameTexture(base.Animation, 0).GetSize();
+        return AnimatedSprite.SpriteFrames.GetFrameTexture(AnimatedSprite.Animation, 0).GetSize();
     }
 
     /**
@@ -27,26 +28,11 @@ public abstract partial class AbstractMachine : AnimatedSprite2D
      */
     public ItemTexture SwapBufferItem(ItemTexture item)
     {
-        return Inventory.TakeBufferItem(item);
+        return TakeBufferItem(item);
     }
 
-    public void ToggleInventory()
-    {
-        Inventory.ToggleVisible();
-    }
-
-    public void ShowInventory()
-    {
-        Inventory.Show();
-    }
-
-    public void HideInventory()
-    {
-        Inventory.Hide();
-    }
 
     public override void _Ready()
     {
-        this.AddChild(Inventory);
     }
 }
