@@ -164,6 +164,6 @@ public partial class MainCharacter : CharacterBody2D
     public void CatchMachine(AbstractMachine machine)
     {
         machine.Show();
-        _inventory.LinkInventories(machine);
+        _inventory.LinkInventories(null);
     }
 }

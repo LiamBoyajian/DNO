@@ -9,18 +9,18 @@ namespace Main.Package;
  * Extend this class for each machine and place that script onto the machine directly.
  * Sprite size should be uniform across all frames
  */
-public abstract partial class AbstractMachine(Vector2 size, int slots, TextureButton button)
-    : InventoryContainer(size, slots, button)
+public abstract partial class AbstractMachine()
+    : AnimatedSprite2D
 {
     //protected AnimatedSprite2D Sprite;
     //protected InventoryContainer Inventory;
-    public AnimatedSprite2D AnimatedSprite;
+    protected InventoryContainer Inventory;
 
     public Vector2 GetSpriteSize()
     {
-        if (AnimatedSprite.GetSpriteFrames() == null)
+        if (SpriteFrames == null)
             return new Vector2(0, 0);
-        return AnimatedSprite.SpriteFrames.GetFrameTexture(AnimatedSprite.Animation, 0).GetSize();
+        return SpriteFrames.GetFrameTexture(Animation, 0).GetSize();
     }
 
     /**
@@ -28,10 +28,9 @@ public abstract partial class AbstractMachine(Vector2 size, int slots, TextureBu
      */
     public ItemTexture SwapBufferItem(ItemTexture item)
     {
-        return TakeBufferItem(item);
+        return Inventory?.TakeBufferItem(item);
     }
-
-
+    //I need a method that reemits the signal from inventory and also i need to somehow handle the bufferslot swapping.
     public override void _Ready()
     {
     }

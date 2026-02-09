@@ -159,7 +159,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
             this.Size, new int?(0));
         Button.Hide();
 
-        foreach (var node in this.GetChildren())
+        foreach (var node in GetChildren())
         {
             if (node is not (TextureButton))
                 throw new ArrayTypeMismatchException();
@@ -301,8 +301,9 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     private void HandleConnectionClick(BaseButton button)
     {
         Console.WriteLine("HYA");
+        
     }
-
+    
     public void SeverInventoryConnections()
     {
         if (ConnectedInventoryContainer != null)
