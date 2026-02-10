@@ -183,14 +183,14 @@ public partial class MainCharacter : CharacterBody2D
     {
         ShowHoldingItem(texture, bufferFull);
 
-        if (bufferFull) return;
+        //if (bufferFull) return;
         if (!_openMachine.HasBufferItemWrapper()) return;
-        Console.WriteLine("Inventory" + texture);
+        //Console.WriteLine("Inventory" + texture);
 
         //Sorry for the readability
         _openMachine.PlaceBufferItemWrapper(_inventory.SlotSwap(_openMachine.TakeBufferItemWrapper()));
         _inventory.ClearPressedButtons();
-        _openMachine.ClearPressedButtonsWrapper();
+        //_openMachine.ClearPressedButtonsWrapper();
     }
 
     /**
@@ -200,15 +200,24 @@ public partial class MainCharacter : CharacterBody2D
     {
         ShowHoldingItem(texture, bufferFull);
 
-        if (bufferFull) return; //then we want to see if the other has an item
-        if (!_inventory.HasBufferItem()) return;
-        Console.WriteLine("Machine" + texture);
+        //if (bufferFull) return; //machine must not have a buffer item
+        if (!_inventory.HasBufferItem()) return; //inventory must have a buffer item
 
-        //TODO remembering where the last clicked button was and then forcing the item to that location rather than where was just pressed. assuming it is an update issue??
-        //has something to do with swapping between then within. individual operations are successful
+        //Todo there is a case when an inventory has no buffer and a swap is requested, the item is killed.
+        //IT is a problem because this method is handling two instances:
+            //the first when an internal click takes place
+                //the if statements cause an early return in both instances
+            //and when a swap takes place
+                //this swap either swaps a null item which is fine to overwrite
+                //or it swaps a real values but overwrites it too
+        
+        /*
+         * Enter method. Click takes place. Has buffer and 
+         */
+        //for this to be valid, the click must have processed the current buffer item which can never happen since we are returning
         _inventory.PlaceBufferItem(_openMachine.SlotSwapWrapper(_inventory.TakeBufferItem())); //preform swap
         _openMachine.ClearPressedButtonsWrapper();
-        _inventory.ClearPressedButtons();
+        //_inventory.ClearPressedButtons();
     }
 
     public void CloseMachine()

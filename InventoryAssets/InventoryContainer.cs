@@ -280,6 +280,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
     public ItemTexture SlotSwap(ItemTexture item)
     {
+        Console.WriteLine("Slot swap: " + item + " - " + BufferSlot);
         var result = BufferSlot;
         BufferSlot = item;
         LoadBufferSlot();
@@ -288,22 +289,19 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
     public ItemTexture PlaceBufferItem(ItemTexture item)
     {
-        if (BufferSlot == null)
-        {
-            BufferSlot = item;
-            LoadBufferSlot();
-            return null;
-        }
-
-        return item;
+        Console.WriteLine("MY item + "+item+" +");
+        if (BufferSlot != null) throw new InvalidOperationException("buffer slot is full");
+        BufferSlot = item;
+        //LoadBufferSlot(); //TODO maybe something bad here
+        return null;
     }
 
     public ItemTexture TakeBufferItem()
     {
         var result = BufferSlot;
         BufferSlot = null;
-        ClearPressedButtons();
-        return BufferSlot;
+        //ClearPressedButtons(); //idk this might be good -- prob not so the slot is pushable
+        return result;
     }
 
     public Texture2D GetBufferSlotTexture()
