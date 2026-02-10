@@ -103,20 +103,23 @@ public partial class MainCharacter : CharacterBody2D
         if (@event.IsActionPressed("Open Nearest Object") && this.Velocity.Equals(new Vector2(0, 0)))
         {
             _mainChar.SetAnimation("IdleBack");
-            if (true)
+            if (_openMachine == null)
             {
                 EmitSignal(MainCharacter.SignalName.RequestNearestDevice,
                     GlobalPosition); //I don't know why using 'this.' returns 0,0 so might be something to watch
-                return;
+            }
+            else
+            {
+                CloseMachine();
             }
 
             return;
         }
     }
 
-    private void ShowHoldingItem()
+    private void ShowHoldingItem(Texture2D texture, bool bufferFull)
     {
-        _spriteOnMouse.Texture = _inventory.GetBufferSlot()?.Texture;
+        _spriteOnMouse.Texture = texture;
     }
 
     private void _setInventory()
@@ -166,20 +169,58 @@ public partial class MainCharacter : CharacterBody2D
     public void CatchMachine(AbstractMachine machine)
     {
         _openMachine = machine;
-        _inventory.SlotSwapped += _openMachine.CatchSlotSwap;
-        _openMachine.SlotSwapped += _inventory.SlotSwap;
+
+        _inventory.UpdatedBufferSlot += HandleItemEventInventory;
+        _openMachine.UpdatedBufferSlotWrapper += HandleItemEventMachine;
+        _inventory.UpdatedBufferSlot -= ShowHoldingItem;
+        _openMachine.ShowInventoryWrapper();
     }
-    public void HandleItemEvent()
+
+    /**
+     * Called when the inv was updated
+     */
+    private void HandleItemEventInventory(Texture2D texture, bool bufferFull)
     {
-        
+        ShowHoldingItem(texture, bufferFull);
+
+        if (!bufferFull) return;
+        if (_openMachine.HasBufferItemWrapper()) return;
+        Console.WriteLine("Inventory" + texture);
+
+        //Sorry for the readability
+        _openMachine.PlaceBufferItemWrapper(_inventory.SlotSwap(_openMachine.TakeBufferItemWrapper()));
+        _inventory.ClearPressedButtons();
     }
+
+    /**
+     * Called when the machine was updated
+     */
+    private void HandleItemEventMachine(Texture2D texture, bool bufferFull)
+    {
+        ShowHoldingItem(texture, bufferFull);
+
+        if (!bufferFull) return;
+        if (_inventory.HasBufferItem()) return;
+        Console.WriteLine("Machine" + texture);
+
+        //TODO sometimes when clicking on the same inventory the item switches to the other one???
+
+        _inventory.PlaceBufferItem(_openMachine.SlotSwapWrapper(_inventory.TakeBufferItem()));
+        _openMachine.ClearPressedButtonsWrapper();
+    }
+
     public void CloseMachine()
     {
         if (_openMachine == null) return;
-        
-        _inventory.SlotSwapped -= _openMachine.CatchSlotSwap; 
-        _openMachine.SlotSwapped -= _inventory.SlotSwap;
-        
+
+        _inventory.UpdatedBufferSlot -= HandleItemEventInventory;
+        _openMachine.UpdatedBufferSlotWrapper -= HandleItemEventMachine;
+
+        _openMachine.HideInventoryWrapper();
+        _openMachine.ClearPressedButtonsWrapper();
+        ShowHoldingItem(_inventory.GetBufferSlotTexture(), false);
+
         _openMachine = null;
+        _inventory.UpdatedBufferSlot += ShowHoldingItem;
     }
 }

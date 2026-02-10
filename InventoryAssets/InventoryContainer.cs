@@ -118,13 +118,12 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     protected TextureButton Button;
     protected ButtonGroup PlayerInventoryButtons;
     protected InventoryContainer ConnectedInventoryContainer;
+
     protected ItemTexture
         BufferSlot =
             null; //Basically a free storage slot that also lets outside users interact with it. manipulated based on the clicked button.  
 
-    [Signal]
-    public delegate void SlotSwappedEventHandler();
-    
+
     public InventoryContainer(Vector2 size, int slots, TextureButton button) : base(slots)
     {
         Size = size;
@@ -135,7 +134,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         Button.Hide();
 
         //this.AddChild(_container);
-        this.AddChild(Button);
+        this.AddChild(Button); //TODO I think there is a bug with this : shouldnt make a child should just free
         PlayerInventoryButtons = new ButtonGroup();
         PlayerInventoryButtons.SetName("playerInventoryButtons");
         PlayerInventoryButtons.Pressed += OnGroupButtonPressed;
@@ -144,7 +143,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     }
 
     [Signal]
-    public delegate void UpdatedBufferSlotEventHandler();
+    public delegate void UpdatedBufferSlotEventHandler(Texture2D texture, bool bufferFull);
 
 
     //Required by Godot
@@ -184,16 +183,25 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
     private void OnGroupButtonPressed(BaseButton button)
     {
-        EmitSignal(nameof(SlotSwapped));
+        //button alway not null...
         LoadBufferSlot();
+        Console.WriteLine("Buffer : " + BufferSlot);
+        EmitSignal(nameof(UpdatedBufferSlot), BufferSlot?.Texture,
+            BufferSlot != null); //SlotSwapped Emit == on button press      
     }
 
-    public new void Show()
+    public void ShowInventory()
     {
         Visible = true;
     }
 
-    public new void Hide()
+    public bool HasBufferItem()
+    {
+        return BufferSlot != null;
+    }
+
+
+    public void HideInventory()
     {
         Visible = false;
     }
@@ -220,11 +228,11 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         if (PlayerInventoryButtons.GetPressedButton() == null) return;
         if (BufferSlot != null)
         {
-            if(Place(GetPressedButton().GetIndex(), BufferSlot))
+            if (Place(GetPressedButton().GetIndex(), BufferSlot))
                 AddItem(BufferSlot);
             BufferSlot = null;
         }
-        
+
         PlayerInventoryButtons.GetPressedButton().SetPressed(false);
     }
 
@@ -260,20 +268,20 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         return BufferSlot;
     }
 
-    public ItemTexture GetBufferSlot()
-    {
-        return BufferSlot;
-    }
+    //public ItemTexture GetBufferSlot()
+    //{
+    //    return BufferSlot;
+    //}
 
     /**
      * Returns a references to the ItemTexture in bufferslot and removes bufferslot's own reference
      */
-    public ItemTexture TakeBufferItem(ItemTexture item)
-    {
-        ItemTexture result = GetBufferSlot();
-        BufferSlot = item; //nullable
-        return result;
-    }
+    //public ItemTexture TakeBufferItem(ItemTexture item)
+    //{
+    //    ItemTexture result = GetBufferSlot();
+    //    BufferSlot = item; //nullable
+    //    return result;
+    //}
 
     /**
      * I thought it is nice to make containers in the editor to see the size in scene and wanted to make a way for the inventory to "steal" those stats.
@@ -307,15 +315,35 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     //
     //    return true;
     //}
-
-    public void SlotSwap()
+    public ItemTexture SlotSwap(ItemTexture item)
     {
-            
+        var result = BufferSlot;
+        BufferSlot = item;
+        return result;
     }
-    
 
+    public ItemTexture PlaceBufferItem(ItemTexture item)
+    {
+        if (BufferSlot == null)
+        {
+            BufferSlot = item;
+            return null;
+        }
 
-    /**
+        return item;
+    }
+
+    public ItemTexture TakeBufferItem()
+    {
+        return BufferSlot;
+    }
+
+    public Texture2D GetBufferSlotTexture()
+    {
+        return BufferSlot?.Texture;
+    }
+
+    /*
      * Needs to be able to swap buffer items.
      * -Does not necessarily need a link to the container but that would make the most sense and allow for the easiest communication
      *  Buffer slot mimics a cursor in my implementation
@@ -323,7 +351,4 @@ public partial class InventoryContainer : Inventory<ItemTexture>
      *      When a pressed signal is received from the other inv then the current inv gives its bufferslot item
      *      to the other inv's pressed button's inv slot, then takes the item that was there and puts it in its buffer slot again.
      */
-    public void SwapBufferSlots()
-    {
-    }
 }

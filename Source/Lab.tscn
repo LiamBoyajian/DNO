@@ -5,11 +5,11 @@
 [ext_resource type="Texture2D" uid="uid://dg6vihqdcckbp" path="res://LabAssetts/BaseChar1.png" id="2_qytnw"]
 [ext_resource type="Texture2D" uid="uid://hw54h7njepk0" path="res://LabAssetts/oven1.png" id="3_qytnw"]
 [ext_resource type="Texture2D" uid="uid://c0ao6rqnt3j4e" path="res://Sprites/MicrocentrifugeTube.png" id="4_4vl0c"]
-[ext_resource type="Texture2D" uid="uid://gbxv2h118uol" path="res://Sprites/itemBox-sheet.png" id="4_ognkn"]
+[ext_resource type="Texture2D" uid="uid://dstfxasgreu37" path="res://Sprites/itemBox-sheet.png" id="4_ognkn"]
 [ext_resource type="Texture2D" uid="uid://cjolt7fmvvfqy" path="res://LabAssetts/pcDNA.png" id="5_7hs1q"]
 [ext_resource type="Texture2D" uid="uid://cc27bh4y3onni" path="res://LabAssetts/Grower.png" id="6_rk17r"]
 [ext_resource type="Texture2D" uid="uid://cefs0g3ayffob" path="res://LabAssetts/PlantGrowth.png" id="7_qlutr"]
-[ext_resource type="Script" uid="uid://c1r3ml7qnwtvf" path="res://LabAssetts/Pc.cs" id="8_2iyuy"]
+[ext_resource type="Script" uid="uid://dxie6cdiectlt" path="res://LabAssetts/Pc.cs" id="8_2iyuy"]
 [ext_resource type="Texture2D" uid="uid://cnx3au7b5lf1i" path="res://Sprites/BankerLampSheet.png" id="11_2iyuy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rk17r"]
@@ -150,13 +150,13 @@ region = Rect2(28, 0, 28, 28)
 atlas = ExtResource("4_4vl0c")
 region = Rect2(0, 0, 28, 28)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_k4cmc"]
-atlas = ExtResource("4_4vl0c")
-region = Rect2(56, 0, 28, 28)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_jg60c"]
 atlas = ExtResource("4_4vl0c")
 region = Rect2(84, 0, 28, 28)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k4cmc"]
+atlas = ExtResource("4_4vl0c")
+region = Rect2(56, 0, 28, 28)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_wurmn"]
 animations = [{
@@ -178,18 +178,18 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_k4cmc")
+"texture": SubResource("AtlasTexture_jg60c")
 }],
 "loop": true,
-"name": &"Plant",
+"name": &"Empty",
 "speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_jg60c")
+"texture": SubResource("AtlasTexture_k4cmc")
 }],
 "loop": true,
-"name": &"Vial",
+"name": &"Plant",
 "speed": 5.0
 }]
 
@@ -498,7 +498,6 @@ frame_progress = 0.4044736
 script = ExtResource("8_2iyuy")
 
 [node name="_box" type="AnimatedSprite2D" parent="machineList/Pc"]
-visible = false
 position = Vector2(-92, -58)
 sprite_frames = SubResource("SpriteFrames_klfij")
 animation = &"Black"
@@ -517,7 +516,7 @@ offset_bottom = -19.0
 visible = false
 position = Vector2(-55, -22)
 sprite_frames = SubResource("SpriteFrames_wurmn")
-animation = &"Plant"
+animation = &"Empty"
 
 [node name="Boiler" type="AnimatedSprite2D" parent="machineList"]
 visible = false

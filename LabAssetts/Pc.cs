@@ -7,37 +7,39 @@ namespace Main.LabAssetts;
 
 public partial class Pc : AbstractMachine
 {
-	public Pc()
-	{
-		
-	}
+    public Pc()
+    {
+    }
 
-	public override void _Ready()
-	{
-		var tempTextureButton = new TextureButton();
-		tempTextureButton.TextureNormal =
-			(FindChild("_box") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("Black", 0);
-		tempTextureButton.TextureHover =
-			(FindChild("_box") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("Selected", 0);
-		tempTextureButton.TexturePressed =
-			(FindChild("_box") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("Selected", 0);
+    public override void _Ready()
+    {
+        var tempTextureButton = new TextureButton();
+        tempTextureButton.TextureNormal =
+            (FindChild("_box") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("Black", 0);
+        tempTextureButton.TextureHover =
+            (FindChild("_box") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("Selected", 0);
+        tempTextureButton.TexturePressed =
+            (FindChild("_box") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("Selected", 0);
 
-		tempTextureButton.ToggleMode = true;
-		tempTextureButton.Show();
-		Inventory = new InventoryContainer(new Vector2(200, 50), 6, tempTextureButton);
-		AddChild(Inventory);
-		
-		Inventory.Position = new Vector2(-100, -80);
-		Inventory.GenNodeGrid(new Vector2(32, 32));
-		Inventory.ZIndex = 1;
-		//Inventory.Hide();
+        tempTextureButton.ToggleMode = true;
+        tempTextureButton.Show();
+        Inventory = new InventoryContainer(new Vector2(200, 50), 6, tempTextureButton);
 
-		Texture2D temp = (FindChild("Vial") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("DNA", 0);
-		Texture2D temp2 = (FindChild("Vial") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("Plant", 0);
-		//Inventory.AddItem(new Item<DNA>(temp2, new DNA(new RandomNumberGenerator())));
-		while (-1 != Inventory.AddItem(new Item<DNA>(temp, new DNA(new RandomNumberGenerator()))))
-			Console.WriteLine("Size " + Inventory.Count());
-		; //Remove after testing
-		Inventory.UpdateItemsDisplay();
-	}
+
+        Inventory.Position = new Vector2(-100, -80);
+        Inventory.GenNodeGrid(new Vector2(32, 32));
+        Inventory.ZIndex = 1;
+        //Inventory.Hide();
+
+
+        Texture2D temp = (FindChild("Vial") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("DNA", 0);
+        Texture2D temp2 = (FindChild("Vial") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("Empty", 0);
+        Console.WriteLine(Inventory.AddItem(new Item<DNA>(temp2, null)));
+        Inventory.AddItem(new Item<DNA>(temp2, null)); //TODO first item is getting killed idk
+        while (-1 != Inventory.AddItem(new Item<DNA>(temp, new DNA(new RandomNumberGenerator()))))
+            Console.WriteLine("Size " + Inventory.Count());
+        ; //Remove after testing
+        RunOnReady();
+        //Inventory.UpdatedBufferSlot += SlotSwappedEventWrapper;
+    }
 }

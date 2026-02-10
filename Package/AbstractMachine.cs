@@ -16,8 +16,19 @@ public abstract partial class AbstractMachine()
     //protected InventoryContainer Inventory;
     protected InventoryContainer Inventory;
 
+
     [Signal]
-    public delegate void SlotSwappedEventHandler();
+    public delegate void UpdatedBufferSlotWrapperEventHandler(Texture2D texture, bool bufferFull);
+
+    //
+    public ItemTexture PlaceBufferItemWrapper(ItemTexture item) => Inventory.PlaceBufferItem(item);
+    public void ClearPressedButtonsWrapper() => Inventory.ClearPressedButtons();
+    public ItemTexture SlotSwapWrapper(ItemTexture item) => Inventory.SlotSwap(item);
+    public ItemTexture TakeBufferItemWrapper() => Inventory.TakeBufferItem();
+    public void ShowInventoryWrapper() => Inventory.ShowInventory();
+    public void HideInventoryWrapper() => Inventory.HideInventory();
+    public bool HasBufferItemWrapper() => Inventory.HasBufferItem();
+
     public Vector2 GetSpriteSize()
     {
         if (SpriteFrames == null)
@@ -28,30 +39,25 @@ public abstract partial class AbstractMachine()
     /**
      * Returns the machine's former buffer item and puts the item argument into its buffer slot
      */
-    public ItemTexture SwapBufferItem(ItemTexture item)
+    //public ItemTexture SwapBufferItem(ItemTexture item)
+    //{
+    //    return Inventory?.TakeBufferItem(item);
+    //}
+    public void SlotSwappedEventWrapper(Texture2D texture, bool bufferFull)
     {
-        return Inventory?.TakeBufferItem(item);
+        EmitSignal(nameof(UpdatedBufferSlotWrapper), texture, bufferFull);
     }
 
-    public void PassSlotSwappedEvent()
+    protected void RunOnReady()
     {
-        EmitSignal(nameof(SlotSwapped));
+        AddChild(Inventory);
+        Inventory.UpdateItemsDisplay();
+        Inventory.HideInventory();
+        Inventory.UpdatedBufferSlot += SlotSwappedEventWrapper;
     }
-    
-    
+
     //I need a method that reemits the signal from inventory and also i need to somehow handle the bufferslot swapping.
     public override void _Ready()
     {
-        Inventory.SlotSwapped += PassSlotSwappedEvent;
-    }
-
-    public void ClearPressedButton()
-    {
-        Inventory.ClearPressedButtons();
-    }
-
-    public void CatchSlotSwap()
-    {
-        
     }
 }
