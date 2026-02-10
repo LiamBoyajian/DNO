@@ -228,12 +228,13 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         if (PlayerInventoryButtons.GetPressedButton() == null) return;
         if (BufferSlot != null)
         {
-            if (Place(GetPressedButton().GetIndex(), BufferSlot))
+            if (!Place(GetPressedButton().GetIndex(), BufferSlot))
                 AddItem(BufferSlot);
             BufferSlot = null;
         }
 
         PlayerInventoryButtons.GetPressedButton().SetPressed(false);
+        LoadBufferSlot();
     }
 
     public void UpdateItemsDisplay()
@@ -254,7 +255,6 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         return;
     }
 
-
     /**
      * This refreshes the slot
      */
@@ -264,28 +264,10 @@ public partial class InventoryContainer : Inventory<ItemTexture>
             return null;
         BufferSlot = SwapAtIndex(GetPressedButton().GetIndex(), BufferSlot);
         UpdateItemsDisplay(); //Visual update
-        EmitSignal(SignalName.UpdatedBufferSlot);
+        //EmitSignal(SignalName.UpdatedBufferSlot);
         return BufferSlot;
     }
 
-    //public ItemTexture GetBufferSlot()
-    //{
-    //    return BufferSlot;
-    //}
-
-    /**
-     * Returns a references to the ItemTexture in bufferslot and removes bufferslot's own reference
-     */
-    //public ItemTexture TakeBufferItem(ItemTexture item)
-    //{
-    //    ItemTexture result = GetBufferSlot();
-    //    BufferSlot = item; //nullable
-    //    return result;
-    //}
-
-    /**
-     * I thought it is nice to make containers in the editor to see the size in scene and wanted to make a way for the inventory to "steal" those stats.
-     */
     public void CopyValues(Container container, bool destroyContainer)
     {
         if (container == null) return;
@@ -295,30 +277,12 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         if (destroyContainer)
             container.QueueFree();
     }
-    //Need a new method for swapping between containers...
 
-    /**
-     * Creates a reference to another inventory in each respective inventory
-     */
-    //public bool LinkInventories(InventoryContainer container)
-    //{
-    //    if (container == null) return false;
-    //
-    //    SeverInventoryConnections();
-    //    container.SeverInventoryConnections();
-    //
-    //    ConnectedInventoryContainer = container;
-    //    container.PlayerInventoryButtons.Pressed += HandleConnectionClick;
-    //
-    //    container.ConnectedInventoryContainer = this;
-    //    PlayerInventoryButtons.Pressed += container.HandleConnectionClick;
-    //
-    //    return true;
-    //}
     public ItemTexture SlotSwap(ItemTexture item)
     {
         var result = BufferSlot;
         BufferSlot = item;
+        LoadBufferSlot();
         return result;
     }
 
@@ -327,6 +291,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
         if (BufferSlot == null)
         {
             BufferSlot = item;
+            LoadBufferSlot();
             return null;
         }
 
@@ -335,6 +300,9 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
     public ItemTexture TakeBufferItem()
     {
+        var result = BufferSlot;
+        BufferSlot = null;
+        ClearPressedButtons();
         return BufferSlot;
     }
 
@@ -342,13 +310,4 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     {
         return BufferSlot?.Texture;
     }
-
-    /*
-     * Needs to be able to swap buffer items.
-     * -Does not necessarily need a link to the container but that would make the most sense and allow for the easiest communication
-     *  Buffer slot mimics a cursor in my implementation
-     *  When one inv has a filled bufferSlot then the next time the other inv has its bufferSlot filled:
-     *      When a pressed signal is received from the other inv then the current inv gives its bufferslot item
-     *      to the other inv's pressed button's inv slot, then takes the item that was there and puts it in its buffer slot again.
-     */
 }

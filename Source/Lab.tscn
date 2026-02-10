@@ -498,6 +498,7 @@ frame_progress = 0.4044736
 script = ExtResource("8_2iyuy")
 
 [node name="_box" type="AnimatedSprite2D" parent="machineList/Pc"]
+visible = false
 position = Vector2(-92, -58)
 sprite_frames = SubResource("SpriteFrames_klfij")
 animation = &"Black"

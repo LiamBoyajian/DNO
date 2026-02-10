@@ -183,13 +183,14 @@ public partial class MainCharacter : CharacterBody2D
     {
         ShowHoldingItem(texture, bufferFull);
 
-        if (!bufferFull) return;
-        if (_openMachine.HasBufferItemWrapper()) return;
+        if (bufferFull) return;
+        if (!_openMachine.HasBufferItemWrapper()) return;
         Console.WriteLine("Inventory" + texture);
 
         //Sorry for the readability
         _openMachine.PlaceBufferItemWrapper(_inventory.SlotSwap(_openMachine.TakeBufferItemWrapper()));
         _inventory.ClearPressedButtons();
+        _openMachine.ClearPressedButtonsWrapper();
     }
 
     /**
@@ -199,14 +200,15 @@ public partial class MainCharacter : CharacterBody2D
     {
         ShowHoldingItem(texture, bufferFull);
 
-        if (!bufferFull) return;
-        if (_inventory.HasBufferItem()) return;
+        if (bufferFull) return; //then we want to see if the other has an item
+        if (!_inventory.HasBufferItem()) return;
         Console.WriteLine("Machine" + texture);
 
-        //TODO sometimes when clicking on the same inventory the item switches to the other one???
-
-        _inventory.PlaceBufferItem(_openMachine.SlotSwapWrapper(_inventory.TakeBufferItem()));
+        //TODO remembering where the last clicked button was and then forcing the item to that location rather than where was just pressed. assuming it is an update issue??
+        //has something to do with swapping between then within. individual operations are successful
+        _inventory.PlaceBufferItem(_openMachine.SlotSwapWrapper(_inventory.TakeBufferItem())); //preform swap
         _openMachine.ClearPressedButtonsWrapper();
+        _inventory.ClearPressedButtons();
     }
 
     public void CloseMachine()
