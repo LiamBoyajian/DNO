@@ -185,7 +185,6 @@ public partial class InventoryContainer : Inventory<ItemTexture>
     {
         //button alway not null...
         LoadBufferSlot();
-        Console.WriteLine("Buffer : " + BufferSlot);
         EmitSignal(nameof(UpdatedBufferSlot), BufferSlot?.Texture,
             BufferSlot != null); //SlotSwapped Emit == on button press      
     }
@@ -289,7 +288,7 @@ public partial class InventoryContainer : Inventory<ItemTexture>
 
     public ItemTexture PlaceBufferItem(ItemTexture item)
     {
-        Console.WriteLine("MY item + "+item+" +");
+        Console.WriteLine("MY item + " + item + " +");
         if (BufferSlot != null) throw new InvalidOperationException("buffer slot is full");
         BufferSlot = item;
         //LoadBufferSlot(); //TODO maybe something bad here
