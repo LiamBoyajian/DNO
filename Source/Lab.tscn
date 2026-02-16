@@ -1,4 +1,4 @@
-[gd_scene load_steps=58 format=3 uid="uid://eljyd8ypochx"]
+[gd_scene load_steps=60 format=3 uid="uid://eljyd8ypochx"]
 
 [ext_resource type="Script" uid="uid://ce03glqlcgu1q" path="res://LabAssetts/MainCharacter.cs" id="1_mim5p"]
 [ext_resource type="Script" uid="uid://biybq8g6qxxmp" path="res://Source/LabSignalManager.cs" id="1_y6m64"]
@@ -13,6 +13,21 @@
 [ext_resource type="Script" uid="uid://dxie6cdiectlt" path="res://LabAssetts/Pc.cs" id="8_2iyuy"]
 [ext_resource type="Script" uid="uid://0lwx87dsu5nn" path="res://Source/Grower.cs" id="8_q8man"]
 [ext_resource type="Texture2D" uid="uid://cnx3au7b5lf1i" path="res://Sprites/BankerLampSheet.png" id="11_2iyuy"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v1drn"]
+atlas = ExtResource("2_q8man")
+region = Rect2(0, 0, 155, 159)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ypn3k"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v1drn")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_qhm7t"]
 atlas = ExtResource("4_ognkn")
@@ -400,34 +415,33 @@ script = ExtResource("1_y6m64")
 
 [node name="machineList" type="Node" parent="."]
 
-[node name="DnaComputer" type="Sprite2D" parent="machineList"]
-position = Vector2(148, 281)
-texture = ExtResource("2_q8man")
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="machineList"]
+position = Vector2(124.5, 209.5)
+sprite_frames = SubResource("SpriteFrames_ypn3k")
 
-[node name="DnaComputerCrtFrames" type="Sprite2D" parent="machineList/DnaComputer"]
-position = Vector2(0, 1)
+[node name="DnaComputerCrtFrames" type="Sprite2D" parent="machineList/AnimatedSprite2D"]
 texture = ExtResource("3_v1drn")
 
-[node name="_box" type="AnimatedSprite2D" parent="machineList/DnaComputer"]
+[node name="_box" type="AnimatedSprite2D" parent="machineList/AnimatedSprite2D"]
 visible = false
-position = Vector2(-68, -20)
+position = Vector2(-69, -21)
 sprite_frames = SubResource("SpriteFrames_klfij")
 animation = &"Black"
 script = ExtResource("8_2iyuy")
 
-[node name="blueprintContainer" type="Control" parent="machineList/DnaComputer"]
+[node name="blueprintContainer" type="Control" parent="machineList/AnimatedSprite2D"]
 visible = false
 z_index = 1
 layout_mode = 3
 anchors_preset = 0
-offset_left = -42.0
-offset_top = -24.0
-offset_right = 89.0
-offset_bottom = 19.0
+offset_left = -43.0
+offset_top = -25.0
+offset_right = 88.0
+offset_bottom = 18.0
 
-[node name="Vial" type="AnimatedSprite2D" parent="machineList/DnaComputer"]
+[node name="Vial" type="AnimatedSprite2D" parent="machineList/AnimatedSprite2D"]
 visible = false
-position = Vector2(-31, 16)
+position = Vector2(-32, 15)
 sprite_frames = SubResource("SpriteFrames_wurmn")
 animation = &"Empty"
 
@@ -438,29 +452,27 @@ sprite_frames = SubResource("SpriteFrames_rk17r")
 animation = &"Off"
 
 [node name="Grower" type="AnimatedSprite2D" parent="machineList"]
-position = Vector2(277, 298)
+position = Vector2(436.5, 227.5)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_6vegd")
 animation = &"Growing"
 script = ExtResource("8_q8man")
 
-[node name="Plant" type="AnimatedSprite2D" parent="machineList"]
+[node name="Plant" type="AnimatedSprite2D" parent="machineList/Grower"]
 z_index = -1
-position = Vector2(285, 290)
-scale = Vector2(2, 2)
+position = Vector2(4, -4)
 sprite_frames = SubResource("SpriteFrames_qhm7t")
 animation = &"SoyPlant"
 frame_progress = 0.47152698
 
 [node name="Lamp" type="AnimatedSprite2D" parent="machineList"]
-position = Vector2(290, 218)
-scale = Vector2(2, 2)
+position = Vector2(214.5, 146.5)
 sprite_frames = SubResource("SpriteFrames_l42qy")
 frame = 1
 frame_progress = 0.11335947
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]
-position = Vector2(124, 323)
+position = Vector2(105.5, 251.5)
 script = ExtResource("1_mim5p")
 
 [node name="mainChar" type="AnimatedSprite2D" parent="CharacterBody2D"]
