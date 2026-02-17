@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://eljyd8ypochx"]
+[gd_scene load_steps=63 format=3 uid="uid://eljyd8ypochx"]
 
 [ext_resource type="Script" uid="uid://ce03glqlcgu1q" path="res://LabAssetts/MainCharacter.cs" id="1_mim5p"]
 [ext_resource type="Script" uid="uid://biybq8g6qxxmp" path="res://Source/LabSignalManager.cs" id="1_y6m64"]
@@ -13,6 +13,7 @@
 [ext_resource type="Script" uid="uid://dxie6cdiectlt" path="res://LabAssetts/Pc.cs" id="8_2iyuy"]
 [ext_resource type="Script" uid="uid://0lwx87dsu5nn" path="res://Source/Grower.cs" id="8_q8man"]
 [ext_resource type="Texture2D" uid="uid://cnx3au7b5lf1i" path="res://Sprites/BankerLampSheet.png" id="11_2iyuy"]
+[ext_resource type="Texture2D" uid="uid://v8v452msvb0o" path="res://Sprites/TEMPcentrifuge.png" id="14_ypn3k"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v1drn"]
 atlas = ExtResource("2_q8man")
@@ -410,6 +411,21 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ngg8q"]
+atlas = ExtResource("14_ypn3k")
+region = Rect2(39, 73, 76, 58)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_jc4c4"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ngg8q")
+}],
+"loop": true,
+"name": &"default",
+"speed": 5.0
+}]
+
 [node name="main" type="Node2D"]
 script = ExtResource("1_y6m64")
 
@@ -492,3 +508,7 @@ visible = false
 position = Vector2(-26, 4)
 sprite_frames = SubResource("SpriteFrames_klfij")
 animation = &"Black"
+
+[node name="centrifuge" type="AnimatedSprite2D" parent="."]
+position = Vector2(251, 258)
+sprite_frames = SubResource("SpriteFrames_jc4c4")
