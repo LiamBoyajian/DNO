@@ -432,7 +432,7 @@ script = ExtResource("1_y6m64")
 [node name="machineList" type="Node" parent="."]
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="machineList"]
-position = Vector2(124.5, 209.5)
+position = Vector2(131.5, 220.5)
 sprite_frames = SubResource("SpriteFrames_ypn3k")
 
 [node name="DnaComputerCrtFrames" type="Sprite2D" parent="machineList/AnimatedSprite2D"]
@@ -468,7 +468,7 @@ sprite_frames = SubResource("SpriteFrames_rk17r")
 animation = &"Off"
 
 [node name="Grower" type="AnimatedSprite2D" parent="machineList"]
-position = Vector2(436.5, 227.5)
+position = Vector2(443.5, 238.5)
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_6vegd")
 animation = &"Growing"
@@ -482,13 +482,13 @@ animation = &"SoyPlant"
 frame_progress = 0.47152698
 
 [node name="Lamp" type="AnimatedSprite2D" parent="machineList"]
-position = Vector2(214.5, 146.5)
+position = Vector2(221.5, 157.5)
 sprite_frames = SubResource("SpriteFrames_l42qy")
 frame = 1
 frame_progress = 0.11335947
 
 [node name="CharacterBody2D" type="CharacterBody2D" parent="."]
-position = Vector2(105.5, 251.5)
+position = Vector2(112.5, 262.5)
 script = ExtResource("1_mim5p")
 
 [node name="mainChar" type="AnimatedSprite2D" parent="CharacterBody2D"]
@@ -510,5 +510,5 @@ sprite_frames = SubResource("SpriteFrames_klfij")
 animation = &"Black"
 
 [node name="centrifuge" type="AnimatedSprite2D" parent="."]
-position = Vector2(251, 258)
+position = Vector2(258, 269)
 sprite_frames = SubResource("SpriteFrames_jc4c4")

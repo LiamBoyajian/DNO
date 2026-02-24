@@ -6,7 +6,7 @@ namespace Main.InventoryAssets;
 
 public class Cell
 {
-    public DNA Dna;
+    public outdated_DNA OutdatedDna;
     private byte promote; //indicates the quantity of the genes or smth like that
     private byte operate; //indicates the start of the gene segment
 
@@ -21,16 +21,16 @@ public class Cell
     private uint light;
 
     /** <remarks>
-     * Goal: i need to be able to encode all of these, or at least one initially, into the DNA's structure. I then should be able to manipulate each field's delta by changing the dna.
-     *      So the main things I need to do for the DNA encoding and decoding is first to build the functions of promoters and operators.
+     * Goal: i need to be able to encode all of these, or at least one initially, into the outdated_DNA's structure. I then should be able to manipulate each field's delta by changing the OutdatedDna.
+     *      So the main things I need to do for the outdated_DNA encoding and decoding is first to build the functions of promoters and operators.
      *      I also need to develop some inherit system to determine the 'intensity' of the promoter.
      *      The operator should be easy since it just acts like a bookmark.
-     *      Then I need some system for turning an mRNA strand into a protein (arguably not needed), but it could be cool for adding a research layer to dna to protein.
+     *      Then I need some system for turning an mRNA strand into a protein (arguably not needed), but it could be cool for adding a research layer to OutdatedDna to protein.
      *
      *
      *      After these are done I would like to have some high level system for labeling any set of proteins, mrna strands, cells broadly etc. I would like it to end up as a research system.
      *      The issue even if I am able to successfully implement everything here is that I need a function and plant diversity because soy plants are mega boring on their own.
-     *      Past that too there needs to be some use for this system that is interesting enough to drive players who don't care about the dna part to engage with it.
+     *      Past that too there needs to be some use for this system that is interesting enough to drive players who don't care about the OutdatedDna part to engage with it.
      *      It should be natural and allow for depth where needed. I want every system to have a shortcut that forces you to cut through a thick jungle to discover the path.
      *
      *      My main objective was to use the plants to experiment with proteins to then apply it to other things like bacteria or animals or something.
@@ -54,7 +54,7 @@ public class Cell
     public Cell()
     {
         RandomNumberGenerator random = new RandomNumberGenerator();
-        Dna = new DNA(random);
+        OutdatedDna = new outdated_DNA(random);
         promote = (byte)random.RandfRange(0, 255);
         operate = (byte)random.RandfRange(0, 255);
         GenerateCellStat();
@@ -62,21 +62,21 @@ public class Cell
 
     public String GetDnaString()
     {
-        return Dna.ToString();
+        return OutdatedDna.ToString();
     }
 
-    public DNA GetDna()
+    public outdated_DNA GetDna()
     {
-        return Dna;
+        return OutdatedDna;
     }
 
     /**
-     * Reads the DNA and returns an array of tuples with the first element [byte] being the mrna strand and the second [int] being the quantity;
+     * Reads the outdated_DNA and returns an array of tuples with the first element [byte] being the mrna strand and the second [int] being the quantity;
      */
 #nullable enable
     public (byte, int)[]? SendRibosome()
     {
-        foreach (AcidBases b in Dna)
+        foreach (AcidBases b in OutdatedDna)
         {
         }
 

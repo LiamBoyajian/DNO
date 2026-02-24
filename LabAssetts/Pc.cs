@@ -32,11 +32,11 @@ public partial class Pc : AbstractMachine
         //Inventory.Hide();
 
 
-        Texture2D temp = (FindChild("Vial") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("DNA", 0);
+        Texture2D temp = (FindChild("Vial") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("outdated_DNA", 0);
         Texture2D temp2 = (FindChild("Vial") as AnimatedSprite2D)?.SpriteFrames.GetFrameTexture("Empty", 0);
-        Console.WriteLine(Inventory.AddItem(new Item<DNA>(temp2, null)));
-        Inventory.AddItem(new Item<DNA>(temp2, null)); //TODO first item is getting killed idk
-        while (-1 != Inventory.AddItem(new Item<DNA>(temp, new DNA(new RandomNumberGenerator()))))
+        Console.WriteLine(Inventory.AddItem(new Item<outdated_DNA>(temp2, null)));
+        Inventory.AddItem(new Item<outdated_DNA>(temp2, null)); //TODO first item is getting killed idk
+        while (-1 != Inventory.AddItem(new Item<outdated_DNA>(temp, new outdated_DNA(new RandomNumberGenerator()))))
             Console.WriteLine("Size " + Inventory.Count());
         ; //Remove after testing
         RunOnReady();

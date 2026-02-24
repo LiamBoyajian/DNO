@@ -6,24 +6,24 @@ using Main.InventoryAssets;
 //using AcidBases = System.;
 namespace Main.Package;
 
-public partial class DNA : IEnumerable<AcidBases>
+public partial class outdated_DNA : IEnumerable<AcidBases>
 {
     private ulong _binaryString;
     private bool _realDNA;
-
+    private byte _dnaBytes;
 
     public const int
-        DnaLength = 32; //im hard coding this because if I increase the dna size I'll need a different structure meaning any solution here will immediately become obsolete. 
+        DnaLength = 32; //im hard coding this because if I increase the OutdatedDna size I'll need a different structure meaning any solution here will immediately become obsolete. 
 
 
-    public DNA(RandomNumberGenerator hi)
+    public outdated_DNA(RandomNumberGenerator hi)
     {
         _realDNA = true;
         _binaryString = ((ulong)hi.Randi()) << 32;
         _binaryString += (ulong)hi.Randi();
     }
 
-    private DNA(ulong binaryString)
+    private outdated_DNA(ulong binaryString)
     {
         _realDNA = false;
         _binaryString = binaryString;
@@ -48,7 +48,7 @@ public partial class DNA : IEnumerable<AcidBases>
     }
 
     /**
- * Used for dna segments
+ * Used for OutdatedDna segments
  */
     public static string GetDnaString(byte binaryString)
     {
@@ -72,14 +72,14 @@ public partial class DNA : IEnumerable<AcidBases>
 
     public IEnumerator<AcidBases> GetEnumerator()
     {
-        DNA snapshot = this.Clone();
+        outdated_DNA snapshot = this.Clone();
         for (var i = 0; i < DnaLength; i++)
             yield return GetDnaAtIndex(snapshot, i);
     }
 
-    public DNA Clone()
+    public outdated_DNA Clone()
     {
-        return new DNA(_binaryString);
+        return new outdated_DNA(_binaryString);
     }
 
     public bool GetRealDna()
@@ -99,14 +99,14 @@ public partial class DNA : IEnumerable<AcidBases>
         return (AcidBases)(temp >> (index * 2)); //I love this system so much
     }
 
-    public AcidBases GetDnaAtIndex(DNA givenDna, int index)
+    public AcidBases GetDnaAtIndex(outdated_DNA givenOutdatedDna, int index)
     {
         if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "index is less than zero");
         if (index >= DnaLength)
             throw new ArgumentOutOfRangeException(nameof(index), "index is greater than the max index");
 
         ulong temp = 3ul << (index * 2); //something like 0000000000000000000000110000000000000000
-        temp &= givenDna._binaryString;
+        temp &= givenOutdatedDna._binaryString;
         return (AcidBases)(temp >> (index * 2)); //I love this system so much
     }
 
