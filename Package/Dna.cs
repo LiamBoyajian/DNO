@@ -6,43 +6,7 @@ using Godot;
 
 namespace Main.Package;
 
-public enum AminoAcid
-{
-    // Nonpolar, Aliphatic
-    [Display(Name = "Alanine")] Ala,
-    [Display(Name = "Glycine")] Gly,
-    [Display(Name = "Isoleucine")] Ile,
-    [Display(Name = "Leucine")] Leu,
-    [Display(Name = "Proline")] Pro,
-    [Display(Name = "Valine")] Val,
-
-    // Polar, Uncharged
-    [Display(Name = "Cysteine")] Cys,
-    [Display(Name = "Glutamine")] Gln,
-    [Display(Name = "Asparagine")] Asn,
-    [Display(Name = "Serine")] Ser,
-    [Display(Name = "Threonine")] Thr,
-    [Display(Name = "Tyrosine")] Tyr,
-
-    // Aromatic
-    [Display(Name = "Phenylalanine")] Phe,
-    [Display(Name = "Tryptophan")] Trp,
-
-    // Positively Charged
-    [Display(Name = "Arginine")] Arg,
-    [Display(Name = "Histidine")] His,
-    [Display(Name = "Lysine")] Lys,
-
-    // Negatively Charged
-    [Display(Name = "Aspartic Acid")] Asp,
-    [Display(Name = "Glutamic Acid")] Glu,
-
-    // Special
-    [Display(Name = "Methionine (Start)")] Met,
-    [Display(Name = "Stop Codon")] Stop
-}
-
-public enum AcidBases
+public enum NucleotideBase : byte
 {
     [Display(Name = "Adenine")] A,
     [Display(Name = "Thymine")] T,
@@ -50,18 +14,20 @@ public enum AcidBases
     [Display(Name = "Cytosine")] C
 }
 
-public class Dna : IEnumerable<AcidBases>
+public class Dna : IEnumerable<NucleotideBase>
 {
-    private byte[] _dnaBinary; //four bases per byte
-    private int _length; //total bases; excluding trailing bases from final byte
+    protected readonly byte[]
+        DnaBinary; //four bases per byte -- might be good to swap to a NucleotideBase[] (opting for ram here)
+
+    public readonly int Length; //total bases; excluding trailing bases from final byte
 
     public Dna(Random random, int acidCount)
     {
         ArgumentOutOfRangeException.ThrowIfNegative(acidCount);
-        _length = acidCount;
-        _dnaBinary = new byte[acidCount / 4 + 1];
+        Length = acidCount;
+        DnaBinary = new byte[(acidCount + 3) / 4];
 
-        random.NextBytes(_dnaBinary); //fill array
+        random.NextBytes(DnaBinary); //fill array
     }
 
 
@@ -70,11 +36,15 @@ public class Dna : IEnumerable<AcidBases>
         throw new NotImplementedException();
     }
 
-    public IEnumerator<AcidBases> GetEnumerator()
+    public IEnumerator<NucleotideBase> GetEnumerator()
     {
-        for (var i = 0; i < _length; i++)
+        for (var i = 0; i < Length; i++)
         {
-            yield return (AcidBases)(_dnaBinary[i / 4] >> (6 - (2 * (i % 4))) & 3);
+            //first step: place in the byte
+            //2: 
+
+            //final: get the value using & 3 and convert that number to nucBase
+            yield return (NucleotideBase)(DnaBinary[i / 4] >> (6 - (2 * (i % 4))) & 3);
         }
     }
 

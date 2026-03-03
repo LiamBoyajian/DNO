@@ -76,7 +76,7 @@ public class Cell
 #nullable enable
     public (byte, int)[]? SendRibosome()
     {
-        foreach (AcidBases b in OutdatedDna)
+        foreach (NucleotideBase b in OutdatedDna)
         {
         }
 

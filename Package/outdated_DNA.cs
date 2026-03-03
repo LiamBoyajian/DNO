@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using Godot;
 using Main.InventoryAssets;
 
-//using AcidBases = System.;
+//using NucleotideBase = System.;
 namespace Main.Package;
 
-public partial class outdated_DNA : IEnumerable<AcidBases>
+public partial class outdated_DNA : IEnumerable<NucleotideBase>
 {
     private ulong _binaryString;
     private bool _realDNA;
@@ -35,7 +35,7 @@ public partial class outdated_DNA : IEnumerable<AcidBases>
         ulong temp = binaryString;
         while (temp != 0)
         {
-            result += ((AcidBases)(temp & 3)).ToString();
+            result += ((NucleotideBase)(temp & 3)).ToString();
             temp >>= 2;
         }
 
@@ -56,7 +56,7 @@ public partial class outdated_DNA : IEnumerable<AcidBases>
         byte temp = binaryString;
         while (temp != 0)
         {
-            result += ((AcidBases)(temp & 3)).ToString();
+            result += ((NucleotideBase)(temp & 3)).ToString();
             temp >>= 2;
         }
 
@@ -70,7 +70,7 @@ public partial class outdated_DNA : IEnumerable<AcidBases>
 
     System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator() => GetEnumerator();
 
-    public IEnumerator<AcidBases> GetEnumerator()
+    public IEnumerator<NucleotideBase> GetEnumerator()
     {
         outdated_DNA snapshot = this.Clone();
         for (var i = 0; i < DnaLength; i++)
@@ -88,7 +88,7 @@ public partial class outdated_DNA : IEnumerable<AcidBases>
     }
 
 
-    public AcidBases GetDnaAtIndex(int index)
+    public NucleotideBase GetDnaAtIndex(int index)
     {
         if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "index is less than zero");
         if (index >= DnaLength)
@@ -96,10 +96,10 @@ public partial class outdated_DNA : IEnumerable<AcidBases>
 
         ulong temp = 3ul << (index * 2); //something like 0000000000000000000000110000000000000000
         temp &= _binaryString;
-        return (AcidBases)(temp >> (index * 2)); //I love this system so much
+        return (NucleotideBase)(temp >> (index * 2)); //I love this system so much
     }
 
-    public AcidBases GetDnaAtIndex(outdated_DNA givenOutdatedDna, int index)
+    public NucleotideBase GetDnaAtIndex(outdated_DNA givenOutdatedDna, int index)
     {
         if (index < 0) throw new ArgumentOutOfRangeException(nameof(index), "index is less than zero");
         if (index >= DnaLength)
@@ -107,7 +107,7 @@ public partial class outdated_DNA : IEnumerable<AcidBases>
 
         ulong temp = 3ul << (index * 2); //something like 0000000000000000000000110000000000000000
         temp &= givenOutdatedDna._binaryString;
-        return (AcidBases)(temp >> (index * 2)); //I love this system so much
+        return (NucleotideBase)(temp >> (index * 2)); //I love this system so much
     }
 
     public int GetLength()
