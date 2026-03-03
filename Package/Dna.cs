@@ -23,11 +23,13 @@ public class Dna : IEnumerable<NucleotideBase>
 
     public Dna(Random random, int acidCount)
     {
+        if (acidCount < 3) throw new ArgumentOutOfRangeException(nameof(acidCount));
         ArgumentOutOfRangeException.ThrowIfNegative(acidCount);
         Length = acidCount;
-        DnaBinary = new byte[(acidCount + 3) / 4];
-
+        DnaBinary = new byte[acidCount / 4];
         random.NextBytes(DnaBinary); //fill array
+        DnaBinary[0] &= 3;
+        DnaBinary[0] |= ((byte)NucleotideBase.T << 4) | ((byte)NucleotideBase.G << 2); //Coding ATG(AUG) to the start.
     }
 
 

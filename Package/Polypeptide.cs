@@ -44,16 +44,72 @@ public enum AminoAcid : byte
 
 public static class AminoAcidExtensions
 {
-    public static sbyte GetCharge(this AminoAcid aa) => aa switch
+    public enum AminoTypes
+    {
+        Positive = 1,
+        Negative = -1,
+        Aromatic = 0,
+        Polar = 0,
+        NonPolar = 0
+    }
+
+    //public static sbyte GetChargeValue(this AminoTypes type) => type switch
+    //{
+    //    AminoTypes.Positive => 1,
+    //    AminoTypes.Negative => -1,
+    //    _ => 0,
+    //};
+    public enum AminoHydro
+    {
+        Hydrophobic,
+        Hydrophilic,
+        Neutral
+    }
+
+    public static AminoTypes? GetCharge(this AminoAcid aa) => aa switch
     {
         // Positively Charged
-        AminoAcid.Arg or AminoAcid.His or AminoAcid.Lys => 1,
+        AminoAcid.Arg or AminoAcid.His or AminoAcid.Lys => AminoTypes.Positive,
 
         // Negatively Charged
-        AminoAcid.Asp or AminoAcid.Glu => -1,
+        AminoAcid.Asp or AminoAcid.Glu => AminoTypes.Negative,
 
-        // Neutral (All others)
-        _ => 0,
+        //Polar 
+        AminoAcid.Cys or AminoAcid.Gln or AminoAcid.Asn or AminoAcid.Ser or AminoAcid.Thr or AminoAcid.Tyr => AminoTypes
+            .Polar,
+        //Aromatic
+        AminoAcid.Phe or AminoAcid.Trp => AminoTypes.Aromatic,
+        //Non-polar
+        AminoAcid.Ala or AminoAcid.Gly or AminoAcid.Ile or AminoAcid.Leu or AminoAcid.Pro or AminoAcid.Val
+            or AminoAcid.Met => AminoTypes.NonPolar,
+
+        AminoAcid.Stop => null,
+
+        _ => throw new Exception($"Unknown AminoAcid {aa}"),
+    };
+
+    /**
+     * Most uncertain about this one scientifically but I never claimed to be a biochemist.
+     */
+    public static AminoHydro? GetHydrophobicity(this AminoAcid aa) => aa switch
+    {
+        // Hydrophobic (Non-polar and Aromatic groups)
+        AminoAcid.Ala or AminoAcid.Gly or AminoAcid.Ile or
+            AminoAcid.Leu or AminoAcid.Pro or AminoAcid.Val or
+            AminoAcid.Phe => AminoHydro.Hydrophobic,
+
+        // Hydrophilic (Polar, Acidic, and Basic groups)
+        AminoAcid.Cys or AminoAcid.Gln or AminoAcid.Asn or
+            AminoAcid.Ser or AminoAcid.Thr or
+            AminoAcid.Arg or AminoAcid.His or
+            AminoAcid.Asp or AminoAcid.Glu => AminoHydro.Hydrophilic,
+
+        // Neutral
+        AminoAcid.Tyr or AminoAcid.Lys or AminoAcid.Trp or AminoAcid.Met => AminoHydro.Neutral,
+
+        AminoAcid.Stop => null,
+
+        _ => throw new Exception("Unknown AminoAcid"),
     };
 }
 
@@ -146,40 +202,53 @@ public class Polypeptide : IEnumerable<AminoAcid>
 
     private void _transcriptionTranslation(Dna dna)
     {
-        var i = 0;
-        var j = -1;
+        var peptideLength = 0;
+        var indexCodon = -1;
         var codonVal = (byte)0;
 
         foreach (var b in dna)
         {
-            ++j;
+            ++indexCodon;
             codonVal <<= 2;
             codonVal |= (byte)b;
-            if (j < 2) continue;
+            if (indexCodon < 2) continue;
             //turn codon into an acid
-            Residues[i] = CodonLookup[codonVal];
-            ++i;
-            j = -1;
+            if (CodonLookup[codonVal] is AminoAcid.Stop) break;
+
+            Residues[peptideLength] = CodonLookup[codonVal];
+            ++peptideLength;
+            indexCodon = -1;
             codonVal = 0;
+        }
+
+        if (peptideLength != Residues.Length)
+        {
+            //maybe not the best way. My reasoning was that copying values would be faster than doing the math twice.
+            var result = new AminoAcid[peptideLength];
+            for (var i = 0; i < peptideLength; i++)
+            {
+                result[i] = Residues[i];
+            }
+
+            Residues = result;
         }
     }
 
     public Polypeptide(Dna dna)
     {
-        Residues = new AminoAcid[dna.Length / 3 + 4];
+        Residues = new AminoAcid[dna.Length / 3 - 1];
         _transcriptionTranslation(dna);
     }
 
     public IEnumerator<AminoAcid> GetEnumerator()
     {
-        for (var i = 0; i < Residues.Length; i++)
-        {
-            yield return (AminoAcid)Residues[i];
-        }
+        return ((IEnumerable<AminoAcid>)Residues).GetEnumerator();
     }
 
     IEnumerator IEnumerable.GetEnumerator()
     {
         return GetEnumerator();
     }
+
+    public int GetLength() => Residues.Length;
 }

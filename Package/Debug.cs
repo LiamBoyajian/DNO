@@ -14,9 +14,17 @@ public partial class Debug : Node
         //    
         //}
         var polypep = new Polypeptide(dna);
+        int en = 0;
         foreach (var a in polypep)
         {
             Console.Write(a + ", ");
+
+            var acidCharge = (int)(a.GetCharge() ?? 0);
+            en += acidCharge;
+            if (en != 0 && (acidCharge != 0))
+                Console.WriteLine("[FOLD], ");
         }
+
+        Console.WriteLine("\n End of Polypeptide...");
     }
 }
