@@ -44,21 +44,15 @@ public enum AminoAcid : byte
 
 public static class AminoAcidExtensions
 {
-    public enum AminoTypes
+    public enum AminoAttributes
     {
-        Positive = 1,
-        Negative = -1,
-        Aromatic = 0,
-        Polar = 0,
-        NonPolar = 0
+        Positive,
+        Negative,
+        Polar,
+        Aromatic,
+        NonPolar
     }
 
-    //public static sbyte GetChargeValue(this AminoTypes type) => type switch
-    //{
-    //    AminoTypes.Positive => 1,
-    //    AminoTypes.Negative => -1,
-    //    _ => 0,
-    //};
     public enum AminoHydro
     {
         Hydrophobic,
@@ -66,22 +60,25 @@ public static class AminoAcidExtensions
         Neutral
     }
 
-    public static AminoTypes? GetCharge(this AminoAcid aa) => aa switch
+    public static AminoAttributes? GetCharge(this AminoAcid aa) => aa switch
     {
         // Positively Charged
-        AminoAcid.Arg or AminoAcid.His or AminoAcid.Lys => AminoTypes.Positive,
+        AminoAcid.Arg or AminoAcid.His or AminoAcid.Lys => AminoAttributes.Positive,
 
         // Negatively Charged
-        AminoAcid.Asp or AminoAcid.Glu => AminoTypes.Negative,
+        AminoAcid.Asp or AminoAcid.Glu => AminoAttributes.Negative,
 
         //Polar 
-        AminoAcid.Cys or AminoAcid.Gln or AminoAcid.Asn or AminoAcid.Ser or AminoAcid.Thr or AminoAcid.Tyr => AminoTypes
-            .Polar,
+        AminoAcid.Cys or AminoAcid.Gln or AminoAcid.Asn or AminoAcid.Ser or AminoAcid.Thr or AminoAcid.Tyr =>
+            AminoAttributes
+                .Polar,
+
         //Aromatic
-        AminoAcid.Phe or AminoAcid.Trp => AminoTypes.Aromatic,
+        AminoAcid.Phe or AminoAcid.Trp => AminoAttributes.Aromatic,
+
         //Non-polar
         AminoAcid.Ala or AminoAcid.Gly or AminoAcid.Ile or AminoAcid.Leu or AminoAcid.Pro or AminoAcid.Val
-            or AminoAcid.Met => AminoTypes.NonPolar,
+            or AminoAcid.Met => AminoAttributes.NonPolar,
 
         AminoAcid.Stop => null,
 
@@ -236,7 +233,7 @@ public class Polypeptide : IEnumerable<AminoAcid>
 
     public Polypeptide(Dna dna)
     {
-        Residues = new AminoAcid[dna.Length / 3 - 1];
+        Residues = new AminoAcid[dna.Length / 3];
         _transcriptionTranslation(dna);
     }
 

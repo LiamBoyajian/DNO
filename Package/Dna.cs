@@ -32,6 +32,24 @@ public class Dna : IEnumerable<NucleotideBase>
         DnaBinary[0] |= ((byte)NucleotideBase.T << 4) | ((byte)NucleotideBase.G << 2); //Coding ATG(AUG) to the start.
     }
 
+    public Dna(string dnaString)
+    {
+        Length = dnaString.Length;
+        DnaBinary = new byte[(Length + 3) / 4];
+
+        for (int i = 0; i < Length; i++)
+        {
+            NucleotideBase current = dnaString[i] switch
+            {
+                'A' => NucleotideBase.A,
+                'T' => NucleotideBase.T,
+                'G' => NucleotideBase.G,
+                'C' => NucleotideBase.C,
+                _ => throw new ArgumentException("dnaString contains illegal characters")
+            };
+            DnaBinary[i / 4] |= (byte)((int)current << 2 * (3 - (i % 4)));
+        }
+    }
 
     public object Clone()
     {
