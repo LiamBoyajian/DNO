@@ -8,11 +8,15 @@
 
 config_version=5
 
+[animation]
+
+compatibility/default_parent_skeleton_in_mesh_instance_3d=true
+
 [application]
 
 config/name="Main"
-run/main_scene="uid://x3agewg1m5il"
-config/features=PackedStringArray("4.5", "C#", "Forward Plus")
+run/main_scene="uid://hkrl88j77qi4"
+config/features=PackedStringArray("4.6", "C#", "Forward Plus")
 config/icon="res://icon.svg"
 
 [display]
@@ -27,13 +31,17 @@ window/vsync/vsync_mode=0
 
 project/assembly_name="Main"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg")
+
 [file_customization]
 
 folder_colors={
-"res://InventoryAssets/": "yellow",
-"res://LabAssetts/": "yellow",
-"res://Menu things/": "yellow",
 "res://Package/": "red",
+"res://Scenes/Assets/InventoryAssets/": "yellow",
+"res://Scenes/Assets/LabAssetts/": "yellow",
+"res://Scenes/Assets/Menu things/": "yellow",
 "res://Source/": "green",
 "res://Sprites/": "purple"
 }
