@@ -1,0 +1,162 @@
+{ "frames": {
+   "labBG (true_bg).aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (true_bg_detail).aseprite": {
+    "frame": { "x": 640, "y": 0, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (temp_Poster).aseprite": {
+    "frame": { "x": 1280, "y": 0, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (true_bg_detail).aseprite": {
+    "frame": { "x": 640, "y": 0, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (cabinets).aseprite": {
+    "frame": { "x": 1920, "y": 0, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (counterTop far).aseprite": {
+    "frame": { "x": 0, "y": 360, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (counter).aseprite": {
+    "frame": { "x": 640, "y": 360, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (bgSculpt).aseprite": {
+    "frame": { "x": 1280, "y": 360, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (back_overhang_cabinets).aseprite": {
+    "frame": { "x": 1920, "y": 360, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (.temp).aseprite": {
+    "frame": { "x": 0, "y": 720, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (Layer 1).aseprite": {
+    "frame": { "x": 640, "y": 720, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (overhang_cabinets).aseprite": {
+    "frame": { "x": 1280, "y": 720, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (Layer 2).aseprite": {
+    "frame": { "x": 1920, "y": 720, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (Layer 3).aseprite": {
+    "frame": { "x": 1280, "y": 360, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (.mc).aseprite": {
+    "frame": { "x": 0, "y": 1080, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   },
+   "labBG (Layer 4).aseprite": {
+    "frame": { "x": 1280, "y": 360, "w": 640, "h": 360 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 640, "h": 360 },
+    "sourceSize": { "w": 640, "h": 360 },
+    "duration": 100
+   }
+ },
+ "meta": {
+  "app": "https://www.aseprite.org/",
+  "version": "1.3.17.2-x64",
+  "image": "SAMPLE_LABBG.png",
+  "format": "RGBA8888",
+  "size": { "w": 2560, "h": 1440 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "true_bg", "opacity": 255, "blendMode": "normal" },
+   { "name": "true_bg_detail", "opacity": 255, "blendMode": "normal" },
+   { "name": "temp_Poster", "opacity": 255, "blendMode": "normal" },
+   { "name": "true_bg_detail", "opacity": 255, "blendMode": "normal" },
+   { "name": "cabinets", "opacity": 255, "blendMode": "normal" },
+   { "name": "counterTop far", "opacity": 255, "blendMode": "normal" },
+   { "name": "counter", "opacity": 255, "blendMode": "normal" },
+   { "name": "bgSculpt", "opacity": 255, "blendMode": "normal" },
+   { "name": "back_overhang_cabinets", "opacity": 255, "blendMode": "normal" },
+   { "name": ".temp", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 1", "opacity": 255, "blendMode": "normal" },
+   { "name": "overhang_cabinets", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 2", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 3", "opacity": 255, "blendMode": "normal" },
+   { "name": ".mc", "opacity": 255, "blendMode": "normal" },
+   { "name": "Layer 4", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+   { "name": "Slice 1", "color": "#0000ffff", "keys": [{ "frame": 0, "bounds": {"x": 535, "y": 133, "w": 76, "h": 97 } }] }
+  ]
+ }
+}

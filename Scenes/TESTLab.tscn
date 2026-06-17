@@ -1,0 +1,168 @@
+[gd_scene format=3 uid="uid://hkrl88j77qi4"]
+
+[ext_resource type="Texture2D" uid="uid://pls7gvlumkg6" path="res://Sprites/asprite/sketch/idkDNa.aseprite" id="2_n1dxk"]
+[ext_resource type="Texture2D" uid="uid://c1b1h42mndlqg" path="res://Sprites/asprite/sketch/dnaRing.aseprite" id="2_t5aub"]
+
+[sub_resource type="Animation" id="Animation_n1dxk"]
+resource_name = "Cell_Bobbing"
+length = 10.033334
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5.033333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(330, 170), Vector2(330, 180)]
+}
+
+[sub_resource type="Animation" id="Animation_33q2i"]
+resource_name = "DNA_Circle_360"
+length = 20.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 20),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.283185307179586]
+}
+
+[sub_resource type="Animation" id="Animation_t5aub"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0001, 10),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_33q2i"]
+_data = {
+&"Cell_Bobbing": SubResource("Animation_n1dxk"),
+&"DNA_Circle_360": SubResource("Animation_33q2i"),
+&"RESET": SubResource("Animation_t5aub")
+}
+
+[sub_resource type="Animation" id="Animation_iba45"]
+resource_name = "DNA_Circle 360"
+length = 20.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 20),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.283185307179586]
+}
+
+[sub_resource type="Animation" id="Animation_g0duu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wf25g"]
+_data = {
+&"DNA_Circle 360": SubResource("Animation_iba45"),
+&"RESET": SubResource("Animation_g0duu")
+}
+
+[node name="TestLab" type="Node2D" unique_id=502175854]
+
+[node name="Cell" type="Sprite2D" parent="." unique_id=1292420218]
+position = Vector2(330, 170)
+texture = ExtResource("2_n1dxk")
+metadata/_aseprite_wizard_interface_config_ = {
+"layer_section": true,
+"pending_changes": {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"scale": "1.0",
+"slice": "",
+"source": "res://Sprites/asprite/labBG.aseprite",
+"source_uid": 565789563306373823
+}
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Cell" unique_id=1429791387]
+libraries/ = SubResource("AnimationLibrary_33q2i")
+autoplay = &"Cell_Bobbing"
+
+[node name="DNA_Circle" type="Sprite2D" parent="." unique_id=1704384706]
+position = Vector2(0.0025943518, 179.07196)
+texture = ExtResource("2_t5aub")
+offset = Vector2(-42, 0)
+metadata/_aseprite_wizard_interface_config_ = {
+"layer_section": true,
+"pending_changes": {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"scale": "1.0",
+"slice": "",
+"source": "res://Sprites/asprite/labBG.aseprite",
+"source_uid": 565789563306373823
+}
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DNA_Circle" unique_id=1621545584]
+libraries/ = SubResource("AnimationLibrary_wf25g")
+autoplay = &"DNA_Circle 360"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=377568576]
+layer = -10
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1822128348]
+z_index = -20
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0.019607844, 0.019607844, 0.05490196, 1)

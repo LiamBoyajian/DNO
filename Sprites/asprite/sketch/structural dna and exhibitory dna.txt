@@ -1,0 +1,11 @@
+structural dna and exhibitory dna 
+- plant design unchangeable ish
+- plant code part idk
+
+balancing the different binding sites because the different genes will create proteins that crowd out others that share their binding site
+
+genes should work like Japanese conjugation?
+Subject is the stat, object is null?, predicate: verb is the change
+- This allows for simple stat changes 
+- How would different tenses be represented?
+	- prerequisites and aftereffects and consistent 
