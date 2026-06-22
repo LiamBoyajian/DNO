@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://2ae25ckj888j"]
+
+[ext_resource type="Theme" uid="uid://bccati3tbihud" path="res://Scenes/Assets/TESTLab Assets/Gene_Window/pc_design.tres" id="1_0xhjo"]
+
+[node name="Genes" type="Window" unique_id=1004885525]
+transparent_bg = true
+oversampling_override = 1.0
+position = Vector2i(10, 36)
+size = Vector2i(620, 330)
+visible = false
+transparent = true
+popup_window = true
+min_size = Vector2i(25, 25)
+theme = ExtResource("1_0xhjo")
+
+[node name="ScrollContainer" type="ScrollContainer" parent="." unique_id=1001222000]
+anchors_preset = -1
+anchor_top = -0.009000001
+anchor_right = 0.337
+anchor_bottom = 1.0
+offset_top = -0.029999733
+offset_right = 0.05999756
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="MarginContainer" type="MarginContainer" parent="ScrollContainer" unique_id=964393701]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5

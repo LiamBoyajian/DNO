@@ -1,0 +1,1021 @@
+[gd_scene format=3 uid="uid://ds37ymi7uqccg"]
+
+[ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://Scenes/window.tscn" id="1_g3fb6"]
+[ext_resource type="Theme" uid="uid://bccati3tbihud" path="res://Scenes/Assets/TESTLab Assets/Gene_Window/pc_design.tres" id="2_rionv"]
+[ext_resource type="StyleBox" uid="uid://bgraddpb3vbox" path="res://Scenes/Assets/TESTLab Assets/Gene_Window/RoundBox.tres" id="3_kt8vu"]
+
+[node name="Genes" unique_id=1004885525 instance=ExtResource("1_g3fb6")]
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ScrollContainer/MarginContainer" parent_id_path=PackedInt32Array(964393701) index="0" unique_id=1152819833]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 5
+
+[node name="PanelContainer" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="0" unique_id=372597291]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer" index="0" unique_id=731174316]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer/Gene_Holder2" index="0" unique_id=644663489]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer/Gene_Holder2" index="1" unique_id=1667744557]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer/Gene_Holder2" index="2" unique_id=1698511219]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer/Gene_Holder2" index="3" unique_id=1311123480]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="1" unique_id=180126698]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer2" index="0" unique_id=1314593532]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer2/Gene_Holder2" index="0" unique_id=1830202913]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer2/Gene_Holder2" index="1" unique_id=1150923123]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer2/Gene_Holder2" index="2" unique_id=1503384228]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer2/Gene_Holder2" index="3" unique_id=2009676644]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer3" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="2" unique_id=1167980390]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer3" index="0" unique_id=1955922618]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer3/Gene_Holder2" index="0" unique_id=614951829]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer3/Gene_Holder2" index="1" unique_id=1836014418]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer3/Gene_Holder2" index="2" unique_id=934555701]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer3/Gene_Holder2" index="3" unique_id=973314587]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer4" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="3" unique_id=507618812]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer4" index="0" unique_id=916395482]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer4/Gene_Holder2" index="0" unique_id=649780951]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer4/Gene_Holder2" index="1" unique_id=208408684]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer4/Gene_Holder2" index="2" unique_id=329006144]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer4/Gene_Holder2" index="3" unique_id=1309304718]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer5" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="4" unique_id=1220254124]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer5" index="0" unique_id=1195785251]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer5/Gene_Holder2" index="0" unique_id=786008387]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer5/Gene_Holder2" index="1" unique_id=939350440]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer5/Gene_Holder2" index="2" unique_id=1232889810]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer5/Gene_Holder2" index="3" unique_id=614225323]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer6" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="5" unique_id=424382523]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer6" index="0" unique_id=1385457630]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer6/Gene_Holder2" index="0" unique_id=461768397]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer6/Gene_Holder2" index="1" unique_id=1805750993]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer6/Gene_Holder2" index="2" unique_id=1985164948]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer6/Gene_Holder2" index="3" unique_id=214653529]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer7" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="6" unique_id=2141578134]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer7" index="0" unique_id=21961064]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer7/Gene_Holder2" index="0" unique_id=2091453336]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer7/Gene_Holder2" index="1" unique_id=308132117]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer7/Gene_Holder2" index="2" unique_id=1766356708]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer7/Gene_Holder2" index="3" unique_id=2044801797]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer8" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="7" unique_id=1239580825]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer8" index="0" unique_id=1830532969]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer8/Gene_Holder2" index="0" unique_id=866114710]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer8/Gene_Holder2" index="1" unique_id=399205032]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer8/Gene_Holder2" index="2" unique_id=1839622376]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer8/Gene_Holder2" index="3" unique_id=176948017]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer9" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="8" unique_id=55610754]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer9" index="0" unique_id=1267875267]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer9/Gene_Holder2" index="0" unique_id=1209053688]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer9/Gene_Holder2" index="1" unique_id=919386282]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer9/Gene_Holder2" index="2" unique_id=94601071]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer9/Gene_Holder2" index="3" unique_id=147286061]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer10" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="9" unique_id=473360319]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer10" index="0" unique_id=1522168282]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer10/Gene_Holder2" index="0" unique_id=1855718073]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer10/Gene_Holder2" index="1" unique_id=1763002575]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer10/Gene_Holder2" index="2" unique_id=943075620]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer10/Gene_Holder2" index="3" unique_id=1956394836]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer11" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="10" unique_id=1638059564]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer11" index="0" unique_id=930098764]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer11/Gene_Holder2" index="0" unique_id=1070925644]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer11/Gene_Holder2" index="1" unique_id=1266713124]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer11/Gene_Holder2" index="2" unique_id=301801134]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer11/Gene_Holder2" index="3" unique_id=1197949123]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer12" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="11" unique_id=1112059723]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer12" index="0" unique_id=900491590]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer12/Gene_Holder2" index="0" unique_id=1580275158]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer12/Gene_Holder2" index="1" unique_id=319280184]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer12/Gene_Holder2" index="2" unique_id=1348809275]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer12/Gene_Holder2" index="3" unique_id=987493620]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer13" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="12" unique_id=1542205721]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer13" index="0" unique_id=1139719129]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer13/Gene_Holder2" index="0" unique_id=686864329]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer13/Gene_Holder2" index="1" unique_id=1455571542]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer13/Gene_Holder2" index="2" unique_id=2081098531]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer13/Gene_Holder2" index="3" unique_id=1835418339]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer14" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="13" unique_id=1353227869]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer14" index="0" unique_id=1693337338]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer14/Gene_Holder2" index="0" unique_id=2026989557]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer14/Gene_Holder2" index="1" unique_id=1613968065]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer14/Gene_Holder2" index="2" unique_id=337479883]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer14/Gene_Holder2" index="3" unique_id=1533380171]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer15" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="14" unique_id=768150297]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer15" index="0" unique_id=1959005768]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer15/Gene_Holder2" index="0" unique_id=1659748887]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer15/Gene_Holder2" index="1" unique_id=339443195]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer15/Gene_Holder2" index="2" unique_id=335685000]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer15/Gene_Holder2" index="3" unique_id=476975001]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer16" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="15" unique_id=477071212]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer16" index="0" unique_id=471766699]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer16/Gene_Holder2" index="0" unique_id=442698707]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer16/Gene_Holder2" index="1" unique_id=1622988744]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer16/Gene_Holder2" index="2" unique_id=1671247537]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer16/Gene_Holder2" index="3" unique_id=617377179]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer17" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="16" unique_id=1895678874]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer17" index="0" unique_id=2094302180]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer17/Gene_Holder2" index="0" unique_id=2001867452]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer17/Gene_Holder2" index="1" unique_id=1110596597]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer17/Gene_Holder2" index="2" unique_id=100978012]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer17/Gene_Holder2" index="3" unique_id=303424930]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer18" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="17" unique_id=766280711]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer18" index="0" unique_id=900885123]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer18/Gene_Holder2" index="0" unique_id=512637156]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer18/Gene_Holder2" index="1" unique_id=1648435442]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer18/Gene_Holder2" index="2" unique_id=80723323]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer18/Gene_Holder2" index="3" unique_id=1430913964]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer19" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="18" unique_id=1436374669]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer19" index="0" unique_id=1824952186]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer19/Gene_Holder2" index="0" unique_id=1956718014]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer19/Gene_Holder2" index="1" unique_id=900225095]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer19/Gene_Holder2" index="2" unique_id=609531325]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer19/Gene_Holder2" index="3" unique_id=2121675851]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer20" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="19" unique_id=272475861]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer20" index="0" unique_id=874171976]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer20/Gene_Holder2" index="0" unique_id=256738374]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer20/Gene_Holder2" index="1" unique_id=1900306504]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer20/Gene_Holder2" index="2" unique_id=1760628684]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer20/Gene_Holder2" index="3" unique_id=1288776505]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer21" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="20" unique_id=673191772]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer21" index="0" unique_id=317979625]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer21/Gene_Holder2" index="0" unique_id=492142051]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer21/Gene_Holder2" index="1" unique_id=2089531449]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer21/Gene_Holder2" index="2" unique_id=1667867989]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer21/Gene_Holder2" index="3" unique_id=1167093021]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer22" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="21" unique_id=1116334805]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer22" index="0" unique_id=899398566]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer22/Gene_Holder2" index="0" unique_id=1404527674]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer22/Gene_Holder2" index="1" unique_id=1440007041]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer22/Gene_Holder2" index="2" unique_id=1601662057]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer22/Gene_Holder2" index="3" unique_id=1903691202]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer23" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="22" unique_id=364944446]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer23" index="0" unique_id=864317796]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer23/Gene_Holder2" index="0" unique_id=463012171]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer23/Gene_Holder2" index="1" unique_id=955782636]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer23/Gene_Holder2" index="2" unique_id=1811288652]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer23/Gene_Holder2" index="3" unique_id=471408418]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="PanelContainer24" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer" index="23" unique_id=435327302]
+self_modulate = Color(0, 0, 0, 0.36078432)
+custom_minimum_size = Vector2(10, 20)
+layout_mode = 2
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene_Holder2" type="HBoxContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer24" index="0" unique_id=1898350468]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 0
+
+[node name="GeneHead" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer24/Gene_Holder2" index="0" unique_id=1096077788]
+self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("2_rionv")
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene1" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer24/Gene_Holder2" index="1" unique_id=1030505488]
+self_modulate = Color(0.43529412, 0.45882353, 1, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Gene2" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer24/Gene_Holder2" index="2" unique_id=1739104310]
+self_modulate = Color(3.3691526e-07, 0.6380837, 0.40767294, 0.8862745)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 1.75
+theme_override_styles/panel = ExtResource("3_kt8vu")
+
+[node name="Available_Space" type="PanelContainer" parent="ScrollContainer/MarginContainer/VBoxContainer/PanelContainer24/Gene_Holder2" index="3" unique_id=919656927]
+self_modulate = Color(0, 0, 0, 0)
+custom_minimum_size = Vector2(1, 1)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("3_kt8vu")
