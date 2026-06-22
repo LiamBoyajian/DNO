@@ -1,6 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://c170spcs4nixq"]
+[gd_scene format=3 uid="uid://c170spcs4nixq"]
 
-[ext_resource type="Script" uid="uid://ct8y5png4e2l7" path="res://Source/AcidDisplay.cs" id="1_wrpp5"]
+[ext_resource type="Script" uid="uid://ct8y5png4e2l7" path="res://Source/Outdated/AcidDisplay.cs" id="1_wrpp5"]
 [ext_resource type="SpriteFrames" uid="uid://7c6s0pllybhj" path="res://Scenes/Assets/MachineAssets/DnaSequence.tres" id="2_2vtas"]
 
 [node name="DnaSequence" type="Control"]

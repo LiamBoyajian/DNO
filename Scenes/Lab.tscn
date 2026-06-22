@@ -1,7 +1,7 @@
-[gd_scene load_steps=60 format=3 uid="uid://eljyd8ypochx"]
+[gd_scene format=3 uid="uid://eljyd8ypochx"]
 
 [ext_resource type="Script" uid="uid://ce03glqlcgu1q" path="res://Scenes/Assets/LabAssetts/MainCharacter.cs" id="1_mim5p"]
-[ext_resource type="Script" uid="uid://biybq8g6qxxmp" path="res://Source/LabSignalManager.cs" id="1_y6m64"]
+[ext_resource type="Script" uid="uid://biybq8g6qxxmp" path="res://Source/Outdated/LabSignalManager.cs" id="1_y6m64"]
 [ext_resource type="Texture2D" uid="uid://c3xvgy8x5q41x" path="res://Sprites/DNA_Computer.png" id="2_q8man"]
 [ext_resource type="Texture2D" uid="uid://dg6vihqdcckbp" path="res://Scenes/Assets/LabAssetts/BaseChar1.png" id="2_qytnw"]
 [ext_resource type="Texture2D" uid="uid://hw54h7njepk0" path="res://Scenes/Assets/LabAssetts/oven1.png" id="3_qytnw"]
@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://cc27bh4y3onni" path="res://Scenes/Assets/LabAssetts/Grower.png" id="6_rk17r"]
 [ext_resource type="Texture2D" uid="uid://cefs0g3ayffob" path="res://Scenes/Assets/LabAssetts/PlantGrowth.png" id="7_qlutr"]
 [ext_resource type="Script" uid="uid://dxie6cdiectlt" path="res://Scenes/Assets/LabAssetts/Pc.cs" id="8_2iyuy"]
-[ext_resource type="Script" uid="uid://0lwx87dsu5nn" path="res://Source/Grower.cs" id="8_q8man"]
+[ext_resource type="Script" uid="uid://0lwx87dsu5nn" path="res://Source/Outdated/Grower.cs" id="8_q8man"]
 [ext_resource type="Texture2D" uid="uid://8eex3f2c1q8g" path="res://Sprites/BankerLampSheet.png" id="11_2iyuy"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_v1drn"]
