@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://hkrl88j77qi4"]
 
+[ext_resource type="Script" uid="uid://dds1x2d8o5b1u" path="res://Source/main/Plant.cs" id="2_34esj"]
 [ext_resource type="Texture2D" uid="uid://pls7gvlumkg6" path="res://Sprites/asprite/sketch/idkDNa.aseprite" id="2_n1dxk"]
 [ext_resource type="Texture2D" uid="uid://c1b1h42mndlqg" path="res://Sprites/asprite/sketch/dnaRing.aseprite" id="2_t5aub"]
 [ext_resource type="Texture2D" uid="uid://dchk1h2k3f5yu" path="res://Scenes/Assets/TESTLab Assets/Gene_Window/Window Popup_window base.ase_layer_tex" id="3_n1dxk"]
@@ -113,11 +114,39 @@ texture_margin_bottom = 6.0
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
+[sub_resource type="CanvasTexture" id="CanvasTexture_34esj"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6pemv"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 0, 0)
+spread = 180.0
+orbit_velocity_min = -0.13599992
+orbit_velocity_max = 0.1280001
+radial_velocity_min = -18.180021
+radial_velocity_max = 31.819977
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -6.820002
+linear_accel_max = 8.6399975
+radial_accel_min = -16.810001
+radial_accel_max = 92.28
+hue_variation_min = -0.13000003
+hue_variation_max = 0.16999997
+turbulence_enabled = true
+collision_mode = 1
+collision_friction = 1.0
+collision_bounce = 1.0
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_34esj"]
+polygon = PackedVector2Array(-124.38338, -62.46421, 55.605103, -66.09141, 62.498993, 66.74486, -120.41382, 72.48111, -124.38338, -62.46421)
+
 [node name="TestLab" type="Node2D" unique_id=502175854]
 
 [node name="Cell" type="Sprite2D" parent="." unique_id=1292420218]
 position = Vector2(330, 180)
 texture = ExtResource("2_n1dxk")
+script = ExtResource("2_34esj")
 metadata/_aseprite_wizard_interface_config_ = {
 "layer_section": true,
 "pending_changes": {
@@ -222,3 +251,24 @@ script = ExtResource("8_6pemv")
 
 [node name="editor" parent="." unique_id=1369433767 instance=ExtResource("8_34esj")]
 script = ExtResource("8_6pemv")
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=145163715]
+position = Vector2(318.99997, 182)
+emitting = false
+amount = 356
+texture = SubResource("CanvasTexture_34esj")
+lifetime = 41.79
+interp_to_end = 0.014
+speed_scale = 3.83
+explosiveness = 0.07
+interpolate = false
+fract_delta = false
+collision_base_size = 0.0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_6pemv")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=943931753]
+visible = false
+position = Vector2(353, 172)
+rotation = 0.036814757
+occluder = SubResource("OccluderPolygon2D_34esj")
