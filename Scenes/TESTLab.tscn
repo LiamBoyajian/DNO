@@ -247,12 +247,15 @@ target_node = NodePath("../editor")
 click_behavior = 2
 
 [node name="Genes" parent="." unique_id=1004885525 instance=ExtResource("8_igb03")]
+visible = false
 script = ExtResource("8_6pemv")
 
 [node name="editor" parent="." unique_id=1369433767 instance=ExtResource("8_34esj")]
+visible = true
 script = ExtResource("8_6pemv")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=145163715]
+visible = false
 position = Vector2(318.99997, 182)
 emitting = false
 amount = 356
