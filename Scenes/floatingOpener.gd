@@ -1,4 +1,4 @@
-extends "res://Source/SceneControl/display_element.gd"
+extends "res://Source/main/SceneControl/display_element.gd"
 
 @export var float_speed: float = 2.0
 @export var float_amplitude: float = 2
