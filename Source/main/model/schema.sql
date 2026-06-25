@@ -4,7 +4,7 @@ CREATE TABLE plants
     name TEXT NOT NULL
 );
 
-CREATE TABLE genes
+CREATE TABLE dna_strands
 (
     id        INTEGER PRIMARY KEY AUTOINCREMENT,
     plant_id  INTEGER NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE genes
     FOREIGN KEY (plant_id) REFERENCES plants (id) ON DELETE CASCADE
 );
 
-CREATE TABLE sub_genes
+CREATE TABLE genes
 (
     id               INTEGER PRIMARY KEY AUTOINCREMENT,
     gene_id          INTEGER NOT NULL,

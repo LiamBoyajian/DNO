@@ -24,6 +24,10 @@ config/icon="res://icon.svg"
 
 DatabaseManager="*uid://dmkbkhmxlofth"
 
+[debug]
+
+gdscript/warnings/enable=false
+
 [display]
 
 window/size/viewport_width=640
