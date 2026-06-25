@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 
 namespace Main.Source.main.model;
@@ -8,19 +9,29 @@ using Microsoft.Data.Sqlite;
 public partial class DatabaseManager : Node
 {
     private string _databasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
+    private string _schemaPath = "Source/main/model/schema.sql";
 
     private void InitializeDatabase()
     {
-        using (var connection = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={_databasePath}"))
+        if (!FileAccess.FileExists(_schemaPath))
         {
+            GD.PrintErr($"Database initialization failed: Schema file not found at {_schemaPath}");
+            return;
+        }
+
+        try
+        {
+            using var connection = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={_databasePath}");
             connection.Open();
+
             using var command = connection.CreateCommand();
-            command.CommandText = @"
-            CREATE TABLE IF NOT EXISTS plants (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                name TEXT NOT NULL
-            );";
             command.ExecuteNonQuery();
+
+            GD.Print("Database initialized successfully from schema.sql.");
+        }
+        catch (Exception ex)
+        {
+            GD.PrintErr($"Failed to execute database schema: {ex.Message}");
         }
     }
 
@@ -31,18 +42,16 @@ public partial class DatabaseManager : Node
 
     public bool AddPlant(string name)
     {
-        using (var connection = new SqliteConnection($"Data Source={_databasePath}"))
-        {
-            connection.Open();
+        using var connection = new SqliteConnection($"Data Source={_databasePath}");
+        connection.Open();
 
-            var command = connection.CreateCommand();
-            command.CommandText = "INSERT INTO plants (name) VALUES (@name)";
-            command.Parameters.AddWithValue("@name", name);
-            command.ExecuteNonQuery();
+        var command = connection.CreateCommand();
+        command.CommandText = "INSERT INTO plants (name) VALUES (@name)";
+        command.Parameters.AddWithValue("@name", name);
+        //command.ExecuteNonQuery();
 
 
-            return command.ExecuteNonQuery() > 0;
-        }
+        return command.ExecuteNonQuery() > 0;
     }
 }
 
