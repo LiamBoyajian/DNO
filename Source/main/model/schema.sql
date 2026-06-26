@@ -8,15 +8,15 @@ CREATE TABLE dna_strands
 (
     id        INTEGER PRIMARY KEY AUTOINCREMENT,
     plant_id  INTEGER NOT NULL,
-    gene_name TEXT    NOT NULL,
+    name TEXT NOT NULL,
     FOREIGN KEY (plant_id) REFERENCES plants (id) ON DELETE CASCADE
 );
 
 CREATE TABLE genes
 (
     id               INTEGER PRIMARY KEY AUTOINCREMENT,
-    gene_id          INTEGER NOT NULL,
-    expression_value REAL,
-    FOREIGN KEY (gene_id) REFERENCES genes (id) ON DELETE CASCADE
+    strand_id INTEGER NOT NULL,
+
+    FOREIGN KEY (strand_id) REFERENCES dna_strands (id) ON DELETE CASCADE
 );
 

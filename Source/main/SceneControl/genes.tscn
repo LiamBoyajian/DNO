@@ -11,7 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://b03dbw3wahcrw" path="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_store.ase_layer_tex" id="9_iu5im"]
 [ext_resource type="Texture2D" uid="uid://b0cbi3ejjty6y" path="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_trade.ase_layer_tex" id="10_xlm3k"]
 
-[node name="Window" unique_id=1004885525 instance=ExtResource("1_1tjp2")]
+[node name="Gene_Editor_Window" unique_id=1004885525 instance=ExtResource("1_1tjp2")]
 
 [node name="OptionButton" type="OptionButton" parent="MarginContainer" parent_id_path=PackedInt32Array(964393701) index="0" unique_id=543365280]
 custom_minimum_size = Vector2(150, 50)

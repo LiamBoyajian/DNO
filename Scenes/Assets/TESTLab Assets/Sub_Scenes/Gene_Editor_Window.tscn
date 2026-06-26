@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/window.tscn" id="1_rm35y"]
 [ext_resource type="Texture2D" uid="uid://8222f1lnkm3i" path="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_clean.ase_layer_tex" id="2_2rq58"]
+[ext_resource type="Script" uid="uid://cx2i8j1i3y2dj" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/UIGeneEditor.gd" id="2_dy6ql"]
 [ext_resource type="Texture2D" uid="uid://roqcvuv2n40r" path="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_consume.ase_layer_tex" id="3_50biq"]
 [ext_resource type="Texture2D" uid="uid://bme25ksb5kuxd" path="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_cycle.ase_layer_tex" id="4_yc1ea"]
 [ext_resource type="Texture2D" uid="uid://cty4ap7oi8x8v" path="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_grow.ase_layer_tex" id="5_2lgeg"]
@@ -11,7 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://b03dbw3wahcrw" path="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_store.ase_layer_tex" id="9_gdwfk"]
 [ext_resource type="Texture2D" uid="uid://b0cbi3ejjty6y" path="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_trade.ase_layer_tex" id="10_txglq"]
 
-[node name="Editor" unique_id=1004885525 instance=ExtResource("1_rm35y")]
+[node name="Gene_Editor_Window" unique_id=1004885525 instance=ExtResource("1_rm35y")]
+script = ExtResource("2_dy6ql")
 
 [node name="OptionButton" type="OptionButton" parent="MarginContainer" parent_id_path=PackedInt32Array(964393701) index="0" unique_id=2035632767]
 custom_minimum_size = Vector2(150, 50)
