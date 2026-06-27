@@ -4,10 +4,11 @@
 [ext_resource type="Texture2D" uid="uid://pls7gvlumkg6" path="res://Sprites/asprite/sketch/idkDNa.aseprite" id="2_n1dxk"]
 [ext_resource type="Texture2D" uid="uid://c1b1h42mndlqg" path="res://Sprites/asprite/sketch/dnaRing.aseprite" id="2_t5aub"]
 [ext_resource type="Texture2D" uid="uid://dchk1h2k3f5yu" path="res://Scenes/Assets/TESTLab Assets/Gene_Window/Window Popup_window base.ase_layer_tex" id="3_n1dxk"]
-[ext_resource type="Script" uid="uid://drjfdi7qawa8o" path="res://Source/main/SceneControl/floatingOpener.gd" id="5_igb03"]
+[ext_resource type="Script" uid="uid://drjfdi7qawa8o" path="res://Scenes/floatingOpener.gd" id="5_igb03"]
 [ext_resource type="Texture2D" uid="uid://bqxgvrsno46xu" path="res://Scenes/Assets/TESTLab Assets/Gene_Window/Window Popup_Closed_window_Icon.ase_layer_tex" id="7_wf25g"]
-[ext_resource type="PackedScene" uid="uid://ds37ymi7uqccg" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/Plant_Gene_Window.tscn" id="8_igb03"]
-[ext_resource type="PackedScene" uid="uid://bg7g70dd654ew" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/Gene_Editor_Window.tscn" id="9_34esj"]
+[ext_resource type="Script" uid="uid://7fpox42tfdm3" path="res://Scenes/window_close.gd" id="8_6pemv"]
+[ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/window.tscn" id="8_34esj"]
+[ext_resource type="PackedScene" uid="uid://ds37ymi7uqccg" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/genes.tscn" id="8_igb03"]
 [ext_resource type="Texture2D" uid="uid://crmxitvyal6w1" path="res://Scenes/Assets/TESTLab Assets/Gene_Window/Window Popup_Open_Editor.ase_layer_tex" id="9_igb03"]
 [ext_resource type="Script" uid="uid://bbn3i0cgkwq0w" path="res://Source/main/SceneControl/EditorController.gd" id="11_6pemv"]
 
@@ -232,7 +233,7 @@ tooltip_text = "Open DNA editor
 "
 texture_normal = ExtResource("7_wf25g")
 script = ExtResource("5_igb03")
-target_node = NodePath("../Plant_Gene_Window")
+target_node = NodePath("../Genes")
 click_behavior = 2
 
 [node name="Open_Editor" type="TextureButton" parent="." unique_id=748450391 node_paths=PackedStringArray("target_node")]
@@ -243,15 +244,14 @@ offset_right = 632.0
 offset_bottom = 361.0
 texture_normal = ExtResource("9_igb03")
 script = ExtResource("5_igb03")
-target_node = NodePath("../Gene_Editor_Window")
+target_node = NodePath("../editor")
 click_behavior = 2
 
-[node name="Plant_Gene_Window" parent="." unique_id=1004885525 instance=ExtResource("8_igb03")]
-position = Vector2i(0, 28)
-visible = false
+[node name="Genes" parent="." unique_id=1004885525 instance=ExtResource("8_igb03")]
+script = ExtResource("8_6pemv")
 
-[node name="Gene_Editor_Window" parent="." unique_id=534227550 instance=ExtResource("9_34esj")]
-visible = false
+[node name="editor" parent="." unique_id=1369433767 instance=ExtResource("8_34esj")]
+script = ExtResource("8_6pemv")
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=145163715]
 visible = false

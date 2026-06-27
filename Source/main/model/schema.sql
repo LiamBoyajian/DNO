@@ -1,0 +1,22 @@
+CREATE TABLE plants
+(
+    id   INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+);
+
+CREATE TABLE dna_strands
+(
+    id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    plant_id  INTEGER NOT NULL,
+    name TEXT NOT NULL,
+    FOREIGN KEY (plant_id) REFERENCES plants (id) ON DELETE CASCADE
+);
+
+CREATE TABLE genes
+(
+    id               INTEGER PRIMARY KEY AUTOINCREMENT,
+    strand_id INTEGER NOT NULL,
+
+    FOREIGN KEY (strand_id) REFERENCES dna_strands (id) ON DELETE CASCADE
+);
+

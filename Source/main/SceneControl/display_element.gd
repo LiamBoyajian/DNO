@@ -14,7 +14,6 @@ func _ready() -> void:
 	pressed.connect(_button_pressed)
 	if not target_node:
 		push_error("Missing display mode")
-	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

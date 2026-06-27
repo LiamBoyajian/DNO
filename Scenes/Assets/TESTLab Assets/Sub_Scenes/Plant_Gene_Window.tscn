@@ -1,0 +1,30 @@
+[gd_scene format=3 uid="uid://ds37ymi7uqccg"]
+
+[ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/window.tscn" id="1_g3fb6"]
+[ext_resource type="Theme" uid="uid://bccati3tbihud" path="res://Scenes/Assets/TESTLab Assets/Gene_Window/pc_design.tres" id="2_rionv"]
+[ext_resource type="Script" uid="uid://7fpox42tfdm3" path="res://Source/main/SceneControl/UIGeneWindowController.gd" id="2_x53in"]
+[ext_resource type="PackedScene" uid="uid://7ruahpj7upcc" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/editor_components/PanelContainer_GeneBG.tscn" id="3_c1kx8"]
+[ext_resource type="PackedScene" uid="uid://d3xfn6wc8nwga" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/editor_components/HBox_GeneContainer.tscn" id="4_hinv1"]
+[ext_resource type="PackedScene" uid="uid://c3v6k30bmehk0" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/editor_components/PanelContainer_GeneBase.tscn" id="5_uy7xq"]
+
+[node name="Plant_Gene_Window" unique_id=1004885525 node_paths=PackedStringArray("dna_strand_container") instance=ExtResource("1_g3fb6")]
+script = ExtResource("2_x53in")
+dna_strand_container = NodePath("MarginContainer/Strand_Holder")
+panel_template = ExtResource("3_c1kx8")
+gene_container_template = ExtResource("4_hinv1")
+gene_template = ExtResource("5_uy7xq")
+
+[node name="MarginContainer" parent="." index="0" unique_id=964393701]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 0.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Strand_Holder" type="VBoxContainer" parent="MarginContainer" index="0" unique_id=1152819833]
+layout_mode = 2
+theme = ExtResource("2_rionv")
+theme_override_constants/separation = 5
