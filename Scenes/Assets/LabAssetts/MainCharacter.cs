@@ -153,7 +153,7 @@ public partial class MainCharacter : CharacterBody2D
         //Removable:
 
         //Texture2D temp = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("outdated_DNA", 0);
-        //Texture2D temp2 = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("Plant", 0);
+        //Texture2D temp2 = GetNode<AnimatedSprite2D>("Vial").SpriteFrames.GetFrameTexture("AbstractPlant", 0);
 
         //_inventory.AddItem(null);
         //_inventory.AddItem(null);

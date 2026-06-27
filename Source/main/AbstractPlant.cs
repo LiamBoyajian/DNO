@@ -2,76 +2,74 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using Godot;
+using Main.Package;
 
 namespace Main.Source.main;
 
-public partial class Plant : Node
+public abstract partial class AbstractPlant : Node
 {
     public class Resource(double amount, double max)
     {
-        private double _amount = amount;
-        private double _max = max;
-
         /**
          * Storage here?
          */
 
 
-        public double Max => _max;
+        public double Max { get; } = max;
 
-        public double Amount => _amount;
+        public double Amount { get; private set; } = amount;
 
         public double ReturnPercent()
         {
-            if (_max == 0.0) return 0;
-            return _amount / _max;
+            if (Max == 0.0) return 0;
+            return Amount / Max;
         }
 
-        public double give(double amount)
+        public double Give(double amount)
         {
             if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
 
-            if (amount + _amount > _max)
+            if (amount + Amount > Max)
             {
-                _amount = _max;
-                return amount - (_max - _amount);
+                Amount = Max;
+                return amount - (Max - Amount);
             }
 
-            _amount += amount;
+            Amount += amount;
             return 0.0;
         }
 
-        public double take(double amount)
+        public double Take(double amount)
         {
             if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
 
-            if (amount > _amount)
+            if (amount > Amount)
             {
-                var result = amount - _amount;
-                _amount = 0;
+                var result = amount - Amount;
+                Amount = 0;
                 return result;
             }
 
-            _amount -= amount;
+            Amount -= amount;
             return 0.0;
         }
 
-        public bool isEmpty()
+        public bool IsEmpty()
         {
-            return _amount <= 0;
+            return Amount <= 0;
         }
 
-        public bool increment()
+        public bool Increment()
         {
-            if (_amount + 1.0 >= _max) return false;
-            _amount++;
+            if (Amount + 1.0 >= Max) return false;
+            Amount++;
             return true;
         }
 
-        public bool decrement()
+        public bool Decrement()
         {
-            if (_amount - 1.0 <= 0.0) return false;
-            _amount--;
+            if (Amount - 1.0 <= 0.0) return false;
+            Amount--;
             return true;
         }
     }
@@ -99,7 +97,7 @@ public partial class Plant : Node
         DamagedCells, //maybe add types of cells or damage idk (types of broken proteins.)
     }
 
-    private Dictionary<Rt, Resource> _resources = new()
+    protected Dictionary<Rt, Resource> _resources = new()
     {
         //Arbitrary base values
         { Rt.Health, new Resource(10.0, 100.0) },
@@ -114,12 +112,12 @@ public partial class Plant : Node
         { Rt.DamagedCells, new Resource(50.0, 100.0) },
     };
 
-
     //-----------------------------
     public IReadOnlyDictionary<Rt, Resource> MyResources => _resources;
 
-
     private double _frameSum = 0.0;
+
+
     //-----------------------------
 
     // Called when the node enters the scene tree for the first time.
@@ -131,7 +129,8 @@ public partial class Plant : Node
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
-        Tick(delta);
+        if (_resources[Rt.Health].Amount > 0.0)
+            Tick(delta);
     }
 
     public void Tick(double delta)
@@ -141,8 +140,8 @@ public partial class Plant : Node
             return;
         _frameSum = 0.0;
 
-        _resources[Rt.H2O].give(25.0);
-        _resources[Rt.Co2].give(50.0);
+        _resources[Rt.H2O].Give(25.0);
+        _resources[Rt.Co2].Give(50.0);
 
         _consume();
         if (_resources[Rt.Health].Amount <= 0.0)
@@ -184,10 +183,10 @@ public partial class Plant : Node
 
         var glucoseGenerated =
             (int)((Math.Max(_resources[Rt.H2O].Amount, _resources[Rt.Co2].Amount) * sunlevel) / 6.0f);
-        _resources[Rt.Glucose].increment();
-        _resources[Rt.Oxygen].give(glucoseGenerated * oxygenByproductRatio);
-        _resources[Rt.H2O].take(glucoseGenerated * waterAndCo2Min);
-        _resources[Rt.Co2].take(glucoseGenerated * waterAndCo2Min);
+        _resources[Rt.Glucose].Increment();
+        _resources[Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
+        _resources[Rt.H2O].Take(glucoseGenerated * waterAndCo2Min);
+        _resources[Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
     }
 
     //Clean: remove a resource permanently
@@ -212,13 +211,13 @@ public partial class Plant : Node
     //Consume: Use glucose for energy (no energy = lose hp)
     public void _consume()
     {
-        if (_resources[Rt.Glucose].decrement())
+        if (_resources[Rt.Glucose].Decrement())
         {
-            _resources[Rt.Energy].give(10.0);
+            _resources[Rt.Energy].Give(10.0);
         }
         else
         {
-            _resources[Rt.Health].take(10.0);
+            _resources[Rt.Health].Take(10.0);
         }
     }
 
@@ -237,4 +236,13 @@ public partial class Plant : Node
     public void _cycle()
     {
     }
+
+    public bool IsAlive()
+    {
+        return _resources[Rt.Health].Amount > 0.0;
+    }
+
+    abstract protected bool GrowthUpdateFrame();
+
+    abstract protected bool IsDeadThenDeadFrame();
 }
