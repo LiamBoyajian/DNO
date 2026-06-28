@@ -42,7 +42,7 @@ public class Cell
      *      In terms of combat it can't be crazy live since I'm doing 2d and don't have server experience yet. Which makes me lean towards something more like COC or Pokémon.
      *
      *      There is also the resource gathering element which I have not yet thought about. I like the idea of going into raids or something, Tarkov style.
-     *      Links well with a market and items having value. I want it to be very diverse maybe like MMO, but I can't plan that far ahead yet. Resource gathering could be going to the location then processing the materials
+     *      Links well with a market and items having value. I want it to be very diverse maybe like MMO, but I can't plan that far ahead yet. MaterialResource gathering could be going to the location then processing the materials
      * </remarks>>
      */
     private void GenerateCellStat()

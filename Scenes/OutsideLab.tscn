@@ -1,3 +1,8 @@
 [gd_scene format=3 uid="uid://cmhy4hjjsl4aw"]
 
+[ext_resource type="PackedScene" uid="uid://cy0a7dxicfc84" path="res://Scenes/Assets/lib/soil.tscn" id="1_ga1pc"]
+
 [node name="OutsideLab" type="Node2D" unique_id=1082450297]
+
+[node name="PotTerracotta" parent="." unique_id=2017679942 instance=ExtResource("1_ga1pc")]
+position = Vector2(313, 184)

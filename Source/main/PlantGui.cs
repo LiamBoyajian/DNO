@@ -3,7 +3,7 @@ using Godot;
 
 namespace Main.Source.main;
 
-public abstract partial class PlantGui : AnimatedSprite2D
+public partial class PlantGui : AnimatedSprite2D
 {
     //requires specifically named frames to run 
 
@@ -13,7 +13,7 @@ public abstract partial class PlantGui : AnimatedSprite2D
         Play("default");
     }
 
-    protected void _Process(float delta) //TODO idk sm wrong here should have an override
+    public override void _Process(double delta)
     {
     }
 
