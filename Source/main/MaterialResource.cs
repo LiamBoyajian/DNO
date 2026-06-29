@@ -2,14 +2,21 @@ using System;
 
 namespace Main.Source.main;
 
-public class MaterialResource(double amount, double max)
+public interface IMaterialResource
+{
+    public double Max { get; }
+
+    public double Amount { get; }
+}
+
+public class MaterialResource(double amount, double max) : IMaterialResource
 {
     /**
      * Storage here?
      */
 
 
-    public double Max { get; } = max;
+    public double Max { get; private set; } = max;
 
     public double Amount { get; private set; } = amount;
 
@@ -21,7 +28,7 @@ public class MaterialResource(double amount, double max)
 
     /**
      * Param: amount to add to this.Amount
-     * result: overflow total after addition
+     * result: how much was given
      */
     public double Give(double amount)
     {
@@ -29,17 +36,18 @@ public class MaterialResource(double amount, double max)
 
         if (amount + Amount > Max)
         {
+            var result = Max - Amount;
             Amount = Max;
-            return amount - (Max - Amount);
+            return result;
         }
 
         Amount += amount;
-        return 0.0;
+        return amount;
     }
 
     /**
      * Param: amount to subtract from this.Amount
-     * result: underflow total after removal
+     * result: how much was taken
      */
     public double Take(double amount)
     {
@@ -47,13 +55,13 @@ public class MaterialResource(double amount, double max)
 
         if (amount > Amount)
         {
-            var result = amount - Amount;
+            var result = Amount;
             Amount = 0;
             return result;
         }
 
         Amount -= amount;
-        return 0.0;
+        return amount;
     }
 
     public bool IsEmpty()
@@ -78,5 +86,12 @@ public class MaterialResource(double amount, double max)
     public void SetEmpty()
     {
         Amount = 0;
+    }
+
+    public bool ChangeMax(double change)
+    {
+        if (Max + change < 0) return false;
+        Max += change;
+        return true;
     }
 }

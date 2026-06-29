@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.Linq;
 using Godot;
 using Main.Package;
 using Microsoft.Data.Sqlite;
@@ -33,7 +34,7 @@ public abstract partial class AbstractPlant : Node
         DamagedCells, //maybe add types of cells or damage idk (types of broken proteins.)
     }
 
-    protected Dictionary<Rt, MaterialResource> Resources = new()
+    private Dictionary<Rt, MaterialResource> _resources = new()
     {
         //Arbitrary base values -- should be removed outside of testing
         { Rt.Health, new MaterialResource(14.0, 100.0) },
@@ -48,12 +49,13 @@ public abstract partial class AbstractPlant : Node
     };
 
     //-----------------------------
-    public IReadOnlyDictionary<Rt, MaterialResource> MyResources => Resources;
+    public IReadOnlyDictionary<Rt, IMaterialResource> MyResources =>
+        _resources.ToDictionary(k => k.Key, IMaterialResource (v) => v.Value);
 
     protected double FrameSum = 0.0;
 
-    protected int db_id = 1;
-    private string _databasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
+    protected int DbId;
+    protected string DatabasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
     //-----------------------------
 
 
@@ -69,11 +71,11 @@ public abstract partial class AbstractPlant : Node
 
     public bool ConnectPlantToDatabase()
     {
-        using var connection = new SqliteConnection($"Data Source={_databasePath}");
+        using var connection = new SqliteConnection($"Data Source={DatabasePath}");
         connection.Open();
 
         var query = "SELECT id, name FROM plants WHERE id = @plant_id;";
-        var foundPlants = connection.Query(query, new { plant_id = db_id });
+        var foundPlants = connection.Query(query, new { plant_id = DbId });
 
         var count = 0;
         foreach (var plant in foundPlants)
@@ -83,7 +85,7 @@ public abstract partial class AbstractPlant : Node
         }
 
         if (count > 1)
-            throw new InvalidOperationException($"Database found two identical plant_ids - {db_id}");
+            throw new InvalidOperationException($"Database found two identical plant_ids - {DbId}");
 
 
         return count != 1;
@@ -111,65 +113,108 @@ public abstract partial class AbstractPlant : Node
     //Photosynthesize: yk what that is
     //should soon be exponential 
     //co2 one to one with water; sun is idk and idc rn
-    private void _photosynthesize(float sunlevel)
+    private double _photosynthesize(float sunlevel)
     {
-        const float oxygenByproductRatio = 6.0f;
+        const float oxygenByproductRatio = 6f;
         const float waterAndCo2Min = 6f;
 
         var glucoseGenerated =
-            (int)((Math.Max(Resources[Rt.H2O].Amount, Resources[Rt.Co2].Amount) * sunlevel) / 6.0f);
-        Resources[Rt.Glucose].Increment();
-        Resources[Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
-        Resources[Rt.H2O].Take(glucoseGenerated * waterAndCo2Min);
-        Resources[Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
+            ((Math.Max(_resources[Rt.H2O].Amount, _resources[Rt.Co2].Amount) * sunlevel) / waterAndCo2Min);
+        _resources[Rt.Glucose].Increment();
+        _resources[Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
+        _resources[Rt.H2O].Take(glucoseGenerated * waterAndCo2Min);
+        _resources[Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
+
+        return glucoseGenerated;
     }
 
     //Clean: remove a resource permanently
     public void _clean(Enum resource)
     {
         if (resource is not Rt)
-            throw new ArgumentException(resource.ToString() + " is not an Rt.");
+            throw new ArgumentException(resource + " is not an Rt.");
         //stub not sure if I want here yet
     }
 
 
     //Store: store specific resources in an organelle or plant structure
-    public void _store()
+    //Implementing later because I'm unsure how I will implement this
+    // new class?: storableResource?
+    private void _store()
     {
     }
 
     //retrieve: retrieve specific resources in an organelle or plant structure
-    public void _retrieve()
+    private void _retrieve()
     {
     }
 
-    //Consume: Use glucose for energy (no energy = lose hp)
-    public void _consume()
+    /**
+     * Consume: Use glucose to create energy
+     */
+    private double _consume(double glucoseAmount)
+    {
+        return _resources[Rt.Glucose].Take(glucoseAmount);
+    }
+
+    /**
+     * Grow: Use resources to increase an attribute maximum
+     * Params: glucose directed to growing; ratio of glucose to health
+     */
+    private void _grow(double glucoseAmount, double modifier)
+    {
+        _resources[Rt.Health].ChangeMax(glucoseAmount * modifier);
+    }
+
+    /**
+     * TODO
+     * Perform: Use resources to use an organ
+     *
+     */
+    private void _perform()
     {
     }
 
-    //Grow: Use resources to increase an attribute maximum
-    public void _grow()
-    {
-        //size attribute needed: size creates a need for higher upkeep cost
-    }
-
-    //Perform: Use resources to use an organ
-    public void _perform()
-    {
-    }
-
-    //Cycle: Tell the plant to change its hormonal state
-    public void _cycle()
+    /**
+     * TODO
+     * Cycle: Tell the plant to change its hormonal state
+     */
+    private void _cycle()
     {
     }
 
     public bool IsAlive()
     {
-        return Resources[Rt.Health].Amount > 0.0;
+        return _resources[Rt.Health].Amount > 0.0;
+    }
+
+    protected double EnergyHp(double hpToEnergyRatio)
+    {
+        double toTake = _resources[Rt.Health].Max * hpToEnergyRatio;
+        double result = _resources[Rt.Energy].Take(toTake);
+        _resources[Rt.Health].Take(toTake - result);
+        return result;
+    }
+
+    /**
+     * Takes water.
+     */
+    protected double AcceptWater(double waterAmount)
+    {
+        return _resources[Rt.H2O].Give(waterAmount);
     }
 
     abstract protected bool GrowthUpdateFrame();
 
     abstract protected bool IsDeadThenDeadFrame();
+
+    abstract protected bool GetAtmosphRatio();
+
+    //Versioned used by the plants
+    protected abstract void Store();
+    protected abstract void Retrieve();
+    protected abstract void Consume();
+    protected abstract void Grow();
+    protected abstract void Perform();
+    protected abstract void Cycle();
 }
