@@ -22,7 +22,7 @@
 bin/
 obj/
 *.sln
-*.csproj
+#*.csproj
 *.user
 *.suo
 *.pdb
