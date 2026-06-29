@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://cjh8w6etq81mw"
+path="res://.godot/imported/itemBox.aseprite-25792a36ce3475567b79ea9414c22e85.res"
+
+[deps]
+
+source_file="res://Scenes/Assets/Menu things/itemBox.aseprite"
+dest_files=["res://.godot/imported/itemBox.aseprite-25792a36ce3475567b79ea9414c22e85.res"]
+
+[params]
+

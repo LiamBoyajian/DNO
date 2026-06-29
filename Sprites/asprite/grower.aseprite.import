@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://b016qou247mtj"
+path="res://.godot/imported/grower.aseprite-d9232becf3d9d6a18ae3fb146e5e26cf.res"
+
+[deps]
+
+source_file="res://Sprites/asprite/grower.aseprite"
+dest_files=["res://.godot/imported/grower.aseprite-d9232becf3d9d6a18ae3fb146e5e26cf.res"]
+
+[params]
+
