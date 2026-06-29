@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Godot;
 using Godot.Collections;
@@ -6,7 +7,7 @@ namespace Main.Source.main;
 
 public partial class ContainPlant : Sprite2D
 {
-    public MaterialResource Water = new MaterialResource(5.0, 100.0);
+    public MaterialResource Water = new MaterialResource(12.0, 100.0);
 
     // Called when the node enters the scene tree for the first time.
     protected const uint HealthCapacity = 100;
@@ -15,6 +16,7 @@ public partial class ContainPlant : Sprite2D
 
     public override void _Ready()
     {
+        Console.Write($"\n {GetTotalLoad()}");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.

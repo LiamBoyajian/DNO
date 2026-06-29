@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cy0a7dxicfc84"]
 
-[ext_resource type="Texture2D" uid="uid://be4k6m5xojps6" path="res://Sprites/asprite/sketch/pot_terracotta.aseprite" id="1_1yclq"]
+[ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://Source/main/ContainPlant.cs" id="2_1yclq"]
 
 [node name="_TEMPLATE_soil" type="Sprite2D" unique_id=2017679942]
 scale = Vector2(0.5, 0.5)
-texture = ExtResource("1_1yclq")
+script = ExtResource("2_1yclq")

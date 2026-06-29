@@ -19,6 +19,10 @@ public class MaterialResource(double amount, double max)
         return Amount / Max;
     }
 
+    /**
+     * Param: amount to add to this.Amount
+     * result: overflow total after addition
+     */
     public double Give(double amount)
     {
         if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));
@@ -33,6 +37,10 @@ public class MaterialResource(double amount, double max)
         return 0.0;
     }
 
+    /**
+     * Param: amount to subtract from this.Amount
+     * result: underflow total after removal
+     */
     public double Take(double amount)
     {
         if (amount < 0) throw new ArgumentOutOfRangeException(nameof(amount));

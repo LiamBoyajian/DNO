@@ -74,10 +74,10 @@ public partial class DatabaseManager : Node
         command.Parameters.Add("@plant_id", SqliteType.Integer).Value = plantId;
 
         //command.ExecuteNonQuery();
-        var godotArray = new Godot.Collections.Array<Godot.Collections.Dictionary>();
+
 
         var dnaList = connection.Query(query, new { plant_id = plantId });
-
+        var godotArray = new Godot.Collections.Array<Godot.Collections.Dictionary>();
         foreach (var row in dnaList)
         {
             var godotDict = new Godot.Collections.Dictionary();

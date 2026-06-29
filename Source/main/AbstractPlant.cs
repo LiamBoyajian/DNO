@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using Godot;
 using Main.Package;
+using Microsoft.Data.Sqlite;
+using Dapper;
+
 
 namespace Main.Source.main;
 
@@ -15,7 +18,6 @@ public abstract partial class AbstractPlant : Node
     {
         //Abstract:
         Health,
-        MaxHealth,
         Chlorophyll,
         Energy,
 
@@ -33,9 +35,8 @@ public abstract partial class AbstractPlant : Node
 
     protected Dictionary<Rt, MaterialResource> Resources = new()
     {
-        //Arbitrary base values
-        { Rt.Health, new MaterialResource(10.0, 100.0) },
-        //size attribute needed
+        //Arbitrary base values -- should be removed outside of testing
+        { Rt.Health, new MaterialResource(14.0, 100.0) },
         { Rt.Chlorophyll, new MaterialResource(10.0, 100.0) },
         { Rt.Energy, new MaterialResource(10.0, 100.0) },
         { Rt.Glucose, new MaterialResource(10.0, 1000.0) },
@@ -51,7 +52,8 @@ public abstract partial class AbstractPlant : Node
 
     protected double FrameSum = 0.0;
 
-
+    protected int db_id = 1;
+    private string _databasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
     //-----------------------------
 
 
@@ -59,13 +61,33 @@ public abstract partial class AbstractPlant : Node
     {
     }
 
-
     public override void _Process(double delta)
     {
     }
 
     abstract public void Tick(double delta);
 
+    public bool ConnectPlantToDatabase()
+    {
+        using var connection = new SqliteConnection($"Data Source={_databasePath}");
+        connection.Open();
+
+        var query = "SELECT id, name FROM plants WHERE id = @plant_id;";
+        var foundPlants = connection.Query(query, new { plant_id = db_id });
+
+        var count = 0;
+        foreach (var plant in foundPlants)
+        {
+            Console.WriteLine($"\nPlants: {plant.id} - {plant.name}");
+            ++count;
+        }
+
+        if (count > 1)
+            throw new InvalidOperationException($"Database found two identical plant_ids - {db_id}");
+
+
+        return count != 1;
+    }
 
     /**
      * TODO: STUB
@@ -124,14 +146,6 @@ public abstract partial class AbstractPlant : Node
     //Consume: Use glucose for energy (no energy = lose hp)
     public void _consume()
     {
-        if (Resources[Rt.Glucose].Decrement())
-        {
-            Resources[Rt.Energy].Give(10.0);
-        }
-        else
-        {
-            Resources[Rt.Health].Take(10.0);
-        }
     }
 
     //Grow: Use resources to increase an attribute maximum
