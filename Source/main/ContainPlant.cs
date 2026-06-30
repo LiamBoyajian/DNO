@@ -73,4 +73,9 @@ public partial class ContainPlant : Sprite2D
         Water.SetEmpty();
         return true;
     }
+
+    public static bool GetAtmosphRatio()
+    {
+        throw new NotImplementedException();
+    }
 }

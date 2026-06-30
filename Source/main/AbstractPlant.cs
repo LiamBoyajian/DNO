@@ -35,7 +35,7 @@ public abstract partial class AbstractPlant : Node
         Null,
     }
 
-    private Dictionary<Rt, MaterialResource> _resources = new()
+    protected Dictionary<Rt, MaterialResource> Resources = new()
     {
         //Arbitrary base values -- should be removed outside of testing
         { Rt.Health, new MaterialResource(14.0, 100.0) },
@@ -51,7 +51,7 @@ public abstract partial class AbstractPlant : Node
 
     //-----------------------------
     public IReadOnlyDictionary<Rt, IMaterialResource> MyResources =>
-        _resources.ToDictionary(k => k.Key, IMaterialResource (v) => v.Value);
+        Resources.ToDictionary(k => k.Key, IMaterialResource (v) => v.Value);
 
     protected double FrameSum = 0.0;
 
@@ -106,11 +106,6 @@ public abstract partial class AbstractPlant : Node
      *
      **/
 
-    //Trade: swap one resource for another at a specific rate
-    private void _trade()
-    {
-    }
-
     //Photosynthesize: yk what that is
     //should soon be exponential 
     //co2 one to one with water; sun is idk and idc rn
@@ -120,81 +115,63 @@ public abstract partial class AbstractPlant : Node
         const float waterAndCo2Min = 6f;
 
         var glucoseGenerated =
-            ((Math.Max(_resources[Rt.H2O].Amount, _resources[Rt.Co2].Amount) * sunlevel) / waterAndCo2Min);
-        _resources[Rt.Glucose].Increment();
-        _resources[Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
-        _resources[Rt.H2O].Take(glucoseGenerated * waterAndCo2Min);
-        _resources[Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
+            ((Math.Max(Resources[Rt.H2O].Amount, Resources[Rt.Co2].Amount) * sunlevel) / waterAndCo2Min);
+        Resources[Rt.Glucose].Increment();
+        Resources[Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
+        Resources[Rt.H2O].Take(glucoseGenerated * waterAndCo2Min);
+        Resources[Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
 
         return glucoseGenerated;
     }
 
     //Clean: remove a resource permanently
-    public void _clean(Enum resource)
+    public double Clean(Enum resource, double amount)
     {
-        if (resource is not Rt)
+        if (resource is not Rt rt)
             throw new ArgumentException(resource + " is not an Rt.");
-        //stub not sure if I want here yet
-    }
 
-
-    //Store: store specific resources in an organelle or plant structure
-    //Implementing later because I'm unsure how I will implement this
-    // new class?: storableResource?
-    private void _store()
-    {
-    }
-
-    //retrieve: retrieve specific resources in an organelle or plant structure
-    private void _retrieve()
-    {
+        return Resources[rt].Take(amount);
     }
 
     /**
-     * Consume: Use glucose to create energy
+     * Consume: create energy from resource
+     * Param (double): amount of input to use (1:1)
      */
-    private double _consume(double glucoseAmount)
+    protected double Consume(double amount)
     {
-        return _resources[Rt.Glucose].Take(glucoseAmount);
+        return Resources[Rt.Energy].Give(amount);
     }
 
     /**
      * Grow: Use resources to increase an attribute maximum
-     * Params: glucose directed to growing; ratio of glucose to health
+     * Params: resource to use
      */
-    private void _grow(double glucoseAmount, double modifier)
+    public void Grow(Rt attributeType, double amount)
     {
-        _resources[Rt.Health].ChangeMax(glucoseAmount * modifier);
+        Resources[attributeType].ChangeMax(amount);
     }
 
-    /**
-     * TODO
-     * Perform: Use resources to use an organ
-     *
-     */
-    private void _perform()
-    {
-    }
-
-    /**
-     * TODO
-     * Cycle: Tell the plant to change its hormonal state
-     */
-    private void _cycle()
-    {
-    }
 
     public bool IsAlive()
     {
-        return _resources[Rt.Health].Amount > 0.0;
+        return Resources[Rt.Health].Amount > 0.0;
     }
 
-    protected double EnergyHp(double hpToEnergyRatio)
+    /**
+     *
+     * Automatically runs to sustain plant
+     * When energy demand is greater than supply: hp is used instead
+     *
+     * Param: units of energy needed per health point (.1 == 10:1; health * .1 == current demand)
+     * Param: Ratio when health is converted to energy (10 == 1:10; health * 10 = output energy)
+     * Result: in case of energy underflow; missing energy taken from hp
+     */
+    protected double EnergyHp(double hpToEnergyRatio, double valueOfHealth)
     {
-        double toTake = _resources[Rt.Health].Max * hpToEnergyRatio;
-        double result = _resources[Rt.Energy].Take(toTake);
-        _resources[Rt.Health].Take(toTake - result);
-        return result;
+        double toTake = Resources[Rt.Health].Max * hpToEnergyRatio; //Energy required in this run
+        double underflow = toTake - Resources[Rt.Energy].Take(toTake); //Energy # not met
+        Resources[Rt.Health].Take(underflow / valueOfHealth);
+        return underflow;
     }
 
     /**
@@ -202,20 +179,13 @@ public abstract partial class AbstractPlant : Node
      */
     protected double AcceptWater(double waterAmount)
     {
-        return _resources[Rt.H2O].Give(waterAmount);
+        return Resources[Rt.H2O].Give(waterAmount);
     }
 
-    abstract protected bool GrowthUpdateFrame();
-
-    abstract protected bool IsDeadThenDeadFrame();
-
-    abstract protected bool GetAtmosphRatio();
-
-    //Versioned used by the plants
-    protected abstract void Store();
-    protected abstract void Retrieve();
+    protected abstract bool GrowthUpdateFrame();
+    protected abstract bool IsDeadThenDeadFrame();
+    protected abstract bool GetAtmosphRatio();
     protected abstract void Consume();
-    protected abstract void Grow();
-    protected abstract void Perform();
-    protected abstract void Cycle();
+    protected abstract void Grow(Enum resource);
+    protected abstract void Clean(Enum resource);
 }

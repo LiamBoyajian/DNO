@@ -5,7 +5,7 @@ using Microsoft.Data.Sqlite;
 
 namespace Main.Source.main;
 
-public partial class MicrochipPlant : AbstractPlant
+public abstract partial class MicrochipPlant : AbstractPlant
 {
     [Export] private PlantGui _guiManager;
 
@@ -26,20 +26,6 @@ public partial class MicrochipPlant : AbstractPlant
             throw new InvalidOperationException($"{this} is not in a ContainPlant object.");
 
         ConnectPlantToDatabase();
-
-        var connection = new SqliteConnection($"Data Source={DatabasePath}");
-        connection.Open();
-
-        var query = $"SELECT * FROM genes g JOIN dna_strands d WHERE g.strand_id = d.id";
-
-
-        var result = connection.Query(query, new { plant_id = DbId });
-
-        foreach (var n in result)
-        {
-            //Console.WriteLine($"n.id: {n.id}, n.name: {n.name}, n.thing: {n.code}");
-            RunGene(n.code);
-        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -57,52 +43,36 @@ public partial class MicrochipPlant : AbstractPlant
         if (FrameSum < 5.0)
             return;
 
+
+        ConnectToGenes();
         //THESE VALUES ARE TESTING CONSTANTS :: SHOULD BE REPLACED WITH SOME SET CONSTANT LATER
-        DrawWater(MyResources[Rt.Health].Max * .1); //SHOULD BE CONTROLLED BY GENES
-        EnergyHp(.1); //ENERGY CONSUMPTION IS CONSISTENT BUT CHANGED BY HORMONES (ADDITION REQUIRED)
+        EnergyHp(.1, 15); //ENERGY CONSUMPTION IS CONSISTENT BUT CHANGED BY HORMONES (ADDITION REQUIRED)
 
 
-        Console.Write($"\nHEALTH REMAINING: {MyResources[Rt.Health].Amount}");
-        Console.Write($"\nENERGY REMAINING: {MyResources[Rt.Energy].Amount}");
+        Console.Write($"\nHEALTH REMAINING: {MyResources[Rt.Health].Amount} - ");
+        Console.Write($"GLUCOSE REMAINING: {MyResources[Rt.Glucose].Amount} - ");
+        Console.Write($"ENERGY REMAINING: {MyResources[Rt.Energy].Amount}");
 
 
         IsDeadThenDeadFrame();
         FrameSum = 0.0;
     }
 
-    protected override bool GetAtmosphRatio()
+    public void ConnectToGenes()
     {
-        throw new NotImplementedException();
-    }
+        var connection = new SqliteConnection($"Data Source={DatabasePath}");
+        connection.Open();
 
-    protected override void Store()
-    {
-        throw new NotImplementedException();
-    }
+        var query = $"SELECT * FROM genes g JOIN dna_strands d WHERE g.strand_id = d.id";
 
-    protected override void Retrieve()
-    {
-        throw new NotImplementedException();
-    }
 
-    protected override void Consume()
-    {
-        throw new NotImplementedException();
-    }
+        var result = connection.Query(query, new { plant_id = DbId });
 
-    protected override void Grow()
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void Perform()
-    {
-        throw new NotImplementedException();
-    }
-
-    protected override void Cycle()
-    {
-        throw new NotImplementedException();
+        foreach (var n in result)
+        {
+            //Console.WriteLine($"n.id: {n.id}, n.name: {n.name}, n.thing: {n.code}");
+            RunGene(n.code);
+        }
     }
 
     protected override bool GrowthUpdateFrame()
@@ -137,7 +107,7 @@ public partial class MicrochipPlant : AbstractPlant
 
     /**
      *
-     * EX: ENERGY::10<80::CONSUME
+     *
      */
     protected void RunGene(string gene)
     {
@@ -157,9 +127,7 @@ public partial class MicrochipPlant : AbstractPlant
                 continue;
             }
 
-
             //Context
-
             var bounds = component.Split('<', '-');
             if (component.Contains("<") || component.Contains("-"))
             {
@@ -190,37 +158,44 @@ public partial class MicrochipPlant : AbstractPlant
 
         if (head != null)
         {
-            Console.WriteLine($"\n{head} - {first} - {second} - {funcName}");
-            if (MyResources[(Rt)head].Amount > first && MyResources[(Rt)head].Amount < second)
+            if (MyResources[(Rt)head].Amount >= first && MyResources[(Rt)head].Amount <= second)
             {
                 if (funcName != null)
                 {
-                    switch (funcName.ToLower())
-                    {
-                        case "grow":
-                            Grow();
-                            break;
-                        case "consume":
-                            Consume();
-                            break;
-                        case "store":
-                            Store();
-                            break;
-                        case "retrieve":
-                            Retrieve();
-                            break;
-                        case "perform":
-                            Perform();
-                            break;
-                        case "cycle":
-                            Cycle();
-                            break;
-                        default:
-                            throw new InvalidOperationException($"Unknown function: {funcName}");
-                            break;
-                    }
+                    RunString(funcName, head, first, second);
                 }
             }
         }
+    }
+
+    protected bool RunString(string funcName, Enum rt, double first, double second)
+    {
+        Console.WriteLine($"\nWITHIN BOUNDS:    {rt} - {first} - {second} - {funcName}");
+        switch (funcName.ToLower())
+        {
+            case "grow":
+                Grow(rt);
+                break;
+            case "consume":
+                Consume();
+                break;
+            case "clean":
+                Clean(rt);
+                break;
+            default:
+                throw new InvalidOperationException($"Unknown function: {funcName}");
+                return false;
+                break;
+        }
+
+        return true;
+    }
+
+    /**
+     * TODO - get from plant container
+     */
+    protected override bool GetAtmosphRatio()
+    {
+        return ContainPlant.GetAtmosphRatio();
     }
 }

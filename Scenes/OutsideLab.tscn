@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://be4k6m5xojps6" path="res://Sprites/asprite/sketch/pot_terracotta.aseprite" id="1_ga1pc"]
 [ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://Source/main/ContainPlant.cs" id="2_7npfq"]
 [ext_resource type="PackedScene" uid="uid://c4ll7m6ooasli" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/Plants/_Template_Plant.tscn" id="2_ql8eh"]
+[ext_resource type="Script" uid="uid://c3oe2uq58g1uf" path="res://Source/main/Species/SoyBean.cs" id="4_qt6oq"]
 
 [node name="OutsideLab" type="Node2D" unique_id=1082450297]
 
@@ -15,3 +16,4 @@ script = ExtResource("2_7npfq")
 [node name="(base_logic)[Plant_Name]" parent="Por" unique_id=1975322258 instance=ExtResource("2_ql8eh")]
 position = Vector2(0, -116)
 scale = Vector2(4, 4)
+script = ExtResource("4_qt6oq")

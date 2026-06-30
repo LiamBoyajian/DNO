@@ -88,10 +88,20 @@ public class MaterialResource(double amount, double max) : IMaterialResource
         Amount = 0;
     }
 
-    public bool ChangeMax(double change)
+    /**
+     * param double: amount to change (increase or decrease) by.
+     * returns: amount changed by.
+     */
+    public double ChangeMax(double change)
     {
-        if (Max + change < 0) return false;
+        if (Max + change < 0)
+        {
+            var result = Max;
+            Max = 0;
+            return -1.0 * result;
+        }
+
         Max += change;
-        return true;
+        return change;
     }
 }
