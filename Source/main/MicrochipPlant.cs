@@ -36,9 +36,10 @@ public partial class MicrochipPlant : AbstractPlant
         var result = connection.Query(query, new { plant_id = DbId });
 
         foreach (var n in result)
-            Console.WriteLine($"n.id: {n.id}, n.name: {n.name}, n.thing: {n.code}");
-
-        //RunGene();
+        {
+            //Console.WriteLine($"n.id: {n.id}, n.name: {n.name}, n.thing: {n.code}");
+            RunGene(n.code);
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -142,30 +143,84 @@ public partial class MicrochipPlant : AbstractPlant
     {
         var components = gene.Split("::");
 
-        Rt head = Rt.DamagedCells;
-        int first = -1;
-        int second = -1;
+        Rt? head = null;
+        int first = int.MinValue;
+        int second = int.MaxValue;
+        string funcName = null;
+
         foreach (var component in components)
         {
             //Rt
-            Enum.TryParse(component, true, out head);
+            if (Enum.TryParse(component, true, out Rt temp))
+            {
+                head = temp;
+                continue;
+            }
+
+
             //Context
-            if (component.Contains("<"))
-                foreach (var value in component.Split("<"))
+
+            var bounds = component.Split('<', '-');
+            if (component.Contains("<") || component.Contains("-"))
+            {
+                if (bounds.Length > 1)
                 {
-                    if (first == -1)
+                    int.TryParse(bounds[0], out first);
+                    int.TryParse(bounds[1], out second);
+                }
+                else
+                {
+                    if (component[0] == '<')
                     {
-                        int.TryParse(value, out first);
+                        int.TryParse(bounds[0], out second);
                     }
                     else
                     {
-                        int.TryParse(value, out second);
+                        int.TryParse(bounds[0], out first);
                     }
                 }
+
+                continue;
+            }
+
+
             //Action
+            funcName = component;
         }
 
-        if (head != Rt.DamagedCells)
-            Console.WriteLine($"\n{head} - {first} - {second}");
+        if (head != null)
+        {
+            Console.WriteLine($"\n{head} - {first} - {second} - {funcName}");
+            if (MyResources[(Rt)head].Amount > first && MyResources[(Rt)head].Amount < second)
+            {
+                if (funcName != null)
+                {
+                    switch (funcName.ToLower())
+                    {
+                        case "grow":
+                            Grow();
+                            break;
+                        case "consume":
+                            Consume();
+                            break;
+                        case "store":
+                            Store();
+                            break;
+                        case "retrieve":
+                            Retrieve();
+                            break;
+                        case "perform":
+                            Perform();
+                            break;
+                        case "cycle":
+                            Cycle();
+                            break;
+                        default:
+                            throw new InvalidOperationException($"Unknown function: {funcName}");
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

@@ -32,6 +32,7 @@ public abstract partial class AbstractPlant : Node
         //circadian rhythm
         //injury types:
         DamagedCells, //maybe add types of cells or damage idk (types of broken proteins.)
+        Null,
     }
 
     private Dictionary<Rt, MaterialResource> _resources = new()
