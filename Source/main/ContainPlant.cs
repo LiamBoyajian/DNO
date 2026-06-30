@@ -78,4 +78,14 @@ public partial class ContainPlant : Sprite2D
     {
         throw new NotImplementedException();
     }
+
+    /**
+     * TODO: STUB
+     * Get environmental sun level
+     *
+     */
+    public float GetSunlevel()
+    {
+        return 1;
+    }
 }

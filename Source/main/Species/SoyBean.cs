@@ -6,11 +6,18 @@ public partial class SoyBean : MicrochipPlant
 {
     const double TESTVALUE = 10; //TEST VALUE
 
-    protected const double MAINTENANCERATIO = .1; //arbitrary value per plant species
+
+    public override void _Ready()
+    {
+        HpToEnergyRatio = .1; //arbitrary value per plant species
+        HpEnergyValue = 15;
+        GlucoseToEnergyRatio = 25;
+        base._Ready();
+    }
 
     protected override void Consume()
     {
-        Consume(Resources[Rt.Glucose].Take(MyResources[Rt.Health].Max * MAINTENANCERATIO));
+        Consume(Resources[Rt.Glucose].Take(MyResources[Rt.Energy].Max) / GlucoseToEnergyRatio);
     }
 
     protected override void Grow(Enum resource)

@@ -9,6 +9,10 @@ public abstract partial class MicrochipPlant : AbstractPlant
 {
     [Export] private PlantGui _guiManager;
 
+    protected double HpToEnergyRatio;
+    protected double HpEnergyValue;
+    protected double GlucoseToEnergyRatio;
+
     protected ContainPlant
         MyContainer; //TODO this should be replaced with some new implementation. Only used for testing and simple environmental control
 
@@ -43,10 +47,14 @@ public abstract partial class MicrochipPlant : AbstractPlant
         if (FrameSum < 5.0)
             return;
 
-
+        Photosynthesize();
         ConnectToGenes();
         //THESE VALUES ARE TESTING CONSTANTS :: SHOULD BE REPLACED WITH SOME SET CONSTANT LATER
-        EnergyHp(.1, 15); //ENERGY CONSUMPTION IS CONSISTENT BUT CHANGED BY HORMONES (ADDITION REQUIRED)
+        Console.Write($"\nHEALTH REMAINING: {MyResources[Rt.Health].Amount} - ");
+        Console.Write($"GLUCOSE REMAINING: {MyResources[Rt.Glucose].Amount} - ");
+        Console.Write($"ENERGY REMAINING: {MyResources[Rt.Energy].Amount}");
+
+        EnergyHp(HpToEnergyRatio, HpEnergyValue);
 
 
         Console.Write($"\nHEALTH REMAINING: {MyResources[Rt.Health].Amount} - ");
@@ -95,14 +103,6 @@ public abstract partial class MicrochipPlant : AbstractPlant
     {
         if (!MyContainer.HasWater()) return 0;
         return AcceptWater(MyContainer.Water.Take(amount));
-    }
-
-    /**
-     * TODO: STUB
-     */
-    protected void RunAll()
-    {
-        return;
     }
 
     /**
@@ -197,5 +197,24 @@ public abstract partial class MicrochipPlant : AbstractPlant
     protected override bool GetAtmosphRatio()
     {
         return ContainPlant.GetAtmosphRatio();
+    }
+
+    //Photosynthesize: yk what that is
+    //should soon be exponential 
+    //co2 one to one with water; sun is idk and idc rn
+    protected double Photosynthesize()
+    {
+        var sunlevel = (float)MyContainer.GetSunlevel();
+        const float oxygenByproductRatio = 6f;
+        const float waterAndCo2Min = 6f;
+
+        var glucoseGenerated =
+            ((Math.Max(Resources[Rt.H2O].Amount, Resources[Rt.Co2].Amount) * sunlevel) / waterAndCo2Min);
+        Resources[Rt.Glucose].Give(glucoseGenerated);
+        Resources[Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
+        Resources[Rt.H2O].Take(glucoseGenerated * waterAndCo2Min);
+        Resources[Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
+
+        return glucoseGenerated;
     }
 }

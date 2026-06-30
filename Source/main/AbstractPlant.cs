@@ -106,24 +106,6 @@ public abstract partial class AbstractPlant : Node
      *
      **/
 
-    //Photosynthesize: yk what that is
-    //should soon be exponential 
-    //co2 one to one with water; sun is idk and idc rn
-    private double _photosynthesize(float sunlevel)
-    {
-        const float oxygenByproductRatio = 6f;
-        const float waterAndCo2Min = 6f;
-
-        var glucoseGenerated =
-            ((Math.Max(Resources[Rt.H2O].Amount, Resources[Rt.Co2].Amount) * sunlevel) / waterAndCo2Min);
-        Resources[Rt.Glucose].Increment();
-        Resources[Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
-        Resources[Rt.H2O].Take(glucoseGenerated * waterAndCo2Min);
-        Resources[Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
-
-        return glucoseGenerated;
-    }
-
     //Clean: remove a resource permanently
     public double Clean(Enum resource, double amount)
     {
