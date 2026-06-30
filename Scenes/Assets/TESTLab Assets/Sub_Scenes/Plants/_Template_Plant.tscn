@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c4ll7m6ooasli"]
 
-[ext_resource type="Script" uid="uid://dds1x2d8o5b1u" path="res://Source/main/Plant.cs" id="1_ybs22"]
+[ext_resource type="Script" uid="uid://r8ippr6cv0b7" path="res://Source/main/SoyBean.cs" id="1_ybs22"]
 [ext_resource type="Texture2D" uid="uid://d3fwlslkm8kot" path="res://Sprites/PlantGrowth.png" id="2_mak41"]
 [ext_resource type="Script" uid="uid://d1m0odxcuuouw" path="res://Source/main/PlantGui.cs" id="3_i78rd"]
 
@@ -71,11 +71,8 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_klosi")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_r8vht")
 }],
-"loop": true,
+"loop": false,
 "name": &"default",
 "speed": 5.0
 }, {
@@ -88,8 +85,9 @@ animations = [{
 "speed": 5.0
 }]
 
-[node name="(base_logic)[Plant_Name]" type="Node2D" unique_id=1975322258]
+[node name="(base_logic)[Plant_Name]" type="Node2D" unique_id=1975322258 node_paths=PackedStringArray("_guiManager")]
 script = ExtResource("1_ybs22")
+_guiManager = NodePath("(visual_logic)")
 
 [node name="(visual_logic)" type="AnimatedSprite2D" parent="." unique_id=1805913587]
 sprite_frames = SubResource("SpriteFrames_j4eeb")

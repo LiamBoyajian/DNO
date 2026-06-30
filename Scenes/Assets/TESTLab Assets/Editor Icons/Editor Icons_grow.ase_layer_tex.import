@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://cty4ap7oi8x8v"
+path="res://.godot/imported/Editor Icons_grow.ase_layer_tex-f7db6b4ff3f13e099a3795a2bb3f11a8.res"
+
+[deps]
+
+source_file="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_grow.ase_layer_tex"
+dest_files=["res://.godot/imported/Editor Icons_grow.ase_layer_tex-f7db6b4ff3f13e099a3795a2bb3f11a8.res"]
+
+[params]
+

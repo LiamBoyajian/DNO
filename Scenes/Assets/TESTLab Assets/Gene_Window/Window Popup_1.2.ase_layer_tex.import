@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://b43jvbyhbsej"
+path="res://.godot/imported/Window Popup_1.2.ase_layer_tex-fec61e5973c207e82ad7a0b23e3d9dd8.res"
+
+[deps]
+
+source_file="res://Scenes/Assets/TESTLab Assets/Gene_Window/Window Popup_1.2.ase_layer_tex"
+dest_files=["res://.godot/imported/Window Popup_1.2.ase_layer_tex-fec61e5973c207e82ad7a0b23e3d9dd8.res"]
+
+[params]
+
