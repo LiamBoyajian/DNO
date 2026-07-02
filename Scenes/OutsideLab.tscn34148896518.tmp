@@ -79,9 +79,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_aibrc")
 }],
-"loop": 0,
+"loop": 1,
 "name": &"default",
-"speed": 0.0
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -114,12 +114,12 @@ script = ExtResource("2_7npfq")
 
 [node name="acceptSeed" parent="Por" unique_id=1930195085 instance=ExtResource("7_4w7ee")]
 anchors_preset = -1
-anchor_top = 0.097
-anchor_bottom = 0.097
+anchor_top = 0.09
+anchor_bottom = 0.09
 offset_left = -94.0
-offset_top = -89.7
+offset_top = -85.0
 offset_right = -6.0
-offset_bottom = -10.700001
+offset_bottom = -10.0
 offset_transform_enabled = false
 script = ExtResource("6_4w7ee")
 

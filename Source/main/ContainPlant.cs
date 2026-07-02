@@ -1,13 +1,16 @@
 using System;
+using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
 
 namespace Main.Source.main;
 
+[GlobalClass]
 public partial class ContainPlant : Sprite2D
 {
     public MaterialResource Water = new MaterialResource(12.0, 100.0);
+    protected Node Plant = null;
 
     // Called when the node enters the scene tree for the first time.
     protected const uint HealthCapacity = 100;
@@ -87,5 +90,25 @@ public partial class ContainPlant : Sprite2D
     public float GetSunlevel()
     {
         return 1;
+    }
+
+    /**
+     * Addchild
+     *
+     * returns: reference to the child node (null if unassigned)
+     */
+    public Node AcceptSeed(Node plant)
+    {
+        if (plant == null) return null;
+        if (plant is not AbstractPlant p)
+            throw new ArgumentException("Node does not contain an AbstractPlant script");
+
+        Plant = p;
+        if (p is MicrochipPlant)
+            ((MicrochipPlant)p).LinkParentContainer(this);
+
+        AddChild(plant);
+
+        return plant;
     }
 }

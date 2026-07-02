@@ -10,6 +10,7 @@ using Dapper;
 
 namespace Main.Source.main;
 
+[GlobalClass]
 public abstract partial class AbstractPlant : Node
 {
     /**

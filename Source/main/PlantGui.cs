@@ -1,4 +1,3 @@
-using System.Runtime.InteropServices.JavaScript;
 using Godot;
 
 namespace Main.Source.main;

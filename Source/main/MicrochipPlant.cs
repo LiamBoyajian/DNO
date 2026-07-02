@@ -7,7 +7,7 @@ namespace Main.Source.main;
 
 public abstract partial class MicrochipPlant : AbstractPlant
 {
-    [Export] private PlantGui _guiManager;
+    [Export] protected PlantGui GuiManager;
 
     protected double HpToEnergyRatio;
     protected double HpEnergyValue;
@@ -21,13 +21,10 @@ public abstract partial class MicrochipPlant : AbstractPlant
     {
         DbId = 1;
 
-        _guiManager ??= GetChild<PlantGui>(0);
-        Console.Write("GuiManger set to: " + _guiManager);
+        GuiManager ??= GetChild<PlantGui>(0);
+        Console.Write("GuiManger set to: " + GuiManager);
 
-        if (GetParent() is ContainPlant)
-            MyContainer = (ContainPlant)GetParent();
-        else
-            throw new InvalidOperationException($"{this} is not in a ContainPlant object.");
+        // /LinkParentContainer(GetParent() as ContainPlant);
 
         ConnectPlantToDatabase();
     }
@@ -95,7 +92,7 @@ public abstract partial class MicrochipPlant : AbstractPlant
     {
         if (IsAlive())
             return false;
-        _guiManager.DeadFrame();
+        GuiManager.DeadFrame();
         return true;
     }
 
@@ -103,6 +100,12 @@ public abstract partial class MicrochipPlant : AbstractPlant
     {
         if (!MyContainer.HasWater()) return 0;
         return AcceptWater(MyContainer.Water.Take(amount));
+    }
+
+    public ContainPlant LinkParentContainer(ContainPlant container)
+    {
+        MyContainer = container;
+        return container;
     }
 
     /**
@@ -160,6 +163,7 @@ public abstract partial class MicrochipPlant : AbstractPlant
         {
             if (MyResources[(Rt)head].Amount >= first && MyResources[(Rt)head].Amount <= second)
             {
+                //INCLUSIVE EXCLUSIVE BASED ON SYMBOL '-' '<'
                 if (funcName != null)
                 {
                     RunString(funcName, head, first, second);
@@ -199,22 +203,5 @@ public abstract partial class MicrochipPlant : AbstractPlant
         return ContainPlant.GetAtmosphRatio();
     }
 
-    //Photosynthesize: yk what that is
-    //should soon be exponential 
-    //co2 one to one with water; sun is idk and idc rn
-    protected double Photosynthesize()
-    {
-        var sunlevel = (float)MyContainer.GetSunlevel();
-        const float oxygenByproductRatio = 6f;
-        const float waterAndCo2Min = 6f;
-
-        var glucoseGenerated =
-            ((Math.Max(Resources[Rt.H2O].Amount, Resources[Rt.Co2].Amount) * sunlevel) / waterAndCo2Min);
-        Resources[Rt.Glucose].Give(glucoseGenerated);
-        Resources[Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
-        Resources[Rt.H2O].Take(glucoseGenerated * waterAndCo2Min);
-        Resources[Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
-
-        return glucoseGenerated;
-    }
+    protected abstract double Photosynthesize();
 }

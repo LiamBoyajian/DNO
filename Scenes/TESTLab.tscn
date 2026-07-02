@@ -1,6 +1,5 @@
 [gd_scene format=3 uid="uid://hkrl88j77qi4"]
 
-[ext_resource type="Script" uid="uid://dds1x2d8o5b1u" path="res://Source/main/Plant.cs" id="2_34esj"]
 [ext_resource type="Texture2D" uid="uid://pls7gvlumkg6" path="res://Sprites/asprite/sketch/idkDNa.aseprite" id="2_n1dxk"]
 [ext_resource type="Texture2D" uid="uid://c1b1h42mndlqg" path="res://Sprites/asprite/sketch/dnaRing.aseprite" id="2_t5aub"]
 [ext_resource type="Texture2D" uid="uid://dchk1h2k3f5yu" path="res://Scenes/Assets/TESTLab Assets/Gene_Window/Window Popup_window base.ase_layer_tex" id="3_n1dxk"]
@@ -146,7 +145,6 @@ polygon = PackedVector2Array(-124.38338, -62.46421, 55.605103, -66.09141, 62.498
 [node name="Cell" type="Sprite2D" parent="." unique_id=1292420218]
 position = Vector2(330, 180)
 texture = ExtResource("2_n1dxk")
-script = ExtResource("2_34esj")
 metadata/_aseprite_wizard_interface_config_ = {
 "layer_section": true,
 "pending_changes": {
@@ -208,8 +206,9 @@ layer = -10
 
 [node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1822128348]
 z_index = -20
+offset_top = -1.0
 offset_right = 640.0
-offset_bottom = 360.0
+offset_bottom = 359.0
 color = Color(0.019607844, 0.019607844, 0.05490196, 1)
 
 [node name="Organism_Genes" type="Panel" parent="." unique_id=705191473]
