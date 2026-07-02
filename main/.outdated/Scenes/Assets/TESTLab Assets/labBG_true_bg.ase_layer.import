@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.spriteframes-split-layer"
+type="SpriteFrames"
+uid="uid://bypnf1t7okgg"
+path="res://.godot/imported/labBG_true_bg.ase_layer-e6a7ad91b26e7141d4856ae6eb13331d.res"
+
+[deps]
+
+source_file="res://Scenes/Assets/TESTLab Assets/labBG_true_bg.ase_layer"
+dest_files=["res://.godot/imported/labBG_true_bg.ase_layer-e6a7ad91b26e7141d4856ae6eb13331d.res"]
+
+[params]
+

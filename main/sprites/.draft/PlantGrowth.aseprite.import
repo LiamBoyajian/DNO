@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://c0ge5nvlb5n7r"
+path="res://.godot/imported/PlantGrowth.aseprite-5f0e8ce307d8d4ef4993138a312ba194.res"
+
+[deps]
+
+source_file="res://main/sprites/Unmanaged Sprites/asprite/PlantGrowth.aseprite"
+dest_files=["res://.godot/imported/PlantGrowth.aseprite-5f0e8ce307d8d4ef4993138a312ba194.res"]
+
+[params]
+

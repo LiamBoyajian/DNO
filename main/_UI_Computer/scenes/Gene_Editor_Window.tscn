@@ -1,0 +1,59 @@
+[gd_scene format=3 uid="uid://bg7g70dd654ew"]
+
+[ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://main/common/ui/_base computer window/window.tscn" id="1_rm35y"]
+[ext_resource type="Texture2D" path="res://main/_UI_Computer/gene viewer window/Window Popup_window base.ase_layer_tex" id="2_2rq58"]
+[ext_resource type="Script" uid="uid://cx2i8j1i3y2dj" path="res://main/_UI_Computer/scenes/UIGeneEditor.gd" id="2_dy6ql"]
+[ext_resource type="Texture2D" uid="uid://dsmivlkfsjpei" path="res://main/_UI_Computer/gene editor window/Editor Icons_consume.ase_layer_tex" id="3_50biq"]
+[ext_resource type="Texture2D" uid="uid://c124aqok7h0ij" path="res://main/_UI_Computer/gene editor window/Editor Icons_cycle.ase_layer_tex" id="4_yc1ea"]
+[ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="5_2lgeg"]
+[ext_resource type="Texture2D" uid="uid://y8a8nldtjytj" path="res://main/_UI_Computer/gene editor window/Editor Icons_perform.ase_layer_tex" id="6_47k3j"]
+[ext_resource type="Texture2D" uid="uid://bld52gt5na50p" path="res://main/_UI_Computer/gene editor window/Editor Icons_photosynth.ase_layer_tex" id="7_2dcbh"]
+[ext_resource type="Texture2D" uid="uid://c71k0ngx0yx5r" path="res://main/_UI_Computer/gene editor window/Editor Icons_retrieve.ase_layer_tex" id="8_m051d"]
+[ext_resource type="Texture2D" uid="uid://cmrb5nrqi7jvj" path="res://main/_UI_Computer/gene editor window/Editor Icons_store.ase_layer_tex" id="9_gdwfk"]
+[ext_resource type="Texture2D" uid="uid://0rfm0pa5x1fl" path="res://main/_UI_Computer/gene editor window/Editor Icons_trade.ase_layer_tex" id="10_txglq"]
+
+[node name="Gene_Editor_Window" unique_id=1004885525 instance=ExtResource("1_rm35y")]
+script = ExtResource("2_dy6ql")
+
+[node name="OptionButton" type="OptionButton" parent="MarginContainer" parent_id_path=PackedInt32Array(964393701) index="0" unique_id=2035632767]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+text_overrun_behavior = 3
+fit_to_longest_item = false
+allow_reselect = true
+item_count = 14
+popup/item_0/text = "Clean"
+popup/item_0/icon = ExtResource("2_2rq58")
+popup/item_0/id = 0
+popup/item_1/text = "Consume"
+popup/item_1/icon = ExtResource("3_50biq")
+popup/item_1/id = 1
+popup/item_2/text = "Cycle"
+popup/item_2/icon = ExtResource("4_yc1ea")
+popup/item_2/id = 2
+popup/item_3/text = "Grow"
+popup/item_3/icon = ExtResource("5_2lgeg")
+popup/item_3/id = 3
+popup/item_4/text = "Perform"
+popup/item_4/icon = ExtResource("6_47k3j")
+popup/item_4/id = 4
+popup/item_5/text = "Photosynthisize"
+popup/item_5/icon = ExtResource("7_2dcbh")
+popup/item_5/id = 5
+popup/item_6/text = "Retrive"
+popup/item_6/icon = ExtResource("8_m051d")
+popup/item_6/id = 6
+popup/item_7/text = "Store"
+popup/item_7/icon = ExtResource("9_gdwfk")
+popup/item_7/id = 7
+popup/item_8/text = "Trade"
+popup/item_8/icon = ExtResource("10_txglq")
+popup/item_8/id = 8
+popup/item_9/text = "Blank"
+popup/item_9/id = 9
+popup/item_10/id = 10
+popup/item_11/id = 11
+popup/item_12/id = 12
+popup/item_13/id = 13

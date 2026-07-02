@@ -1,0 +1,13 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://crmxitvyal6w1"
+valid=false
+
+[deps]
+
+source_file="res://common/_UI_Computer/Gene Window/Window Popup_Open_Editor.ase_layer_tex"
+
+[params]
+
