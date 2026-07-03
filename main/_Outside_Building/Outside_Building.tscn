@@ -7,79 +7,10 @@
 [ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/common/core/accept seed/Accept_Seed.gd" id="6_4w7ee"]
 [ext_resource type="PackedScene" uid="uid://336qp8djyjhc" path="res://main/common/ui/inventory_bar/inventory_bar.tscn" id="6_o5f0g"]
 [ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/common/ui/inventory_bar/inventory slot/inventorySquare.tscn" id="7_4w7ee"]
+[ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="7_ukbo7"]
 [ext_resource type="Script" uid="uid://hhbfcj38vv7j" path="res://main/common/core/items/seed/Item_Seed.gd" id="9_n86gg"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_m7rfc"]
-region = Rect2(260, 0, 32, 44)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_pbyth"]
-region = Rect2(36, 0, 32, 44)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_i7cw7"]
-region = Rect2(68, 0, 32, 44)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_iii77"]
-region = Rect2(100, 0, 32, 44)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_80tbw"]
-region = Rect2(132, 0, 32, 44)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_38dlr"]
-region = Rect2(164, 0, 32, 44)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_gp24v"]
-region = Rect2(196, 0, 32, 44)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_aibrc"]
-region = Rect2(228, 0, 32, 44)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_yjlqa"]
-region = Rect2(4, 0, 32, 44)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_n86gg"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_m7rfc")
-}],
-"loop": 1,
-"name": &"dead",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_pbyth")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_i7cw7")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_iii77")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_80tbw")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_38dlr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_gp24v")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_aibrc")
-}],
-"loop": 0,
-"name": &"default",
-"speed": 0.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_yjlqa")
-}],
-"loop": 1,
-"name": &"dirt",
-"speed": 5.0
-}]
+[ext_resource type="PackedScene" uid="uid://c4ll7m6ooasli" path="res://main/common/core/plants/_Template_Plant.tscn" id="10_2jrj6"]
+[ext_resource type="SpriteFrames" uid="uid://dja4egrke0cwa" path="res://main/common/sprites/sprite_frames/soybean.tres" id="10_iml5x"]
 
 [node name="OutsideLab" type="Node2D" unique_id=1082450297]
 
@@ -122,6 +53,8 @@ offset_bottom = 172.5
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+texture = ExtResource("7_ukbo7")
 script = ExtResource("9_n86gg")
 _plant_type = ExtResource("4_qt6oq")
-_frames = SubResource("SpriteFrames_n86gg")
+_frames = ExtResource("10_iml5x")
+_plant_scene = ExtResource("10_2jrj6")

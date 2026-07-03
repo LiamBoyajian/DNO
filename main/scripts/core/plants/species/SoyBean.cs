@@ -1,8 +1,8 @@
 using System;
 
-namespace Main.Source.main.Species;
+namespace Main.main.scripts.core.plants.species;
 
-public partial class SoyBean : MicrochipPlant
+public partial class SoyBean : Main.main.scripts.core.plants.MicrochipPlant
 {
     const double TESTVALUE = 10; //TEST VALUE
 

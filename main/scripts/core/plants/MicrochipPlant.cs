@@ -1,9 +1,12 @@
 using System;
 using Dapper;
 using Godot;
+using Main.Source.main;
 using Microsoft.Data.Sqlite;
+using PlantGui = Main.main.scripts.core.util.PlantGui;
 
-namespace Main.Source.main;
+
+namespace Main.main.scripts.core.plants;
 
 public abstract partial class MicrochipPlant : AbstractPlant
 {
@@ -12,6 +15,8 @@ public abstract partial class MicrochipPlant : AbstractPlant
     protected double HpToEnergyRatio;
     protected double HpEnergyValue;
     protected double GlucoseToEnergyRatio;
+
+    protected string DatabasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
 
     protected ContainPlant
         MyContainer; //TODO this should be replaced with some new implementation. Only used for testing and simple environmental control
@@ -61,6 +66,28 @@ public abstract partial class MicrochipPlant : AbstractPlant
 
         IsDeadThenDeadFrame();
         FrameSum = 0.0;
+    }
+
+    public bool ConnectPlantToDatabase()
+    {
+        using var connection = new SqliteConnection($"Data Source={DatabasePath}");
+        connection.Open();
+
+        var query = "SELECT id, name FROM plants WHERE id = @plant_id;";
+        var foundPlants = connection.Query(query, new { plant_id = DbId });
+
+        var count = 0;
+        foreach (var plant in foundPlants)
+        {
+            Console.WriteLine($"\nPlants: {plant.id} - {plant.name}");
+            ++count;
+        }
+
+        if (count > 1)
+            throw new InvalidOperationException($"Database found two identical plant_ids - {DbId}");
+
+
+        return count != 1;
     }
 
     public void ConnectToGenes()

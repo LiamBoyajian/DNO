@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-
-namespace Main.Source.main.model;
-
+using Dapper;
 using Godot;
 using Microsoft.Data.Sqlite;
-using Dapper;
+
+namespace Main.main.scripts.model;
 
 public partial class DatabaseManager : Node
 {
     private string _databasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
-    private string _schemaPath = "Source/main/model/schema.sql";
+    private string _schemaPath = "main/scripts/model/schema.sql";
 
     private void InitializeDatabase()
     {
@@ -27,6 +25,11 @@ public partial class DatabaseManager : Node
             connection.Open();
 
             using var command = connection.CreateCommand();
+
+            using var file = FileAccess.Open(_schemaPath, FileAccess.ModeFlags.Read);
+            string schemaSql = file.GetAsText();
+
+            command.CommandText = schemaSql;
             command.ExecuteNonQuery();
 
             GD.Print("Database initialized successfully from schema.sql.");
@@ -61,10 +64,9 @@ public partial class DatabaseManager : Node
         using var connection = new SqliteConnection($"Data Source={_databasePath}");
 
         var query = """
-                    SELECT id, plant_id, gene_name 
+                    SELECT *
                     FROM dna_strands 
-                    WHERE plant_id = @plant_id 
-                    ORDER BY id ASC;
+                    WHERE plant_id = @plant_id;
                     """;
 
         connection.Open();

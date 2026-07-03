@@ -38,4 +38,4 @@ Thumbs.db
 export/
 build/
 
-.tmp
+*.tmp

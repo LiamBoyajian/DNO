@@ -1,6 +1,6 @@
 using Godot;
 
-namespace Main.Source.main;
+namespace Main.main.scripts.core.util;
 
 public partial class PlantGui : AnimatedSprite2D
 {

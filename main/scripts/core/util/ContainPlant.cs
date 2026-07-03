@@ -104,8 +104,8 @@ public partial class ContainPlant : Sprite2D
             throw new ArgumentException("Node does not contain an AbstractPlant script");
 
         Plant = p;
-        if (p is MicrochipPlant)
-            ((MicrochipPlant)p).LinkParentContainer(this);
+        if (p is Main.main.scripts.core.plants.MicrochipPlant)
+            ((Main.main.scripts.core.plants.MicrochipPlant)p).LinkParentContainer(this);
 
         AddChild(plant);
 

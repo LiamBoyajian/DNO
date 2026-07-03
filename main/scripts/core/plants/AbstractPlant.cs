@@ -56,7 +56,7 @@ public abstract partial class AbstractPlant : Node
     protected double FrameSum = 0.0;
 
     protected int DbId;
-    protected string DatabasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
+
     //-----------------------------
 
 
@@ -70,27 +70,6 @@ public abstract partial class AbstractPlant : Node
 
     abstract public void Tick(double delta);
 
-    public bool ConnectPlantToDatabase()
-    {
-        using var connection = new SqliteConnection($"Data Source={DatabasePath}");
-        connection.Open();
-
-        var query = "SELECT id, name FROM plants WHERE id = @plant_id;";
-        var foundPlants = connection.Query(query, new { plant_id = DbId });
-
-        var count = 0;
-        foreach (var plant in foundPlants)
-        {
-            Console.WriteLine($"\nPlants: {plant.id} - {plant.name}");
-            ++count;
-        }
-
-        if (count > 1)
-            throw new InvalidOperationException($"Database found two identical plant_ids - {DbId}");
-
-
-        return count != 1;
-    }
 
     /**
      * TODO: STUB

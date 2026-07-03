@@ -4,6 +4,7 @@ extends item_base
 #SHOULD NOT BE EXPORTS; CURRENTLY USED FOR TESTING; REMOVE IF YOU ARE READING THIS
 @export var _plant_type: Script
 @export var _frames: SpriteFrames
+@export var _plant_scene: PackedScene
 
 
 # Called when the node enters the scene tree for the first time.
@@ -30,3 +31,7 @@ func get_plant_type() -> Script:
 
 func get_frames() -> SpriteFrames:
 	return _frames
+
+
+func get_plant_scene() -> PackedScene:
+	return _plant_scene
