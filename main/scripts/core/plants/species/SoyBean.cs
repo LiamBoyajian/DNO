@@ -1,11 +1,17 @@
 using System;
+using Godot;
+using Main.main.scripts.core.plants.interfaces;
 
 namespace Main.main.scripts.core.plants.species;
 
-public partial class SoyBean : Main.main.scripts.core.plants.MicrochipPlant
+public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
 {
     const double TESTVALUE = 10; //TEST VALUE
 
+
+    SoyBean() : this(-1)
+    {
+    }
 
     public override void _Ready()
     {
@@ -15,27 +21,6 @@ public partial class SoyBean : Main.main.scripts.core.plants.MicrochipPlant
         base._Ready();
     }
 
-    protected override void Consume()
-    {
-        Consume(Resources[Rt.Glucose].Take(MyResources[Rt.Energy].Max) / GlucoseToEnergyRatio);
-    }
-
-    protected override void Grow(Enum resource)
-    {
-        if (resource is not Rt rt)
-            throw new ArgumentException(resource + " is not an Rt.");
-
-        base.Grow(rt, TESTVALUE);
-        GrowAtMilestones();
-    }
-
-    protected override void Clean(Enum resource)
-    {
-        if (resource is not Rt rt)
-            throw new ArgumentException(resource + " is not an Rt.");
-
-        Clean(resource, TESTVALUE);
-    }
 
     protected bool GrowAtMilestones()
     {
@@ -76,6 +61,63 @@ public partial class SoyBean : Main.main.scripts.core.plants.MicrochipPlant
 
         return false; //TODO return bool on whether the frame changed
     }
+
+
+    /**
+     * Temp function that should be implemented in a separate class.
+     * Used to test the gameplay loop without finalizing an implementation
+     */
+    public override void _UnhandledInput(InputEvent input)
+    {
+        if (input.IsActionPressed("ui_accept"))
+        {
+            foreach (var pair in Resources)
+            {
+                Console.Write($"\r\n{pair.Key}: {pair.Value.Amount}/{pair.Value.Max}");
+            }
+        }
+    }
+
+
+    //--------------------------------------------------------------------------
+    // Abstract Functions
+    //--------------------------------------------------------------------------
+
+
+    protected override double ObtainGlucose()
+    {
+        return Photosynthesize();
+    }
+
+    //--------------------------------------------------------------------------
+    // Interface Functions
+    //--------------------------------------------------------------------------
+    protected override double Consume(double amount)
+    {
+        return base.Consume(Resources[Rt.Glucose].Take(MyResources[Rt.Energy].Max) / GlucoseToEnergyRatio);
+        ;
+    }
+
+    protected override double Grow(Enum resource, double amount)
+    {
+        if (resource is not Rt rt)
+            throw new ArgumentException(resource + " is not an Rt.");
+
+        var result = base.Grow(rt, TESTVALUE);
+        GrowAtMilestones();
+        return result;
+    }
+
+    protected override double Clean(Enum resource, double amount)
+    {
+        if (resource is not Rt rt)
+            throw new ArgumentException(resource + " is not an Rt.");
+
+
+        return base.Clean(resource, TESTVALUE);
+        ;
+    }
+
 
     protected override double Photosynthesize()
     {

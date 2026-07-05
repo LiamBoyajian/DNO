@@ -1,106 +1,141 @@
 using System;
 using System.Collections.Generic;
-using Dapper;
+using System.IO;
 using Godot;
-using Microsoft.Data.Sqlite;
+using Main.Source.main;
+using SQLite;
+using SQLiteNetExtensions.Attributes;
+using SQLiteNetExtensions.Extensions;
 
 namespace Main.main.scripts.model;
 
-public partial class DatabaseManager : Node
+//Do functions need parameters (only for quantity and resource type if they do): so probably yes
+
+public partial class DatabaseManager() : Node
 {
-    private string _databasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
-    private string _schemaPath = "main/scripts/model/schema.sql";
+    public string DbPath { get; private set; }
 
-    private void InitializeDatabase()
-    {
-        if (!FileAccess.FileExists(_schemaPath))
-        {
-            GD.PrintErr($"Database initialization failed: Schema file not found at {_schemaPath}");
-            return;
-        }
+    private SQLiteConnection _db;
 
-        try
-        {
-            using var connection = new Microsoft.Data.Sqlite.SqliteConnection($"Data Source={_databasePath}");
-            connection.Open();
-
-            using var command = connection.CreateCommand();
-
-            using var file = FileAccess.Open(_schemaPath, FileAccess.ModeFlags.Read);
-            string schemaSql = file.GetAsText();
-
-            command.CommandText = schemaSql;
-            command.ExecuteNonQuery();
-
-            GD.Print("Database initialized successfully from schema.sql.");
-        }
-        catch (Exception ex)
-        {
-            GD.PrintErr($"Failed to execute database schema: {ex.Message}");
-        }
-    }
+    public static DatabaseManager Instance { get; private set; }
 
     public override void _Ready()
     {
-        InitializeDatabase();
-    }
+        InitDb();
+        DbPath = Path.Combine(Godot.ProjectSettings.GlobalizePath("user://"), "greenhouse.db");
+        using var db = new SQLite.SQLiteConnection(DbPath);
 
-    public bool AddPlant(string name)
-    {
-        using var connection = new SqliteConnection($"Data Source={_databasePath}");
-        connection.Open();
+        IEnumerable<PlantDb> iePlants = db.Table<PlantDb>();
 
-        var command = connection.CreateCommand();
-        command.CommandText = "INSERT INTO plants (name) VALUES (@name)";
-        command.Parameters.Add("@name", SqliteType.Text).Value = name;
-        //command.ExecuteNonQuery();
-
-
-        return command.ExecuteNonQuery() > 0;
-    }
-
-    private Godot.Collections.Array<Godot.Collections.Dictionary> GetPlantGenes(int plantId)
-    {
-        using var connection = new SqliteConnection($"Data Source={_databasePath}");
-
-        var query = """
-                    SELECT *
-                    FROM dna_strands 
-                    WHERE plant_id = @plant_id;
-                    """;
-
-        connection.Open();
-        using var command = connection.CreateCommand();
-
-        command.CommandText = query;
-        command.Parameters.Add("@plant_id", SqliteType.Integer).Value = plantId;
-
-        //command.ExecuteNonQuery();
-
-
-        var dnaList = connection.Query(query, new { plant_id = plantId });
-        var godotArray = new Godot.Collections.Array<Godot.Collections.Dictionary>();
-        foreach (var row in dnaList)
+        foreach (var p in iePlants)
         {
-            var godotDict = new Godot.Collections.Dictionary();
-            godotDict.Add("id", row["id"]);
-            godotDict.Add("gene_name", row["gene_name"]);
+            Console.WriteLine("\r\n" + p);
         }
 
-
-        return godotArray;
+        Instance = this;
     }
-}
 
-public partial class GeneDataContainer : Node
-{
-    public string Name;
+    public void InitDb()
+    {
+        DbPath = Path.Combine(Godot.ProjectSettings.GlobalizePath("user://"), "greenhouse.db");
 
-    public List<SubGeneDataContainer> SubGenes;
-}
+        _db = new SQLiteConnection(DbPath);
 
-public class SubGeneDataContainer
-{
-    public string Name;
-    public float Value;
-}
+        _db.CreateTable<PlantDb>();
+        _db.CreateTable<StrandDb>();
+        _db.CreateTable<GeneDb>();
+    }
+
+    public static PlantDb GetPlantDb(int id)
+    {
+        return Instance._db.GetWithChildren<PlantDb>(id, true);
+    }
+    ///**
+    // *
+    // *
+    // */
+    //protected void FromString(string gene)
+    //{
+    //    var components = gene.Split("::");
+//
+    //    AbstractPlant.Rt? head = null;
+    //    int first = int.MinValue;
+    //    int second = int.MaxValue;
+    //    string funcName = null;
+//
+    //    foreach (var component in components)
+    //    {
+    //        //Rt
+    //        if (Enum.TryParse(component, true, out AbstractPlant.Rt temp))
+    //        {
+    //            head = temp;
+    //            continue;
+    //        }
+//
+    //        //Context
+    //        var bounds = component.Split('<', '-');
+    //        if (component.Contains("<") || component.Contains("-"))
+    //        {
+    //            if (bounds.Length > 1)
+    //            {
+    //                int.TryParse(bounds[0], out first);
+    //                int.TryParse(bounds[1], out second);
+    //            }
+    //            else
+    //            {
+    //                if (component[0] == '<')
+    //                {
+    //                    int.TryParse(bounds[0], out second);
+    //                }
+    //                else
+    //                {
+    //                    int.TryParse(bounds[0], out first);
+    //                }
+    //            }
+//
+    //            continue;
+    //        }
+//
+//
+    //        //Action
+    //        funcName = component;
+    //    }
+//
+    //    if (head != null)
+    //    {
+    //        if (MyResources[(AbstractPlant.Rt)head].Amount >= first && MyResources[(AbstractPlant.Rt)head].Amount <= second)
+    //        {
+    //            //INCLUSIVE EXCLUSIVE BASED ON SYMBOL '-' '<'
+    //            if (funcName != null)
+    //            {
+    //                RunString(funcName, head, first, second);
+    //            }
+    //        }
+    //    }
+    //}
+//
+    //protected abstract void SubRun(string funcName);
+    //protected bool RunString(string funcName, Enum rt, double first, double second)
+    //{
+    //    Console.WriteLine($"\nWITHIN BOUNDS:    {rt} - {first} - {second} - {funcName}");
+    //    switch (funcName.ToLower())
+    //    {
+    //        case "grow":
+    //            Grow(rt);
+    //            break;
+    //        case "consume":
+    //            Consume();
+    //            break;
+    //        case "clean":
+    //            Clean(rt);
+    //            break;
+    //        default:
+    //            SubRun(funcName);
+    //            //throw new InvalidOperationException($"Unknown function: {funcName}");
+    //            return false;
+    //            break;
+    //    }
+//
+    //    return true;
+    //}
+} //

@@ -5,6 +5,7 @@ extends item_base
 @export var _plant_type: Script
 @export var _frames: SpriteFrames
 @export var _plant_scene: PackedScene
+@export var _plant_db_id: int
 
 
 # Called when the node enters the scene tree for the first time.
@@ -35,3 +36,8 @@ func get_frames() -> SpriteFrames:
 
 func get_plant_scene() -> PackedScene:
 	return _plant_scene
+
+func get_plant_db_id() -> int:
+	return _plant_db_id
+	
+	

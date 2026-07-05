@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
+using Main.main.scripts.core.plants;
+using Main.main.scripts.core.plants.species;
 
 namespace Main.Source.main;
 
@@ -97,15 +99,19 @@ public partial class ContainPlant : Sprite2D
      *
      * returns: reference to the child node (null if unassigned)
      */
-    public Node AcceptSeed(Node plant)
+    public Node AcceptSeed(Node plant, int plantId)
     {
         if (plant == null) return null;
         if (plant is not AbstractPlant p)
             throw new ArgumentException("Node does not contain an AbstractPlant script");
 
         Plant = p;
-        if (p is Main.main.scripts.core.plants.MicrochipPlant)
-            ((Main.main.scripts.core.plants.MicrochipPlant)p).LinkParentContainer(this);
+        if (p is Main.main.scripts.core.plants.AbstractMicrochipPlant temp)
+        {
+            temp.LinkParentContainer(this);
+            temp.SetDbId(plantId);
+        }
+
 
         AddChild(plant);
 

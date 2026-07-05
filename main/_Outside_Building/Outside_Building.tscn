@@ -4,13 +4,13 @@
 [ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://main/scripts/core/util/ContainPlant.cs" id="2_7npfq"]
 [ext_resource type="Script" uid="uid://c3oe2uq58g1uf" path="res://main/scripts/core/plants/species/SoyBean.cs" id="4_qt6oq"]
 [ext_resource type="Texture2D" uid="uid://dlch3jnjbtmhp" path="res://main/_Outside_Building/sprites/outside.aseprite" id="5_g2r01"]
-[ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/common/core/accept seed/Accept_Seed.gd" id="6_4w7ee"]
+[ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/scripts/core/util/Accept_Seed.gd" id="6_iml5x"]
 [ext_resource type="PackedScene" uid="uid://336qp8djyjhc" path="res://main/common/ui/inventory_bar/inventory_bar.tscn" id="6_o5f0g"]
 [ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/common/ui/inventory_bar/inventory slot/inventorySquare.tscn" id="7_4w7ee"]
 [ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="7_ukbo7"]
-[ext_resource type="Script" uid="uid://hhbfcj38vv7j" path="res://main/common/core/items/seed/Item_Seed.gd" id="9_n86gg"]
-[ext_resource type="PackedScene" uid="uid://c4ll7m6ooasli" path="res://main/common/core/plants/_Template_Plant.tscn" id="10_2jrj6"]
+[ext_resource type="Script" uid="uid://hhbfcj38vv7j" path="res://main/scripts/core/util/Item_Seed.gd" id="8_iml5x"]
 [ext_resource type="SpriteFrames" uid="uid://dja4egrke0cwa" path="res://main/common/sprites/sprite_frames/soybean.tres" id="10_iml5x"]
+[ext_resource type="PackedScene" uid="uid://c4ll7m6ooasli" path="res://main/common/core/templates/_Template_Plant.tscn" id="11_iml5x"]
 
 [node name="OutsideLab" type="Node2D" unique_id=1082450297]
 
@@ -41,7 +41,7 @@ offset_top = -89.7
 offset_right = -6.0
 offset_bottom = -10.700001
 offset_transform_enabled = false
-script = ExtResource("6_4w7ee")
+script = ExtResource("6_iml5x")
 
 [node name="Panel" parent="." unique_id=1845670035 instance=ExtResource("7_4w7ee")]
 offset_left = 157.5
@@ -54,7 +54,8 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 texture = ExtResource("7_ukbo7")
-script = ExtResource("9_n86gg")
+script = ExtResource("8_iml5x")
 _plant_type = ExtResource("4_qt6oq")
 _frames = ExtResource("10_iml5x")
-_plant_scene = ExtResource("10_2jrj6")
+_plant_scene = ExtResource("11_iml5x")
+_plant_db_id = 1

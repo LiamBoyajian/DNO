@@ -55,7 +55,6 @@ public abstract partial class AbstractPlant : Node
 
     protected double FrameSum = 0.0;
 
-    protected int DbId;
 
     //-----------------------------
 
@@ -74,19 +73,10 @@ public abstract partial class AbstractPlant : Node
     /**
      * TODO: STUB
      */
-    public float GetSunLevel()
-    {
-        var TESTSUM = .8f;
-        return TESTSUM;
-    }
-
-    /**
-     * ACTIONS: Make changes to a plant's resources
-     *
-     **/
+    public abstract float GetSunLevel();
 
     //Clean: remove a resource permanently
-    public double Clean(Enum resource, double amount)
+    protected virtual double Clean(Enum resource, double amount)
     {
         if (resource is not Rt rt)
             throw new ArgumentException(resource + " is not an Rt.");
@@ -98,7 +88,7 @@ public abstract partial class AbstractPlant : Node
      * Consume: create energy from resource
      * Param (double): amount of input to use (1:1)
      */
-    protected double Consume(double amount)
+    protected virtual double Consume(double amount)
     {
         return Resources[Rt.Energy].Give(amount);
     }
@@ -107,13 +97,16 @@ public abstract partial class AbstractPlant : Node
      * Grow: Use resources to increase an attribute maximum
      * Params: resource to use
      */
-    public void Grow(Rt attributeType, double amount)
+    protected virtual double Grow(Enum resource, double amount)
     {
-        Resources[attributeType].ChangeMax(amount);
+        if (resource is not Rt rt)
+            throw new ArgumentException(resource + " is not an Rt.");
+
+        return Resources[rt].ChangeMax(amount);
     }
 
 
-    public bool IsAlive()
+    public virtual bool IsAlive()
     {
         return Resources[Rt.Health].Amount > 0.0;
     }
@@ -146,7 +139,6 @@ public abstract partial class AbstractPlant : Node
     protected abstract bool GrowthUpdateFrame();
     protected abstract bool IsDeadThenDeadFrame();
     protected abstract bool GetAtmosphRatio();
-    protected abstract void Consume();
-    protected abstract void Grow(Enum resource);
-    protected abstract void Clean(Enum resource);
+
+    protected abstract double ObtainGlucose();
 }
