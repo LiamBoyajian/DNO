@@ -1,6 +1,7 @@
 [gd_resource type="Theme" format=4 uid="uid://bccati3tbihud"]
 
-[ext_resource type="Texture2D" path="res://main/_UI_Computer/gene viewer window/Window Popup_minimize.ase_layer_tex" id="1_g76qb"]
+[ext_resource type="Texture2D" uid="uid://d15dv8rcnsb04" path="res://main/_UI_Computer/gene viewer window/Window Popup_minimize.ase_layer_tex" id="1_g76qb"]
+[ext_resource type="StyleBox" uid="uid://dqfri3l75pg27" path="res://main/_UI_Computer/gene viewer window/GeneBox.tres" id="1_lqao0"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g76qb"]
 content_margin_left = 0.0
@@ -622,6 +623,9 @@ anti_aliasing = false
 
 [resource]
 resource_name = "Pc_Window"
+Button/styles/hover = ExtResource("1_lqao0")
+Button/styles/normal = ExtResource("1_lqao0")
+Button/styles/pressed = ExtResource("1_lqao0")
 HBoxContainer/constants/separation = 0
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_g76qb")
 VBoxContainer/constants/separation = 5

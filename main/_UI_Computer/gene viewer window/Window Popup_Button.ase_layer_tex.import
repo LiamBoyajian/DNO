@@ -2,12 +2,13 @@
 
 importer="aseprite_wizard.plugin.static-texture-split-layer"
 type="PortableCompressedTexture2D"
-uid="uid://qwywhn8ogv2u"
-valid=false
+uid="uid://bjuthtk4pev40"
+path="res://.godot/imported/Window Popup_Button.ase_layer_tex-c5f6626531f9f3d84f4123c966fa9c2a.res"
 
 [deps]
 
-source_file="res://common/_UI_Computer/Gene Window/Window Popup_Button.ase_layer_tex"
+source_file="res://main/_UI_Computer/gene viewer window/Window Popup_Button.ase_layer_tex"
+dest_files=["res://.godot/imported/Window Popup_Button.ase_layer_tex-c5f6626531f9f3d84f4123c966fa9c2a.res"]
 
 [params]
 

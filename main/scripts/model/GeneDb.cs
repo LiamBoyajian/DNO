@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using Godot;
 using Main.Source.main;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 
 namespace Main.main.scripts.model;
 
-public class GeneDb()
+public partial class GeneDb : GodotObject
 {
     [PrimaryKey, AutoIncrement, Unique] public int Id { get; set; }
 

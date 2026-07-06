@@ -1,4 +1,4 @@
-extends "res://CloseWindow.gd"
+extends "res://main/scripts/SceneControl/CloseWindow.gd"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

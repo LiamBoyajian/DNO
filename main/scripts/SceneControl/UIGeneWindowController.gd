@@ -1,17 +1,18 @@
-extends "res://CloseWindow.gd"
+extends "res://main/scripts/SceneControl/CloseWindow.gd"
 
-var _databasePath: String = ProjectSettings.globalize_path("user://greenhouse.db")
 
 @export var dna_strand_container: VBoxContainer
 @export var panel_template: PackedScene
 @export var gene_container_template: PackedScene
 @export var gene_template: PackedScene
-
+@export var plant_id: int = 1
+@export var geneButtonGroup: ButtonGroup
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	super._ready()
-
+	
+	
 	if not dna_strand_container:
 		push_error("dna_strand_container has no reference.")
 	if not panel_template:
@@ -21,9 +22,10 @@ func _ready() -> void:
 	if not gene_template:
 		push_error("gene_template has no reference.")
 
-	var strands = _get_dna_strands(1)
+	var plant = DbManager.GetPlant(plant_id)
+	#var plant = DbManager.get_plant(plant_id)
 
-	_display_strands_to_editor(strands)
+	_display_strands_to_editor(Array(plant.GetChildren()))
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -50,41 +52,30 @@ func _display_strands_to_editor(strands: Array):
 		#could optimize by preloading all the genes for that plant
 		#needs very minimal sql
 		var colorWeight = 0;
-		var genes: Array = _get_genes(strand["id"])
+		var genes: Array = strand.GetChildren()
 		for gene in genes:
 			if not gene:
 				continue
-			var temp_gene = gene_template.instantiate()
+			
+			var temp_gene = gene_template.instantiate() #kills the link
+			
 			temp_gene_cont.add_child(temp_gene)
-			temp_gene.self_modulate = Color (0.78431374, 0.21568628, 0.21568628).lerp(Color(0.15686275, 0.3137255, 0.5882353), colorWeight);
+			temp_gene.button_group = geneButtonGroup
+			
+			
+			temp_gene.toggle_mode = true
+	
+			var alphaC = .9
+			var firstColor = Color(0.78431374, 0.21568628, 0.21568628, alphaC)
+			var secondColor = Color(0.15686275, 0.3137255, 0.5882353, alphaC)
+			
+			var ttt = temp_gene.get_theme_stylebox("normal").duplicate()#$= Color(0.78431374, 0.21568628, 0.21568628).lerp(Color(0.15686275, 0.3137255, 0.5882353), colorWeight)
+			ttt.bg_color = firstColor.lerp(secondColor, colorWeight)
+			temp_gene.add_theme_stylebox_override("normal",ttt)
+			
+			
+			var tempHover = temp_gene.get_theme_stylebox("hover")
+			tempHover.bg_color = Color(1,1,1,.8)
+			
+			
 			colorWeight += .33
-
-
-func _get_dna_strands(plant_id: int) -> Array:
-
-	var db = SQLite.new()
-	db.path = _databasePath
-	db.open_db()
-
-	var query: String = "SELECT id, plant_id, name FROM dna_strands WHERE plant_id = ? ORDER BY id ASC"
-	db.query_with_bindings(query, [plant_id])
-
-	var results: Array = db.query_result
-
-	db.close_db()
-	return results
-
-
-func _get_genes(dna_id: int) -> Array:
-	var db = SQLite.new()
-	db.path = _databasePath
-	db.open_db()
-
-	var query: String = "SELECT id, strand_id FROM genes WHERE strand_id = ? ORDER BY id ASC"
-
-	db.query_with_bindings(query, [dna_id])
-
-	var results: Array = db.query_result
-
-	db.close_db()
-	return results;

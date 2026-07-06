@@ -21,4 +21,4 @@ sheet/sheet_type="packed"
 sheet/sheet_columns=12
 sheet/frame_padding=0
 sheet/scale=1
-output/layers_resources_folder="res://Scenes/Assets/TESTLab Assets/Gene_Window"
+output/layers_resources_folder="res://main/_UI_Computer/gene viewer window"

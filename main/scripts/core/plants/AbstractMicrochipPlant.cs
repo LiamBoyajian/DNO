@@ -102,15 +102,15 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
 
                 foreach (var gene in strand.Children)
                 {
-                    Console.WriteLine(this.StringToPlantAction(gene.PlantAction));
+                    this.StringToPlantAction(gene.PlantAction);
                     var del = this.StringToPlantAction(gene.PlantAction);
                     if (del is Func<Enum, double, double> temp)
                     {
-                        Console.WriteLine(temp(gene.Input, gene.Amount));
+                        temp(gene.Input, gene.Amount);
                     }
                     else if (del is Func<double, double> temp2)
                     {
-                        Console.WriteLine(temp2(gene.Amount));
+                        temp2(gene.Amount);
                     }
                     else
                     {
@@ -125,7 +125,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
 
     public PlantDb ConnectToPlant()
     {
-        return PlantInstance = DatabaseManager.GetPlantDb(DbId);
+        return PlantInstance = DbManager.Instance?.GetPlant(DbId);
     }
 
     public virtual Delegate StringToPlantAction(string plantAction)

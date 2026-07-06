@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://c3v6k30bmehk0"]
 
 [ext_resource type="Theme" uid="uid://bccati3tbihud" path="res://main/_UI_Computer/gene viewer window/pc_design.tres" id="1_rno4j"]
-[ext_resource type="StyleBox" uid="uid://bgraddpb3vbox" path="res://main/_UI_Computer/gene viewer window/RoundBox.tres" id="2_ujpp7"]
+[ext_resource type="ButtonGroup" uid="uid://ctf37jawq5i8i" path="res://main/_UI_Computer/scenes/util/gene_buttons.tres" id="2_rn2do"]
 
-[node name="_TEMPLATE_GeneHead" type="PanelContainer" unique_id=280610043]
-self_modulate = Color(0.99215686, 0, 0.27450982, 0.94509804)
+[node name="_TEMPLATE_GeneHead" type="Button" unique_id=591743135]
 custom_minimum_size = Vector2(1, 1)
 offset_top = -3.0
 offset_right = 95.0
@@ -12,4 +11,4 @@ offset_bottom = 17.0
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 1.05
 theme = ExtResource("1_rno4j")
-theme_override_styles/panel = ExtResource("2_ujpp7")
+button_group = ExtResource("2_rn2do")

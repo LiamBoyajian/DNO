@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://336qp8djyjhc"]
 
-[ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://Scenes/inventorySquare.tscn" id="2_egnjp"]
+[ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/common/ui/inventory_bar/inventorySquare.tscn" id="2_egnjp"]
 
 [node name="MarginContainer" type="MarginContainer" unique_id=2039833341]
 propagate_maximum_size = false

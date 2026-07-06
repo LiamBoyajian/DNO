@@ -15,14 +15,14 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="DNO"
-run/main_scene="uid://h1n7j6elr0cp"
+run/main_scene="uid://hkrl88j77qi4"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 boot_splash/show_image=false
 config/icon="res://icon.svg"
 
 [autoload]
 
-DatabaseManager="*uid://lty2x2jqgt4t"
+DbManager="*uid://lty2x2jqgt4t"
 
 [debug]
 

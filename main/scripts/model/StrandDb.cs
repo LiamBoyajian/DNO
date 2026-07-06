@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using Godot;
 using Main.Source.main;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
 
 namespace Main.main.scripts.model;
 
-public class StrandDb()
+public partial class StrandDb : GodotObject
 {
     [PrimaryKey, AutoIncrement, Unique] public int Id { get; set; }
 
@@ -22,4 +23,9 @@ public class StrandDb()
 
     public AbstractPlant.Rt Type { get; set; }
     public string Operator { get; set; }
+
+    public GeneDb[] GetChildren()
+    {
+        return Children.ToArray();
+    }
 }

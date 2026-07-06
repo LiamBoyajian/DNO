@@ -1,4 +1,4 @@
-extends "res://main/common/ui/disappear slot/disappearSlot.gd"
+extends "res://main/scripts/SceneControl/disappearSlot.gd"
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
