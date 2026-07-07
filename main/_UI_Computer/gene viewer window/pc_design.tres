@@ -1,7 +1,13 @@
 [gd_resource type="Theme" format=4 uid="uid://bccati3tbihud"]
 
 [ext_resource type="Texture2D" uid="uid://d15dv8rcnsb04" path="res://main/_UI_Computer/gene viewer window/Window Popup_minimize.ase_layer_tex" id="1_g76qb"]
-[ext_resource type="StyleBox" uid="uid://dqfri3l75pg27" path="res://main/_UI_Computer/gene viewer window/GeneBox.tres" id="1_lqao0"]
+[ext_resource type="StyleBox" uid="uid://bgraddpb3vbox" path="res://main/_UI_Computer/gene viewer window/RoundBox.tres" id="1_lqao0"]
+[ext_resource type="StyleBox" uid="uid://dqfri3l75pg27" path="res://main/_UI_Computer/gene viewer window/GeneBox.tres" id="2_47osk"]
+[ext_resource type="StyleBox" uid="uid://im50wynnapc3" path="res://main/_UI_Computer/gene viewer window/confirm.tres" id="2_vh5xo"]
+[ext_resource type="StyleBox" uid="uid://bjlsw0q7twhpu" path="res://main/_UI_Computer/gene viewer window/pc_embedded_border.tres" id="3_161gr"]
+[ext_resource type="StyleBox" uid="uid://c5gjgmd5tbr41" path="res://main/_UI_Computer/gene viewer window/pc_embedded_unfocused_border.tres" id="4_47osk"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mrq1q"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g76qb"]
 content_margin_left = 0.0
@@ -601,31 +607,20 @@ cache/0/16/0/glyphs/402653265/size = Vector2(10, 11)
 cache/0/16/0/glyphs/402653265/uv_rect = Rect2(80, 84, 10, 11)
 cache/0/16/0/glyphs/402653265/texture_idx = 0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_igb03"]
-bg_color = Color(0.40832943, 0.4083295, 0.40832937, 1)
-border_width_left = 5
-border_width_top = 27
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(0.45843887, 0.53715616, 0.9775316, 1)
-corner_radius_top_left = 4
-corner_radius_top_right = 4
-corner_radius_bottom_right = 4
-corner_radius_bottom_left = 4
-expand_margin_left = 5.0
-expand_margin_top = 30.0
-expand_margin_right = 5.0
-expand_margin_bottom = 5.0
-shadow_color = Color(0, 0, 0, 0.31764707)
-shadow_size = 1
-shadow_offset = Vector2(5, 5)
-anti_aliasing = false
-
 [resource]
 resource_name = "Pc_Window"
+Button/styles/disabled = ExtResource("1_lqao0")
+Button/styles/focus = ExtResource("1_lqao0")
 Button/styles/hover = ExtResource("1_lqao0")
 Button/styles/normal = ExtResource("1_lqao0")
 Button/styles/pressed = ExtResource("1_lqao0")
+ConfirmButton/base_type = &"Button"
+ConfirmButton/colors/font_color = Color(0.98708373, 0.91597855, 1, 1)
+ConfirmButton/icons/icon = SubResource("PlaceholderTexture2D_mrq1q")
+ConfirmButton/styles/normal = ExtResource("2_vh5xo")
+GeneButton/styles/hover = ExtResource("2_47osk")
+GeneButton/styles/normal = ExtResource("2_47osk")
+GeneButton/styles/pressed = ExtResource("2_47osk")
 HBoxContainer/constants/separation = 0
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_g76qb")
 VBoxContainer/constants/separation = 5
@@ -644,4 +639,5 @@ Window/icons/close = ExtResource("1_g76qb")
 Window/icons/close_pressed = ExtResource("1_g76qb")
 Window/icons/minimize = ExtResource("1_g76qb")
 Window/icons/minimize_pressed = ExtResource("1_g76qb")
-Window/styles/embedded_border = SubResource("StyleBoxFlat_igb03")
+Window/styles/embedded_border = ExtResource("3_161gr")
+Window/styles/embedded_unfocused_border = ExtResource("4_47osk")

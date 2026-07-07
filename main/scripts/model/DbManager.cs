@@ -46,10 +46,6 @@ public partial class DbManager : Node
         _db.CreateTable<GeneDb>();
     }
 
-    public PlantDb GetPlant(int id)
-    {
-        return _db.GetWithChildren<PlantDb>(id, true);
-    }
 
     public List<PlantDb> GetPlantDbList(int start, int end)
     {
@@ -62,13 +58,31 @@ public partial class DbManager : Node
         return allPlants;
     }
 
-    public List<PlantDb> GetPlantDbList()
+    public List<PlantDb> GetPlantDbList(bool recursive)
     {
-        return _db.GetAllWithChildren<PlantDb>();
+        if (recursive)
+            return _db.GetAllWithChildren<PlantDb>();
+        return _db.Table<PlantDb>().ToList();
     }
+
 
     public PlantDb[] GetPlantDbArray()
     {
-        return GetPlantDbList().ToArray();
+        return GetPlantDbList(false).ToArray();
+    }
+
+    public PlantDb GetPlant(int plantId)
+    {
+        return _db.GetWithChildren<PlantDb>(plantId, true);
+    }
+
+    public StrandDb GetStrand(int plantId, int strandId)
+    {
+        return GetPlant(plantId).Children.First(child => child.Id == strandId);
+    }
+
+    public GeneDb GetGene(int plantId, int strandId, int geneId)
+    {
+        return GetStrand(plantId, strandId).Children.First(child => child.Id == geneId);
     }
 }

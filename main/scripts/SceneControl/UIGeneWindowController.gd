@@ -1,11 +1,13 @@
 extends "res://main/scripts/SceneControl/CloseWindow.gd"
 
+#import "res://main/scripts/core/util/scene_data.gd"
+
 
 @export var dna_strand_container: VBoxContainer
 @export var panel_template: PackedScene
 @export var gene_container_template: PackedScene
 @export var gene_template: PackedScene
-@export var plant_id: int = 1
+@export var scene_data: SceneData
 @export var geneButtonGroup: ButtonGroup
 
 # Called when the node enters the scene tree for the first time.
@@ -22,10 +24,13 @@ func _ready() -> void:
 	if not gene_template:
 		push_error("gene_template has no reference.")
 
-	var plant = DbManager.GetPlant(plant_id)
+	var plant = DbManager.GetPlant(scene_data.plantId)
 	#var plant = DbManager.get_plant(plant_id)
 
 	_display_strands_to_editor(Array(plant.GetChildren()))
+	
+	geneButtonGroup.pressed.connect(_on_gene_pressed)
+	
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -45,7 +50,9 @@ func _display_strands_to_editor(strands: Array):
 			continue
 		var temp_panel     = panel_template.instantiate()
 		var temp_gene_cont = gene_container_template.instantiate()
-
+		
+		#temp_panel.set_type_variant(&"Button", &"GeneButton")
+		
 		temp_panel.add_child(temp_gene_cont)
 		dna_strand_container.add_child(temp_panel)
 
@@ -57,7 +64,13 @@ func _display_strands_to_editor(strands: Array):
 			if not gene:
 				continue
 			
+
 			var temp_gene = gene_template.instantiate() #kills the link
+			
+			temp_gene.theme_type_variation = &"GeneButton"
+			
+			temp_gene.name = "%d.%d.%d" % [sceneData.plantId, strand.Id, gene.Id]
+			temp_gene.editor_description = "%d.%d.%d" % [sceneData.plantId, strand.Id, gene.Id]
 			
 			temp_gene_cont.add_child(temp_gene)
 			temp_gene.button_group = geneButtonGroup
@@ -79,3 +92,14 @@ func _display_strands_to_editor(strands: Array):
 			
 			
 			colorWeight += .33
+
+func _on_gene_pressed(button: BaseButton) -> void:
+	var name = button.editor_description
+	
+	var pieces = name.split('.')
+	
+	sceneData.set_data(int(pieces[0]), int(pieces[1]), int(pieces[2]))
+	
+	print(sceneData.get_plant_data_string())
+	
+		
