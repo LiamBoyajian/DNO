@@ -1,7 +1,5 @@
 extends "res://main/scripts/SceneControl/CloseWindow.gd"
 
-#import "res://main/scripts/core/util/scene_data.gd"
-
 
 @export var dna_strand_container: VBoxContainer
 @export var panel_template: PackedScene
@@ -15,6 +13,8 @@ func _ready() -> void:
 	super._ready()
 	
 	
+	add_child(scene_data)
+	
 	if not dna_strand_container:
 		push_error("dna_strand_container has no reference.")
 	if not panel_template:
@@ -24,7 +24,7 @@ func _ready() -> void:
 	if not gene_template:
 		push_error("gene_template has no reference.")
 
-	var plant = DbManager.GetPlant(scene_data.plantId)
+	var plant = DbManager.GetPlant(scene_data.get_head_node().plantId)
 	#var plant = DbManager.get_plant(plant_id)
 
 	_display_strands_to_editor(Array(plant.GetChildren()))
@@ -69,8 +69,8 @@ func _display_strands_to_editor(strands: Array):
 			
 			temp_gene.theme_type_variation = &"GeneButton"
 			
-			temp_gene.name = "%d.%d.%d" % [sceneData.plantId, strand.Id, gene.Id]
-			temp_gene.editor_description = "%d.%d.%d" % [sceneData.plantId, strand.Id, gene.Id]
+			temp_gene.name = "%d.%d.%d" % [scene_data.get_head_node().plantId, strand.Id, gene.Id]
+			temp_gene.editor_description = "%d.%d.%d" % [scene_data.get_head_node().plantId, strand.Id, gene.Id]
 			
 			temp_gene_cont.add_child(temp_gene)
 			temp_gene.button_group = geneButtonGroup
@@ -98,8 +98,8 @@ func _on_gene_pressed(button: BaseButton) -> void:
 	
 	var pieces = name.split('.')
 	
-	sceneData.set_data(int(pieces[0]), int(pieces[1]), int(pieces[2]))
+	scene_data.get_head_node().set_data(int(pieces[0]), int(pieces[1]), int(pieces[2]))
 	
-	print(sceneData.get_plant_data_string())
+	print(scene_data.get_head_node().get_plant_data_string())
 	
 		
