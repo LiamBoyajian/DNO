@@ -3,16 +3,33 @@ using Godot;
 
 namespace Main.main.scripts.core.util;
 
-public partial class SceneData : Node
+public partial class SceneData<THeadType>(SceneData<THeadType> head) : Node
+    where THeadType : SceneData<THeadType>
 {
-    [Export] protected SceneData HeadDataNode;
+    public SceneData() : this(null)
+    {
+    }
+
+    [Export] protected SceneData<THeadType> HeadDataNode = head;
+
 
     public bool HasHeadNode()
     {
         return HeadDataNode != null;
     }
 
-    public SceneData GetHeadNode(bool nullable)
+    public SceneData<THeadType> SetHeadNode(SceneData<THeadType> head)
+    {
+        HeadDataNode = head;
+        return HeadDataNode;
+    }
+
+    public bool HasValidHeadRoot()
+    {
+        return GetHeadRoot(true) != null;
+    }
+
+    public SceneData<THeadType> GetHeadNode(bool nullable)
     {
         if (nullable)
             return HeadDataNode;
@@ -23,15 +40,28 @@ public partial class SceneData : Node
         return HeadDataNode;
     }
 
-    public SceneData GetHeadRoot()
+    /**
+     * Cannot be null
+     */
+    public THeadType GetHeadRoot(bool nullable)
     {
+        if (this is THeadType)
+            return (THeadType)this; //might throw an error idk; I suspect not
+
         if (HeadDataNode == null)
-            return this;
-        return HeadDataNode.GetHeadRoot();
+        {
+            return nullable ? null : throw new InvalidOperationException("HeadDataNode is this");
+        }
+
+        return HeadDataNode.GetHeadRoot(true);
     }
 
-    public void Update()
+    public void Updated()
     {
-        throw new NotImplementedException();
+        EmitSignal(SignalName.WasUpdated);
+        //throw new NotImplementedException();
     }
+
+    [Signal]
+    public delegate void WasUpdatedEventHandler();
 }

@@ -10,4 +10,8 @@
         <PackageReference Include="sqlite-net-pcl" Version="1.9.172"/>
         <PackageReference Include="SQLiteNetExtensions" Version="2.1.0"/>
     </ItemGroup>
+    <ItemGroup>
+        <Content Include="main\scripts\scene\Gene_Window_Item_List.gd"/>
+        <Content Include="main\scripts\scene\Gene_Window_Item_List.gd.uid"/>
+    </ItemGroup>
 </Project>

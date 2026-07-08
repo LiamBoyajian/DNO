@@ -23,6 +23,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 DbManager="*uid://lty2x2jqgt4t"
+ComputerSceneData="*uid://65pvkqjkdvqp"
 
 [debug]
 

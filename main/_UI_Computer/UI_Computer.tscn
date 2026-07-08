@@ -1,11 +1,10 @@
 [gd_scene format=3 uid="uid://hkrl88j77qi4"]
 
-[ext_resource type="Script" uid="uid://dt8ih1gd2qr5a" path="res://main/scripts/core/util/computer.gd" id="1_jp175"]
 [ext_resource type="Texture2D" uid="uid://pls7gvlumkg6" path="res://main/_UI_Computer/sprites/idkDNa.aseprite" id="2_n1dxk"]
 [ext_resource type="Texture2D" uid="uid://c1b1h42mndlqg" path="res://main/_UI_Computer/sprites/dnaRing.aseprite" id="2_t5aub"]
 [ext_resource type="Texture2D" uid="uid://bw1vwtjqi24me" path="res://main/_UI_Computer/gene viewer window/Window Popup_window base.ase_layer_tex" id="3_n1dxk"]
-[ext_resource type="Script" uid="uid://drjfdi7qawa8o" path="res://main/scripts/SceneControl/floatingOpener.gd" id="5_igb03"]
 [ext_resource type="Texture2D" uid="uid://doyehftuisbr3" path="res://main/_UI_Computer/gene viewer window/Window Popup_Closed_window_Icon.ase_layer_tex" id="7_wf25g"]
+[ext_resource type="Script" uid="uid://drjfdi7qawa8o" path="res://main/scripts/scene/floatingOpener.gd" id="8_24r0m"]
 [ext_resource type="PackedScene" uid="uid://ds37ymi7uqccg" path="res://main/_UI_Computer/scenes/Plant_Gene_Window.tscn" id="8_igb03"]
 [ext_resource type="PackedScene" uid="uid://bg7g70dd654ew" path="res://main/_UI_Computer/scenes/Gene_Editor_Window.tscn" id="9_34esj"]
 [ext_resource type="Texture2D" uid="uid://bs1c0cp6jvco5" path="res://main/_UI_Computer/gene viewer window/Window Popup_Open_Editor.ase_layer_tex" id="9_igb03"]
@@ -113,7 +112,7 @@ texture_margin_bottom = 6.0
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_sbixi"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_7krux"]
 allow_unpress = true
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_34esj"]
@@ -144,10 +143,6 @@ collision_bounce = 1.0
 polygon = PackedVector2Array(-124.38338, -62.46421, 55.605103, -66.09141, 62.498993, 66.74486, -120.41382, 72.48111, -124.38338, -62.46421)
 
 [node name="TestLab" type="Node2D" unique_id=502175854]
-script = ExtResource("1_jp175")
-
-[node name="sceneData" type="Node" parent="." unique_id=1164580495]
-script = ExtResource("1_jp175")
 
 [node name="Cell" type="Sprite2D" parent="." unique_id=1292420218]
 position = Vector2(330, 176)
@@ -200,7 +195,7 @@ metadata/_aseprite_wizard_interface_config_ = {
 "scale": "1.0",
 "slice": "",
 "source": "res://Sprites/asprite/labBG.aseprite",
-"source_uid": 565789563306373823
+"source_uid": -1
 }
 }
 
@@ -228,12 +223,6 @@ tooltip_text = "Nihao"
 focus_mode = 1
 theme_override_styles/panel = SubResource("StyleBoxTexture_n1dxk")
 
-[node name="Plant_Gene_Window" parent="." unique_id=1004885525 node_paths=PackedStringArray("sceneData") instance=ExtResource("8_igb03")]
-position = Vector2i(0, 28)
-visible = false
-sceneData = NodePath("../sceneData")
-geneButtonGroup = SubResource("ButtonGroup_sbixi")
-
 [node name="Open_Genes" type="TextureButton" parent="." unique_id=1044970604 node_paths=PackedStringArray("target_node")]
 z_index = -1
 offset_left = 567.0
@@ -243,12 +232,12 @@ offset_bottom = 355.0
 tooltip_text = "Open DNA editor
 "
 texture_normal = ExtResource("7_wf25g")
-script = ExtResource("5_igb03")
+script = ExtResource("8_24r0m")
 target_node = NodePath("../Plant_Gene_Window")
-click_behavior = 2
 
-[node name="Gene_Editor_Window" parent="." unique_id=534227550 instance=ExtResource("9_34esj")]
-visible = false
+[node name="Plant_Gene_Window" parent="." unique_id=1004885525 node_paths=PackedStringArray("SceneData") instance=ExtResource("8_igb03")]
+SceneData = NodePath("")
+GeneButtonGroup = SubResource("ButtonGroup_7krux")
 
 [node name="Open_Editor" type="TextureButton" parent="." unique_id=748450391 node_paths=PackedStringArray("target_node")]
 z_index = -1
@@ -257,9 +246,11 @@ offset_top = 342.0
 offset_right = 632.0
 offset_bottom = 361.0
 texture_normal = ExtResource("9_igb03")
-script = ExtResource("5_igb03")
+script = ExtResource("8_24r0m")
 target_node = NodePath("../Gene_Editor_Window")
-click_behavior = 2
+
+[node name="Gene_Editor_Window" parent="." unique_id=1912597706 instance=ExtResource("9_34esj")]
+visible = false
 
 [node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=145163715]
 visible = false

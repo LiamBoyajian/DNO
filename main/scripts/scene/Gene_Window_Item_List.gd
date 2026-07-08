@@ -1,6 +1,5 @@
 extends ItemList
 
-@export var sceneData: Node
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -15,17 +14,13 @@ func _process(delta: float) -> void:
 
 func update() -> void:
 	clear()
-	for plant in DbManager.GetPlant(false):
+	for plant in DbManager.GetPlantDbArray():
 		add_item(str(plant.Id) + "." + plant.Species)
 	pass
 	
 func string_to_texture(plantSpecies: String) -> Texture:
 	return null #STUB TODO 
 	
-func update_scene_data() -> void:
-	var computer = sceneData.GetHeadRoot()
-	if (computer == null):
-		return
-	
-	computer.SetData(1,2,3) #TODO
+func update_scene_data(index: int) -> void:
+	ComputerSceneData.SetData(index + 1, -1, -1) #TODO
 	pass

@@ -1,19 +1,16 @@
 [gd_scene format=4 uid="uid://ds37ymi7uqccg"]
 
 [ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://main/common/ui/_base computer window/window.tscn" id="1_g3fb6"]
-[ext_resource type="Script" uid="uid://7fpox42tfdm3" path="res://main/scripts/SceneControl/UIGeneWindowController.gd" id="2_x53in"]
+[ext_resource type="Script" uid="uid://jrxqsfi1hjqg" path="res://main/scripts/scene/UiGeneDisplay.cs" id="2_wvhgo"]
 [ext_resource type="PackedScene" uid="uid://7ruahpj7upcc" path="res://main/_UI_Computer/scenes/util/PanelContainer_GeneBG.tscn" id="3_c1kx8"]
 [ext_resource type="PackedScene" uid="uid://d3xfn6wc8nwga" path="res://main/_UI_Computer/scenes/util/HBox_GeneContainer.tscn" id="4_hinv1"]
 [ext_resource type="PackedScene" uid="uid://c3v6k30bmehk0" path="res://main/_UI_Computer/scenes/util/PanelContainer_GeneBase.tscn" id="5_uy7xq"]
-[ext_resource type="Script" uid="uid://ct2ukqcumj8ux" path="res://main/scripts/core/util/SceneData.gd" id="6_vg54y"]
+[ext_resource type="ButtonGroup" uid="uid://ctf37jawq5i8i" path="res://main/_UI_Computer/scenes/util/gene_buttons.tres" id="6_vg54y"]
 [ext_resource type="StyleBox" uid="uid://dqfri3l75pg27" path="res://main/_UI_Computer/gene viewer window/GeneBox.tres" id="6_wvhgo"]
 [ext_resource type="Texture2D" uid="uid://d15dv8rcnsb04" path="res://main/_UI_Computer/gene viewer window/Window Popup_minimize.ase_layer_tex" id="6_yk4eo"]
 [ext_resource type="StyleBox" uid="uid://bjlsw0q7twhpu" path="res://main/_UI_Computer/gene viewer window/pc_embedded_border.tres" id="8_3xrjv"]
 [ext_resource type="StyleBox" uid="uid://c5gjgmd5tbr41" path="res://main/_UI_Computer/gene viewer window/pc_embedded_unfocused_border.tres" id="8_f7rbd"]
-[ext_resource type="Script" uid="uid://db2sro21w7r3u" path="res://main/scripts/core/util/Gene_Window_Item_List.gd" id="10_mgvd3"]
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_nh3ku"]
-allow_unpress = true
+[ext_resource type="Script" uid="uid://db2sro21w7r3u" path="res://main/scripts/scene/Gene_Window_Item_List.gd" id="11_vg54y"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g76qb"]
 content_margin_left = 0.0
@@ -643,48 +640,54 @@ Window/icons/minimize_pressed = ExtResource("6_yk4eo")
 Window/styles/embedded_border = ExtResource("8_3xrjv")
 Window/styles/embedded_unfocused_border = ExtResource("8_f7rbd")
 
-[node name="Plant_Gene_Window" unique_id=1004885525 node_paths=PackedStringArray("dna_strand_container") instance=ExtResource("1_g3fb6")]
-script = ExtResource("2_x53in")
-panel_template = ExtResource("3_c1kx8")
-gene_container_template = ExtResource("4_hinv1")
-gene_template = ExtResource("5_uy7xq")
-geneButtonGroup = SubResource("ButtonGroup_nh3ku")
-dna_strand_container = NodePath("Container/MarginContainer/Strand_Holder")
+[node name="Plant_Gene_Window" unique_id=1004885525 node_paths=PackedStringArray("DnaStrandContainer") instance=ExtResource("1_g3fb6")]
+position = Vector2i(0, 28)
+script = ExtResource("2_wvhgo")
+DnaStrandContainer = NodePath("SplitContainer/MarginContainer/Strand_Holder")
+StrandPanelBg = ExtResource("3_c1kx8")
+GeneContainerTemplate = ExtResource("4_hinv1")
+GeneTemplate = ExtResource("5_uy7xq")
+GeneButtonGroup = ExtResource("6_vg54y")
 
-[node name="Node" type="Node" parent="." index="0" unique_id=856777157]
-script = ExtResource("6_vg54y")
+[node name="SceneData" type="Node" parent="." index="0" unique_id=791592029]
 
-[node name="Container" type="Container" parent="." index="1" unique_id=1666120635]
+[node name="SplitContainer" type="SplitContainer" parent="." index="1" unique_id=241376146]
 anchors_preset = -1
 anchor_top = -0.009000001
-anchor_bottom = -0.009000001
+anchor_right = 1.0
+anchor_bottom = 1.0
 offset_top = -0.029999733
-offset_right = 620.0
-offset_bottom = 332.97
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="MarginContainer" type="MarginContainer" parent="Container" index="0" unique_id=1846354081]
+[node name="MarginContainer" type="MarginContainer" parent="SplitContainer" index="0" unique_id=1846354081]
+custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 
-[node name="Strand_Holder" type="VBoxContainer" parent="Container/MarginContainer" index="0" unique_id=1152819833]
+[node name="Strand_Holder" type="VBoxContainer" parent="SplitContainer/MarginContainer" index="0" unique_id=1152819833]
 layout_mode = 2
 theme = SubResource("Theme_wvhgo")
 theme_type_variation = &"GeneButton"
 theme_override_constants/separation = 5
 
-[node name="MarginContainer2" type="MarginContainer" parent="Container" index="1" unique_id=881805877]
+[node name="MarginContainer2" type="MarginContainer" parent="SplitContainer" index="1" unique_id=881805877]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_constants/margin_left = 5
-theme_override_constants/margin_top = 5
-theme_override_constants/margin_right = 5
-theme_override_constants/margin_bottom = 5
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
 
-[node name="ItemList" type="ItemList" parent="Container/MarginContainer2" index="0" unique_id=1332049607]
+[node name="ItemList" type="ItemList" parent="SplitContainer/MarginContainer2" index="0" unique_id=1332049607]
 custom_minimum_size = Vector2(100, 100)
 layout_mode = 2
 size_flags_horizontal = 5
@@ -692,4 +695,4 @@ size_flags_vertical = 5
 max_columns = 5
 same_column_width = true
 icon_mode = 0
-script = ExtResource("10_mgvd3")
+script = ExtResource("11_vg54y")

@@ -79,11 +79,11 @@ public partial class DbManager : Node
 
     /**
     * returns the plant with that id; otherwise null
-    * includes children
+    * param: includes children
     */
-    public PlantDb GetPlant(int plantId)
+    public PlantDb GetPlant(int plantId, bool recursive)
     {
-        return _db.FindWithChildren<PlantDb>(plantId, true);
+        return _db.FindWithChildren<PlantDb>(plantId, recursive);
     }
 
     /**

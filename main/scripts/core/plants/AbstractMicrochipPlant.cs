@@ -125,7 +125,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
 
     public PlantDb ConnectToPlant()
     {
-        return PlantInstance = DbManager.Instance?.GetPlant(DbId);
+        return PlantInstance = DbManager.Instance?.GetPlant(DbId, true);
     }
 
     public virtual Delegate StringToPlantAction(string plantAction)
