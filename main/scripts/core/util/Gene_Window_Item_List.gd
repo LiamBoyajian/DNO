@@ -23,5 +23,9 @@ func string_to_texture(plantSpecies: String) -> Texture:
 	return null #STUB TODO 
 	
 func update_scene_data() -> void:
+	var computer = sceneData.GetHeadRoot()
+	if (computer == null):
+		return
 	
+	computer.SetData(1,2,3) #TODO
 	pass

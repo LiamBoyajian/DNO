@@ -29,4 +29,9 @@ public partial class SceneData : Node
             return this;
         return HeadDataNode.GetHeadRoot();
     }
+
+    public void Update()
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -58,6 +58,9 @@ public partial class DbManager : Node
         return allPlants;
     }
 
+    /**
+     * returns all plants in the database; (TODO might return null)
+     */
     public List<PlantDb> GetPlantDbList(bool recursive)
     {
         if (recursive)
@@ -66,23 +69,79 @@ public partial class DbManager : Node
     }
 
 
+    /**
+     * returns all plants in the database as an array; (TODO might return null)
+     */
     public PlantDb[] GetPlantDbArray()
     {
-        return GetPlantDbList(false).ToArray();
+        return GetPlantDbList(false)?.ToArray();
     }
 
+    /**
+    * returns the plant with that id; otherwise null
+    * includes children
+    */
     public PlantDb GetPlant(int plantId)
     {
-        return _db.GetWithChildren<PlantDb>(plantId, true);
+        return _db.FindWithChildren<PlantDb>(plantId, true);
     }
 
-    public StrandDb GetStrand(int plantId, int strandId)
+    /**
+    * returns the strand with that id; otherwise null
+    * includes children
+    */
+    public StrandDb GetStrand(int strandId)
     {
-        return GetPlant(plantId).Children.First(child => child.Id == strandId);
+        return _db.FindWithChildren<StrandDb>(strandId, true);
     }
 
-    public GeneDb GetGene(int plantId, int strandId, int geneId)
+    /**
+    * returns the gene with that id; otherwise null
+    * includes children
+    */
+    public GeneDb GetGene(int geneId)
     {
-        return GetStrand(plantId, strandId).Children.First(child => child.Id == geneId);
+        return _db.FindWithChildren<GeneDb>(geneId, true);
+    }
+
+    /**
+     * returns the plant with that id; otherwise null
+     * does not include children
+     */
+    public PlantDb HasPlant(int plantId)
+    {
+        return _db.Find<PlantDb>(plantId);
+    }
+
+    /**
+     * returns the strand with that id; otherwise null
+     * does not include children
+     */
+    public StrandDb HasStrand(int strandtId)
+    {
+        return _db.Find<StrandDb>(strandtId);
+    }
+
+    /**
+     * returns the gene with that id; otherwise null
+     * does not include children
+     */
+    public GeneDb HasGene(int geneId)
+    {
+        return _db.Find<GeneDb>(geneId);
+    }
+
+
+    /**
+     * Primary key must match target gene
+     *
+     * return: replaced gene original gene if target is not found
+     */
+    public bool ReplaceGene(GeneDb gene)
+    {
+        if (_db.Find<GeneDb>(gene.Id) != null)
+            throw new InvalidOperationException("No gene with that id");
+
+        return _db.Update(gene) > 0;
     }
 }
