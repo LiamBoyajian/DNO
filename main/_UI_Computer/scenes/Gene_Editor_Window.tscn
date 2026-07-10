@@ -12,6 +12,8 @@
 [ext_resource type="Texture2D" uid="uid://c71k0ngx0yx5r" path="res://main/_UI_Computer/gene editor window/Editor Icons_retrieve.ase_layer_tex" id="8_m051d"]
 [ext_resource type="Texture2D" uid="uid://cmrb5nrqi7jvj" path="res://main/_UI_Computer/gene editor window/Editor Icons_store.ase_layer_tex" id="9_gdwfk"]
 [ext_resource type="Texture2D" uid="uid://0rfm0pa5x1fl" path="res://main/_UI_Computer/gene editor window/Editor Icons_trade.ase_layer_tex" id="10_txglq"]
+[ext_resource type="Theme" uid="uid://bccati3tbihud" path="res://main/_UI_Computer/gene viewer window/pc_design.tres" id="13_v8xl2"]
+[ext_resource type="Script" uid="uid://d2csknxorpndi" path="res://main/scripts/core/util/push.gd" id="14_f8gtd"]
 
 [node name="Gene_Editor_Window" unique_id=1004885525 instance=ExtResource("1_rm35y")]
 position = Vector2i(0, 28)
@@ -56,3 +58,16 @@ popup/item_7/id = 7
 popup/item_8/text = "Grow"
 popup/item_8/icon = ExtResource("5_2lgeg")
 popup/item_8/id = 8
+
+[node name="Button" type="Button" parent="MarginContainer" index="1" unique_id=572754905]
+custom_minimum_size = Vector2(20, 10)
+custom_maximum_size = Vector2(100, 50)
+layout_mode = 2
+theme = ExtResource("13_v8xl2")
+theme_type_variation = &"ConfirmButton"
+text = "Confirm
+"
+
+[node name="TextureButton" type="TextureButton" parent="MarginContainer" index="2" unique_id=963854031]
+layout_mode = 2
+script = ExtResource("14_f8gtd")
