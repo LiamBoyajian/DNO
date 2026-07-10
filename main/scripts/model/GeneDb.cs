@@ -22,4 +22,14 @@ public partial class GeneDb : GodotObject
     public double Amount { get; set; }
 
     public string PlantAction { get; set; }
+
+    public override string ToString()
+    {
+        return $"{PlantAction}: {Amount}.{Input.ToString()}->{Output.ToString()}";
+    }
+
+    public StrandDb GetParent()
+    {
+        return Parent;
+    }
 }

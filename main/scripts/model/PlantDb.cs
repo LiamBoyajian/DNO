@@ -18,10 +18,6 @@ public partial class PlantDb : GodotObject
 
     public string Species { get; set; }
 
-    //public IEnumerable<Plant> Where()
-    //{
-    //    return null;
-    //}
     public override string ToString()
     {
         return Id + Species;

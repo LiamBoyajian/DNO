@@ -63,16 +63,22 @@ public partial class ComputerSceneData : SceneData<ComputerSceneData>
 
     public GeneDb GetGeneDb()
     {
-        UpdateSelectedGene();
+        SilentUpdateSelectedGene();
         return Gene; //TODO make this a clone
     }
 
-    protected bool UpdateSelectedGene()
+    protected bool SilentUpdateSelectedGene()
     {
         if (!HasPlantId() || !HasStrandId() || !HasGeneId())
             return false; //throw new InvalidOperationException("Not all ids are set");
 
         Gene = DbManager.Instance?.GetGene(GeneId);
+        return true;
+    }
+
+    protected bool UpdateSelectedGene()
+    {
+        bool result = SilentUpdateSelectedGene();
         base.Updated();
         return true;
     }

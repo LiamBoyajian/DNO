@@ -28,4 +28,9 @@ public partial class StrandDb : GodotObject
     {
         return Children.ToArray();
     }
+
+    public override string ToString()
+    {
+        return $"{Type}: {Lo} {Operator} {Hi}";
+    }
 }

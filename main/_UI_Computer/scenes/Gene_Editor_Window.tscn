@@ -3,7 +3,6 @@
 [ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://main/common/ui/_base computer window/window.tscn" id="1_rm35y"]
 [ext_resource type="Script" uid="uid://c5c4ab86240ik" path="res://main/scripts/scene/UiGeneEdit.cs" id="2_aub61"]
 [ext_resource type="Texture2D" uid="uid://dsmivlkfsjpei" path="res://main/_UI_Computer/gene editor window/Editor Icons_consume.ase_layer_tex" id="3_50biq"]
-[ext_resource type="Texture2D" uid="uid://d15dv8rcnsb04" path="res://main/_UI_Computer/gene viewer window/Window Popup_minimize.ase_layer_tex" id="3_aub61"]
 [ext_resource type="Texture2D" uid="uid://uiqe0efeow02" path="res://main/_UI_Computer/gene editor window/Editor Icons_clean.ase_layer_tex" id="3_ro2bu"]
 [ext_resource type="Texture2D" uid="uid://c124aqok7h0ij" path="res://main/_UI_Computer/gene editor window/Editor Icons_cycle.ase_layer_tex" id="4_yc1ea"]
 [ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="5_2lgeg"]
@@ -13,23 +12,44 @@
 [ext_resource type="Texture2D" uid="uid://cmrb5nrqi7jvj" path="res://main/_UI_Computer/gene editor window/Editor Icons_store.ase_layer_tex" id="9_gdwfk"]
 [ext_resource type="Texture2D" uid="uid://0rfm0pa5x1fl" path="res://main/_UI_Computer/gene editor window/Editor Icons_trade.ase_layer_tex" id="10_txglq"]
 [ext_resource type="Theme" uid="uid://bccati3tbihud" path="res://main/_UI_Computer/gene viewer window/pc_design.tres" id="13_v8xl2"]
-[ext_resource type="Script" uid="uid://d2csknxorpndi" path="res://main/scripts/core/util/push.gd" id="14_f8gtd"]
 
-[node name="Gene_Editor_Window" unique_id=1004885525 instance=ExtResource("1_rm35y")]
+[node name="Gene_Editor_Window" unique_id=1004885525 node_paths=PackedStringArray("GeneDisplay", "StrandDisplay") instance=ExtResource("1_rm35y")]
 position = Vector2i(0, 28)
 script = ExtResource("2_aub61")
+GeneDisplay = NodePath("MarginContainer/FlowContainer/GeneDisplay")
+StrandDisplay = NodePath("MarginContainer/FlowContainer/StrandDisplay")
 
 [node name="MarginContainer" type="MarginContainer" parent="." index="0" unique_id=822070023]
 offset_top = -3.0
 offset_right = 620.0
 offset_bottom = 330.0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
 
-[node name="MenuButton" type="MenuButton" parent="MarginContainer" index="0" unique_id=1898326114]
+[node name="FlowContainer" type="FlowContainer" parent="MarginContainer" index="0" unique_id=670942992]
+layout_mode = 2
+alignment = 1
+vertical = true
+
+[node name="StrandDisplay" type="TextEdit" parent="MarginContainer/FlowContainer" index="0" unique_id=547752383]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+tooltip_text = "$\"{Type}: {Lo} {Operator} {Hi}\""
+placeholder_text = "Encode Strand...."
+
+[node name="GeneDisplay" type="TextEdit" parent="MarginContainer/FlowContainer" index="1" unique_id=1699088471]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+tooltip_text = "{PlantAction}: {Amount}.{Input.ToString()}->{Output.ToString()}"
+placeholder_text = "Encode Gene...."
+
+[node name="Dropdown" type="OptionButton" parent="MarginContainer/FlowContainer" index="2" unique_id=1274222902]
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-icon = ExtResource("3_aub61")
 item_count = 9
 popup/item_0/text = "Perform"
 popup/item_0/icon = ExtResource("6_47k3j")
@@ -59,7 +79,7 @@ popup/item_8/text = "Grow"
 popup/item_8/icon = ExtResource("5_2lgeg")
 popup/item_8/id = 8
 
-[node name="Button" type="Button" parent="MarginContainer" index="1" unique_id=572754905]
+[node name="Button" type="Button" parent="MarginContainer/FlowContainer" index="3" unique_id=572754905]
 custom_minimum_size = Vector2(20, 10)
 custom_maximum_size = Vector2(100, 50)
 layout_mode = 2
@@ -67,7 +87,3 @@ theme = ExtResource("13_v8xl2")
 theme_type_variation = &"ConfirmButton"
 text = "Confirm
 "
-
-[node name="TextureButton" type="TextureButton" parent="MarginContainer" index="2" unique_id=963854031]
-layout_mode = 2
-script = ExtResource("14_f8gtd")
