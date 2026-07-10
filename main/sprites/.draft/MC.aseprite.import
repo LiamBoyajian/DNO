@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://cwgediwx8sosi"
+path="res://.godot/imported/MC.aseprite-22e8706a8923a2bfe135eb1fb604c0f8.res"
+
+[deps]
+
+source_file="res://main/sprites/Unmanaged Sprites/asprite/MC.aseprite"
+dest_files=["res://.godot/imported/MC.aseprite-22e8706a8923a2bfe135eb1fb604c0f8.res"]
+
+[params]
+

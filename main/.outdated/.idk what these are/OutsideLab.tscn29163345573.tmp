@@ -1,0 +1,54 @@
+[gd_scene format=3 uid="uid://h1n7j6elr0cp"]
+
+[ext_resource type="Texture2D" uid="uid://be4k6m5xojps6" path="res://Sprites/asprite/sketch/pot_terracotta.aseprite" id="1_ga1pc"]
+[ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://Source/main/ContainPlant.cs" id="2_7npfq"]
+[ext_resource type="Script" uid="uid://c3oe2uq58g1uf" path="res://Source/main/Species/SoyBean.cs" id="4_qt6oq"]
+[ext_resource type="Texture2D" uid="uid://cwebbo83jb4ly" path="res://Sprites/asprite/sketch/outside.aseprite" id="5_g2r01"]
+[ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://Accept_Seed.gd" id="6_4w7ee"]
+[ext_resource type="PackedScene" uid="uid://336qp8djyjhc" path="res://Scenes/inventory_bar.tscn" id="6_o5f0g"]
+[ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://Scenes/inventorySquare.tscn" id="7_4w7ee"]
+[ext_resource type="Texture2D" uid="uid://cty4ap7oi8x8v" path="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_grow.ase_layer_tex" id="8_4w7ee"]
+[ext_resource type="Script" uid="uid://hhbfcj38vv7j" path="res://Item_Seed.gd" id="9_n86gg"]
+[ext_resource type="SpriteFrames" uid="uid://dja4egrke0cwa" path="res://Scenes/Assets/lib/sprite_frames/soybean.tres" id="10_m7rfc"]
+
+[node name="OutsideLab" type="Node2D" unique_id=1082450297]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=517609415]
+z_index = -5
+position = Vector2(320, 180)
+texture = ExtResource("5_g2r01")
+
+[node name="MarginContainer" parent="Sprite2D" unique_id=2039833341 instance=ExtResource("6_o5f0g")]
+offset_left = -417.5
+offset_top = -180.0
+offset_right = -222.5
+offset_bottom = -139.0
+
+[node name="Por" type="Sprite2D" parent="." unique_id=566636643]
+position = Vector2(300, 325)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_ga1pc")
+script = ExtResource("2_7npfq")
+
+[node name="acceptSeed" parent="Por" unique_id=1930195085 instance=ExtResource("7_4w7ee")]
+offset_left = -74.0
+offset_top = -143.0
+offset_right = -22.0
+offset_bottom = -91.0
+offset_transform_enabled = false
+script = ExtResource("6_4w7ee")
+
+[node name="Panel" parent="." unique_id=1845670035 instance=ExtResource("7_4w7ee")]
+offset_left = -17.5
+offset_top = -17.5
+offset_right = 17.5
+offset_bottom = 17.5
+
+[node name="TextureRect" type="TextureRect" parent="Panel" unique_id=1930486734]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("8_4w7ee")
+script = ExtResource("9_n86gg")
+_plant_type = ExtResource("4_qt6oq")
+_frames = ExtResource("10_m7rfc")

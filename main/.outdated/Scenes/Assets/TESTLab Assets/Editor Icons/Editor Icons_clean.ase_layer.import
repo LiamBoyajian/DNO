@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.spriteframes-split-layer"
+type="SpriteFrames"
+uid="uid://bg6gc1ixw081b"
+path="res://.godot/imported/Editor Icons_clean.ase_layer-611d0ec9a6e7afaf4d424077f61e5c6f.res"
+
+[deps]
+
+source_file="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_clean.ase_layer"
+dest_files=["res://.godot/imported/Editor Icons_clean.ase_layer-611d0ec9a6e7afaf4d424077f61e5c6f.res"]
+
+[params]
+

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://ombx8t7e3vy8"
+path="res://.godot/imported/dnaBG.aseprite-1c312db4081dfad067a0d46848e16daa.res"
+
+[deps]
+
+source_file="res://main/sprites/Unmanaged Sprites/asprite/dnaBG.aseprite"
+dest_files=["res://.godot/imported/dnaBG.aseprite-1c312db4081dfad067a0d46848e16daa.res"]
+
+[params]
+

@@ -1,0 +1,84 @@
+[gd_resource type="SpriteFrames" format=3 uid="uid://dja4egrke0cwa"]
+
+[ext_resource type="Texture2D" uid="uid://d3fwlslkm8kot" path="res://main/sprites/.outdated/PlantGrowth.png" id="1_psyxc"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rcbep"]
+atlas = ExtResource("1_psyxc")
+region = Rect2(259, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_e7x2h"]
+atlas = ExtResource("1_psyxc")
+region = Rect2(35, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2u2wv"]
+atlas = ExtResource("1_psyxc")
+region = Rect2(67, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0it47"]
+atlas = ExtResource("1_psyxc")
+region = Rect2(99, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wsn04"]
+atlas = ExtResource("1_psyxc")
+region = Rect2(131, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jor3e"]
+atlas = ExtResource("1_psyxc")
+region = Rect2(163, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_mrhur"]
+atlas = ExtResource("1_psyxc")
+region = Rect2(195, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0tr86"]
+atlas = ExtResource("1_psyxc")
+region = Rect2(227, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_suimp"]
+atlas = ExtResource("1_psyxc")
+region = Rect2(3, 0, 32, 44)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rcbep")
+}],
+"loop": 0,
+"name": &"dead",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_e7x2h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2u2wv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0it47")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wsn04")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jor3e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_mrhur")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0tr86")
+}],
+"loop": 0,
+"name": &"default",
+"speed": 0.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_suimp")
+}],
+"loop": 0,
+"name": &"dirt",
+"speed": 0.0
+}]

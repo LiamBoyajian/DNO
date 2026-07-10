@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://h1n7j6elr0cp"]
+
+[ext_resource type="Texture2D" uid="uid://be4k6m5xojps6" path="res://Sprites/asprite/sketch/pot_terracotta.aseprite" id="1_ga1pc"]
+[ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://Source/main/ContainPlant.cs" id="2_7npfq"]
+[ext_resource type="PackedScene" uid="uid://c4ll7m6ooasli" path="res://Scenes/Assets/TESTLab Assets/Sub_Scenes/Plants/_Template_Plant.tscn" id="2_ql8eh"]
+[ext_resource type="Script" uid="uid://c3oe2uq58g1uf" path="res://Source/main/Species/SoyBean.cs" id="4_qt6oq"]
+[ext_resource type="Texture2D" uid="uid://cwebbo83jb4ly" path="res://Sprites/asprite/sketch/outside.aseprite" id="5_g2r01"]
+[ext_resource type="PackedScene" uid="uid://336qp8djyjhc" path="res://Scenes/inventory_bar.tscn" id="6_o5f0g"]
+
+[node name="OutsideLab" type="Node2D" unique_id=1082450297]
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=517609415]
+z_index = -5
+position = Vector2(320, 180)
+texture = ExtResource("5_g2r01")
+
+[node name="MarginContainer" parent="Sprite2D" unique_id=2039833341 instance=ExtResource("6_o5f0g")]
+offset_left = -417.5
+offset_top = -180.0
+offset_right = -222.5
+offset_bottom = -139.0
+
+[node name="Por" type="Sprite2D" parent="." unique_id=566636643]
+position = Vector2(300, 325)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_ga1pc")
+script = ExtResource("2_7npfq")
+
+[node name="(base_logic)[Plant_Name]" parent="Por" unique_id=1975322258 instance=ExtResource("2_ql8eh")]
+position = Vector2(0, -116)
+scale = Vector2(4, 4)
+script = ExtResource("4_qt6oq")

@@ -1,0 +1,1 @@
+Used to hold any assets / scenes that are game mechanics, have significant logic, or are likely to be extended.

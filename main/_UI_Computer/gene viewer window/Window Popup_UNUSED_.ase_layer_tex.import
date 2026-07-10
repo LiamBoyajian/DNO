@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://cltjqjte1dt4x"
+path="res://.godot/imported/Window Popup_UNUSED_.ase_layer_tex-b794764e720ba172542b91f2e82f0cb2.res"
+
+[deps]
+
+source_file="res://main/_UI_Computer/gene viewer window/Window Popup_UNUSED_.ase_layer_tex"
+dest_files=["res://.godot/imported/Window Popup_UNUSED_.ase_layer_tex-b794764e720ba172542b91f2e82f0cb2.res"]
+
+[params]
+

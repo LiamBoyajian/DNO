@@ -1,0 +1,21 @@
+[remap]
+
+importer="aseprite_wizard.plugin.spriteframes"
+type="SpriteFrames"
+uid="uid://8abb7o8yqeav"
+path="res://.godot/imported/AcidPallet.aseprite-81b49723110b8805d2ea20b35cc55def.res"
+
+[deps]
+
+source_file="res://main/sprites/Unmanaged Sprites/asprite/AcidPallet.aseprite"
+dest_files=["res://.godot/imported/AcidPallet.aseprite-81b49723110b8805d2ea20b35cc55def.res"]
+
+[params]
+
+layer/exclude_layers_pattern=""
+layer/only_visible_layers=true
+sheet/sheet_type="packed"
+sheet/sheet_columns=12
+sheet/frame_padding=0
+sheet/scale=1
+animation/round_fps=true

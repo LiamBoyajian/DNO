@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.spriteframes-split-layer"
+type="SpriteFrames"
+uid="uid://dfyaag0rg0u64"
+path="res://.godot/imported/labBG_counter.ase_layer-eb40ecef6f4b82564a60138e12d2cfc0.res"
+
+[deps]
+
+source_file="res://Scenes/Assets/TESTLab Assets/labBG_counter.ase_layer"
+dest_files=["res://.godot/imported/labBG_counter.ase_layer-eb40ecef6f4b82564a60138e12d2cfc0.res"]
+
+[params]
+

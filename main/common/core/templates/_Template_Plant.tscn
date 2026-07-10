@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://c4ll7m6ooasli"]
+
+[ext_resource type="Script" uid="uid://d1m0odxcuuouw" path="res://Source/main/PlantGui.cs" id="3_i78rd"]
+
+[node name="(base_logic)[Plant_Name]" type="Node2D" unique_id=1975322258]
+
+[node name="(visual_logic)" type="AnimatedSprite2D" parent="." unique_id=1805913587]
+script = ExtResource("3_i78rd")

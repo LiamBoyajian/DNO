@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://6fu5tp078w4x"
+path="res://.godot/imported/AcidBasesForCodon.aseprite-847817a9d547aa6306b33c09827dd3f4.res"
+
+[deps]
+
+source_file="res://main/sprites/Unmanaged Sprites/asprite/AcidBasesForCodon.aseprite"
+dest_files=["res://.godot/imported/AcidBasesForCodon.aseprite-847817a9d547aa6306b33c09827dd3f4.res"]
+
+[params]
+

@@ -1,0 +1,139 @@
+[gd_scene format=3 uid="uid://h1n7j6elr0cp"]
+
+[ext_resource type="Texture2D" uid="uid://be4k6m5xojps6" path="res://Sprites/asprite/sketch/pot_terracotta.aseprite" id="1_ga1pc"]
+[ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://Source/main/ContainPlant.cs" id="2_7npfq"]
+[ext_resource type="Script" uid="uid://c3oe2uq58g1uf" path="res://Source/main/Species/SoyBean.cs" id="4_qt6oq"]
+[ext_resource type="Texture2D" uid="uid://cwebbo83jb4ly" path="res://Sprites/asprite/sketch/outside.aseprite" id="5_g2r01"]
+[ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://Accept_Seed.gd" id="6_4w7ee"]
+[ext_resource type="PackedScene" uid="uid://336qp8djyjhc" path="res://Scenes/inventory_bar.tscn" id="6_o5f0g"]
+[ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://Scenes/inventorySquare.tscn" id="7_4w7ee"]
+[ext_resource type="Texture2D" uid="uid://cty4ap7oi8x8v" path="res://Scenes/Assets/TESTLab Assets/Editor Icons/Editor Icons_grow.ase_layer_tex" id="8_4w7ee"]
+[ext_resource type="Script" uid="uid://hhbfcj38vv7j" path="res://Item_Seed.gd" id="9_n86gg"]
+[ext_resource type="Texture2D" uid="uid://d3fwlslkm8kot" path="res://Sprites/PlantGrowth.png" id="10_pbyth"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_m7rfc"]
+atlas = ExtResource("10_pbyth")
+region = Rect2(260, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pbyth"]
+atlas = ExtResource("10_pbyth")
+region = Rect2(36, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_i7cw7"]
+atlas = ExtResource("10_pbyth")
+region = Rect2(68, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_iii77"]
+atlas = ExtResource("10_pbyth")
+region = Rect2(100, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_80tbw"]
+atlas = ExtResource("10_pbyth")
+region = Rect2(132, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_38dlr"]
+atlas = ExtResource("10_pbyth")
+region = Rect2(164, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gp24v"]
+atlas = ExtResource("10_pbyth")
+region = Rect2(196, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_aibrc"]
+atlas = ExtResource("10_pbyth")
+region = Rect2(228, 0, 32, 44)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yjlqa"]
+atlas = ExtResource("10_pbyth")
+region = Rect2(4, 0, 32, 44)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_n86gg"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_m7rfc")
+}],
+"loop": 1,
+"name": &"dead",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pbyth")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_i7cw7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_iii77")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_80tbw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_38dlr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gp24v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_aibrc")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yjlqa")
+}],
+"loop": 1,
+"name": &"dirt",
+"speed": 5.0
+}]
+
+[node name="OutsideLab" type="Node2D" unique_id=1082450297]
+
+[node name="bg" type="Sprite2D" parent="." unique_id=517609415]
+z_index = -5
+position = Vector2(320, 180)
+texture = ExtResource("5_g2r01")
+
+[node name="MarginContainer" parent="bg" unique_id=2039833341 instance=ExtResource("6_o5f0g")]
+offset_left = -417.5
+offset_top = -180.0
+offset_right = -222.5
+offset_bottom = -139.0
+
+[node name="Por" type="Sprite2D" parent="." unique_id=566636643]
+position = Vector2(299, 323)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_ga1pc")
+offset = Vector2(0, 40)
+script = ExtResource("2_7npfq")
+
+[node name="acceptSeed" parent="Por" unique_id=1930195085 instance=ExtResource("7_4w7ee")]
+anchors_preset = -1
+anchor_top = 0.09
+anchor_bottom = 0.09
+offset_left = -94.0
+offset_top = -85.0
+offset_right = -6.0
+offset_bottom = -10.0
+offset_transform_enabled = false
+script = ExtResource("6_4w7ee")
+
+[node name="Panel" parent="." unique_id=1845670035 instance=ExtResource("7_4w7ee")]
+offset_left = 43.5
+offset_top = 121.5
+offset_right = 78.5
+offset_bottom = 156.5
+
+[node name="Seed_Soybean" type="TextureRect" parent="Panel" unique_id=1930486734]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("8_4w7ee")
+script = ExtResource("9_n86gg")
+_plant_type = ExtResource("4_qt6oq")
+_frames = SubResource("SpriteFrames_n86gg")
