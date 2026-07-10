@@ -13,11 +13,12 @@
 [ext_resource type="Texture2D" uid="uid://0rfm0pa5x1fl" path="res://main/_UI_Computer/gene editor window/Editor Icons_trade.ase_layer_tex" id="10_txglq"]
 [ext_resource type="Theme" uid="uid://bccati3tbihud" path="res://main/_UI_Computer/gene viewer window/pc_design.tres" id="13_v8xl2"]
 
-[node name="Gene_Editor_Window" unique_id=1004885525 node_paths=PackedStringArray("GeneDisplay", "StrandDisplay") instance=ExtResource("1_rm35y")]
+[node name="Gene_Editor_Window" unique_id=1004885525 node_paths=PackedStringArray("GeneDisplay", "StrandDisplay", "Push") instance=ExtResource("1_rm35y")]
 position = Vector2i(0, 28)
 script = ExtResource("2_aub61")
 GeneDisplay = NodePath("MarginContainer/FlowContainer/GeneDisplay")
 StrandDisplay = NodePath("MarginContainer/FlowContainer/StrandDisplay")
+Push = NodePath("MarginContainer/FlowContainer/push")
 
 [node name="MarginContainer" type="MarginContainer" parent="." index="0" unique_id=822070023]
 offset_top = -3.0
@@ -42,7 +43,8 @@ placeholder_text = "Encode Strand...."
 [node name="GeneDisplay" type="TextEdit" parent="MarginContainer/FlowContainer" index="1" unique_id=1699088471]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
-tooltip_text = "{PlantAction}: {Amount}.{Input.ToString()}->{Output.ToString()}"
+tooltip_text = "        return $\"{PlantAction}:{Amount};{(int)Input}?{(int)Output}\";
+"
 placeholder_text = "Encode Gene...."
 
 [node name="Dropdown" type="OptionButton" parent="MarginContainer/FlowContainer" index="2" unique_id=1274222902]
@@ -79,11 +81,10 @@ popup/item_8/text = "Grow"
 popup/item_8/icon = ExtResource("5_2lgeg")
 popup/item_8/id = 8
 
-[node name="Button" type="Button" parent="MarginContainer/FlowContainer" index="3" unique_id=572754905]
+[node name="push" type="Button" parent="MarginContainer/FlowContainer" index="3" unique_id=572754905]
 custom_minimum_size = Vector2(20, 10)
 custom_maximum_size = Vector2(100, 50)
 layout_mode = 2
 theme = ExtResource("13_v8xl2")
 theme_type_variation = &"ConfirmButton"
-text = "Confirm
-"
+text = "Push"

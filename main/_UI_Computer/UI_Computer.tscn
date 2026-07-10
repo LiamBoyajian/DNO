@@ -6,8 +6,17 @@
 [ext_resource type="Texture2D" uid="uid://doyehftuisbr3" path="res://main/_UI_Computer/gene viewer window/Window Popup_Closed_window_Icon.ase_layer_tex" id="7_wf25g"]
 [ext_resource type="Script" uid="uid://drjfdi7qawa8o" path="res://main/scripts/scene/floatingOpener.gd" id="8_24r0m"]
 [ext_resource type="PackedScene" uid="uid://ds37ymi7uqccg" path="res://main/_UI_Computer/scenes/Plant_Gene_Window.tscn" id="8_igb03"]
+[ext_resource type="Texture2D" uid="uid://be4k6m5xojps6" path="res://main/common/sprites/plant containers/pot_terracotta.aseprite" id="9_5jpea"]
 [ext_resource type="PackedScene" uid="uid://bg7g70dd654ew" path="res://main/_UI_Computer/scenes/Gene_Editor_Window.tscn" id="9_34esj"]
 [ext_resource type="Texture2D" uid="uid://bs1c0cp6jvco5" path="res://main/_UI_Computer/gene viewer window/Window Popup_Open_Editor.ase_layer_tex" id="9_igb03"]
+[ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://main/scripts/core/util/ContainPlant.cs" id="10_gqvdk"]
+[ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/common/ui/inventory_bar/inventorySquare.tscn" id="11_42eun"]
+[ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/scripts/core/util/Accept_Seed.gd" id="12_4g20d"]
+[ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="13_eoerb"]
+[ext_resource type="Script" uid="uid://hhbfcj38vv7j" path="res://main/scripts/core/util/Item_Seed.gd" id="14_cmf1a"]
+[ext_resource type="Script" uid="uid://c3oe2uq58g1uf" path="res://main/scripts/core/plants/species/SoyBean.cs" id="15_as6t1"]
+[ext_resource type="SpriteFrames" uid="uid://dja4egrke0cwa" path="res://main/common/sprites/sprite_frames/soybean.tres" id="16_23s51"]
+[ext_resource type="PackedScene" uid="uid://c4ll7m6ooasli" path="res://main/common/core/templates/_Template_Plant.tscn" id="17_mtvsp"]
 
 [sub_resource type="Animation" id="Animation_n1dxk"]
 resource_name = "Cell_Bobbing"
@@ -112,7 +121,7 @@ texture_margin_bottom = 6.0
 axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_7krux"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_wdhss"]
 allow_unpress = true
 
 [sub_resource type="CanvasTexture" id="CanvasTexture_34esj"]
@@ -235,9 +244,9 @@ texture_normal = ExtResource("7_wf25g")
 script = ExtResource("8_24r0m")
 target_node = NodePath("../Plant_Gene_Window")
 
-[node name="Plant_Gene_Window" parent="." unique_id=1004885525 node_paths=PackedStringArray("SceneData") instance=ExtResource("8_igb03")]
-SceneData = NodePath("")
-GeneButtonGroup = SubResource("ButtonGroup_7krux")
+[node name="Plant_Gene_Window" parent="." unique_id=1004885525 instance=ExtResource("8_igb03")]
+visible = false
+GeneButtonGroup = SubResource("ButtonGroup_wdhss")
 
 [node name="Open_Editor" type="TextureButton" parent="." unique_id=748450391 node_paths=PackedStringArray("target_node")]
 z_index = -1
@@ -273,3 +282,72 @@ visible = false
 position = Vector2(353, 172)
 rotation = 0.036814757
 occluder = SubResource("OccluderPolygon2D_34esj")
+
+[node name="Por" type="Sprite2D" parent="." unique_id=1971028383]
+position = Vector2(299, 323)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("9_5jpea")
+offset = Vector2(0, 40)
+script = ExtResource("10_gqvdk")
+
+[node name="acceptSeed" parent="Por" unique_id=1930195085 instance=ExtResource("11_42eun")]
+anchors_preset = -1
+anchor_top = 0.097
+anchor_bottom = 0.097
+offset_left = -94.0
+offset_top = -89.7
+offset_right = -6.0
+offset_bottom = -10.700001
+offset_transform_enabled = false
+script = ExtResource("12_4g20d")
+
+[node name="Panel" parent="." unique_id=298379190 instance=ExtResource("11_42eun")]
+offset_left = 157.5
+offset_top = 137.5
+offset_right = 192.5
+offset_bottom = 172.5
+
+[node name="Seed_Soybean" type="TextureRect" parent="Panel" unique_id=2011604859]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("13_eoerb")
+script = ExtResource("14_cmf1a")
+_plant_type = ExtResource("15_as6t1")
+_frames = ExtResource("16_23s51")
+_plant_scene = ExtResource("17_mtvsp")
+_plant_db_id = 1
+
+[node name="Panel2" parent="." unique_id=171671031 instance=ExtResource("11_42eun")]
+offset_left = 198.5
+offset_top = 137.5
+offset_right = 233.5
+offset_bottom = 172.5
+
+[node name="Seed_Soybean" type="TextureRect" parent="Panel2" unique_id=1167590622]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("13_eoerb")
+script = ExtResource("14_cmf1a")
+_plant_type = ExtResource("15_as6t1")
+_frames = ExtResource("16_23s51")
+_plant_scene = ExtResource("17_mtvsp")
+_plant_db_id = 1
+
+[node name="Panel3" parent="." unique_id=1639708874 instance=ExtResource("11_42eun")]
+offset_left = 120.5
+offset_top = 137.5
+offset_right = 155.5
+offset_bottom = 172.5
+
+[node name="Seed_Soybean" type="TextureRect" parent="Panel3" unique_id=512458265]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("13_eoerb")
+script = ExtResource("14_cmf1a")
+_plant_type = ExtResource("15_as6t1")
+_frames = ExtResource("16_23s51")
+_plant_scene = ExtResource("17_mtvsp")
+_plant_db_id = 1

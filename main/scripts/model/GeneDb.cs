@@ -25,11 +25,25 @@ public partial class GeneDb : GodotObject
 
     public override string ToString()
     {
-        return $"{PlantAction}: {Amount}.{Input.ToString()}->{Output.ToString()}";
+        return $"{PlantAction}:{Amount};{(int)Input}?{(int)Output}";
     }
 
     public StrandDb GetParent()
     {
         return Parent;
+    }
+
+    public GeneDb Clone()
+    {
+        GeneDb result = new GeneDb();
+        result.Id = Id;
+        result.StrandId = StrandId;
+        result.Parent = Parent;
+        result.Input = Input;
+        result.Output = Output;
+        result.Amount = Amount;
+        result.PlantAction = PlantAction;
+
+        return result;
     }
 }

@@ -31,6 +31,28 @@ public partial class StrandDb : GodotObject
 
     public override string ToString()
     {
-        return $"{Type}: {Lo} {Operator} {Hi}";
+        return $"{(int)Type}:{Lo} {Operator} {Hi}";
+    }
+
+    public PlantDb GetParent()
+    {
+        return Parent;
+    }
+
+    public StrandDb Clone()
+    {
+        StrandDb result = new StrandDb();
+        result.Id = Id;
+        result.PlantDbId = PlantDbId;
+
+        result.Type = Type;
+        result.Lo = Lo;
+        result.Operator = Operator;
+        result.Hi = Hi;
+
+        result.Children = Children;
+        result.Parent = Parent;
+
+        return result;
     }
 }

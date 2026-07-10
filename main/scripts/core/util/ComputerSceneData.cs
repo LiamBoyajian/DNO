@@ -1,6 +1,8 @@
 using System;
 using Godot;
 using Main.main.scripts.model;
+using Main.Source.main;
+using Microsoft.VisualBasic.CompilerServices;
 
 namespace Main.main.scripts.core.util;
 
@@ -9,6 +11,9 @@ public partial class ComputerSceneData : SceneData<ComputerSceneData>
     [Export] public int PlantId = 1;
     [Export] public int StrandId = -1;
     [Export] public int GeneId = -1;
+
+    protected PlantDb Plant = null;
+    protected StrandDb Strand = null;
     protected GeneDb Gene = null;
 
     public static ComputerSceneData Instance { get; private set; }
@@ -63,27 +68,60 @@ public partial class ComputerSceneData : SceneData<ComputerSceneData>
 
     public GeneDb GetGeneDb()
     {
-        SilentUpdateSelectedGene();
-        return Gene; //TODO make this a clone
+        if (!SilentUpdateSelectedGene())
+            return null;
+        return Gene;
+    }
+
+    public StrandDb GetStrandDb()
+    {
+        if (!SilentUpdateSelectedStrand())
+            return null;
+        return Strand;
+    }
+
+    public PlantDb GetPlantDb()
+    {
+        if (!SilentUpdateSelectedPlant())
+            return null;
+        return Plant;
+    }
+
+    protected bool SilentUpdateSelectedPlant()
+    {
+        if (!HasPlantId())
+            return false;
+
+        Plant = DbManager.Instance?.GetPlant(PlantId, true);
+        return true;
+    }
+
+    protected bool SilentUpdateSelectedStrand()
+    {
+        if (!HasPlantId() || !HasStrandId())
+            return false;
+
+        Strand = DbManager.Instance?.GetStrand(StrandId, true);
+        return true;
     }
 
     protected bool SilentUpdateSelectedGene()
     {
         if (!HasPlantId() || !HasStrandId() || !HasGeneId())
-            return false; //throw new InvalidOperationException("Not all ids are set");
+            return false;
 
         Gene = DbManager.Instance?.GetGene(GeneId);
         return true;
     }
 
-    protected bool UpdateSelectedGene()
+    protected bool UpdateSelected()
     {
-        bool result = SilentUpdateSelectedGene();
-        base.Updated();
-        return true;
+        var result = SilentUpdateSelectedPlant() || SilentUpdateSelectedStrand() || SilentUpdateSelectedGene();
+        if (result) base.Updated();
+        return result;
     }
 
-    protected bool UpdateSelectedGene(GeneDb gene)
+    public bool UpdateSelectedGene(GeneDb gene)
     {
         if (gene == null)
             return false;

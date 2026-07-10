@@ -114,7 +114,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
                     }
                     else
                     {
-                        throw new Exception($"Unknown plantaction {gene.PlantAction}"); //idk 
+                        throw new Exception($"Unknown PlantAction {gene.PlantAction}"); //idk 
                     }
                 }
             }

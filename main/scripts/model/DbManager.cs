@@ -90,9 +90,9 @@ public partial class DbManager : Node
     * returns the strand with that id; otherwise null
     * includes children
     */
-    public StrandDb GetStrand(int strandId)
+    public StrandDb GetStrand(int strandId, bool recursive)
     {
-        return _db.FindWithChildren<StrandDb>(strandId, true);
+        return _db.FindWithChildren<StrandDb>(strandId, recursive);
     }
 
     /**
@@ -139,9 +139,26 @@ public partial class DbManager : Node
      */
     public bool ReplaceGene(GeneDb gene)
     {
-        if (_db.Find<GeneDb>(gene.Id) != null)
+        //Console.WriteLine($"Replacing {gene.Id}");
+        if (_db.Find<GeneDb>(gene.Id) == null)
             throw new InvalidOperationException("No gene with that id");
 
         return _db.Update(gene) > 0;
+    }
+
+    public bool UpdateStrand(StrandDb strand)
+    {
+        if (_db.Find<StrandDb>(strand.Id) == null)
+            throw new InvalidOperationException("No strand with that id");
+
+        return _db.Update(strand) > 0;
+    }
+
+    public bool UpdatePlant(PlantDb plant)
+    {
+        if (_db.Find<PlantDb>(plant.Id) == null)
+            throw new InvalidOperationException("No plant with that id");
+
+        return _db.Update(plant) > 0;
     }
 }
