@@ -42,6 +42,14 @@ public partial class ResourceDisplay : HBoxContainer
         }
     }
 
+    public void CreateAttributeButtons(Dictionary<Enum, double> resources)
+    {
+        foreach (var r in resources)
+        {
+            DisplayAttributes(r.Key, r.Value);
+        }
+    }
+
     public bool DisplayMaterialResource(AbstractPlant.Rt key, MaterialResource material)
     {
         if (material == null)
@@ -64,6 +72,7 @@ public partial class ResourceDisplay : HBoxContainer
     public bool DisplayAttributes(Enum key, double value)
     {
         var bT = ButtonTemplate.Instantiate() as Button;
+        AddChild(bT);
         bT.Name = $"Button:{key}";
         bT.Text = $"{key}:{value}";
         bT.ButtonGroup = Buttons;
@@ -72,11 +81,17 @@ public partial class ResourceDisplay : HBoxContainer
         return true;
     }
 
+    /**
+     * returns found progressbar; otherwise null
+     */
     public ProgressBar GetProgressBar(AbstractPlant.Rt key)
     {
         return FindChild($"Bar:{key}", false) as ProgressBar;
     }
 
+    /**
+     * returns found "progressbar"-button; otherwise null
+     */
     public ProgressBar GetProgressBarButton(AbstractPlant.Rt key)
     {
         return FindChild($"BarButton:{key}", false) as ProgressBar;
@@ -90,6 +105,10 @@ public partial class ResourceDisplay : HBoxContainer
         return FindChild($"Button:{key}", false) as Button; //TODO
     }
 
+    /**
+     * Attempts to update a button with this key
+     * returns updated button; otherwise null
+     */
     public Button UpdateButton(Enum key, double value)
     {
         if (GetButton(key) is not { } b)
@@ -100,6 +119,10 @@ public partial class ResourceDisplay : HBoxContainer
         return b;
     }
 
+    /**
+     * Attempts to update a progressbar with this key
+     * returns updated progressbar; otherwise null
+     */
     public ProgressBar UpdateBar(AbstractPlant.Rt key, MaterialResource material)
     {
         if (GetProgressBar(key) is not { } b)
@@ -109,5 +132,18 @@ public partial class ResourceDisplay : HBoxContainer
         b.Value = material.Amount;
 
         return b;
+    }
+
+    public bool ClearChildren()
+    {
+        if (GetChildren().Count <= 0)
+            return false;
+
+        foreach (Node child in GetChildren())
+        {
+            child.QueueFree();
+        }
+
+        return true;
     }
 }
