@@ -3,6 +3,7 @@ using Godot;
 using Main.main.scripts.core.util;
 using Main.main.scripts.model;
 using Main.Source.main;
+using AbstractPlant = Main.main.scripts.core.plants.AbstractPlant;
 
 namespace Main.main.scripts.scene;
 

@@ -2,6 +2,7 @@
 
 [ext_resource type="Theme" uid="uid://b7am0k6ih57f5" path="res://main/common/ui/templatePopup/plantPopup.tres" id="1_dq4wh"]
 [ext_resource type="Script" uid="uid://bjp8l4c5ivbr0" path="res://main/common/ui/templatePopup/TemplatePopup.cs" id="2_ui284"]
+[ext_resource type="PackedScene" uid="uid://dbnfv84hox21s" path="res://main/common/ui/templatePopup/resources/h_box_container.tscn" id="3_kjk4s"]
 
 [node name="TemplatePopup" type="Window" unique_id=754308462]
 transparent_bg = true
@@ -21,3 +22,17 @@ maximize_disabled = true
 theme = ExtResource("1_dq4wh")
 theme_type_variation = &"plantInfoPopup"
 script = ExtResource("2_ui284")
+ResourceDisplayTemplate = ExtResource("3_kjk4s")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=208999261]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 18.0
+offset_right = -288.0
+offset_bottom = 9.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" parent="VBoxContainer" unique_id=268412883 instance=ExtResource("3_kjk4s")]
+layout_mode = 2

@@ -17,6 +17,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     protected double HpEnergyValue;
     protected double GlucoseToEnergyRatio;
     protected PlantDb PlantInstance;
+    protected int MaxStrands;
 
     [Export] protected int DbId = dbId;
     protected string DatabasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
@@ -125,6 +126,9 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
 
     public PlantDb ConnectToPlant()
     {
+        if (DbId < 0)
+            return null;
+
         return PlantInstance = DbManager.Instance?.GetPlant(DbId, true);
     }
 
@@ -189,4 +193,9 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     }
 
     protected abstract double Photosynthesize();
+
+    protected double ChangeResourceMax(Rt key, double change)
+    {
+        return Resources[key].ChangeMax(change);
+    }
 }

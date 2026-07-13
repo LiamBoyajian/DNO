@@ -3,6 +3,7 @@ using Godot;
 using Main.Source.main;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
+using AbstractPlant = Main.main.scripts.core.plants.AbstractPlant;
 
 namespace Main.main.scripts.model;
 

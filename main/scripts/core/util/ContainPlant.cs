@@ -34,16 +34,17 @@ public partial class ContainPlant : Sprite2D
         return Water.Amount >= 0;
     }
 
-    public Array<AbstractPlant> GetPlants()
+    public Array<Main.main.scripts.core.plants.AbstractPlant> GetPlants()
     {
-        Array<AbstractPlant> result = new Array<AbstractPlant>();
+        Array<Main.main.scripts.core.plants.AbstractPlant> result =
+            new Array<Main.main.scripts.core.plants.AbstractPlant>();
 
         foreach (var node in GetChildren())
         {
-            if (node is not AbstractPlant child)
+            if (node is not Main.main.scripts.core.plants.AbstractPlant child)
                 continue;
 
-            result.Add((AbstractPlant)node);
+            result.Add((Main.main.scripts.core.plants.AbstractPlant)node);
         }
 
         return result;
@@ -57,7 +58,7 @@ public partial class ContainPlant : Sprite2D
         int result = 0;
         foreach (var node in GetChildren())
         {
-            if (node is not AbstractPlant child)
+            if (node is not Main.main.scripts.core.plants.AbstractPlant child)
                 continue;
             ++result;
         }
@@ -67,7 +68,8 @@ public partial class ContainPlant : Sprite2D
 
     public int GetTotalLoad()
     {
-        double result = GetPlants().Sum(plant => plant.MyResources[AbstractPlant.Rt.Health].Amount);
+        double result = GetPlants().Sum(plant =>
+            plant.MyResources[Main.main.scripts.core.plants.AbstractPlant.Rt.Health].Amount);
         return (int)result;
     }
 
@@ -102,7 +104,7 @@ public partial class ContainPlant : Sprite2D
     public Node AcceptSeed(Node plant, int plantId)
     {
         if (plant == null) return null;
-        if (plant is not AbstractPlant p)
+        if (plant is not Main.main.scripts.core.plants.AbstractPlant p)
             throw new ArgumentException("Node does not contain an AbstractPlant script");
 
         Plant = p;

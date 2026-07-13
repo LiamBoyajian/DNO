@@ -104,4 +104,12 @@ public class MaterialResource(double amount, double max) : IMaterialResource
         Max += change;
         return change;
     }
+
+    /**
+     * returns the val of amount is > val; otherwise returns the current amount
+     */
+    public double HasValue(double val)
+    {
+        return (val >= Amount) ? val : Amount;
+    }
 }
