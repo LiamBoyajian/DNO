@@ -1,15 +1,19 @@
 using Godot;
+using Main.main.common.ui.templatePopup;
 
 namespace Main.main.scripts.core.util;
 
 public partial class PlantGui : AnimatedSprite2D
 {
     //requires specifically named frames to run 
-
+    [Export] protected Area2D ClickArea;
 
     public override void _Ready()
     {
         Play("default");
+        ClickArea.InputEvent += OnClickMe;
+        if (ClickArea is null)
+            ClickArea = GetNode<Area2D>("PopupArea");
     }
 
     public override void _Process(double delta)
@@ -69,5 +73,12 @@ public partial class PlantGui : AnimatedSprite2D
     public bool IsShowingDead()
     {
         return string.Compare(Animation, "dead") == 0;
+    }
+
+    public void OnClickMe(Node viewport, InputEvent @event, long shapeIdx)
+    {
+        if (!@event.IsAction("alt_click"))
+            return;
+        TemplatePopup.Instance.Popup();
     }
 }

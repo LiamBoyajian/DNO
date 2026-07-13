@@ -11,6 +11,7 @@
 [ext_resource type="Texture2D" uid="uid://c71k0ngx0yx5r" path="res://main/_UI_Computer/gene editor window/Editor Icons_retrieve.ase_layer_tex" id="8_m051d"]
 [ext_resource type="Texture2D" uid="uid://cmrb5nrqi7jvj" path="res://main/_UI_Computer/gene editor window/Editor Icons_store.ase_layer_tex" id="9_gdwfk"]
 [ext_resource type="Texture2D" uid="uid://0rfm0pa5x1fl" path="res://main/_UI_Computer/gene editor window/Editor Icons_trade.ase_layer_tex" id="10_txglq"]
+[ext_resource type="StyleBox" uid="uid://dqfri3l75pg27" path="res://main/_UI_Computer/gene viewer window/GeneBox.tres" id="13_jk21i"]
 [ext_resource type="Theme" uid="uid://bccati3tbihud" path="res://main/_UI_Computer/gene viewer window/pc_design.tres" id="13_v8xl2"]
 
 [node name="Gene_Editor_Window" unique_id=1004885525 node_paths=PackedStringArray("GeneDisplay", "StrandDisplay", "Push") instance=ExtResource("1_rm35y")]
@@ -88,3 +89,26 @@ layout_mode = 2
 theme = ExtResource("13_v8xl2")
 theme_type_variation = &"ConfirmButton"
 text = "Push"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/FlowContainer" index="4" unique_id=7892865]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="LeftBound" type="Panel" parent="MarginContainer/FlowContainer/HBoxContainer" index="0" unique_id=578814192]
+self_modulate = Color(0, 0, 0, 0.46666667)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("13_jk21i")
+
+[node name="Panel" type="Panel" parent="MarginContainer/FlowContainer/HBoxContainer" index="1" unique_id=1618341844]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.41
+theme_override_styles/panel = ExtResource("13_jk21i")
+
+[node name="RightBound" type="Panel" parent="MarginContainer/FlowContainer/HBoxContainer" index="2" unique_id=1110873115]
+self_modulate = Color(0, 0, 0, 0.46666667)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.7
+theme_override_styles/panel = ExtResource("13_jk21i")

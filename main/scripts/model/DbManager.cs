@@ -59,7 +59,7 @@ public partial class DbManager : Node
     }
 
     /**
-     * returns all plants in the database; (TODO might return null)
+     * returns all plants in the database;
      */
     public List<PlantDb> GetPlantDbList(bool recursive)
     {
@@ -70,7 +70,7 @@ public partial class DbManager : Node
 
 
     /**
-     * returns all plants in the database as an array; (TODO might return null)
+     * returns all plants in the database as an array
      */
     public PlantDb[] GetPlantDbArray()
     {

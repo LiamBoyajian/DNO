@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://dxw4yx0ij5eme"]
+
+[ext_resource type="Theme" uid="uid://b7am0k6ih57f5" path="res://main/common/ui/templatePopup/plantPopup.tres" id="1_dq4wh"]
+[ext_resource type="Script" uid="uid://bjp8l4c5ivbr0" path="res://main/common/ui/templatePopup/TemplatePopup.cs" id="2_ui284"]
+
+[node name="TemplatePopup" type="Window" unique_id=754308462]
+transparent_bg = true
+oversampling_override = 1.0
+title = "TEST"
+initial_position = 1
+size = Vector2i(580, 300)
+transient = true
+transient_to_focused = true
+unresizable = true
+always_on_top = true
+transparent = true
+popup_window = true
+popup_wm_hint = true
+minimize_disabled = true
+maximize_disabled = true
+theme = ExtResource("1_dq4wh")
+theme_type_variation = &"plantInfoPopup"
+script = ExtResource("2_ui284")
