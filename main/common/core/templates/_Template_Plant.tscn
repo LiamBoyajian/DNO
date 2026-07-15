@@ -1,8 +1,19 @@
 [gd_scene format=3 uid="uid://c4ll7m6ooasli"]
 
-[ext_resource type="Script" uid="uid://d1m0odxcuuouw" path="res://Source/main/PlantGui.cs" id="3_i78rd"]
+[ext_resource type="SpriteFrames" uid="uid://dja4egrke0cwa" path="res://main/common/sprites/sprite_frames/soybean.tres" id="1_2hue5"]
+[ext_resource type="Script" uid="uid://d1m0odxcuuouw" path="res://main/scripts/core/util/PlantGui.cs" id="3_i78rd"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_i70ok"]
 
 [node name="(base_logic)[Plant_Name]" type="Node2D" unique_id=1975322258]
 
-[node name="(visual_logic)" type="AnimatedSprite2D" parent="." unique_id=1805913587]
+[node name="(visual_logic)" type="AnimatedSprite2D" parent="." unique_id=1805913587 node_paths=PackedStringArray("ClickArea")]
+sprite_frames = ExtResource("1_2hue5")
 script = ExtResource("3_i78rd")
+ClickArea = NodePath("PopupArea")
+
+[node name="PopupArea" type="Area2D" parent="(visual_logic)" unique_id=1905768682]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="(visual_logic)/PopupArea" unique_id=1940504542]
+position = Vector2(0, 10)
+shape = SubResource("RectangleShape2D_i70ok")

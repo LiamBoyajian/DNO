@@ -1,15 +1,24 @@
 using Godot;
+using Main.main.scripts.core.plants;
 
 namespace Main.main.scripts.core.util;
 
 public partial class PlantGui : AnimatedSprite2D
 {
     //requires specifically named frames to run 
-
+    [Export] protected Area2D ClickArea;
+    protected AbstractPlant ParentPlant;
 
     public override void _Ready()
     {
         Play("default");
+        ClickArea.InputEvent += OnClickMe;
+        if (ClickArea is null)
+            ClickArea = GetNode<Area2D>("PopupArea");
+
+        if (GetParent() is not AbstractPlant)
+            System.Diagnostics.Debug.Assert(false, "Parent plant is not of type: AbstractPlant");
+        ParentPlant = GetParent() as AbstractPlant;
     }
 
     public override void _Process(double delta)
@@ -69,5 +78,12 @@ public partial class PlantGui : AnimatedSprite2D
     public bool IsShowingDead()
     {
         return string.Compare(Animation, "dead") == 0;
+    }
+
+    public void OnClickMe(Node viewport, InputEvent @event, long shapeIdx)
+    {
+        if (!@event.IsAction("alt_click"))
+            return;
+        TwoSidedPlantPopup.Instance.Popup(ParentPlant);
     }
 }

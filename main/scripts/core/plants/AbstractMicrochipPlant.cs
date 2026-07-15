@@ -11,12 +11,17 @@ namespace Main.main.scripts.core.plants;
 
 public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
 {
+    protected AbstractMicrochipPlant() : this(-1)
+    {
+    }
+
     [Export] protected PlantGui GuiManager;
 
     protected double HpToEnergyRatio;
     protected double HpEnergyValue;
     protected double GlucoseToEnergyRatio;
     protected PlantDb PlantInstance;
+    protected int MaxStrands;
 
     [Export] protected int DbId = dbId;
     protected string DatabasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
@@ -125,18 +130,21 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
 
     public PlantDb ConnectToPlant()
     {
+        if (DbId < 0)
+            return null;
+
         return PlantInstance = DbManager.Instance?.GetPlant(DbId, true);
     }
 
     public virtual Delegate StringToPlantAction(string plantAction)
     {
-        switch (plantAction)
+        switch (plantAction.ToLower())
         {
-            case "Grow":
+            case "grow":
                 return new Func<Enum, double, double>(Grow);
-            case "Clean":
+            case "clean":
                 return new Func<Enum, double, double>(Clean);
-            case "Consume":
+            case "consume":
                 return new Func<double, double>(Consume);
             default:
                 return null;
@@ -189,4 +197,9 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     }
 
     protected abstract double Photosynthesize();
+
+    protected double ChangeResourceMax(Rt key, double change)
+    {
+        return Resources[key].ChangeMax(change);
+    }
 }

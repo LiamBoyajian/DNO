@@ -1,13 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using Godot;
-using Microsoft.Data.Sqlite;
-using Dapper;
+using Main.Source.main;
 
-
-namespace Main.Source.main;
+namespace Main.main.scripts.core.plants;
 
 [GlobalClass]
 public abstract partial class AbstractPlant : Node

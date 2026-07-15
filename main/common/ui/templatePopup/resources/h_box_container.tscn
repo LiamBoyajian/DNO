@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dbnfv84hox21s"]
+
+[node name="HBoxContainer" type="HBoxContainer" unique_id=268412883]
+offset_right = 253.0
+offset_bottom = 28.0
+size_flags_horizontal = 3
