@@ -1,5 +1,5 @@
 using Godot;
-using Main.main.common.ui.templatePopup;
+using Main.main.scripts.core.plants;
 
 namespace Main.main.scripts.core.util;
 
@@ -7,6 +7,7 @@ public partial class PlantGui : AnimatedSprite2D
 {
     //requires specifically named frames to run 
     [Export] protected Area2D ClickArea;
+    protected AbstractPlant ParentPlant;
 
     public override void _Ready()
     {
@@ -14,6 +15,10 @@ public partial class PlantGui : AnimatedSprite2D
         ClickArea.InputEvent += OnClickMe;
         if (ClickArea is null)
             ClickArea = GetNode<Area2D>("PopupArea");
+
+        if (GetParent() is not AbstractPlant)
+            System.Diagnostics.Debug.Assert(false, "Parent plant is not of type: AbstractPlant");
+        ParentPlant = GetParent() as AbstractPlant;
     }
 
     public override void _Process(double delta)
@@ -79,6 +84,6 @@ public partial class PlantGui : AnimatedSprite2D
     {
         if (!@event.IsAction("alt_click"))
             return;
-        TemplatePopup.Instance.Popup();
+        TwoSidedPlantPopup.Instance.Popup(ParentPlant);
     }
 }

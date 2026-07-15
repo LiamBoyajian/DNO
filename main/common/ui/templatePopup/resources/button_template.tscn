@@ -3,3 +3,4 @@
 [node name="Button" type="Button" unique_id=2131077917]
 custom_minimum_size = Vector2(40, 0)
 clip_contents = true
+toggle_mode = true

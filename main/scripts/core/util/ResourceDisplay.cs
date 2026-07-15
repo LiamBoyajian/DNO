@@ -1,32 +1,37 @@
-using System;
 using System.Collections.Generic;
 using Godot;
-using Main.main.scripts.core.plants;
 using Main.Source.main;
 
-namespace Main.main.common.ui.templatePopup.resources;
+namespace Main.main.scripts.core.util;
 
-public partial class ResourceDisplay : HBoxContainer
+public partial class ResourceDisplay : BoxContainer
 {
     [Export] public PackedScene ProgressBarTemplate { get; set; }
     [Export] public PackedScene ButtonTemplate { get; set; }
-    [Export] protected ButtonGroup Buttons { get; private set; }
+    [Export] public ButtonGroup Buttons;
+
+    /**
+     * Seperates the individual elements
+     */
+    [Export]
+    public PackedScene BoxContainer { get; private set; }
 
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        Buttons ??= new ButtonGroup();
+        Buttons.AllowUnpress = true;
+
+
         var pB = ProgressBarTemplate.Instantiate() as ProgressBar;
         if (pB == null)
-        {
             System.Diagnostics.Debug.Assert(false, "ProgressBarTemplate is not type ProgressBar");
-        }
+
 
         var tB = ButtonTemplate.Instantiate() as Button;
-        if (pB == null)
-        {
+        if (tB == null)
             System.Diagnostics.Debug.Assert(false, "ButtonTemplate is not type ProgressBar");
-        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -34,47 +39,56 @@ public partial class ResourceDisplay : HBoxContainer
     {
     }
 
-    public void CreateMaterialBars(Dictionary<AbstractPlant.Rt, MaterialResource> resources)
+    public void CreateMaterialBars(IEnumerable<(string, IMaterialResource)> resources)
     {
         foreach (var r in resources)
         {
-            DisplayMaterialResource(r.Key, r.Value);
+            DisplayMaterialResource(r.Item1, r.Item2);
         }
     }
 
-    public void CreateAttributeButtons(Dictionary<Enum, double> resources)
+    public void CreateAttributeButtons(IEnumerable<(string, double)> resources)
     {
         foreach (var r in resources)
         {
-            DisplayAttributes(r.Key, r.Value);
+            DisplayAttributes(r.Item1, r.Item2);
         }
     }
 
-    public bool DisplayMaterialResource(AbstractPlant.Rt key, MaterialResource material)
+    public bool DisplayMaterialResource(string key, IMaterialResource material)
     {
         if (material == null)
             return false;
 
+        var box = BoxContainer.Instantiate() as BoxContainer;
+        AddChild(box);
+
         var pB = ProgressBarTemplate.Instantiate() as ProgressBar;
-        AddChild(pB);
+
+        box.AddChild(pB);
         pB.MaxValue = material.Max;
         pB.Value = material.Amount;
-        pB.Name = $"Bar:{key}";
+        pB.Name = $"Bar_{key}";
 
         var bT = ButtonTemplate.Instantiate() as Button;
-        AddChild(bT);
-        bT.Name = $"BarButton:{key}";
+        box.AddChild(bT);
+        bT.Name = $"BarButton_{key}";
+        bT.Text = $"{key}_{material.Amount}";
         bT.ButtonGroup = Buttons;
+
 
         return true;
     }
 
-    public bool DisplayAttributes(Enum key, double value)
+    public bool DisplayAttributes(string key, double value)
     {
+        var box = BoxContainer.Instantiate() as BoxContainer;
+        AddChild(box);
+
         var bT = ButtonTemplate.Instantiate() as Button;
-        AddChild(bT);
-        bT.Name = $"Button:{key}";
-        bT.Text = $"{key}:{value}";
+        box.AddChild(bT);
+        bT.Name = $"Button_{key}";
+        bT.Text = $"{key}_{value}";
         bT.ButtonGroup = Buttons;
 
 
@@ -84,37 +98,37 @@ public partial class ResourceDisplay : HBoxContainer
     /**
      * returns found progressbar; otherwise null
      */
-    public ProgressBar GetProgressBar(AbstractPlant.Rt key)
+    public ProgressBar GetProgressBar(string key)
     {
-        return FindChild($"Bar:{key}", false) as ProgressBar;
+        return FindChild($"Bar_{key}", false) as ProgressBar;
     }
 
     /**
      * returns found "progressbar"-button; otherwise null
      */
-    public ProgressBar GetProgressBarButton(AbstractPlant.Rt key)
+    public ProgressBar GetProgressBarButton(string key)
     {
-        return FindChild($"BarButton:{key}", false) as ProgressBar;
+        return FindChild($"BarButton_{key}", false) as ProgressBar;
     }
 
     /**
      * returns found button; otherwise null
      */
-    public Button GetButton(Enum key)
+    public Button GetButton(string key)
     {
-        return FindChild($"Button:{key}", false) as Button; //TODO
+        return FindChild($"Button_{key}", false) as Button;
     }
 
     /**
      * Attempts to update a button with this key
      * returns updated button; otherwise null
      */
-    public Button UpdateButton(Enum key, double value)
+    public Button UpdateButton(string key, double value)
     {
         if (GetButton(key) is not { } b)
             return null;
 
-        b.Text = $"{key}:{value}";
+        b.Text = $"{key}_{value}";
 
         return b;
     }
@@ -123,7 +137,7 @@ public partial class ResourceDisplay : HBoxContainer
      * Attempts to update a progressbar with this key
      * returns updated progressbar; otherwise null
      */
-    public ProgressBar UpdateBar(AbstractPlant.Rt key, MaterialResource material)
+    public ProgressBar UpdateBar(string key, IMaterialResource material)
     {
         if (GetProgressBar(key) is not { } b)
             return null;
@@ -139,7 +153,7 @@ public partial class ResourceDisplay : HBoxContainer
         if (GetChildren().Count <= 0)
             return false;
 
-        foreach (Node child in GetChildren())
+        foreach (var child in GetChildren())
         {
             child.QueueFree();
         }

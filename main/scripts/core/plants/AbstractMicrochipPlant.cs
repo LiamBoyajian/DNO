@@ -11,6 +11,10 @@ namespace Main.main.scripts.core.plants;
 
 public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
 {
+    protected AbstractMicrochipPlant() : this(-1)
+    {
+    }
+
     [Export] protected PlantGui GuiManager;
 
     protected double HpToEnergyRatio;
@@ -134,13 +138,13 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
 
     public virtual Delegate StringToPlantAction(string plantAction)
     {
-        switch (plantAction)
+        switch (plantAction.ToLower())
         {
-            case "Grow":
+            case "grow":
                 return new Func<Enum, double, double>(Grow);
-            case "Clean":
+            case "clean":
                 return new Func<Enum, double, double>(Clean);
-            case "Consume":
+            case "consume":
                 return new Func<double, double>(Consume);
             default:
                 return null;

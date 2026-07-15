@@ -1,16 +1,28 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Godot;
+using Main.main.scripts.core.plants.interfaces;
+using Main.main.scripts.core.util.interfaces;
+using Main.Source.main;
 
 namespace Main.main.scripts.core.plants.species;
 
-public partial class Tomato(int dbId) : AbstractMicrochipPlant(dbId)
+public partial class Tomato(int dbId)
+    : AbstractMicrochipPlant(dbId), IAttributeEnumerable, IMaterialEnumerable, IUpgradable
 {
+    public Tomato() : this(-1)
+    {
+    }
+
     // GROWTH VALUES
     protected double M = 5;
     protected double B = 5;
     protected Func<double, double> GrowthType = Math.Sqrt;
     protected double PhotoSynthAmount = 100;
+
+    protected const int STANDARDUPGRADEVAL = 10;
+    protected const int ORGANPURCHASEMULTIPLIER = 20;
 
     //protected int HpToStemRatio = 10;
 
@@ -156,6 +168,57 @@ public partial class Tomato(int dbId) : AbstractMicrochipPlant(dbId)
 
         if (result)
             Resources[Rt.Health].Give(10);
+
+        return result;
+    }
+
+
+    public IEnumerable<(string, IMaterialResource)> GetMaterialEnumerable()
+    {
+        foreach (var r in Resources)
+        {
+            yield return (r.Key.ToString(), (IMaterialResource)r.Value);
+        }
+    }
+
+    public IEnumerable<(string, double)> GetAttributeEnumerable()
+    {
+        foreach (var r in Organs)
+        {
+            yield return (r.Key.ToString(), r.Value);
+        }
+    }
+
+    /**
+     * Can upgrade doubles and MaterialResource
+     * String can parse to Rt and TomatoOrgans
+     *
+     * returns true if change was made
+     */
+    public virtual bool ParseUpgrade(string s)
+    {
+        bool result = false;
+        if (Enum.TryParse(s, out Rt rtKey))
+        {
+            var tempCost = GlucoseUpgradeFunction(Resources[rtKey].Amount);
+
+            if (tempCost <= Resources[Rt.Glucose].Amount)
+            {
+                Resources[Rt.Glucose].Take(tempCost);
+                Resources[rtKey].ChangeMax(STANDARDUPGRADEVAL);
+                result = true;
+            }
+        }
+        else if (Enum.TryParse(s, out TomatoOrgans tomatoKey))
+        {
+            var tempCost = GlucoseUpgradeFunction(Organs[tomatoKey] * ORGANPURCHASEMULTIPLIER);
+            if (tempCost <= Resources[Rt.Glucose].Amount)
+            {
+                Resources[Rt.Glucose].Take(tempCost);
+                Organs[tomatoKey] += 1;
+                result = true;
+            }
+        }
 
         return result;
     }

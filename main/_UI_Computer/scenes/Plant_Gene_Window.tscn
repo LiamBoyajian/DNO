@@ -5,12 +5,14 @@
 [ext_resource type="PackedScene" uid="uid://7ruahpj7upcc" path="res://main/_UI_Computer/scenes/util/PanelContainer_GeneBG.tscn" id="3_c1kx8"]
 [ext_resource type="PackedScene" uid="uid://d3xfn6wc8nwga" path="res://main/_UI_Computer/scenes/util/HBox_GeneContainer.tscn" id="4_hinv1"]
 [ext_resource type="PackedScene" uid="uid://c3v6k30bmehk0" path="res://main/_UI_Computer/scenes/util/PanelContainer_GeneBase.tscn" id="5_uy7xq"]
-[ext_resource type="ButtonGroup" uid="uid://ctf37jawq5i8i" path="res://main/_UI_Computer/scenes/util/gene_buttons.tres" id="6_vg54y"]
 [ext_resource type="StyleBox" uid="uid://dqfri3l75pg27" path="res://main/_UI_Computer/gene viewer window/GeneBox.tres" id="6_wvhgo"]
 [ext_resource type="Texture2D" uid="uid://d15dv8rcnsb04" path="res://main/_UI_Computer/gene viewer window/Window Popup_minimize.ase_layer_tex" id="6_yk4eo"]
 [ext_resource type="StyleBox" uid="uid://bjlsw0q7twhpu" path="res://main/_UI_Computer/gene viewer window/pc_embedded_border.tres" id="8_3xrjv"]
 [ext_resource type="StyleBox" uid="uid://c5gjgmd5tbr41" path="res://main/_UI_Computer/gene viewer window/pc_embedded_unfocused_border.tres" id="8_f7rbd"]
 [ext_resource type="Script" uid="uid://db2sro21w7r3u" path="res://main/scripts/scene/Gene_Window_Item_List.gd" id="11_vg54y"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_mgvd3"]
+allow_unpress = true
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_g76qb"]
 content_margin_left = 0.0
@@ -647,7 +649,7 @@ DnaStrandContainer = NodePath("SplitContainer/MarginContainer/Strand_Holder")
 StrandPanelBg = ExtResource("3_c1kx8")
 GeneContainerTemplate = ExtResource("4_hinv1")
 GeneTemplate = ExtResource("5_uy7xq")
-GeneButtonGroup = ExtResource("6_vg54y")
+GeneButtonGroup = SubResource("ButtonGroup_mgvd3")
 
 [node name="SceneData" type="Node" parent="." index="0" unique_id=791592029]
 
