@@ -1,17 +1,16 @@
 using System;
-using System.IO;
 using System.Linq;
 using Godot;
 using Godot.Collections;
 using Main.main.scripts.core.plants;
-using Main.main.scripts.core.plants.species;
+using Main.Source.main;
 
-namespace Main.Source.main;
+namespace Main.main.scripts.core.util;
 
 [GlobalClass]
 public partial class ContainPlant : Sprite2D
 {
-    public MaterialResource Water = new MaterialResource(12.0, 100.0);
+    public MaterialResource Water = new MaterialResource(500.0, 1000.0);
     protected Node Plant = null;
 
     // Called when the node enters the scene tree for the first time.
@@ -31,20 +30,20 @@ public partial class ContainPlant : Sprite2D
 
     public bool HasWater()
     {
-        return Water.Amount >= 0;
+        return Water.Amount > 0;
     }
 
-    public Array<Main.main.scripts.core.plants.AbstractPlant> GetPlants()
+    public Array<AbstractPlant> GetPlants()
     {
-        Array<Main.main.scripts.core.plants.AbstractPlant> result =
-            new Array<Main.main.scripts.core.plants.AbstractPlant>();
+        Array<AbstractPlant> result =
+            new Array<AbstractPlant>();
 
         foreach (var node in GetChildren())
         {
-            if (node is not Main.main.scripts.core.plants.AbstractPlant child)
+            if (node is not AbstractPlant child)
                 continue;
 
-            result.Add((Main.main.scripts.core.plants.AbstractPlant)node);
+            result.Add((AbstractPlant)node);
         }
 
         return result;
@@ -58,7 +57,7 @@ public partial class ContainPlant : Sprite2D
         int result = 0;
         foreach (var node in GetChildren())
         {
-            if (node is not Main.main.scripts.core.plants.AbstractPlant child)
+            if (node is not AbstractPlant child)
                 continue;
             ++result;
         }
@@ -69,7 +68,7 @@ public partial class ContainPlant : Sprite2D
     public int GetTotalLoad()
     {
         double result = GetPlants().Sum(plant =>
-            plant.MyResources[Main.main.scripts.core.plants.AbstractPlant.Rt.Health].Amount);
+            plant.MyResources[AbstractPlant.Rt.Health].Amount);
         return (int)result;
     }
 
@@ -104,11 +103,11 @@ public partial class ContainPlant : Sprite2D
     public Node AcceptSeed(Node plant, int plantId)
     {
         if (plant == null) return null;
-        if (plant is not Main.main.scripts.core.plants.AbstractPlant p)
+        if (plant is not AbstractPlant p)
             throw new ArgumentException("Node does not contain an AbstractPlant script");
 
         Plant = p;
-        if (p is Main.main.scripts.core.plants.AbstractMicrochipPlant temp)
+        if (p is AbstractMicrochipPlant temp)
         {
             temp.LinkParentContainer(this);
             temp.SetDbId(plantId);

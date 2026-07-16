@@ -13,7 +13,7 @@ public partial class TwoSidedPlantPopup : Window, IPlantPopup
     [Export] public ResourceDisplay MaterialResourcesContainer;
     [Export] public ResourceDisplay InfiniteResourcesContainer;
 
-    protected IUpgradable LastUpgradable { get; private set; }
+    protected IAttributeDictionary LastAttributeDictionary { get; private set; }
 
 
     // Called when the node enters the scene tree for the first time.
@@ -47,8 +47,14 @@ public partial class TwoSidedPlantPopup : Window, IPlantPopup
      */
     public void Popup(Node parent)
     {
-        if (parent is IUpgradable u)
-            LastUpgradable = u;
+        if (parent is IAttributeDictionary u)
+        {
+            LastAttributeDictionary = u;
+            if (LastAttributeDictionary is IBroadcastsUpdate broadcaster)
+            {
+                broadcaster.Updated += () => Refresh();
+            }
+        }
 
 
         ClearElements();
@@ -78,11 +84,23 @@ public partial class TwoSidedPlantPopup : Window, IPlantPopup
 
     public void ButtonGroupWasPressed(BaseButton button)
     {
-        if (LastUpgradable == null) return;
+        //TODO remove hard coding this terrible (za stringz are very baad
+        if (LastAttributeDictionary == null) return;
 
-        var temp = button.Name.ToString().Split('_')[1]; //hardcoded based on name from ResourceDisplay
+        var temp = button.Name.ToString().Split('_'); //hardcoded based on name from ResourceDisplay
+        bool refresh = false;
 
-        if (LastUpgradable.ParseUpgrade(temp))
+        if (temp[0].Contains("Amount") && LastAttributeDictionary is IObtainable obtainable)
+        {
+            refresh = obtainable.ParseObtain(temp[1]);
+        }
+        else if ((temp[0].Contains("Max") || temp[0].Contains("Infinite")) &&
+                 LastAttributeDictionary is IUpgradable upgradable)
+        {
+            refresh = upgradable.ParseUpgrade(temp[1]);
+        }
+
+        if (refresh)
             Refresh();
     }
 
@@ -92,10 +110,24 @@ public partial class TwoSidedPlantPopup : Window, IPlantPopup
         Refresh();
     }
 
-    public bool Refresh()
+    public void Refresh(bool fullRefresh = false)
     {
-        ClearElements();
-        Popup(LastUpgradable as Node);
-        return LastUpgradable != null;
+        if (fullRefresh)
+        {
+            ClearElements();
+            Popup(LastAttributeDictionary as Node);
+        }
+        else
+        {
+            if (LastAttributeDictionary is IAttributeEnumerable attributeEnumerable)
+            {
+                InfiniteResourcesContainer.UpdateAttributeButtons(attributeEnumerable.GetAttributeEnumerable());
+            }
+
+            if (LastAttributeDictionary is IMaterialEnumerable materialEnumerable)
+            {
+                MaterialResourcesContainer.UpdateMaterialBars(materialEnumerable.GetMaterialEnumerable());
+            }
+        }
     }
 }

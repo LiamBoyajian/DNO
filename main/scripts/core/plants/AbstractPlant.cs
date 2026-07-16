@@ -38,9 +38,9 @@ public abstract partial class AbstractPlant : Node
         { Rt.Health, new MaterialResource(14.0, 100.0) },
         { Rt.Chlorophyll, new MaterialResource(10.0, 100.0) },
         { Rt.Energy, new MaterialResource(10.0, 100.0) },
-        { Rt.Glucose, new MaterialResource(10.0, 1000.0) },
-        { Rt.H2O, new MaterialResource(10.0, 200.0) },
-        { Rt.Co2, new MaterialResource(10.0, 100.0) },
+        { Rt.Glucose, new MaterialResource(1000.0, 1000.0) },
+        { Rt.H2O, new MaterialResource(10.0, 1000.0) },
+        { Rt.Co2, new MaterialResource(10.0, 1000.0) },
         { Rt.Oxygen, new MaterialResource(10.0, 100.0) },
 
         { Rt.DamagedCells, new MaterialResource(50.0, 100.0) },
@@ -64,12 +64,8 @@ public abstract partial class AbstractPlant : Node
     {
     }
 
-    abstract public void Tick(double delta);
+    abstract public bool Tick(double delta);
 
-
-    /**
-     * TODO: STUB
-     */
     public abstract float GetSunLevel();
 
     //Clean: remove a resource permanently
@@ -117,11 +113,11 @@ public abstract partial class AbstractPlant : Node
      * Param: Ratio when health is converted to energy (10 == 1:10; health * 10 = output energy)
      * Result: in case of energy underflow; missing energy taken from hp
      */
-    protected double EnergyHp(double hpToEnergyRatio, double valueOfHealth)
+    protected virtual double EnergyHp(double maxHpToEnergyRatio, double gluToEnergyRatio)
     {
-        double toTake = Resources[Rt.Health].Max * hpToEnergyRatio; //Energy required in this run
+        double toTake = Resources[Rt.Health].Max * maxHpToEnergyRatio; //Energy required in this run
         double underflow = toTake - Resources[Rt.Energy].Take(toTake); //Energy # not met
-        Resources[Rt.Health].Take(underflow / valueOfHealth);
+        Resources[Rt.Health].Take(Resources[Rt.Glucose].Take(underflow * gluToEnergyRatio));
         return underflow;
     }
 
