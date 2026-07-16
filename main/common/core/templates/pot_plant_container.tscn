@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://crwvq7uuoce5k"]
+
+[ext_resource type="Texture2D" uid="uid://be4k6m5xojps6" path="res://main/common/sprites/plant containers/pot_terracotta.aseprite" id="1_yinaj"]
+[ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://main/scripts/core/util/ContainPlant.cs" id="2_ti2gq"]
+[ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/common/ui/inventory_bar/inventorySquare.tscn" id="3_hobh6"]
+[ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/scripts/core/util/AcceptSeed.cs" id="4_n5g41"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
+size = Vector2(88, 156)
+
+[node name="Por" type="Sprite2D" unique_id=1437099568]
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_yinaj")
+offset = Vector2(0, 40)
+script = ExtResource("2_ti2gq")
+
+[node name="acceptSeed" parent="." unique_id=1930195085 instance=ExtResource("3_hobh6")]
+anchors_preset = -1
+anchor_top = 0.097
+anchor_bottom = 0.097
+offset_left = -94.0
+offset_top = -89.7
+offset_right = -6.0
+offset_bottom = -10.700001
+offset_transform_enabled = false
+script = ExtResource("4_n5g41")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=694919913]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1675959269]
+position = Vector2(0, -2)
+shape = SubResource("RectangleShape2D_mrq1q")

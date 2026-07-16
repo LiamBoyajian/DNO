@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://336qp8djyjhc"]
 
 [ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/common/ui/inventory_bar/inventorySquare.tscn" id="2_egnjp"]
+[ext_resource type="Script" uid="uid://cokr7pkm3d1y3" path="res://main/scripts/core/util/inventory/InventorySlot.cs" id="3_nnhah"]
 
 [node name="MarginContainer" type="MarginContainer" unique_id=2039833341]
 propagate_maximum_size = false
@@ -45,15 +46,20 @@ alignment = 1
 
 [node name="Panel" parent="MarginContainer/HBoxContainer" unique_id=1930195085 instance=ExtResource("2_egnjp")]
 layout_mode = 2
+script = ExtResource("3_nnhah")
 
 [node name="Panel2" parent="MarginContainer/HBoxContainer" unique_id=1427122132 instance=ExtResource("2_egnjp")]
 layout_mode = 2
+script = ExtResource("3_nnhah")
 
 [node name="Panel3" parent="MarginContainer/HBoxContainer" unique_id=1074039616 instance=ExtResource("2_egnjp")]
 layout_mode = 2
+script = ExtResource("3_nnhah")
 
 [node name="Panel4" parent="MarginContainer/HBoxContainer" unique_id=1380297166 instance=ExtResource("2_egnjp")]
 layout_mode = 2
+script = ExtResource("3_nnhah")
 
 [node name="Panel5" parent="MarginContainer/HBoxContainer" unique_id=964355614 instance=ExtResource("2_egnjp")]
 layout_mode = 2
+script = ExtResource("3_nnhah")
