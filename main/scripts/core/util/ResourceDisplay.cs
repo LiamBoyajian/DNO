@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Godot;
 using Main.Source.main;
@@ -9,6 +10,11 @@ public partial class ResourceDisplay : BoxContainer
     [Export] public PackedScene ProgressBarTemplate { get; set; }
     [Export] public PackedScene ButtonTemplate { get; set; }
     [Export] public ButtonGroup Buttons;
+
+    private string _barTag = "Bar_";
+    private string _barMaxButtonTag = "MaxBarButton_";
+    private string _barAmountButtonTag = "AmountBarButton_";
+    private string _infiniteButtonTag = "InfiniteButton_";
 
     /**
      * Seperates the individual elements
@@ -68,13 +74,19 @@ public partial class ResourceDisplay : BoxContainer
         box.AddChild(pB);
         pB.MaxValue = material.Max;
         pB.Value = material.Amount;
-        pB.Name = $"Bar_{key}";
+        pB.Name = _barTag + key;
 
-        var bT = ButtonTemplate.Instantiate() as Button;
-        box.AddChild(bT);
-        bT.Name = $"BarButton_{key}";
-        bT.Text = $"{key}_{material.Amount}";
-        bT.ButtonGroup = Buttons;
+        var bT1 = ButtonTemplate.Instantiate() as Button;
+        box.AddChild(bT1);
+        bT1.Name = _barAmountButtonTag + key;
+        bT1.Text = $"{key}_{(int)material.Amount}";
+        bT1.ButtonGroup = Buttons;
+
+        var bT2 = ButtonTemplate.Instantiate() as Button;
+        box.AddChild(bT2);
+        bT2.Name = _barMaxButtonTag + key;
+        bT2.Text = $"{key}_{(int)material.Max}";
+        bT2.ButtonGroup = Buttons;
 
 
         return true;
@@ -87,7 +99,7 @@ public partial class ResourceDisplay : BoxContainer
 
         var bT = ButtonTemplate.Instantiate() as Button;
         box.AddChild(bT);
-        bT.Name = $"Button_{key}";
+        bT.Name = _infiniteButtonTag + key;
         bT.Text = $"{key}_{value}";
         bT.ButtonGroup = Buttons;
 
@@ -100,15 +112,23 @@ public partial class ResourceDisplay : BoxContainer
      */
     public ProgressBar GetProgressBar(string key)
     {
-        return FindChild($"Bar_{key}", false) as ProgressBar;
+        return FindChild(_barTag + key, true, false) as ProgressBar;
     }
 
     /**
      * returns found "progressbar"-button; otherwise null
      */
-    public ProgressBar GetProgressBarButton(string key)
+    public Button GetProgressBarAmountButton(string key)
     {
-        return FindChild($"BarButton_{key}", false) as ProgressBar;
+        return FindChild(_barAmountButtonTag + key, true, false) as Button;
+    }
+
+    /**
+     * returns found "progressbar"-button; otherwise null
+     */
+    public Button GetProgressBarMaxButton(string key)
+    {
+        return FindChild(_barMaxButtonTag + key, true, false) as Button;
     }
 
     /**
@@ -116,7 +136,7 @@ public partial class ResourceDisplay : BoxContainer
      */
     public Button GetButton(string key)
     {
-        return FindChild($"Button_{key}", false) as Button;
+        return FindChild(_infiniteButtonTag + key, true, false) as Button;
     }
 
     /**
@@ -142,8 +162,16 @@ public partial class ResourceDisplay : BoxContainer
         if (GetProgressBar(key) is not { } b)
             return null;
 
+        if (GetProgressBarAmountButton(key) is not { } bT1)
+            return null;
+        if (GetProgressBarMaxButton(key) is not { } bT2)
+            return null;
+
         b.MaxValue = material.Max;
         b.Value = material.Amount;
+
+        bT1.Text = $"{key}_{(int)material.Amount}";
+        bT2.Text = $"{key}_{(int)material.Max}";
 
         return b;
     }
@@ -159,5 +187,21 @@ public partial class ResourceDisplay : BoxContainer
         }
 
         return true;
+    }
+
+    public void UpdateMaterialBars(IEnumerable<(string, IMaterialResource)> getMaterialEnumerable)
+    {
+        foreach (var r in getMaterialEnumerable)
+        {
+            UpdateBar(r.Item1, r.Item2);
+        }
+    }
+
+    public void UpdateAttributeButtons(IEnumerable<(string, double)> getAttributeEnumerable)
+    {
+        foreach (var r in getAttributeEnumerable)
+        {
+            UpdateButton(r.Item1, r.Item2);
+        }
     }
 }

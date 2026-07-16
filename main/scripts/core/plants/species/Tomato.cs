@@ -9,7 +9,8 @@ using Main.Source.main;
 namespace Main.main.scripts.core.plants.species;
 
 public partial class Tomato(int dbId)
-    : AbstractMicrochipPlant(dbId), IAttributeEnumerable, IMaterialEnumerable, IUpgradable
+    : AbstractMicrochipPlant(dbId), IAttributeEnumerable, IMaterialEnumerable, IUpgradable, IObtainable,
+        IBroadcastsUpdate
 {
     public Tomato() : this(-1)
     {
@@ -23,9 +24,20 @@ public partial class Tomato(int dbId)
 
     protected const int STANDARDUPGRADEVAL = 10;
     protected const int ORGANPURCHASEMULTIPLIER = 20;
+    protected const double GLUCOSETORESOURCE = 7.14;
 
+    public event Action Updated;
+    //public event UpdatedEventHandler
     //protected int HpToStemRatio = 10;
 
+    public override bool Tick(double delta)
+    {
+        if (!base.Tick(delta))
+            return false;
+
+        Updated?.Invoke();
+        return true;
+    }
 
     public enum TomatoOrgans
     {
@@ -36,7 +48,6 @@ public partial class Tomato(int dbId)
         Flower,
         Fruit,
     }
-
 
     protected Dictionary<TomatoOrgans, int> Organs = new()
     {
@@ -61,13 +72,15 @@ public partial class Tomato(int dbId)
         return Photosynthesize();
     }
 
+
     protected override double Photosynthesize()
     {
-        double waterCo2Max = Math.Max(Resources[Rt.H2O].HasValue(PhotoSynthAmount),
+        double waterCo2Max = Math.Max(Resources[Rt.H2O].HasValue(PhotoSynthAmount * GetSunLevel()),
             Resources[Rt.Co2].HasValue(PhotoSynthAmount));
         Resources[Rt.Co2].Take(PhotoSynthAmount);
         Resources[Rt.H2O].Take(PhotoSynthAmount);
-        return waterCo2Max * GetSunLevel();
+        Resources[Rt.Glucose].Give(waterCo2Max);
+        return waterCo2Max;
     }
 
     protected double GlucoseUpgradeMax(Rt key, double glucose)
@@ -85,6 +98,24 @@ public partial class Tomato(int dbId)
     }
 
     /**
+     *
+     * Automatically runs to sustain plant
+     * When energy demand is greater than supply: hp is used instead
+     *
+     * Result: in case of energy underflow; hp loss
+     */
+    protected new double EnergyHp(double maxHpToGluRatio, double gluToEnergyRatio)
+    {
+        GD.Print("asdpoijnasodoiasjd\n");
+        double toTake = Resources[Rt.Health].Max * maxHpToGluRatio * gluToEnergyRatio; //Energy required in this run
+        double missingEnergy = toTake - Resources[Rt.Energy].Take(toTake);
+
+        double missingGlucose =
+            (toTake / gluToEnergyRatio) - Resources[Rt.Glucose].Take(missingEnergy / gluToEnergyRatio);
+        return Resources[Rt.Health].Take(missingGlucose / maxHpToGluRatio);
+    }
+
+    /**
      * Unsafe if given a negative
      */
     protected double GlucoseUpgradeFunction(double x)
@@ -92,82 +123,51 @@ public partial class Tomato(int dbId)
         return M * GrowthType(x) + B;
     }
 
-    protected bool ObtainResource(Rt key)
-    {
-        bool result = false;
-        switch (key)
-        {
-            case Rt.H2O:
-                if (Resources[Rt.Glucose].Amount < 5)
-                    break;
-                Resources[Rt.H2O].Give(100);
-                result = true;
-                break;
-        }
-
-
-        return result;
-    }
 
     protected bool CreateOrgan(TomatoOrgans key)
     {
+        //TODO CHANGE TO CHAGERESOURCEMAX()
         bool result = false;
         switch (key)
         {
             case TomatoOrgans.LeafStem:
-                if (Resources[Rt.Glucose].Amount < 50)
-                    break;
-
-                Organs[TomatoOrgans.LeafStem]++;
+                Organs[TomatoOrgans.LeafStem] += 1;
                 result = true;
                 break;
 
             case TomatoOrgans.FlowerStem:
-                if (Resources[Rt.Glucose].Amount < 60)
-                    break;
-
-                Organs[TomatoOrgans.Fruit]++;
+                Organs[TomatoOrgans.FlowerStem] += 1;
                 result = true;
                 break;
 
             case TomatoOrgans.Leaf:
-                if (Resources[Rt.Glucose].Amount < 10 || Organs[TomatoOrgans.LeafStem] <= 0)
-                    break;
-
-
                 Organs[TomatoOrgans.Leaf] += 2;
                 result = true;
                 break;
 
             case TomatoOrgans.Root:
-                if (Resources[Rt.Glucose].Amount < 20)
-                    break;
 
-                Organs[TomatoOrgans.Root]++;
+                Organs[TomatoOrgans.Root] += 1;
                 result = true;
                 break;
 
             case TomatoOrgans.Flower:
-                if (Resources[Rt.Glucose].Amount < 10 || Organs[TomatoOrgans.FlowerStem] <= 0)
-                    break;
 
                 Organs[TomatoOrgans.Flower] += 2;
                 result = true;
                 break;
 
             case TomatoOrgans.Fruit:
-                if (Resources[Rt.Glucose].Amount < 100 || Organs[TomatoOrgans.Flower] <= 0)
+                if (Organs[TomatoOrgans.Flower] <= 0)
                     break;
-
-
-                --Organs[TomatoOrgans.Flower];
-                ++Organs[TomatoOrgans.Fruit];
+                Organs[TomatoOrgans.Flower] -= 1;
+                Organs[TomatoOrgans.Fruit] += 1;
                 result = true;
                 break;
         }
 
         if (result)
-            Resources[Rt.Health].Give(10);
+            Resources[Rt.Health].ChangeMax(10);
 
         return result;
     }
@@ -200,7 +200,7 @@ public partial class Tomato(int dbId)
         bool result = false;
         if (Enum.TryParse(s, out Rt rtKey))
         {
-            var tempCost = GlucoseUpgradeFunction(Resources[rtKey].Amount);
+            var tempCost = GlucoseUpgradeFunction(Resources[rtKey].Max);
 
             if (tempCost <= Resources[Rt.Glucose].Amount)
             {
@@ -211,13 +211,39 @@ public partial class Tomato(int dbId)
         }
         else if (Enum.TryParse(s, out TomatoOrgans tomatoKey))
         {
+            GD.Print("asdojaosijdasoipjd\n");
             var tempCost = GlucoseUpgradeFunction(Organs[tomatoKey] * ORGANPURCHASEMULTIPLIER);
             if (tempCost <= Resources[Rt.Glucose].Amount)
             {
                 Resources[Rt.Glucose].Take(tempCost);
-                Organs[tomatoKey] += 1;
-                result = true;
+                result = CreateOrgan(tomatoKey);
+                ;
             }
+        }
+
+        return result;
+    }
+
+    public virtual bool ParseObtain(string s)
+    {
+        bool result = false;
+        if (Enum.TryParse(s, out Rt rtKey))
+        {
+            if (rtKey == Rt.Glucose)
+            {
+                //Do nothing
+            }
+            else if (rtKey == Rt.H2O)
+            {
+                if (MyContainer.HasWater())
+                    DrawWater(GLUCOSETORESOURCE * Resources[Rt.Glucose].Take(STANDARDUPGRADEVAL));
+            }
+            else
+            {
+                Resources[rtKey].Give(GLUCOSETORESOURCE * Resources[Rt.Glucose].Take(STANDARDUPGRADEVAL));
+            }
+
+            result = true;
         }
 
         return result;

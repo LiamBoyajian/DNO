@@ -80,6 +80,16 @@ public partial class PlantGui : AnimatedSprite2D
         return string.Compare(Animation, "dead") == 0;
     }
 
+    public bool SetGrowthFrame(int frame)
+    {
+        if (frame < 0 || frame >= SpriteFrames.GetFrameCount(Animation))
+            return false;
+
+        Frame = frame;
+
+        return true;
+    }
+
     public void OnClickMe(Node viewport, InputEvent @event, long shapeIdx)
     {
         if (!@event.IsAction("alt_click"))

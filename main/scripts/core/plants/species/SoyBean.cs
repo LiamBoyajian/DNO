@@ -15,9 +15,6 @@ public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
 
     public override void _Ready()
     {
-        HpToEnergyRatio = .1; //arbitrary value per plant species
-        HpEnergyValue = 15;
-        GlucoseToEnergyRatio = 25;
         base._Ready();
     }
 
@@ -94,8 +91,7 @@ public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
     //--------------------------------------------------------------------------
     protected override double Consume(double amount)
     {
-        return base.Consume(Resources[Rt.Glucose].Take(MyResources[Rt.Energy].Max) / GlucoseToEnergyRatio);
-        ;
+        return base.Consume(Resources[Rt.Glucose].Take(MyResources[Rt.Energy].Max) / ConvertGluToEnergyRatio);
     }
 
     protected override double Grow(Enum resource, double amount)

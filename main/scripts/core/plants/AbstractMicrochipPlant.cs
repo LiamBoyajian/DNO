@@ -6,6 +6,7 @@ using Main.main.scripts.model;
 using Main.Source.main;
 using PlantGui = Main.main.scripts.core.util.PlantGui;
 using System.Linq;
+using ContainPlant = Main.main.scripts.core.util.ContainPlant;
 
 namespace Main.main.scripts.core.plants;
 
@@ -16,10 +17,9 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     }
 
     [Export] protected PlantGui GuiManager;
+    [Export] protected double ConvertHpToGluRatio = .1;
+    [Export] protected double ConvertGluToEnergyRatio = .05;
 
-    protected double HpToEnergyRatio;
-    protected double HpEnergyValue;
-    protected double GlucoseToEnergyRatio;
     protected PlantDb PlantInstance;
     protected int MaxStrands;
 
@@ -27,7 +27,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     protected string DatabasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
 
     protected ContainPlant
-        MyContainer; //TODO this should be replaced with some new implementation. Only used for testing and simple environmental control
+        MyContainer;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -49,30 +49,25 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
             Tick(delta);
     }
 
-    public override void Tick(double delta)
+    public override bool Tick(double delta)
     {
         FrameSum += delta;
         if (FrameSum < 2.0)
-            return;
+            return false;
 
         ObtainGlucose();
-        CheckHeadGenes();
+        //CheckHeadGenes();
+
         //THESE VALUES ARE TESTING CONSTANTS :: SHOULD BE REPLACED WITH SOME SET CONSTANT LATER
-        Console.Write($"\nHEALTH REMAINING: {MyResources[Rt.Health].Amount} - ");
-        Console.Write($"GLUCOSE REMAINING: {MyResources[Rt.Glucose].Amount} - ");
-        Console.Write($"ENERGY REMAINING: {MyResources[Rt.Energy].Amount}");
 
-        EnergyHp(HpToEnergyRatio, HpEnergyValue);
-
-
-        Console.Write($"\nHEALTH REMAINING: {MyResources[Rt.Health].Amount} - ");
-        Console.Write($"GLUCOSE REMAINING: {MyResources[Rt.Glucose].Amount} - ");
-        Console.Write($"ENERGY REMAINING: {MyResources[Rt.Energy].Amount}");
+        EnergyHp(ConvertHpToGluRatio, ConvertGluToEnergyRatio);
 
 
         IsDeadThenDeadFrame();
         FrameSum = 0.0;
+        return true;
     }
+
 
     protected bool CheckHeadGenes()
     {
@@ -170,7 +165,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     protected double DrawWater(double amount)
     {
         if (!MyContainer.HasWater()) return 0;
-        return AcceptWater(MyContainer.Water.Take(amount));
+        return Resources[Rt.H2O].Give(MyContainer.Water.Take(amount));
     }
 
     public ContainPlant LinkParentContainer(ContainPlant container)
