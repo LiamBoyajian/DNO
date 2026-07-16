@@ -34,8 +34,20 @@ public abstract partial class DisappearSlot : Panel
 
 
         if (!AfterAccepted(data)) return;
-        Accepting = false;
-        Hide();
+        IsAccepting(false);
+    }
+
+    public void IsAccepting(bool value = true)
+    {
+        Accepting = value;
+        if (Accepting)
+        {
+            Show();
+        }
+        else
+        {
+            Hide();
+        }
     }
 
     public abstract bool AfterAccepted(Variant seed);

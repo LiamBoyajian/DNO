@@ -52,7 +52,7 @@ public partial class AcceptSeed : DisappearSlot
         animatedSprite.SpriteFrames = seed.GetFrames();
 
         animatedSprite.Scale *= 4;
-        animatedSprite.Position = new Vector2(0, -78); //TODO bad hardcoded
+        animatedSprite.Position = new Vector2(0, -29); //TODO bad hardcoded
 
 
         var newPlant = parentContainPlant.AcceptSeed(plant, seed.GetPlantDbId());

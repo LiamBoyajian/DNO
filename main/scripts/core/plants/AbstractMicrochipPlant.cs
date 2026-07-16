@@ -33,6 +33,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     public override void _Ready()
     {
         GuiManager ??= GetChild<PlantGui>(0);
+        GuiManager.DugUp += DigUp;
     }
 
     public void Init()

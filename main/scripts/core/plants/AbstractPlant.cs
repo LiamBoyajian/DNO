@@ -51,7 +51,7 @@ public abstract partial class AbstractPlant : Node
         Resources.ToDictionary(k => k.Key, IMaterialResource (v) => v.Value);
 
     protected double FrameSum = 0.0;
-
+    public event Action DugUp;
 
     //-----------------------------
 
@@ -127,6 +127,11 @@ public abstract partial class AbstractPlant : Node
     protected double AcceptWater(double waterAmount)
     {
         return Resources[Rt.H2O].Give(waterAmount);
+    }
+
+    public void DigUp()
+    {
+        DugUp?.Invoke();
     }
 
     protected abstract bool GrowthUpdateFrame();

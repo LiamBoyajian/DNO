@@ -1,4 +1,6 @@
+using System;
 using Godot;
+using Main.main.common.core.templates;
 using Main.main.scripts.core.plants;
 
 namespace Main.main.scripts.core.util;
@@ -8,11 +10,13 @@ public partial class PlantGui : AnimatedSprite2D
     //requires specifically named frames to run 
     [Export] protected Area2D ClickArea;
     protected AbstractPlant ParentPlant;
+    public event Action DugUp;
 
     public override void _Ready()
     {
         Play("default");
         ClickArea.InputEvent += OnClickMe;
+        ClickArea.BodyEntered += BodyEnteredEventHandler;
         if (ClickArea is null)
             ClickArea = GetNode<Area2D>("PopupArea");
 
@@ -95,5 +99,17 @@ public partial class PlantGui : AnimatedSprite2D
         if (!@event.IsAction("alt_click"))
             return;
         TwoSidedPlantPopup.Instance.Popup(ParentPlant);
+    }
+
+    private void BodyEnteredEventHandler(Node2D node2D)
+    {
+        if (node2D is RigidBody2D rb)
+        {
+            if (rb.GetParent() is Shovel)
+            {
+                ParentPlant.QueueFree();
+                DugUp?.Invoke();
+            }
+        }
     }
 }

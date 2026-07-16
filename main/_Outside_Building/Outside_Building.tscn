@@ -1,9 +1,10 @@
 [gd_scene format=3 uid="uid://h1n7j6elr0cp"]
 
-[ext_resource type="SpriteFrames" uid="uid://bt50dg3t132un" path="res://main/sprites/tools/shovel.aseprite" id="1_0it47"]
-[ext_resource type="PackedScene" uid="uid://crwvq7uuoce5k" path="res://main/common/core/templates/pot_plant_container.tscn" id="4_0it47"]
+[ext_resource type="PackedScene" uid="uid://wjfmciseoumw" path="res://main/common/core/templates/shovel.tscn" id="1_2u2wv"]
+[ext_resource type="Texture2D" uid="uid://be4k6m5xojps6" path="res://main/common/sprites/plant containers/pot_terracotta.aseprite" id="1_ga1pc"]
+[ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://main/scripts/core/util/ContainPlant.cs" id="2_7npfq"]
 [ext_resource type="Texture2D" uid="uid://dlch3jnjbtmhp" path="res://main/_Outside_Building/sprites/outside.aseprite" id="5_g2r01"]
-[ext_resource type="Script" uid="uid://cokr7pkm3d1y3" path="res://main/scripts/core/util/inventory/InventorySlot.cs" id="6_2jrj6"]
+[ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/scripts/core/util/AcceptSeed.cs" id="6_iml5x"]
 [ext_resource type="PackedScene" uid="uid://336qp8djyjhc" path="res://main/common/ui/inventory_bar/inventory_bar.tscn" id="6_o5f0g"]
 [ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/common/ui/inventory_bar/inventorySquare.tscn" id="7_4w7ee"]
 [ext_resource type="Script" uid="uid://02ud7o278srr" path="res://main/scripts/core/util/ItemSeed.cs" id="7_rcbep"]
@@ -19,13 +20,8 @@ size = Vector2(90, 74)
 
 [node name="OutsideLab" type="Node2D" unique_id=1082450297]
 
-[node name="Por" parent="." unique_id=1437099568 instance=ExtResource("4_0it47")]
-position = Vector2(324, 317)
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=2019402981]
+[node name="shovel" parent="." unique_id=1516381891 instance=ExtResource("1_2u2wv")]
 position = Vector2(272, 291)
-rotation = -0.4660029
-sprite_frames = ExtResource("1_0it47")
 
 [node name="bg" type="Sprite2D" parent="." unique_id=517609415]
 z_index = -5
@@ -43,7 +39,6 @@ offset_left = 157.5
 offset_top = 137.5
 offset_right = 192.5
 offset_bottom = 172.5
-script = ExtResource("6_2jrj6")
 
 [node name="Seed" type="TextureRect" parent="Panel" unique_id=1930486734]
 layout_mode = 0
@@ -63,3 +58,21 @@ _targetScene = ExtResource("13_e7x2h")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="IntoBuilding" unique_id=671539743]
 position = Vector2(-1, -7)
 shape = SubResource("RectangleShape2D_mrq1q")
+
+[node name="Pot" type="Sprite2D" parent="." unique_id=1780480357]
+position = Vector2(339, 324)
+scale = Vector2(0.25, 0.25)
+texture = ExtResource("1_ga1pc")
+script = ExtResource("2_7npfq")
+
+[node name="AcceptSeed" type="Panel" parent="Pot" unique_id=596873023]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.1
+anchor_right = 0.5
+anchor_bottom = 0.1
+offset_left = -94.0
+offset_top = -118.0
+offset_right = -6.0
+offset_bottom = -50.0
+script = ExtResource("6_iml5x")

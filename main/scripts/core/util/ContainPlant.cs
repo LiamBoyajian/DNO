@@ -13,6 +13,8 @@ public partial class ContainPlant : Sprite2D
     public MaterialResource Water = new MaterialResource(500.0, 1000.0);
     protected Node Plant = null;
 
+    [Export] private AcceptSeed _acceptSeed;
+
     // Called when the node enters the scene tree for the first time.
     protected const uint HealthCapacity = 100;
 
@@ -20,6 +22,9 @@ public partial class ContainPlant : Sprite2D
 
     public override void _Ready()
     {
+        if (_acceptSeed == null)
+            _acceptSeed = GetNode<AcceptSeed>("AcceptSeed");
+
         Console.Write($"\n {GetTotalLoad()}");
     }
 
@@ -115,7 +120,13 @@ public partial class ContainPlant : Sprite2D
 
 
         AddChild(plant);
+        p.DugUp += DugUpEventHandler;
 
         return plant;
+    }
+
+    public void DugUpEventHandler()
+    {
+        _acceptSeed.IsAccepting();
     }
 }
