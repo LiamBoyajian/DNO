@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://wjfmciseoumw"]
 
 [ext_resource type="SpriteFrames" uid="uid://bt50dg3t132un" path="res://main/sprites/tools/shovel.aseprite" id="1_6uqc1"]
-[ext_resource type="Script" uid="uid://erfup75q2bqc" path="res://main/common/core/templates/Shovel.cs" id="1_d57mi"]
+[ext_resource type="Script" uid="uid://erfup75q2bqc" path="res://main/scripts/core/util/items/tools/Shovel.cs" id="1_d57mi"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mrq1q"]
 radius = 2.8284276
@@ -9,13 +9,11 @@ radius = 2.8284276
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
 size = Vector2(46.141087, 6.925164)
 
-[node name="shovel" type="PinJoint2D" unique_id=2081741102 node_paths=PackedStringArray("CollisionArea2D", "Body2D")]
+[node name="shovel" type="PinJoint2D" unique_id=2081741102]
 rotation = -0.7853982
 node_a = NodePath("StaticBody2D")
 node_b = NodePath("RigidBody2D")
 script = ExtResource("1_d57mi")
-CollisionArea2D = NodePath("RigidBody2D")
-Body2D = NodePath("StaticBody2D")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=543828916]
 

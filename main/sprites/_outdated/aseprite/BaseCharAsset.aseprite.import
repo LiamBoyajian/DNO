@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://ho3lqixbcbmu"
+path="res://.godot/imported/BaseCharAsset.aseprite-add723b7a1306991505419ea20ea9794.res"
+
+[deps]
+
+source_file="res://main/sprites/_outdated/aseprite/BaseCharAsset.aseprite"
+dest_files=["res://.godot/imported/BaseCharAsset.aseprite-add723b7a1306991505419ea20ea9794.res"]
+
+[params]
+

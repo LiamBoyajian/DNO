@@ -25,7 +25,6 @@ public partial class TwoSidedPlantPopup : Window, IPlantPopup
         MaterialResourcesContainer.Buttons.Pressed += ButtonGroupWasPressed;
         InfiniteResourcesContainer.Buttons.Pressed += ButtonGroupWasPressed;
 
-
         OnClose();
     }
 

@@ -1,0 +1,22 @@
+[remap]
+
+importer="aseprite_wizard.plugin.spriteframes-split"
+type="PackedDataContainer"
+uid="uid://iccqa8wu32m2"
+path="res://.godot/imported/labBG.aseprite-57a235fc5fef88ef49c6a25765e2e891.res"
+
+[deps]
+
+source_file="res://main/sprites/draft/labBG.aseprite"
+dest_files=["res://.godot/imported/labBG.aseprite-57a235fc5fef88ef49c6a25765e2e891.res"]
+
+[params]
+
+layer/exclude_layers_pattern=""
+layer/only_visible_layers=true
+sheet/sheet_type="packed"
+sheet/sheet_columns=12
+sheet/frame_padding=0
+sheet/scale=1
+animation/round_fps=true
+output/layers_resources_folder="res://Scenes/Assets/TESTLab Assets"

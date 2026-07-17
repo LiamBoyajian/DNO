@@ -1,7 +1,9 @@
 using System;
 using Godot;
-using Main.main.common.core.templates;
 using Main.main.scripts.core.plants;
+using Main.main.scripts.core.util.inventory;
+using Main.main.scripts.core.util.items.tools;
+using Shovel = Main.main.scripts.core.util.items.tools.Shovel;
 
 namespace Main.main.scripts.core.util;
 
@@ -17,6 +19,8 @@ public partial class PlantGui : AnimatedSprite2D
         Play("default");
         ClickArea.InputEvent += OnClickMe;
         ClickArea.BodyEntered += BodyEnteredEventHandler;
+        ClickArea.AreaEntered += BodyEnteredEventHandler;
+
         if (ClickArea is null)
             ClickArea = GetNode<Area2D>("PopupArea");
 
@@ -103,6 +107,29 @@ public partial class PlantGui : AnimatedSprite2D
 
     private void BodyEnteredEventHandler(Node2D node2D)
     {
+        if (node2D.GetParent() is AbstractTool tool)
+        {
+            switch (tool.Type)
+            {
+                case ToolType.PruningShears:
+                    if (ParentPlant is IShearable shearable)
+                    {
+                        var sheared = shearable.Shear(1);
+                        InventoryDisplay.Instance.AddMoney(sheared, true);
+                    }
+
+                    break;
+
+                case ToolType.Shovel:
+                    if (ParentPlant is { } abstractPlant)
+                    {
+                        abstractPlant.DigUp();
+                    }
+
+                    break;
+            }
+        }
+
         if (node2D is RigidBody2D rb)
         {
             if (rb.GetParent() is Shovel)

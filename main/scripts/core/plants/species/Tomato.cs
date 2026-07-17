@@ -4,13 +4,14 @@ using System.Linq;
 using Godot;
 using Main.main.scripts.core.plants.interfaces;
 using Main.main.scripts.core.util.interfaces;
+using Main.main.scripts.core.util.inventory;
 using Main.Source.main;
 
 namespace Main.main.scripts.core.plants.species;
 
 public partial class Tomato(int dbId)
     : AbstractMicrochipPlant(dbId), IAttributeEnumerable, IMaterialEnumerable, IUpgradable, IObtainable,
-        IBroadcastsUpdate
+        IBroadcastsUpdate, IShearable
 {
     public Tomato() : this(-1)
     {
@@ -75,8 +76,10 @@ public partial class Tomato(int dbId)
 
     protected override double Photosynthesize()
     {
-        double waterCo2Max = Math.Max(Resources[Rt.H2O].HasValue(PhotoSynthAmount * GetSunLevel()),
+        double waterCo2Max = Math.Min(Resources[Rt.H2O].HasValue(PhotoSynthAmount * GetSunLevel()),
             Resources[Rt.Co2].HasValue(PhotoSynthAmount));
+        if (waterCo2Max <= 0.0)
+            return 0;
         Resources[Rt.Co2].Take(PhotoSynthAmount);
         Resources[Rt.H2O].Take(PhotoSynthAmount);
         Resources[Rt.Glucose].Give(waterCo2Max);
@@ -217,7 +220,6 @@ public partial class Tomato(int dbId)
             {
                 Resources[Rt.Glucose].Take(tempCost);
                 result = CreateOrgan(tomatoKey);
-                ;
             }
         }
 
@@ -246,6 +248,31 @@ public partial class Tomato(int dbId)
             result = true;
         }
 
+        return result;
+    }
+
+    public int GetShear()
+    {
+        return Organs[TomatoOrgans.Fruit];
+    }
+
+    public int Shear(int sheared)
+    {
+        if (sheared <= 0) return 0;
+
+        int result;
+        if (sheared <= Organs[TomatoOrgans.Fruit])
+        {
+            result = sheared;
+            Organs[TomatoOrgans.Fruit] -= sheared;
+        }
+        else
+        {
+            result = Organs[TomatoOrgans.Fruit];
+            Organs[TomatoOrgans.Fruit] = 0;
+        }
+
+        Updated?.Invoke();
         return result;
     }
 }

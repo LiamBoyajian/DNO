@@ -129,8 +129,9 @@ public abstract partial class AbstractPlant : Node
         return Resources[Rt.H2O].Give(waterAmount);
     }
 
-    public void DigUp()
+    public virtual void DigUp()
     {
+        QueueFree(); //Can change implementation later
         DugUp?.Invoke();
     }
 
