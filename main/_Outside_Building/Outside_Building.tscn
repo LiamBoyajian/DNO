@@ -5,17 +5,14 @@
 [ext_resource type="Texture2D" uid="uid://dlch3jnjbtmhp" path="res://main/_Outside_Building/sprites/outside.aseprite" id="5_g2r01"]
 [ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/scripts/core/util/AcceptSeed.cs" id="6_iml5x"]
 [ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/common/ui/inventory_bar/inventorySquare.tscn" id="7_4w7ee"]
-[ext_resource type="Script" uid="uid://02ud7o278srr" path="res://main/scripts/core/util/ItemSeed.cs" id="7_rcbep"]
-[ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="7_ukbo7"]
-[ext_resource type="Script" uid="uid://cw6gylr1o30f0" path="res://main/scripts/core/plants/species/Tomato.cs" id="9_iml5x"]
-[ext_resource type="SpriteFrames" uid="uid://dja4egrke0cwa" path="res://main/common/sprites/sprite_frames/soybean.tres" id="10_iml5x"]
-[ext_resource type="PackedScene" uid="uid://c4ll7m6ooasli" path="res://main/common/core/templates/_Template_Plant.tscn" id="11_iml5x"]
 [ext_resource type="Script" uid="uid://q70ssyayrj2k" path="res://main/scripts/scene/SceneTransitionTemplate.cs" id="12_rcbep"]
 [ext_resource type="PackedScene" uid="uid://hkrl88j77qi4" path="res://main/_UI_Computer/UI_Computer.tscn" id="13_e7x2h"]
 [ext_resource type="PackedScene" uid="uid://cx6bs6vejxjwf" path="res://main/mc.tscn" id="15_0it47"]
 [ext_resource type="SpriteFrames" uid="uid://bt50dg3t132un" path="res://main/sprites/tools/shovel.aseprite" id="15_jor3e"]
 [ext_resource type="Script" uid="uid://cb2k8gm1kk334" path="res://main/scripts/core/util/items/tools/PruningShears.cs" id="15_wsn04"]
 [ext_resource type="Script" uid="uid://cnbtcf5757nje" path="res://main/scripts/core/util/items/tools/TemplateTool.cs" id="16_wsn04"]
+[ext_resource type="SpriteFrames" uid="uid://ggsqcdse0e63" path="res://main/sprites/draft/ShopAccess.aseprite" id="17_mrhur"]
+[ext_resource type="Script" uid="uid://b7susdvg0gxnq" path="res://main/scripts/core/util/ShopFrontStructure.cs" id="18_0tr86"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
 size = Vector2(90, 74)
@@ -37,20 +34,11 @@ offset_top = 137.5
 offset_right = 192.5
 offset_bottom = 172.5
 
-[node name="Seed" type="TextureRect" parent="Panel" unique_id=1930486734]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("7_ukbo7")
-script = ExtResource("7_rcbep")
-PlantType = ExtResource("9_iml5x")
-Frames = ExtResource("10_iml5x")
-PlantScene = ExtResource("11_iml5x")
-
 [node name="IntoBuilding" type="Area2D" parent="." unique_id=914254641]
 position = Vector2(499, 283)
 script = ExtResource("12_rcbep")
 _targetScene = ExtResource("13_e7x2h")
+Enabled = false
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="IntoBuilding" unique_id=671539743]
 position = Vector2(-1, -7)
@@ -108,3 +96,9 @@ position = Vector2(3.2500305, 0.25003052)
 rotation = 0.7853982
 scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_aoqhg")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=677269060]
+position = Vector2(222, 311)
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("17_mrhur")
+script = ExtResource("18_0tr86")

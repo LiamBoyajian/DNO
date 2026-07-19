@@ -12,11 +12,15 @@ public partial class PlantGui : AnimatedSprite2D
     //requires specifically named frames to run 
     [Export] protected Area2D ClickArea;
     protected AbstractPlant ParentPlant;
+    public string NoGrowth = "no_growth";
+    public string Dead = "dead";
+    public string Default = "default";
     public event Action DugUp;
 
     public override void _Ready()
     {
-        Play("default");
+        Play(Default);
+        Stop();
         ClickArea.InputEvent += OnClickMe;
         ClickArea.BodyEntered += BodyEnteredEventHandler;
         ClickArea.AreaEntered += BodyEnteredEventHandler;
@@ -38,7 +42,7 @@ public partial class PlantGui : AnimatedSprite2D
      */
     public void DeadFrame()
     {
-        Play("dead");
+        Play(Dead);
     }
 
     /**
@@ -46,7 +50,7 @@ public partial class PlantGui : AnimatedSprite2D
      */
     public void NoGrowthFrame()
     {
-        Play("ground");
+        Play(NoGrowth);
     }
 
     /**
@@ -85,7 +89,7 @@ public partial class PlantGui : AnimatedSprite2D
 
     public bool IsShowingDead()
     {
-        return string.Compare(Animation, "dead") == 0;
+        return string.Compare(Animation, Dead) == 0;
     }
 
     public bool SetGrowthFrame(int frame)

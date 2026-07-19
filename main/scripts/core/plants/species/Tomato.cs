@@ -35,8 +35,8 @@ public partial class Tomato(int dbId)
     {
         if (!base.Tick(delta))
             return false;
-
-        Updated?.Invoke();
+        UpdatePlantGuiFrame();
+        Updated?.Invoke(); //
         return true;
     }
 
@@ -66,6 +66,9 @@ public partial class Tomato(int dbId)
     {
         base._Ready();
         DbId = -1;
+        GuiManager.NoGrowth = "no_growth";
+        GuiManager.Dead = "no_growth";
+        GuiManager.Default = "default";
     }
 
     protected override double ObtainGlucose()
@@ -250,6 +253,55 @@ public partial class Tomato(int dbId)
 
         return result;
     }
+
+    /**
+     * returns the current frame and updates
+     * -2 == dead
+     * -1 == no growth
+     * 0 == first growth frame
+     * n = current growth frame
+     *
+     */
+    public int UpdatePlantGuiFrame()
+    {
+        //Horrible method -- replacing later surely
+        var result = -2;
+        double health = Resources[Rt.Health].Max;
+        if (health <= 0) return -2; //dead
+        Resources[Rt.Health].ChangeMax(2000);
+        switch (health)
+        {
+            case < 0:
+                GuiManager.Animation = "no_growth";
+                break;
+            case < 10:
+                GuiManager.Animation = "no_growth";
+                break;
+            case >= 500:
+                GuiManager.Animation = "fruiting";
+                GuiManager.Stop();
+                GuiManager.Frame = Mathf.Clamp(Organs[TomatoOrgans.Fruit], 0, 8);
+                break;
+            case >= 200:
+                GuiManager.Frame = 4;
+                break;
+            case >= 100:
+                GuiManager.Frame = 3;
+                break;
+            case >= 50:
+                GuiManager.Frame = 2;
+                break;
+            case >= 20:
+                GuiManager.Frame = 1;
+                break;
+            case >= 10:
+                GuiManager.Frame = 0;
+                break;
+        }
+
+        return GuiManager.Frame;
+    }
+
 
     public int GetShear()
     {
