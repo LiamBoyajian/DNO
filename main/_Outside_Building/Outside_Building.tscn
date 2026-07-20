@@ -1,5 +1,6 @@
 [gd_scene format=3 uid="uid://h1n7j6elr0cp"]
 
+[ext_resource type="Script" uid="uid://bofv8ccitqg80" path="res://main/scripts/scene/BasicScene.cs" id="1_2u2wv"]
 [ext_resource type="Texture2D" uid="uid://be4k6m5xojps6" path="res://main/common/sprites/plant containers/pot_terracotta.aseprite" id="1_ga1pc"]
 [ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://main/scripts/core/util/ContainPlant.cs" id="2_7npfq"]
 [ext_resource type="Texture2D" uid="uid://dlch3jnjbtmhp" path="res://main/_Outside_Building/sprites/outside.aseprite" id="5_g2r01"]
@@ -17,11 +18,35 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
 size = Vector2(90, 74)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ygq3"]
+size = Vector2(370, 69)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aoqhg"]
 size = Vector2(9.192362, 50.91172)
 
-[node name="OutsideLab" type="Node2D" unique_id=1082450297]
+[node name="OutsideLab" type="Node2D" unique_id=1082450297 node_paths=PackedStringArray("Boundaries")]
 y_sort_enabled = true
+script = ExtResource("1_2u2wv")
+Boundaries = NodePath("Boundaries")
+
+[node name="mc" parent="." unique_id=2056976437 instance=ExtResource("15_0it47")]
+position = Vector2(375, 341)
+
+[node name="IntoBuilding" type="Area2D" parent="." unique_id=914254641]
+position = Vector2(499, 283)
+script = ExtResource("12_rcbep")
+_targetScene = ExtResource("13_e7x2h")
+Enabled = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="IntoBuilding" unique_id=671539743]
+position = Vector2(-1, -7)
+shape = SubResource("RectangleShape2D_mrq1q")
+
+[node name="Boundaries" type="Area2D" parent="." unique_id=1040490365]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Boundaries" unique_id=254963865]
+position = Vector2(460, 344.5)
+shape = SubResource("RectangleShape2D_1ygq3")
 
 [node name="bg" type="Sprite2D" parent="." unique_id=517609415]
 z_index = -5
@@ -33,16 +58,6 @@ offset_left = 157.5
 offset_top = 137.5
 offset_right = 192.5
 offset_bottom = 172.5
-
-[node name="IntoBuilding" type="Area2D" parent="." unique_id=914254641]
-position = Vector2(499, 283)
-script = ExtResource("12_rcbep")
-_targetScene = ExtResource("13_e7x2h")
-Enabled = false
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="IntoBuilding" unique_id=671539743]
-position = Vector2(-1, -7)
-shape = SubResource("RectangleShape2D_mrq1q")
 
 [node name="Pot" type="Sprite2D" parent="." unique_id=1780480357]
 position = Vector2(340, 325)
@@ -61,10 +76,6 @@ offset_top = -118.0
 offset_right = -6.0
 offset_bottom = -50.0
 script = ExtResource("6_iml5x")
-
-[node name="mc" parent="." unique_id=2056976437 instance=ExtResource("15_0it47")]
-visible = false
-position = Vector2(353, 351)
 
 [node name="Shears" type="AnimatedSprite2D" parent="." unique_id=97293574 node_paths=PackedStringArray("ClickArea")]
 modulate = Color(0.29862767, 0.7047631, 0.9481177, 1)
