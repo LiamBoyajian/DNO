@@ -17,6 +17,7 @@
         <Content Include="main\scripts\scene\Gene_Window_Item_List.gd.uid"/>
     </ItemGroup>
     <ItemGroup>
+        <Folder Include="addons\"/>
         <Folder Include="main\common\core\templates\"/>
         <Folder Include="main\common\ui\templatePopup\resources\"/>
         <Folder Include="main\scripts\tests\"/>
