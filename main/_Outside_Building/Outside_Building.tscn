@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://h1n7j6elr0cp"]
 
 [ext_resource type="Script" uid="uid://bofv8ccitqg80" path="res://main/scripts/scene/BasicScene.cs" id="1_2u2wv"]
-[ext_resource type="Texture2D" uid="uid://be4k6m5xojps6" path="res://main/common/sprites/plant containers/pot_terracotta.aseprite" id="1_ga1pc"]
 [ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://main/scripts/core/util/ContainPlant.cs" id="2_7npfq"]
 [ext_resource type="Texture2D" uid="uid://dlch3jnjbtmhp" path="res://main/_Outside_Building/sprites/outside.aseprite" id="5_g2r01"]
 [ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/scripts/core/util/AcceptSeed.cs" id="6_iml5x"]
-[ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/common/ui/inventory_bar/inventorySquare.tscn" id="7_4w7ee"]
+[ext_resource type="Texture2D" uid="uid://dvopcy32y8dul" path="res://main/sprites/draft/pot.aseprite" id="7_0it47"]
 [ext_resource type="Script" uid="uid://q70ssyayrj2k" path="res://main/scripts/scene/SceneTransitionTemplate.cs" id="12_rcbep"]
 [ext_resource type="PackedScene" uid="uid://hkrl88j77qi4" path="res://main/_UI_Computer/UI_Computer.tscn" id="13_e7x2h"]
 [ext_resource type="PackedScene" uid="uid://cx6bs6vejxjwf" path="res://main/mc.tscn" id="15_0it47"]
 [ext_resource type="SpriteFrames" uid="uid://bt50dg3t132un" path="res://main/sprites/tools/shovel.aseprite" id="15_jor3e"]
+[ext_resource type="SpriteFrames" uid="uid://blvnsm74f8kri" path="res://main/sprites/plants/tomato.aseprite" id="15_mrhur"]
 [ext_resource type="Script" uid="uid://cb2k8gm1kk334" path="res://main/scripts/core/util/items/tools/PruningShears.cs" id="15_wsn04"]
 [ext_resource type="Script" uid="uid://cnbtcf5757nje" path="res://main/scripts/core/util/items/tools/TemplateTool.cs" id="16_wsn04"]
 [ext_resource type="SpriteFrames" uid="uid://ggsqcdse0e63" path="res://main/sprites/draft/ShopAccess.aseprite" id="17_mrhur"]
@@ -19,7 +19,7 @@
 size = Vector2(90, 74)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ygq3"]
-size = Vector2(370, 69)
+size = Vector2(370, 61)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aoqhg"]
 size = Vector2(9.192362, 50.91172)
@@ -45,7 +45,7 @@ shape = SubResource("RectangleShape2D_mrq1q")
 [node name="Boundaries" type="Area2D" parent="." unique_id=1040490365]
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Boundaries" unique_id=254963865]
-position = Vector2(460, 344.5)
+position = Vector2(460, 348.5)
 shape = SubResource("RectangleShape2D_1ygq3")
 
 [node name="bg" type="Sprite2D" parent="." unique_id=517609415]
@@ -53,28 +53,24 @@ z_index = -5
 position = Vector2(320, 180)
 texture = ExtResource("5_g2r01")
 
-[node name="Panel" parent="." unique_id=1845670035 instance=ExtResource("7_4w7ee")]
-offset_left = 157.5
-offset_top = 137.5
-offset_right = 192.5
-offset_bottom = 172.5
-
 [node name="Pot" type="Sprite2D" parent="." unique_id=1780480357]
-position = Vector2(340, 325)
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("1_ga1pc")
+position = Vector2(330, 301)
+texture = ExtResource("7_0it47")
+offset = Vector2(0, 7.5)
 script = ExtResource("2_7npfq")
 
 [node name="AcceptSeed" type="Panel" parent="Pot" unique_id=596873023]
+modulate = Color(1, 1, 1, 0.31764707)
 anchors_preset = -1
-anchor_left = 0.5
-anchor_top = 0.1
-anchor_right = 0.5
-anchor_bottom = 0.1
-offset_left = -94.0
-offset_top = -118.0
-offset_right = -6.0
-offset_bottom = -50.0
+anchor_left = 0.48000002
+anchor_top = 0.18
+anchor_right = 0.48000002
+anchor_bottom = 0.18
+offset_left = -21.000002
+offset_top = -21.5
+offset_right = -3.0
+offset_bottom = -5.0
+offset_transform_visual_only = false
 script = ExtResource("6_iml5x")
 
 [node name="Shears" type="AnimatedSprite2D" parent="." unique_id=97293574 node_paths=PackedStringArray("ClickArea")]
@@ -94,7 +90,7 @@ scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_aoqhg")
 
 [node name="Shovel" type="AnimatedSprite2D" parent="." unique_id=198880228 node_paths=PackedStringArray("ClickArea")]
-position = Vector2(326, 264)
+position = Vector2(385, 213)
 sprite_frames = ExtResource("15_jor3e")
 script = ExtResource("16_wsn04")
 Type = 1
@@ -109,7 +105,15 @@ scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_aoqhg")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=677269060]
-position = Vector2(222, 311)
+position = Vector2(592, 279)
 scale = Vector2(0.5, 0.5)
 sprite_frames = ExtResource("17_mrhur")
 script = ExtResource("18_0tr86")
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="." unique_id=1249555760]
+visible = false
+position = Vector2(340, 288)
+sprite_frames = ExtResource("15_mrhur")
+animation = &"fruiting"
+frame_progress = 0.16592558
+offset = Vector2(0, -25)

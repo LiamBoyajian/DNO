@@ -5,7 +5,7 @@ using Main.Source.main;
 
 namespace Main.main.scripts.core.util;
 
-public partial class ResourceDisplay : BoxContainer
+public partial class ResourceDisplay : Container
 {
     [Export] public PackedScene ProgressBarTemplate { get; set; }
     [Export] public PackedScene ButtonTemplate { get; set; }
@@ -20,7 +20,7 @@ public partial class ResourceDisplay : BoxContainer
      * Seperates the individual elements
      */
     [Export]
-    public PackedScene BoxContainer { get; private set; }
+    public PackedScene SubContainer { get; private set; }
 
 
     // Called when the node enters the scene tree for the first time.
@@ -35,7 +35,7 @@ public partial class ResourceDisplay : BoxContainer
             System.Diagnostics.Debug.Assert(false, "ProgressBarTemplate is not type ProgressBar");
 
 
-        var tB = ButtonTemplate.Instantiate() as Button;
+        var tB = ButtonTemplate.Instantiate() as BaseButton;
         if (tB == null)
             System.Diagnostics.Debug.Assert(false, "ButtonTemplate is not type ProgressBar");
     }
@@ -66,7 +66,7 @@ public partial class ResourceDisplay : BoxContainer
         if (material == null)
             return false;
 
-        var box = BoxContainer.Instantiate() as BoxContainer;
+        var box = SubContainer.Instantiate() as Container;
         AddChild(box);
 
         var pB = ProgressBarTemplate.Instantiate() as ProgressBar;
@@ -76,17 +76,16 @@ public partial class ResourceDisplay : BoxContainer
         pB.Value = material.Amount;
         pB.Name = _barTag + key;
 
-        var bT1 = ButtonTemplate.Instantiate() as Button;
-        box.AddChild(bT1);
-        bT1.Name = _barAmountButtonTag + key;
-        bT1.Text = $"{key}_{(int)material.Amount}";
-        bT1.ButtonGroup = Buttons;
-
-        var bT2 = ButtonTemplate.Instantiate() as Button;
-        box.AddChild(bT2);
-        bT2.Name = _barMaxButtonTag + key;
-        bT2.Text = $"{key}_{(int)material.Max}";
-        bT2.ButtonGroup = Buttons;
+        //var bT1 = ButtonTemplate.Instantiate() as BaseButton;
+        //box.AddChild(bT1);
+        //bT1.Name = _barAmountButtonTag + key;
+        ////bT1.Text = $"{key}_{(int)material.Amount}";
+        //bT1.ButtonGroup = Buttons;
+        //var bT2 = ButtonTemplate.Instantiate() as BaseButton;
+        //box.AddChild(bT2);
+        //bT2.Name = _barMaxButtonTag + key;
+        ////bT2.Text = $"{key}_{(int)material.Max}";
+        //bT2.ButtonGroup = Buttons;
 
 
         return true;
@@ -94,13 +93,13 @@ public partial class ResourceDisplay : BoxContainer
 
     public bool DisplayAttributes(string key, double value)
     {
-        var box = BoxContainer.Instantiate() as BoxContainer;
+        var box = SubContainer.Instantiate() as Container;
         AddChild(box);
 
-        var bT = ButtonTemplate.Instantiate() as Button;
+        var bT = ButtonTemplate.Instantiate() as BaseButton;
         box.AddChild(bT);
         bT.Name = _infiniteButtonTag + key;
-        bT.Text = $"{key}_{value}";
+        //bT.Text = $"{key}_{value}";
         bT.ButtonGroup = Buttons;
 
 
@@ -118,37 +117,37 @@ public partial class ResourceDisplay : BoxContainer
     /**
      * returns found "progressbar"-button; otherwise null
      */
-    public Button GetProgressBarAmountButton(string key)
+    public BaseButton GetProgressBarAmountButton(string key)
     {
-        return FindChild(_barAmountButtonTag + key, true, false) as Button;
+        return FindChild(_barAmountButtonTag + key, true, false) as BaseButton;
     }
 
     /**
      * returns found "progressbar"-button; otherwise null
      */
-    public Button GetProgressBarMaxButton(string key)
+    public BaseButton GetProgressBarMaxButton(string key)
     {
-        return FindChild(_barMaxButtonTag + key, true, false) as Button;
+        return FindChild(_barMaxButtonTag + key, true, false) as BaseButton;
     }
 
     /**
      * returns found button; otherwise null
      */
-    public Button GetButton(string key)
+    public BaseButton GetButton(string key)
     {
-        return FindChild(_infiniteButtonTag + key, true, false) as Button;
+        return FindChild(_infiniteButtonTag + key, true, false) as BaseButton;
     }
 
     /**
      * Attempts to update a button with this key
      * returns updated button; otherwise null
      */
-    public Button UpdateButton(string key, double value)
+    public BaseButton UpdateButton(string key, double value)
     {
         if (GetButton(key) is not { } b)
             return null;
 
-        b.Text = $"{key}_{value}";
+        //b.Text = $"{key}_{value}";
 
         return b;
     }
@@ -170,8 +169,8 @@ public partial class ResourceDisplay : BoxContainer
         b.MaxValue = material.Max;
         b.Value = material.Amount;
 
-        bT1.Text = $"{key}_{(int)material.Amount}";
-        bT2.Text = $"{key}_{(int)material.Max}";
+        //bT1.Text = $"{key}_{(int)material.Amount}";
+        //bT2.Text = $"{key}_{(int)material.Max}";
 
         return b;
     }

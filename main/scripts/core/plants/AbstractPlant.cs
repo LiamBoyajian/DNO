@@ -35,7 +35,7 @@ public abstract partial class AbstractPlant : Node
     protected Dictionary<Rt, MaterialResource> Resources = new()
     {
         //Arbitrary base values -- should be removed outside of testing
-        { Rt.Health, new MaterialResource(14.0, 100.0) },
+        { Rt.Health, new MaterialResource(10.0, 10.0) },
         { Rt.Chlorophyll, new MaterialResource(10.0, 100.0) },
         { Rt.Energy, new MaterialResource(10.0, 100.0) },
         { Rt.Glucose, new MaterialResource(1000.0, 1000.0) },

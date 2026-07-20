@@ -35,6 +35,9 @@ public partial class Tomato(int dbId)
     {
         if (!base.Tick(delta))
             return false;
+        //Resources[Rt.Health].ChangeMax(20);
+        //Resources[Rt.Health].Give(100);
+        //Resources[Rt.Energy].Give(100);
         UpdatePlantGuiFrame();
         Updated?.Invoke(); //
         return true;
@@ -112,7 +115,7 @@ public partial class Tomato(int dbId)
      */
     protected new double EnergyHp(double maxHpToGluRatio, double gluToEnergyRatio)
     {
-        GD.Print("asdpoijnasodoiasjd\n");
+        //GD.Print("asdpoijnasodoiasjd\n");
         double toTake = Resources[Rt.Health].Max * maxHpToGluRatio * gluToEnergyRatio; //Energy required in this run
         double missingEnergy = toTake - Resources[Rt.Energy].Take(toTake);
 
@@ -183,7 +186,8 @@ public partial class Tomato(int dbId)
     {
         foreach (var r in Resources)
         {
-            yield return (r.Key.ToString(), (IMaterialResource)r.Value);
+            if (r.Key is Rt.H2O or Rt.Glucose or Rt.Health)
+                yield return (r.Key.ToString(), (IMaterialResource)r.Value);
         }
     }
 
@@ -264,12 +268,12 @@ public partial class Tomato(int dbId)
      */
     public int UpdatePlantGuiFrame()
     {
-        //Horrible method -- replacing later surely
+        //TODO Horrible method/design -- replacing later surely 
         var result = -2;
-        double health = Resources[Rt.Health].Max;
-        if (health <= 0) return -2; //dead
-        Resources[Rt.Health].ChangeMax(2000);
-        switch (health)
+        double healthMax = Resources[Rt.Health].Max;
+        if (healthMax <= 0) return -2; //dead
+        GD.Print("HEALTH MAX: " + healthMax);
+        switch (healthMax)
         {
             case < 0:
                 GuiManager.Animation = "no_growth";

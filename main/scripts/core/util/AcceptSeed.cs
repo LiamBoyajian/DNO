@@ -6,10 +6,20 @@ namespace Main.main.scripts.core.util;
 
 public partial class AcceptSeed : DisappearSlot
 {
+    protected ContainPlant ParentContainer;
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         base._Ready();
+        if (GetParent() is not ContainPlant parentContainPlant)
+        {
+            Debug.Assert(false, "parent is not type: ContainPlant");
+        }
+        else
+        {
+            ParentContainer = (ContainPlant)parentContainPlant;
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -20,9 +30,7 @@ public partial class AcceptSeed : DisappearSlot
 
     public override bool AfterAccepted(Variant seedVariant)
     {
-        // 1. Parent validation
-        //var parent = GetParent() as ContainPlant;
-        if (GetParent() is not ContainPlant parentContainPlant)
+        if (ParentContainer == null)
         {
             Debug.Assert(false, "parent is not type: ContainPlant");
             return false;
@@ -35,7 +43,6 @@ public partial class AcceptSeed : DisappearSlot
         }
 
         var plant = seed.GetPlantScene().Instantiate();
-        //templatePlant.Name = "soybean - id:" + seed.GetPlantDbId().ToString();
 
         var plantId = plant.GetInstanceId();
         plant.SetScript(seed.GetPlantType());
@@ -51,11 +58,17 @@ public partial class AcceptSeed : DisappearSlot
         var animatedSprite = plant.GetChild<AnimatedSprite2D>(0);
         animatedSprite.SpriteFrames = seed.GetFrames();
 
-        animatedSprite.Scale *= 4;
-        animatedSprite.Position = new Vector2(0, -29); //TODO bad hardcoded
+        //const float scaleAmount = 4;
+        //animatedSprite.Scale *= scaleAmount;
+
+        var currentAnimation = animatedSprite.Animation;
+        var currentFrameIndex = animatedSprite.Frame;
+        var texture = animatedSprite.SpriteFrames.GetFrameTexture(currentAnimation, currentFrameIndex);
+
+        animatedSprite.Position = new Vector2(0, -(texture.GetSize().Y / 2f)); //TODO bad hardcoded
 
 
-        var newPlant = parentContainPlant.AcceptSeed(plant, seed.GetPlantDbId());
+        var newPlant = ParentContainer.AcceptSeed(plant, seed.GetPlantDbId());
 
         plant.Call("Init");
 

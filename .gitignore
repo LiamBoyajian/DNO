@@ -13,6 +13,7 @@
 /dataSources.local.xml
 /addons
 
+
 # --- Godot Core ---
 .godot/
 *.uid
