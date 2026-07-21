@@ -12,8 +12,8 @@
 /dataSources/
 /dataSources.local.xml
 
-/addons
-!/addons/EnumToIcon/*
+/addons/*
+!/addons/EnumToIcon/
 
 
 

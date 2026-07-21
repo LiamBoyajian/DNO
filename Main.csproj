@@ -29,6 +29,8 @@
         <Folder Include="main\scripts\tests\"/>
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="Main.csproj"/>
+        <Content Include="addons\EnumToIcon\main\enum_to_directory.db">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 </Project>
