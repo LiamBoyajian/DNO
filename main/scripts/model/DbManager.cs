@@ -13,6 +13,7 @@ namespace Main.main.scripts.model;
 //Do functions need parameters (only for quantity and resource type if they do): so probably 
 public partial class DbManager : Node
 {
+    //TODO  :: adding pbi
     public string DbPath { get; private set; }
 
     private SQLiteConnection _db;

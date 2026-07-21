@@ -13,13 +13,15 @@
         <PackageReference Include="gdUnit4.test.adapter" Version="*"/>
     </ItemGroup>
     <ItemGroup>
+        <Content Include="addons\EnumToIcon\main\db_declaration.sql"/>
+        <Content Include="addons\EnumToIcon\main\enum_to_directory.db"/>
         <Content Include="main\scripts\scene\Gene_Window_Item_List.gd"/>
         <Content Include="main\scripts\scene\Gene_Window_Item_List.gd.uid"/>
     </ItemGroup>
     <ItemGroup>
-        <Folder Include="addons\"/>
         <Folder Include="main\common\core\templates\"/>
         <Folder Include="main\common\ui\templatePopup\resources\"/>
+        <Folder Include="main\icons\"/>
         <Folder Include="main\scripts\tests\"/>
     </ItemGroup>
 </Project>
