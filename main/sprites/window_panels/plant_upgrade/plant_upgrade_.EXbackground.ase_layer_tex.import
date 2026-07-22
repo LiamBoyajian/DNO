@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://b7yk31gu6nbik"
+path="res://.godot/imported/plant_upgrade_.EXbackground.ase_layer_tex-c5061f999c3020b57395cbc2859bdffa.res"
+
+[deps]
+
+source_file="res://main/sprites/window_panels/plant_upgrade/plant_upgrade_.EXbackground.ase_layer_tex"
+dest_files=["res://.godot/imported/plant_upgrade_.EXbackground.ase_layer_tex-c5061f999c3020b57395cbc2859bdffa.res"]
+
+[params]
+

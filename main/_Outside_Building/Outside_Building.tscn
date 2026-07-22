@@ -1,61 +1,119 @@
 [gd_scene format=3 uid="uid://h1n7j6elr0cp"]
 
-[ext_resource type="Texture2D" uid="uid://be4k6m5xojps6" path="res://main/common/sprites/plant containers/pot_terracotta.aseprite" id="1_ga1pc"]
+[ext_resource type="Script" uid="uid://bofv8ccitqg80" path="res://main/scripts/scene/BasicScene.cs" id="1_2u2wv"]
 [ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://main/scripts/core/util/ContainPlant.cs" id="2_7npfq"]
 [ext_resource type="Texture2D" uid="uid://dlch3jnjbtmhp" path="res://main/_Outside_Building/sprites/outside.aseprite" id="5_g2r01"]
-[ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/scripts/core/util/Accept_Seed.gd" id="6_iml5x"]
-[ext_resource type="PackedScene" uid="uid://336qp8djyjhc" path="res://main/common/ui/inventory_bar/inventory_bar.tscn" id="6_o5f0g"]
-[ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/common/ui/inventory_bar/inventorySquare.tscn" id="7_4w7ee"]
-[ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="7_ukbo7"]
-[ext_resource type="Script" uid="uid://hhbfcj38vv7j" path="res://main/scripts/core/util/Item_Seed.gd" id="8_iml5x"]
-[ext_resource type="Script" uid="uid://cw6gylr1o30f0" path="res://main/scripts/core/plants/species/Tomato.cs" id="9_iml5x"]
-[ext_resource type="SpriteFrames" uid="uid://dja4egrke0cwa" path="res://main/common/sprites/sprite_frames/soybean.tres" id="10_iml5x"]
-[ext_resource type="PackedScene" uid="uid://c4ll7m6ooasli" path="res://main/common/core/templates/_Template_Plant.tscn" id="11_iml5x"]
+[ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/scripts/core/util/AcceptSeed.cs" id="6_iml5x"]
+[ext_resource type="Texture2D" uid="uid://dvopcy32y8dul" path="res://main/sprites/draft/pot.aseprite" id="7_0it47"]
+[ext_resource type="Script" uid="uid://q70ssyayrj2k" path="res://main/scripts/scene/SceneTransitionTemplate.cs" id="12_rcbep"]
+[ext_resource type="PackedScene" uid="uid://hkrl88j77qi4" path="res://main/_UI_Computer/UI_Computer.tscn" id="13_e7x2h"]
+[ext_resource type="PackedScene" uid="uid://cx6bs6vejxjwf" path="res://main/mc.tscn" id="15_0it47"]
+[ext_resource type="SpriteFrames" uid="uid://bt50dg3t132un" path="res://main/sprites/tools/shovel.aseprite" id="15_jor3e"]
+[ext_resource type="SpriteFrames" uid="uid://blvnsm74f8kri" path="res://main/sprites/plants/tomato.aseprite" id="15_mrhur"]
+[ext_resource type="Script" uid="uid://cb2k8gm1kk334" path="res://main/scripts/core/util/items/tools/PruningShears.cs" id="15_wsn04"]
+[ext_resource type="Script" uid="uid://cnbtcf5757nje" path="res://main/scripts/core/util/items/tools/TemplateTool.cs" id="16_wsn04"]
+[ext_resource type="SpriteFrames" uid="uid://ggsqcdse0e63" path="res://main/sprites/draft/ShopAccess.aseprite" id="17_mrhur"]
+[ext_resource type="Script" uid="uid://b7susdvg0gxnq" path="res://main/scripts/core/util/ShopFrontStructure.cs" id="18_0tr86"]
 
-[node name="OutsideLab" type="Node2D" unique_id=1082450297]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
+size = Vector2(90, 74)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ygq3"]
+size = Vector2(370, 61)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aoqhg"]
+size = Vector2(9.192362, 50.91172)
+
+[node name="OutsideLab" type="Node2D" unique_id=1082450297 node_paths=PackedStringArray("Boundaries")]
+y_sort_enabled = true
+script = ExtResource("1_2u2wv")
+Boundaries = NodePath("Boundaries")
+
+[node name="mc" parent="." unique_id=2056976437 instance=ExtResource("15_0it47")]
+position = Vector2(375, 341)
+
+[node name="IntoBuilding" type="Area2D" parent="." unique_id=914254641]
+position = Vector2(499, 283)
+script = ExtResource("12_rcbep")
+_targetScene = ExtResource("13_e7x2h")
+Enabled = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="IntoBuilding" unique_id=671539743]
+position = Vector2(-1, -7)
+shape = SubResource("RectangleShape2D_mrq1q")
+
+[node name="Boundaries" type="Area2D" parent="." unique_id=1040490365]
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="Boundaries" unique_id=254963865]
+position = Vector2(460, 348.5)
+shape = SubResource("RectangleShape2D_1ygq3")
 
 [node name="bg" type="Sprite2D" parent="." unique_id=517609415]
 z_index = -5
 position = Vector2(320, 180)
 texture = ExtResource("5_g2r01")
 
-[node name="MarginContainer" parent="bg" unique_id=2039833341 instance=ExtResource("6_o5f0g")]
-offset_left = -417.5
-offset_top = -180.0
-offset_right = -222.5
-offset_bottom = -139.0
-
-[node name="Por" type="Sprite2D" parent="." unique_id=566636643]
-position = Vector2(299, 323)
-scale = Vector2(0.25, 0.25)
-texture = ExtResource("1_ga1pc")
-offset = Vector2(0, 40)
+[node name="Pot" type="Sprite2D" parent="." unique_id=1780480357]
+position = Vector2(330, 301)
+texture = ExtResource("7_0it47")
+offset = Vector2(0, 7.5)
 script = ExtResource("2_7npfq")
 
-[node name="acceptSeed" parent="Por" unique_id=1930195085 instance=ExtResource("7_4w7ee")]
+[node name="AcceptSeed" type="Panel" parent="Pot" unique_id=596873023]
+modulate = Color(1, 1, 1, 0.31764707)
 anchors_preset = -1
-anchor_top = 0.097
-anchor_bottom = 0.097
-offset_left = -94.0
-offset_top = -89.7
-offset_right = -6.0
-offset_bottom = -10.700001
-offset_transform_enabled = false
+anchor_left = 0.48000002
+anchor_top = 0.18
+anchor_right = 0.48000002
+anchor_bottom = 0.18
+offset_left = -21.000002
+offset_top = -21.5
+offset_right = -3.0
+offset_bottom = -5.0
+offset_transform_visual_only = false
 script = ExtResource("6_iml5x")
 
-[node name="Panel" parent="." unique_id=1845670035 instance=ExtResource("7_4w7ee")]
-offset_left = 157.5
-offset_top = 137.5
-offset_right = 192.5
-offset_bottom = 172.5
+[node name="Shears" type="AnimatedSprite2D" parent="." unique_id=97293574 node_paths=PackedStringArray("ClickArea")]
+modulate = Color(0.29862767, 0.7047631, 0.9481177, 1)
+position = Vector2(360, 264)
+sprite_frames = ExtResource("15_jor3e")
+script = ExtResource("15_wsn04")
+Type = 2
+ClickArea = NodePath("Area2D")
 
-[node name="Seed_Soybean" type="TextureRect" parent="Panel" unique_id=1930486734]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("7_ukbo7")
-script = ExtResource("8_iml5x")
-_plant_type = ExtResource("9_iml5x")
-_frames = ExtResource("10_iml5x")
-_plant_scene = ExtResource("11_iml5x")
-_plant_db_id = 1
+[node name="Area2D" type="Area2D" parent="Shears" unique_id=1562648796]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Shears/Area2D" unique_id=1020676441]
+position = Vector2(3.2500305, 0.25003052)
+rotation = 0.7853982
+scale = Vector2(0.9999999, 0.9999999)
+shape = SubResource("RectangleShape2D_aoqhg")
+
+[node name="Shovel" type="AnimatedSprite2D" parent="." unique_id=198880228 node_paths=PackedStringArray("ClickArea")]
+position = Vector2(385, 213)
+sprite_frames = ExtResource("15_jor3e")
+script = ExtResource("16_wsn04")
+Type = 1
+ClickArea = NodePath("Area2D")
+
+[node name="Area2D" type="Area2D" parent="Shovel" unique_id=594408302]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Shovel/Area2D" unique_id=211034142]
+position = Vector2(3.2500305, 0.25003052)
+rotation = 0.7853982
+scale = Vector2(0.9999999, 0.9999999)
+shape = SubResource("RectangleShape2D_aoqhg")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=677269060]
+position = Vector2(592, 279)
+scale = Vector2(0.5, 0.5)
+sprite_frames = ExtResource("17_mrhur")
+script = ExtResource("18_0tr86")
+
+[node name="AnimatedSprite2D2" type="AnimatedSprite2D" parent="." unique_id=1249555760]
+visible = false
+position = Vector2(340, 288)
+sprite_frames = ExtResource("15_mrhur")
+animation = &"fruiting"
+frame_progress = 0.16592558
+offset = Vector2(0, -25)

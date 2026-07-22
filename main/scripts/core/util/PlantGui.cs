@@ -1,5 +1,9 @@
+using System;
 using Godot;
 using Main.main.scripts.core.plants;
+using Main.main.scripts.core.util.inventory;
+using Main.main.scripts.core.util.items.tools;
+using Shovel = Main.main.scripts.core.util.items.tools.Shovel;
 
 namespace Main.main.scripts.core.util;
 
@@ -8,11 +12,19 @@ public partial class PlantGui : AnimatedSprite2D
     //requires specifically named frames to run 
     [Export] protected Area2D ClickArea;
     protected AbstractPlant ParentPlant;
+    public string NoGrowth = "no_growth";
+    public string Dead = "dead";
+    public string Default = "default";
+    public event Action DugUp;
 
     public override void _Ready()
     {
-        Play("default");
+        Play(Default);
+        Stop();
         ClickArea.InputEvent += OnClickMe;
+        ClickArea.BodyEntered += BodyEnteredEventHandler;
+        ClickArea.AreaEntered += BodyEnteredEventHandler;
+
         if (ClickArea is null)
             ClickArea = GetNode<Area2D>("PopupArea");
 
@@ -30,7 +42,7 @@ public partial class PlantGui : AnimatedSprite2D
      */
     public void DeadFrame()
     {
-        Play("dead");
+        Play(Dead);
     }
 
     /**
@@ -38,7 +50,7 @@ public partial class PlantGui : AnimatedSprite2D
      */
     public void NoGrowthFrame()
     {
-        Play("ground");
+        Play(NoGrowth);
     }
 
     /**
@@ -77,7 +89,7 @@ public partial class PlantGui : AnimatedSprite2D
 
     public bool IsShowingDead()
     {
-        return string.Compare(Animation, "dead") == 0;
+        return string.Compare(Animation, Dead) == 0;
     }
 
     public bool SetGrowthFrame(int frame)
@@ -95,5 +107,40 @@ public partial class PlantGui : AnimatedSprite2D
         if (!@event.IsAction("alt_click"))
             return;
         TwoSidedPlantPopup.Instance.Popup(ParentPlant);
+    }
+
+    private void BodyEnteredEventHandler(Node2D node2D)
+    {
+        if (node2D.GetParent() is AbstractTool tool)
+        {
+            switch (tool.Type)
+            {
+                case ToolType.PruningShears:
+                    if (ParentPlant is IShearable shearable)
+                    {
+                        var sheared = shearable.Shear(1);
+                        InventoryDisplay.Instance.AddMoney(sheared, true);
+                    }
+
+                    break;
+
+                case ToolType.Shovel:
+                    if (ParentPlant is { } abstractPlant)
+                    {
+                        abstractPlant.DigUp();
+                    }
+
+                    break;
+            }
+        }
+
+        if (node2D is RigidBody2D rb)
+        {
+            if (rb.GetParent() is Shovel)
+            {
+                ParentPlant.QueueFree();
+                DugUp?.Invoke();
+            }
+        }
     }
 }

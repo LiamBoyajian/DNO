@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://4rdaq2rrw8s4"
+path="res://.godot/imported/plant_upgrade_corner_stats.ase_layer_tex-f364927cf4e71e9c64c49e7c9b373385.res"
+
+[deps]
+
+source_file="res://main/sprites/window_panels/plant_upgrade/plant_upgrade_corner_stats.ase_layer_tex"
+dest_files=["res://.godot/imported/plant_upgrade_corner_stats.ase_layer_tex-f364927cf4e71e9c64c49e7c9b373385.res"]
+
+[params]
+

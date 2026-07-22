@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://bi0vgf6ihf0s2"
+path="res://.godot/imported/lamp.aseprite-b10a97902d232fcbc762ed6a305115ae.res"
+
+[deps]
+
+source_file="res://main/sprites/draft/lamp.aseprite"
+dest_files=["res://.godot/imported/lamp.aseprite-b10a97902d232fcbc762ed6a305115ae.res"]
+
+[params]
+

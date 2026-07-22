@@ -25,6 +25,9 @@ config/icon="res://icon.svg"
 DbManager="*uid://lty2x2jqgt4t"
 ComputerSceneData="*uid://65pvkqjkdvqp"
 TemplatePopup="*uid://dxw4yx0ij5eme"
+InventoryDisplay="*uid://b52f4xp42pi76"
+Market="*uid://boaevmngm4crt"
+IconConsolidation="*uid://8k8fpk8ckyig"
 
 [debug]
 

@@ -12,6 +12,12 @@
 /dataSources/
 /dataSources.local.xml
 
+/addons/*
+!/addons/EnumToIcon/
+
+
+
+
 # --- Godot Core ---
 .godot/
 *.uid

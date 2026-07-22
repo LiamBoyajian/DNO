@@ -1,6 +1,11 @@
 [gd_scene format=3 uid="uid://336qp8djyjhc"]
 
+[ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="2_bcq0x"]
 [ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/common/ui/inventory_bar/inventorySquare.tscn" id="2_egnjp"]
+[ext_resource type="Script" uid="uid://02ud7o278srr" path="res://main/scripts/core/util/ItemSeed.cs" id="3_n8cn1"]
+[ext_resource type="Script" uid="uid://cw6gylr1o30f0" path="res://main/scripts/core/plants/species/Tomato.cs" id="4_siwgq"]
+[ext_resource type="SpriteFrames" uid="uid://blvnsm74f8kri" path="res://main/sprites/plants/tomato.aseprite" id="5_raamd"]
+[ext_resource type="PackedScene" uid="uid://c4ll7m6ooasli" path="res://main/common/core/templates/_Template_Plant.tscn" id="6_afs1a"]
 
 [node name="MarginContainer" type="MarginContainer" unique_id=2039833341]
 propagate_maximum_size = false
@@ -45,6 +50,16 @@ alignment = 1
 
 [node name="Panel" parent="MarginContainer/HBoxContainer" unique_id=1930195085 instance=ExtResource("2_egnjp")]
 layout_mode = 2
+
+[node name="Seed" type="TextureRect" parent="MarginContainer/HBoxContainer/Panel" unique_id=380287928]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("2_bcq0x")
+script = ExtResource("3_n8cn1")
+PlantType = ExtResource("4_siwgq")
+Frames = ExtResource("5_raamd")
+PlantScene = ExtResource("6_afs1a")
 
 [node name="Panel2" parent="MarginContainer/HBoxContainer" unique_id=1427122132 instance=ExtResource("2_egnjp")]
 layout_mode = 2

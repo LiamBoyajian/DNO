@@ -3,9 +3,13 @@
 [ext_resource type="Theme" uid="uid://b7am0k6ih57f5" path="res://main/common/ui/templatePopup/plantPopup.tres" id="1_dq4wh"]
 [ext_resource type="Script" uid="uid://bjp8l4c5ivbr0" path="res://main/scripts/core/util/TwoSidedPlantPopup.cs" id="2_ynjrw"]
 [ext_resource type="Script" uid="uid://drx08e25cm6vq" path="res://main/scripts/core/util/ResourceDisplay.cs" id="3_7d3qp"]
-[ext_resource type="PackedScene" uid="uid://dbnfv84hox21s" path="res://main/common/ui/templatePopup/resources/h_box_container.tscn" id="3_kjk4s"]
 [ext_resource type="PackedScene" uid="uid://ddo46dt3lkkoi" path="res://main/common/ui/templatePopup/resources/button_template.tscn" id="4_xeqjv"]
+[ext_resource type="PackedScene" uid="uid://dqiwh01fs7ok5" path="res://main/common/ui/templatePopup/resources/SubContainer.tscn" id="6_7k4oj"]
 [ext_resource type="PackedScene" uid="uid://b0a7fa50wbr07" path="res://main/common/ui/templatePopup/resources/progress_bar_template.tscn" id="6_ynjrw"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_7k4oj"]
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_qinad"]
 
 [node name="TemplatePopup" type="Window" unique_id=754308462 node_paths=PackedStringArray("MaterialResourcesContainer", "InfiniteResourcesContainer")]
 transparent_bg = true
@@ -26,18 +30,18 @@ theme = ExtResource("1_dq4wh")
 theme_type_variation = &"plantInfoPopup"
 script = ExtResource("2_ynjrw")
 MaterialResourcesContainer = NodePath("HSplitContainer/ScrollContainer/material_resource_display")
-InfiniteResourcesContainer = NodePath("HSplitContainer/ScrollContainer2/infinite_resource_display")
+InfiniteResourcesContainer = NodePath("HSplitContainer/ScrollContainer2/FlowContainer")
 
 [node name="HSplitContainer" type="HSplitContainer" parent="." unique_id=2090352720]
 anchors_preset = -1
-anchor_left = -0.003
-anchor_top = 0.067
-anchor_right = -0.003
-anchor_bottom = 0.067
-offset_left = -0.26
-offset_top = -0.10000038
-offset_right = 583.74
-offset_bottom = 281.9
+anchor_left = 0.0050000004
+anchor_top = 0.040000003
+anchor_right = 0.0050000004
+anchor_bottom = 0.040000003
+offset_left = 11.1
+offset_top = 1.999999
+offset_right = 563.1
+offset_bottom = 274.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 drag_area_margin_begin = 2
@@ -48,24 +52,26 @@ drag_area_highlight_in_editor = true
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="material_resource_display" type="VBoxContainer" parent="HSplitContainer/ScrollContainer" unique_id=208999261]
+[node name="material_resource_display" type="HBoxContainer" parent="HSplitContainer/ScrollContainer" unique_id=1894650845]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("3_7d3qp")
 ProgressBarTemplate = ExtResource("6_ynjrw")
 ButtonTemplate = ExtResource("4_xeqjv")
-BoxContainer = ExtResource("3_kjk4s")
+Buttons = SubResource("ButtonGroup_7k4oj")
+SubContainer = ExtResource("6_7k4oj")
 
 [node name="ScrollContainer2" type="ScrollContainer" parent="HSplitContainer" unique_id=1402104531]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="infinite_resource_display" type="HBoxContainer" parent="HSplitContainer/ScrollContainer2" unique_id=1013620936]
+[node name="FlowContainer" type="FlowContainer" parent="HSplitContainer/ScrollContainer2" unique_id=1644486352]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 script = ExtResource("3_7d3qp")
 ProgressBarTemplate = ExtResource("6_ynjrw")
 ButtonTemplate = ExtResource("4_xeqjv")
-BoxContainer = ExtResource("3_kjk4s")
+Buttons = SubResource("ButtonGroup_qinad")
+SubContainer = ExtResource("6_7k4oj")

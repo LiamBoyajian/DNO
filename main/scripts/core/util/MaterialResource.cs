@@ -110,6 +110,6 @@ public class MaterialResource(double amount, double max) : IMaterialResource
      */
     public double HasValue(double val)
     {
-        return (val >= Amount) ? val : Amount;
+        return (val <= Amount) ? val : Amount;
     }
 }

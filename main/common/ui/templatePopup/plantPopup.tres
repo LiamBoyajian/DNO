@@ -1,14 +1,22 @@
 [gd_resource type="Theme" format=4 uid="uid://b7am0k6ih57f5"]
 
-[ext_resource type="StyleBox" uid="uid://bbq7ddtjikunv" path="res://main/common/ui/templatePopup/templatePopupBG.tres" id="2_oqfwq"]
+[ext_resource type="Texture2D" uid="uid://c3jtckxbw5fne" path="res://main/sprites/window_panels/plant_upgrade/plant_upgrade_window.ase_layer_tex" id="1_manvx"]
+[ext_resource type="Texture2D" uid="uid://b23lo714mr5dg" path="res://main/sprites/window_panels/plant_upgrade/plant_upgrade_ProgressBar.ase_layer_tex" id="1_oqfwq"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f8u7l"]
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xtptm"]
+texture = ExtResource("1_oqfwq")
+texture_margin_left = 20.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_aoqhg"]
-bg_color = Color(0.6256098, 0.7753396, 0.35088202, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_manvx"]
+bg_color = Color(0.37402916, 0.56831634, 0.40709925, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
 border_color = Color(0.8, 0.8, 0.8, 0)
-corner_detail = 1
-anti_aliasing = false
 
 [sub_resource type="Image" id="Image_hfk1h"]
 data = {
@@ -926,10 +934,20 @@ cache/0/25/0/glyphs/3/texture_idx = -1
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_i70ok"]
 
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2u2wv"]
+texture = ExtResource("1_manvx")
+texture_margin_left = 14.0
+texture_margin_top = 14.0
+texture_margin_right = 14.0
+texture_margin_bottom = 14.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(0, 0, 588, 308)
+
 [resource]
 ResourceProgressBar/base_type = &"ProgressBar"
-ResourceProgressBar/styles/background = SubResource("StyleBoxFlat_f8u7l")
-ResourceProgressBar/styles/fill = SubResource("StyleBoxFlat_aoqhg")
+ResourceProgressBar/styles/background = SubResource("StyleBoxTexture_xtptm")
+ResourceProgressBar/styles/fill = SubResource("StyleBoxFlat_manvx")
 plantInfoPopup/base_type = &"Window"
 plantInfoPopup/colors/title_color = Color(0.7058824, 0.7058824, 0.7058824, 1)
 plantInfoPopup/colors/title_outline_modulate = Color(1, 1, 1, 1)
@@ -942,5 +960,5 @@ plantInfoPopup/font_sizes/title_font_size = 16
 plantInfoPopup/fonts/title_font = SubResource("FontFile_manvx")
 plantInfoPopup/icons/close = SubResource("PlaceholderTexture2D_2hue5")
 plantInfoPopup/icons/close_pressed = SubResource("PlaceholderTexture2D_i70ok")
-plantInfoPopup/styles/embedded_border = ExtResource("2_oqfwq")
-plantInfoPopup/styles/embedded_unfocused_border = ExtResource("2_oqfwq")
+plantInfoPopup/styles/embedded_border = SubResource("StyleBoxTexture_2u2wv")
+plantInfoPopup/styles/embedded_unfocused_border = SubResource("StyleBoxTexture_2u2wv")

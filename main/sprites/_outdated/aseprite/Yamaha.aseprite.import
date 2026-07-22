@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://2cqusxa4fnwq"
+path="res://.godot/imported/Yamaha.aseprite-c856e82f6cfbb8632cf4944351e0fedb.res"
+
+[deps]
+
+source_file="res://main/sprites/_outdated/aseprite/Yamaha.aseprite"
+dest_files=["res://.godot/imported/Yamaha.aseprite-c856e82f6cfbb8632cf4944351e0fedb.res"]
+
+[params]
+

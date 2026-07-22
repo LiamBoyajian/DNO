@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://bx4n2gefwv20y"
+path="res://.godot/imported/plant_upgrade_leaf_icon.ase_layer_tex-6e68ba8b337ffc22b691529781ed233d.res"
+
+[deps]
+
+source_file="res://main/sprites/window_panels/plant_upgrade/plant_upgrade_leaf_icon.ase_layer_tex"
+dest_files=["res://.godot/imported/plant_upgrade_leaf_icon.ase_layer_tex-6e68ba8b337ffc22b691529781ed233d.res"]
+
+[params]
+

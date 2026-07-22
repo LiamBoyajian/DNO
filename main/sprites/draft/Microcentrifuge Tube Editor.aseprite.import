@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://b6yk3ropvktrw"
+path="res://.godot/imported/Microcentrifuge Tube Editor.aseprite-b71b792bd1caf4cc07cf925bfe849555.res"
+
+[deps]
+
+source_file="res://main/sprites/draft/Microcentrifuge Tube Editor.aseprite"
+dest_files=["res://.godot/imported/Microcentrifuge Tube Editor.aseprite-b71b792bd1caf4cc07cf925bfe849555.res"]
+
+[params]
+

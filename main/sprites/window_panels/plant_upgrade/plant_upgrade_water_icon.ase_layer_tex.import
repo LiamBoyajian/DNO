@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://bjjujv03tb4fl"
+path="res://.godot/imported/plant_upgrade_water_icon.ase_layer_tex-a25cf49f6590daaaa5d2f39fa295348a.res"
+
+[deps]
+
+source_file="res://main/sprites/window_panels/plant_upgrade/plant_upgrade_water_icon.ase_layer_tex"
+dest_files=["res://.godot/imported/plant_upgrade_water_icon.ase_layer_tex-a25cf49f6590daaaa5d2f39fa295348a.res"]
+
+[params]
+

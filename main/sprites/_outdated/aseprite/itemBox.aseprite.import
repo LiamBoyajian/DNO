@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://0efna2hkxoex"
+path="res://.godot/imported/itemBox.aseprite-0b5c81d48b52d4e1497fe7664145da22.res"
+
+[deps]
+
+source_file="res://main/sprites/_outdated/aseprite/itemBox.aseprite"
+dest_files=["res://.godot/imported/itemBox.aseprite-0b5c81d48b52d4e1497fe7664145da22.res"]
+
+[params]
+

@@ -4,13 +4,14 @@ using System.Linq;
 using Godot;
 using Main.main.scripts.core.plants.interfaces;
 using Main.main.scripts.core.util.interfaces;
+using Main.main.scripts.core.util.inventory;
 using Main.Source.main;
 
 namespace Main.main.scripts.core.plants.species;
 
 public partial class Tomato(int dbId)
     : AbstractMicrochipPlant(dbId), IAttributeEnumerable, IMaterialEnumerable, IUpgradable, IObtainable,
-        IBroadcastsUpdate
+        IBroadcastsUpdate, IShearable
 {
     public Tomato() : this(-1)
     {
@@ -34,8 +35,11 @@ public partial class Tomato(int dbId)
     {
         if (!base.Tick(delta))
             return false;
-
-        Updated?.Invoke();
+        //Resources[Rt.Health].ChangeMax(20);
+        //Resources[Rt.Health].Give(100);
+        //Resources[Rt.Energy].Give(100);
+        UpdatePlantGuiFrame();
+        Updated?.Invoke(); //
         return true;
     }
 
@@ -65,6 +69,9 @@ public partial class Tomato(int dbId)
     {
         base._Ready();
         DbId = -1;
+        GuiManager.NoGrowth = "no_growth";
+        GuiManager.Dead = "no_growth";
+        GuiManager.Default = "default";
     }
 
     protected override double ObtainGlucose()
@@ -75,8 +82,10 @@ public partial class Tomato(int dbId)
 
     protected override double Photosynthesize()
     {
-        double waterCo2Max = Math.Max(Resources[Rt.H2O].HasValue(PhotoSynthAmount * GetSunLevel()),
+        double waterCo2Max = Math.Min(Resources[Rt.H2O].HasValue(PhotoSynthAmount * GetSunLevel()),
             Resources[Rt.Co2].HasValue(PhotoSynthAmount));
+        if (waterCo2Max <= 0.0)
+            return 0;
         Resources[Rt.Co2].Take(PhotoSynthAmount);
         Resources[Rt.H2O].Take(PhotoSynthAmount);
         Resources[Rt.Glucose].Give(waterCo2Max);
@@ -106,7 +115,7 @@ public partial class Tomato(int dbId)
      */
     protected new double EnergyHp(double maxHpToGluRatio, double gluToEnergyRatio)
     {
-        GD.Print("asdpoijnasodoiasjd\n");
+        //GD.Print("asdpoijnasodoiasjd\n");
         double toTake = Resources[Rt.Health].Max * maxHpToGluRatio * gluToEnergyRatio; //Energy required in this run
         double missingEnergy = toTake - Resources[Rt.Energy].Take(toTake);
 
@@ -177,7 +186,8 @@ public partial class Tomato(int dbId)
     {
         foreach (var r in Resources)
         {
-            yield return (r.Key.ToString(), (IMaterialResource)r.Value);
+            if (r.Key is Rt.H2O or Rt.Glucose or Rt.Health)
+                yield return (r.Key.ToString(), (IMaterialResource)r.Value);
         }
     }
 
@@ -217,7 +227,6 @@ public partial class Tomato(int dbId)
             {
                 Resources[Rt.Glucose].Take(tempCost);
                 result = CreateOrgan(tomatoKey);
-                ;
             }
         }
 
@@ -246,6 +255,80 @@ public partial class Tomato(int dbId)
             result = true;
         }
 
+        return result;
+    }
+
+    /**
+     * returns the current frame and updates
+     * -2 == dead
+     * -1 == no growth
+     * 0 == first growth frame
+     * n = current growth frame
+     *
+     */
+    public int UpdatePlantGuiFrame()
+    {
+        //TODO Horrible method/design -- replacing later surely 
+        var result = -2;
+        double healthMax = Resources[Rt.Health].Max;
+        if (healthMax <= 0) return -2; //dead
+        GD.Print("HEALTH MAX: " + healthMax);
+        switch (healthMax)
+        {
+            case < 0:
+                GuiManager.Animation = "no_growth";
+                break;
+            case < 10:
+                GuiManager.Animation = "no_growth";
+                break;
+            case >= 500:
+                GuiManager.Animation = "fruiting";
+                GuiManager.Stop();
+                GuiManager.Frame = Mathf.Clamp(Organs[TomatoOrgans.Fruit], 0, 8);
+                break;
+            case >= 200:
+                GuiManager.Frame = 4;
+                break;
+            case >= 100:
+                GuiManager.Frame = 3;
+                break;
+            case >= 50:
+                GuiManager.Frame = 2;
+                break;
+            case >= 20:
+                GuiManager.Frame = 1;
+                break;
+            case >= 10:
+                GuiManager.Frame = 0;
+                break;
+        }
+
+        return GuiManager.Frame;
+    }
+
+
+    public int GetShear()
+    {
+        return Organs[TomatoOrgans.Fruit];
+    }
+
+    public int Shear(int sheared)
+    {
+        if (sheared <= 0) return 0;
+
+        int result;
+        if (sheared <= Organs[TomatoOrgans.Fruit])
+        {
+            result = sheared;
+            Organs[TomatoOrgans.Fruit] -= sheared;
+        }
+        else
+        {
+            result = Organs[TomatoOrgans.Fruit];
+            Organs[TomatoOrgans.Fruit] = 0;
+        }
+
+        Updated?.Invoke();
         return result;
     }
 }

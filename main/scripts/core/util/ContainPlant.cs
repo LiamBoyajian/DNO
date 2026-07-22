@@ -11,7 +11,11 @@ namespace Main.main.scripts.core.util;
 public partial class ContainPlant : Sprite2D
 {
     public MaterialResource Water = new MaterialResource(500.0, 1000.0);
-    protected Node Plant = null;
+
+    protected AbstractPlant Plant = null;
+
+    //public Vector2 SpawnPosition { get; private set; }
+    [Export] private AcceptSeed _acceptSeed;
 
     // Called when the node enters the scene tree for the first time.
     protected const uint HealthCapacity = 100;
@@ -20,7 +24,12 @@ public partial class ContainPlant : Sprite2D
 
     public override void _Ready()
     {
-        Console.Write($"\n {GetTotalLoad()}");
+        if (_acceptSeed == null)
+            _acceptSeed = GetNode<AcceptSeed>("AcceptSeed");
+
+        //Offset = new Vector2(0, Texture.GetSize().Y / 2f);
+
+        //Console.Write($"\n {GetTotalLoad()}");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -74,6 +83,7 @@ public partial class ContainPlant : Sprite2D
 
     protected bool BreakOnNoCapacity()
     {
+        return false; //DO later on TODO
         if (GetTotalLoad() < HealthCapacity) return false;
         Broken = true;
         Water.SetEmpty();
@@ -115,7 +125,14 @@ public partial class ContainPlant : Sprite2D
 
 
         AddChild(plant);
+        p.DugUp += DugUpEventHandler;
 
         return plant;
+    }
+
+    public void DugUpEventHandler()
+    {
+        Plant.DugUp -= DugUpEventHandler;
+        _acceptSeed.IsAccepting();
     }
 }

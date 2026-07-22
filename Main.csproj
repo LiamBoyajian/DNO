@@ -7,17 +7,35 @@
     <ItemGroup>
         <PackageReference Include="Dapper" Version="2.1.79"/>
         <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.9"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.8.1"/>
+        <PackageReference Include="MSTest.TestAdapter" Version="4.3.2"/>
+        <PackageReference Include="MSTest.TestFramework" Version="4.3.2"/>
         <PackageReference Include="sqlite-net-pcl" Version="1.9.172"/>
         <PackageReference Include="SQLiteNetExtensions" Version="2.1.0"/>
         <PackageReference Include="gdUnit4.api" Version="5.*"/>
         <PackageReference Include="gdUnit4.test.adapter" Version="*"/>
     </ItemGroup>
     <ItemGroup>
+        <Content Include="addons\EnumToIcon\main\AccessIconsDb.cs.uid"/>
+        <Content Include="addons\EnumToIcon\main\db_declaration.sql"/>
+        <Content Include="addons\EnumToIcon\main\enum_to_directory.db"/>
         <Content Include="main\scripts\scene\Gene_Window_Item_List.gd"/>
         <Content Include="main\scripts\scene\Gene_Window_Item_List.gd.uid"/>
     </ItemGroup>
     <ItemGroup>
+        <Folder Include="main\common\core\templates\"/>
         <Folder Include="main\common\ui\templatePopup\resources\"/>
+        <Folder Include="main\icons\"/>
         <Folder Include="main\scripts\tests\"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="addons\EnumToIcon\main\enum_to_directory.db">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="addons\EnumToIcon\main\db_declaration.sql">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 </Project>

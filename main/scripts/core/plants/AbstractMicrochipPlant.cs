@@ -20,6 +20,11 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     [Export] protected double ConvertHpToGluRatio = .1;
     [Export] protected double ConvertGluToEnergyRatio = .05;
 
+    /**
+     * Seconds
+     */
+    [Export] protected double TickSpeed = 10;
+
     protected PlantDb PlantInstance;
     protected int MaxStrands;
 
@@ -33,6 +38,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     public override void _Ready()
     {
         GuiManager ??= GetChild<PlantGui>(0);
+        GuiManager.DugUp += DigUp;
     }
 
     public void Init()
@@ -52,7 +58,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     public override bool Tick(double delta)
     {
         FrameSum += delta;
-        if (FrameSum < 2.0)
+        if (FrameSum < TickSpeed)
             return false;
 
         ObtainGlucose();
