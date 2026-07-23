@@ -25,4 +25,9 @@
         <Folder Include="main\icons\"/>
         <Folder Include="main\scripts\tests\"/>
     </ItemGroup>
+    <ItemGroup>
+        <Content Include="addons\EnumToIcon\EnumToStringDatabase\main\db_declaration.sql">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 </Project>
