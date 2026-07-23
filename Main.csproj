@@ -16,9 +16,6 @@
         <PackageReference Include="gdUnit4.test.adapter" Version="*"/>
     </ItemGroup>
     <ItemGroup>
-        <Content Include="addons\EnumToIcon\main\AccessIconsDb.cs.uid"/>
-        <Content Include="addons\EnumToIcon\main\db_declaration.sql"/>
-        <Content Include="addons\EnumToIcon\main\enum_to_directory.db"/>
         <Content Include="main\scripts\scene\Gene_Window_Item_List.gd"/>
         <Content Include="main\scripts\scene\Gene_Window_Item_List.gd.uid"/>
     </ItemGroup>
@@ -27,15 +24,5 @@
         <Folder Include="main\common\ui\templatePopup\resources\"/>
         <Folder Include="main\icons\"/>
         <Folder Include="main\scripts\tests\"/>
-    </ItemGroup>
-    <ItemGroup>
-        <Content Include="addons\EnumToIcon\main\enum_to_directory.db">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-    <ItemGroup>
-        <Content Include="addons\EnumToIcon\main\db_declaration.sql">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
     </ItemGroup>
 </Project>

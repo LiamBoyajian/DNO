@@ -1,0 +1,3 @@
+[submodule "addons/EnumToIcon/EnumToStringDatabase"]
+	path = addons/EnumToIcon/EnumToStringDatabase
+	url = https://github.com/LiamBoyajian/EnumToStringDatabase
