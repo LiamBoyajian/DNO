@@ -28,6 +28,7 @@ TemplatePopup="*uid://dxw4yx0ij5eme"
 InventoryDisplay="*uid://b52f4xp42pi76"
 Market="*uid://boaevmngm4crt"
 IconConsolidation="*uid://8k8fpk8ckyig"
+MemoryToDb="*uid://u234agdc7ihf"
 
 [debug]
 
@@ -47,7 +48,7 @@ project/assembly_name="Main"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg", "res://addons/gdUnit4/plugin.cfg", "res://addons/rider-plugin/plugin.cfg")
+enabled=PackedStringArray("res://addons/AsepriteWizard/plugin.cfg", "res://addons/rider-plugin/plugin.cfg")
 
 [file_customization]
 
