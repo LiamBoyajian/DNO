@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="EnumIcons" format=3 uid="uid://ddpcgkg0tnr8s"]
-
-[ext_resource type="Script" uid="uid://cxjadbggr6lva" path="res://main/scripts/model/EnumIcons.cs" id="1_gqifw"]
-
-[resource]
-script = ExtResource("1_gqifw")
-metadata/_custom_type_script = "uid://cxjadbggr6lva"
