@@ -48,6 +48,9 @@
         <Content Include="addons\EnumToIcon\EnumToStringDatabase\main\db_declaration.sql">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
+        <None Update="addons\EnumToIcon\EnumToStringDatabase\main\enum_to_directory.db">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 </Project>
 

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites id="2026-07-26" name="report_1" tests="5" failures="1" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="GodotTests" package="addons/EnumToIcon/EnumToStringDatabase/tests" timestamp="2026-07-26T21:51:11" hostname="localhost" tests="5" failures="1" errors="0" skipped="0" flaky="0" time="0.229">
+		<testcase name="Test" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.005">
+		</testcase>
+		<testcase name="PutData" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.019">
+		</testcase>
+		<testcase name="RequestData" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.047">
+		</testcase>
+		<testcase name="CheckBatchData" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.055">
+			<failure message="FAILED: res://addons/EnumToIcon/EnumToStringDatabase/tests/GodotTests.cs:101" type="FAILURE">
+<![CDATA[
+Object reference not set to an instance of an object.
+]]>
+			</failure>
+		</testcase>
+		<testcase name="CheckData" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.045">
+		</testcase>
+	</testsuite>
+</testsuites>
