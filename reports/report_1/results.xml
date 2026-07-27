@@ -1,41 +1,35 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuites id="2026-07-27" name="report_1" tests="13" failures="2" skipped="0" flaky="0" time="0.000">
-	<testsuite id="0" name="GodotTests" package="addons/EnumToIcon/EnumToStringDatabase/tests" timestamp="2026-07-27T22:19:01" hostname="localhost" tests="13" failures="2" errors="0" skipped="0" flaky="0" time="0.367">
-		<testcase name="Test" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.006">
+<testsuites id="2026-07-27" name="report_1" tests="15" failures="0" skipped="0" flaky="0" time="0.000">
+	<testsuite id="0" name="GodotTests" package="addons/EnumToIcon/EnumToStringDatabase/tests" timestamp="2026-07-27T23:44:28" hostname="localhost" tests="15" failures="0" errors="0" skipped="0" flaky="0" time="0.459">
+		<testcase name="Test" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.007">
 		</testcase>
-		<testcase name="CreateTestDirWorks" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.014">
-			<failure message="FAILED: res://addons/EnumToIcon/EnumToStringDatabase/tests/GodotTests.cs:99" type="FAILURE">
-<![CDATA[
-The process cannot access the file 'C:\Users\thefi\AppData\Local\Temp\GodotTest_a54fee62505a4e5e934ab188c25e325eMain.main.scripts.core.plants.AbstractPlant+Rt_0_16_0_' because it is being used by another process.
-]]>
-			</failure>
+		<testcase name="CreateTestDirWorks" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.004">
 		</testcase>
-		<testcase name="InitFromDir" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.001">
-			<failure message="FAILED: res://addons/EnumToIcon/EnumToStringDatabase/tests/GodotTests.cs:116" type="FAILURE">
-<![CDATA[
-The process cannot access the file 'C:\Users\thefi\AppData\Local\Temp\GodotTest_a54fee62505a4e5e934ab188c25e325eMain.main.scripts.core.plants.AbstractPlant+Rt_0_16_0_' because it is being used by another process.
-]]>
-			</failure>
+		<testcase name="PutData" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.026">
 		</testcase>
-		<testcase name="PutData" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.027">
-		</testcase>
-		<testcase name="RequestData" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.031">
+		<testcase name="RequestData" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.030">
 		</testcase>
 		<testcase name="RequestDataCacheMiss" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.027">
 		</testcase>
 		<testcase name="RequestDataDoesNotExist" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.006">
 		</testcase>
-		<testcase name="RequestDataNegCopy" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.000">
+		<testcase name="RequestDataNegCopy" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.001">
 		</testcase>
-		<testcase name="RequestDataWildcard" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.023">
+		<testcase name="RequestDataWildcard" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.021">
 		</testcase>
 		<testcase name="RequestDataWildcardAlternatives" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.033">
 		</testcase>
-		<testcase name="CheckData" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.044">
+		<testcase name="CheckData" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.043">
 		</testcase>
 		<testcase name="RequestBatchData" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.043">
 		</testcase>
-		<testcase name="RequestBatchDataCopy" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.044">
+		<testcase name="RequestBatchDataCopy" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.043">
+		</testcase>
+		<testcase name="DirNoChangesMade" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.021">
+		</testcase>
+		<testcase name="InitFromDir" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.041">
+		</testcase>
+		<testcase name="TestFromInit" classname="Main.addons.EnumToIcon.EnumToStringDatabase.tests.GodotTests" time="0.047">
 		</testcase>
 	</testsuite>
 </testsuites>
