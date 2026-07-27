@@ -5,6 +5,17 @@
         <EnableDynamicLoading>true</EnableDynamicLoading>
     </PropertyGroup>
     <ItemGroup>
+        <Compile Remove="addons\gdUnit4\**\*.cs"/>
+        <Compile Include="addons\gdUnit4\src\dotnet\GdUnit4CSharpApi.cs"/>
+        <Compile Include="addons\gdUnit4\test\core\discovery\resources\DiscoverExampleTestSuite.cs"/>
+        <Compile Include="addons\gdUnit4\test\core\resources\testsuites\NotATestSuite.cs"/>
+        <Compile Include="addons\gdUnit4\test\dotnet\ExampleTestSuite.cs"/>
+        <Compile Include="addons\gdUnit4\test\dotnet\GdUnit4CSharpApiTest.cs"/>
+        <Compile Include="addons\gdUnit4\test\resources\core\sources\TestPerson.cs"/>
+        <Compile Include="addons\gdUnit4\test\ui\parts\resources\gd_872\ATests.cs"/>
+        <Compile Include="addons\gdUnit4\test\ui\parts\resources\gd_872\AZTests.cs"/>
+    </ItemGroup>
+    <ItemGroup>
         <PackageReference Include="Dapper" Version="2.1.79"/>
         <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.9"/>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.8.1"/>
@@ -12,30 +23,34 @@
         <PackageReference Include="MSTest.TestFramework" Version="4.3.2"/>
         <PackageReference Include="sqlite-net-pcl" Version="1.9.172"/>
         <PackageReference Include="SQLiteNetExtensions" Version="2.1.0"/>
-        <PackageReference Include="gdUnit4.api" Version="5.*"/>
+        <PackageReference Include="gdUnit4.api" Version="*"/>
         <PackageReference Include="gdUnit4.test.adapter" Version="*"/>
     </ItemGroup>
     <ItemGroup>
-        <Content Include="addons\EnumToIcon\main\AccessIconsDb.cs.uid"/>
-        <Content Include="addons\EnumToIcon\main\db_declaration.sql"/>
-        <Content Include="addons\EnumToIcon\main\enum_to_directory.db"/>
+        <Content Include="addons\gdUnit4\bin\GdUnitCmdTool.gd"/>
+        <Content Include="addons\gdUnit4\bin\GdUnitCopyLog.gd"/>
+        <Content Include="addons\gdUnit4\LICENSE"/>
+        <Content Include="addons\gdUnit4\plugin.cfg"/>
+        <Content Include="addons\gdUnit4\plugin.gd"/>
+        <Content Include="addons\gdUnit4\runtest.cmd"/>
+        <Content Include="addons\gdUnit4\runtest.sh"/>
         <Content Include="main\scripts\scene\Gene_Window_Item_List.gd"/>
         <Content Include="main\scripts\scene\Gene_Window_Item_List.gd.uid"/>
     </ItemGroup>
     <ItemGroup>
+        <Folder Include="addons\temp\"/>
         <Folder Include="main\common\core\templates\"/>
         <Folder Include="main\common\ui\templatePopup\resources\"/>
         <Folder Include="main\icons\"/>
         <Folder Include="main\scripts\tests\"/>
     </ItemGroup>
     <ItemGroup>
-        <Content Include="addons\EnumToIcon\main\enum_to_directory.db">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        <Content Include="addons\EnumToIcon\EnumToStringDatabase\main\db_declaration.sql">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
-    </ItemGroup>
-    <ItemGroup>
-        <Content Include="addons\EnumToIcon\main\db_declaration.sql">
+        <None Update="addons\EnumToIcon\EnumToStringDatabase\main\enum_to_directory.db">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
+        </None>
     </ItemGroup>
 </Project>
+

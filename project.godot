@@ -28,6 +28,7 @@ TemplatePopup="*uid://dxw4yx0ij5eme"
 InventoryDisplay="*uid://b52f4xp42pi76"
 Market="*uid://boaevmngm4crt"
 IconConsolidation="*uid://8k8fpk8ckyig"
+MemoryToDb="*uid://u234agdc7ihf"
 
 [debug]
 
