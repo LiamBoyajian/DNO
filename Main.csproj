@@ -27,6 +27,7 @@
         <PackageReference Include="gdUnit4.test.adapter" Version="*"/>
     </ItemGroup>
     <ItemGroup>
+        <Content Include="addons\EnumToIcon\EnumToStringDatabase\plugin.cfg"/>
         <Content Include="addons\gdUnit4\bin\GdUnitCmdTool.gd"/>
         <Content Include="addons\gdUnit4\bin\GdUnitCopyLog.gd"/>
         <Content Include="addons\gdUnit4\LICENSE"/>

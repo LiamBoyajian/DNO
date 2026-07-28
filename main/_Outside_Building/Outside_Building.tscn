@@ -31,6 +31,7 @@ Boundaries = NodePath("Boundaries")
 
 [node name="mc" parent="." unique_id=2056976437 instance=ExtResource("15_0it47")]
 position = Vector2(375, 341)
+_movementSpeed = null
 
 [node name="IntoBuilding" type="Area2D" parent="." unique_id=914254641]
 position = Vector2(499, 283)
