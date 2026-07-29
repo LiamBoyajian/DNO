@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Main.addons.EnumToIcon.EnumToStringDatabase;
+using Main.addons.EnumToIcon.EnumToStringDatabase.main;
+using Main.main.scripts.core.plants;
 using Main.Source.main;
 
 namespace Main.main.scripts.core.util;

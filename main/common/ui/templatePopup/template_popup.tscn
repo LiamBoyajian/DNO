@@ -2,14 +2,15 @@
 
 [ext_resource type="Theme" uid="uid://b7am0k6ih57f5" path="res://main/common/ui/templatePopup/plantPopup.tres" id="1_dq4wh"]
 [ext_resource type="Script" uid="uid://bjp8l4c5ivbr0" path="res://main/scripts/core/util/TwoSidedPlantPopup.cs" id="2_ynjrw"]
-[ext_resource type="Script" uid="uid://drx08e25cm6vq" path="res://main/scripts/core/util/ResourceDisplay.cs" id="3_7d3qp"]
+[ext_resource type="Script" uid="uid://drx08e25cm6vq" path="res://main/scripts/core/util/ResourceDisplay.cs" id="3_kjk4s"]
 [ext_resource type="PackedScene" uid="uid://ddo46dt3lkkoi" path="res://main/common/ui/templatePopup/resources/button_template.tscn" id="4_xeqjv"]
+[ext_resource type="PackedScene" uid="uid://dbnfv84hox21s" path="res://main/common/ui/templatePopup/resources/h_box_container.tscn" id="6_7d3qp"]
 [ext_resource type="PackedScene" uid="uid://dqiwh01fs7ok5" path="res://main/common/ui/templatePopup/resources/SubContainer.tscn" id="6_7k4oj"]
 [ext_resource type="PackedScene" uid="uid://b0a7fa50wbr07" path="res://main/common/ui/templatePopup/resources/progress_bar_template.tscn" id="6_ynjrw"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_7k4oj"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_ngcsc"]
 
-[sub_resource type="ButtonGroup" id="ButtonGroup_qinad"]
+[sub_resource type="ButtonGroup" id="ButtonGroup_xeqjv"]
 
 [node name="TemplatePopup" type="Window" unique_id=754308462 node_paths=PackedStringArray("MaterialResourcesContainer", "InfiniteResourcesContainer")]
 transparent_bg = true
@@ -56,11 +57,11 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("3_7d3qp")
+script = ExtResource("3_kjk4s")
 ProgressBarTemplate = ExtResource("6_ynjrw")
 ButtonTemplate = ExtResource("4_xeqjv")
-Buttons = SubResource("ButtonGroup_7k4oj")
-SubContainer = ExtResource("6_7k4oj")
+Buttons = SubResource("ButtonGroup_ngcsc")
+SubContainer = ExtResource("6_7d3qp")
 
 [node name="ScrollContainer2" type="ScrollContainer" parent="HSplitContainer" unique_id=1402104531]
 layout_mode = 2
@@ -70,8 +71,8 @@ size_flags_horizontal = 3
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("3_7d3qp")
+script = ExtResource("3_kjk4s")
 ProgressBarTemplate = ExtResource("6_ynjrw")
 ButtonTemplate = ExtResource("4_xeqjv")
-Buttons = SubResource("ButtonGroup_qinad")
+Buttons = SubResource("ButtonGroup_xeqjv")
 SubContainer = ExtResource("6_7k4oj")
