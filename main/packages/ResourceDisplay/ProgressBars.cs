@@ -12,7 +12,7 @@ public partial class ProgressBars : BoxContainer, IResourceDisplay<ProgressBar>
     public List<Enum> AllowDisplay { get; }
     public ButtonGroup Buttons { get; } = null;
     [Export] public PackedScene ProgressBarTemplate { get; set; }
-    public string ClassNamePrefix { get; set; } = "IconProgressBar";
+    public static string ClassNamePrefix { get; set; } = "IconProgressBar";
 
     public bool ClearChildren()
     {
@@ -43,7 +43,7 @@ public partial class ProgressBars : BoxContainer, IResourceDisplay<ProgressBar>
 
         pendingProgressBar.MaxValue = item2.Max;
         pendingProgressBar.Value = item2.Amount;
-        pendingProgressBar.Name = $"{ClassNamePrefix}{ResourceDisplay.Delimiter}{item1.GetType().FullName}";
+        pendingProgressBar.Name = $"{ClassNamePrefix}{ResourceDisplayTools.Delimiter}{item1.GetType().FullName}";
 
         var pendingTextureRect = new TextureRect();
         pendingVBox.AddChild(pendingTextureRect);

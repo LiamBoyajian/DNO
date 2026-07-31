@@ -1,16 +1,11 @@
 [gd_scene format=3 uid="uid://dxw4yx0ij5eme"]
 
 [ext_resource type="Theme" uid="uid://b7am0k6ih57f5" path="res://main/packages/PlantPopup/templatePopup/plantPopup.tres" id="1_insi4"]
-[ext_resource type="Script" uid="uid://bjp8l4c5ivbr0" path="res://main/packages/PlantPopup/TwoSidedPlantPopup.cs" id="2_insi4"]
-[ext_resource type="Script" uid="uid://drx08e25cm6vq" path="res://main/scripts/core/util/ResourceDisplay.cs" id="3_jmpxc"]
+[ext_resource type="Script" uid="uid://bjp8l4c5ivbr0" path="res://main/packages/PlantPopup/PlantPopup.cs" id="2_3l5yu"]
+[ext_resource type="Script" uid="uid://d2ps47j40fhml" path="res://main/packages/ResourceDisplay/ProgressBars.cs" id="3_3xf5o"]
 [ext_resource type="PackedScene" uid="uid://b0a7fa50wbr07" path="res://main/packages/PlantPopup/templatePopup/resources/progress_bar_template.tscn" id="4_epeu7"]
+[ext_resource type="Script" uid="uid://caencktyra53p" path="res://main/packages/ResourceDisplay/UpgradeButtons.cs" id="5_3l5yu"]
 [ext_resource type="PackedScene" uid="uid://ddo46dt3lkkoi" path="res://main/packages/PlantPopup/templatePopup/resources/button_template.tscn" id="5_cb8lb"]
-[ext_resource type="PackedScene" uid="uid://dbnfv84hox21s" path="res://main/packages/PlantPopup/templatePopup/resources/h_box_container.tscn" id="6_v0v1a"]
-[ext_resource type="PackedScene" uid="uid://dqiwh01fs7ok5" path="res://main/packages/PlantPopup/templatePopup/resources/SubContainer.tscn" id="7_wogc5"]
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_ngcsc"]
-
-[sub_resource type="ButtonGroup" id="ButtonGroup_xeqjv"]
 
 [node name="TemplatePopup" type="Window" unique_id=754308462]
 transparent_bg = true
@@ -29,7 +24,7 @@ minimize_disabled = true
 maximize_disabled = true
 theme = ExtResource("1_insi4")
 theme_type_variation = &"plantInfoPopup"
-script = ExtResource("2_insi4")
+script = ExtResource("2_3l5yu")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=332772352]
 anchors_preset = -1
@@ -64,11 +59,8 @@ size_flags_stretch_ratio = 3.0
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("3_jmpxc")
+script = ExtResource("3_3xf5o")
 ProgressBarTemplate = ExtResource("4_epeu7")
-ButtonTemplate = ExtResource("5_cb8lb")
-Buttons = SubResource("ButtonGroup_ngcsc")
-SubContainer = ExtResource("6_v0v1a")
 
 [node name="ScrollContainer2" type="ScrollContainer" parent="MarginContainer/HSplitContainer" unique_id=1402104531]
 layout_mode = 2
@@ -80,11 +72,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 last_wrap_alignment = 1
-script = ExtResource("3_jmpxc")
-ProgressBarTemplate = ExtResource("4_epeu7")
-ButtonTemplate = ExtResource("5_cb8lb")
-Buttons = SubResource("ButtonGroup_xeqjv")
-SubContainer = ExtResource("7_wogc5")
+script = ExtResource("5_3l5yu")
+TextureButtonTemplate = ExtResource("5_cb8lb")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer" unique_id=910707194]
 layout_mode = 2

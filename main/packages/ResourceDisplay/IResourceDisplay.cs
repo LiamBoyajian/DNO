@@ -5,19 +5,19 @@ using Main.Source.main;
 
 namespace Main.main.packages.ResourceDisplay;
 
-public static class ResourceDisplay
+public static class ResourceDisplayTools
 {
     public static char Delimiter { get; set; } = '_';
 }
 
-public interface IResourceDisplay<TNode>
+public interface IResourceDisplay<out TNode> where TNode : Node
 {
     //Not 100% needed?
 
     public List<Enum> AllowDisplay { get; }
     public ButtonGroup Buttons { get; }
     public bool ClearChildren();
-    public string ClassNamePrefix { get; set; }
+    //public string ClassNamePrefix { get; set; }
 
     public bool AddElement((Enum, IMaterialResource) item);
 

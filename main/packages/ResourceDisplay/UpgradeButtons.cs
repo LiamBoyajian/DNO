@@ -7,12 +7,12 @@ using Main.Source.main;
 
 namespace Main.main.packages.ResourceDisplay;
 
-public partial class UpgradeButtons : BoxContainer, IResourceDisplay<TextureButton>
+public partial class UpgradeButtons : FlowContainer, IResourceDisplay<TextureButton>
 {
     public List<Enum> AllowDisplay { get; }
     public ButtonGroup Buttons { get; private set; }
     [Export] public PackedScene TextureButtonTemplate { get; set; }
-    public string ClassNamePrefix { get; set; } = "UpgradeButton";
+    public static string ClassNamePrefix { get; set; } = "UpgradeButton";
 
     public override void _Ready()
     {
@@ -49,8 +49,9 @@ public partial class UpgradeButtons : BoxContainer, IResourceDisplay<TextureButt
 
         pendingTextureButton.StretchMode = TextureButton.StretchModeEnum.Scale;
         var icon = MemoryToDb.GetTextureFromEntry(new Entry(item1));
-        pendingTextureButton.SetTextureNormal(icon);
-        pendingTextureButton.Name = $"{ClassNamePrefix}{ResourceDisplay.Delimiter}{item1.GetType().FullName}";
+        if (icon != null)
+            pendingTextureButton.SetTextureNormal(icon);
+        pendingTextureButton.Name = $"{ClassNamePrefix}{ResourceDisplayTools.Delimiter}{item1.GetType().FullName}";
         pendingTextureButton.TooltipText = $"{item2.Amount}/{item2.Max}";
 
         return true;

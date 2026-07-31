@@ -22,6 +22,13 @@ public partial class TwoSidedPlantPopup : Window
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        foreach (var child in FindChildren("*"))
+        {
+            if (child is not IResourceDisplay<Node> resourceDisplay) continue;
+
+            DisplayTo.Add(resourceDisplay);
+        }
+
         Instance = this;
         FocusExited += OnClose;
 
@@ -78,6 +85,7 @@ public partial class TwoSidedPlantPopup : Window
 
                 foreach (var display in DisplayTo)
                 {
+                    //Can later use suffixes to distinguish between nodes
                     display.AddElement(enumerable.Current);
                 }
             }
@@ -102,19 +110,20 @@ public partial class TwoSidedPlantPopup : Window
 
 
         var temp = button.Name.ToString()
-            .Split(ResourceDisplay.Delimiter); //hardcoded based on name from ResourceDisplay
+            .Split(ResourceDisplayTools.Delimiter);
         bool refresh = false;
 
 
-        //if (temp[0].Contains("Amount") && LastAttributeDictionary is IObtainable obtainable)
-        //{
-        //    refresh = obtainable.ParseObtain(temp[1]);
-        //}
-        //else if ((temp[0].Contains("Max") || temp[0].Contains("Infinite")) &&
-        //         LastAttributeDictionary is IUpgradable upgradable)
-        //{
-        //    refresh = upgradable.ParseUpgrade(temp[1]);
-        //}
+        //Future implementation: use suffixes to identify button presses.
+        if (temp[0].Contains(UpgradeButtons.ClassNamePrefix) && LastAttributeDictionary is IObtainable obtainable)
+        {
+            refresh = obtainable.ParseObtain(temp[1]);
+        }
+        else if ((temp[0].Contains("Max") || temp[0].Contains("Infinite")) &&
+                 LastAttributeDictionary is IUpgradable upgradable)
+        {
+            refresh = upgradable.ParseUpgrade(temp[1]);
+        }
 
         if (refresh)
             Refresh();
@@ -150,15 +159,5 @@ public partial class TwoSidedPlantPopup : Window
                 display.Update(item1.GetType().Name, item2);
             }
         }
-        //TODO a way to update the buttons with my new dictionaryenumerator implementation
-        //if (LastAttributeDictionary is IAttributeEnumerable attributeEnumerable)
-        //{
-        //    InfiniteResourcesContainer.UpdateAttributeButtons(attributeEnumerable.GetAttributeEnumerable());
-        //}
-//
-        //if (LastAttributeDictionary is IMaterialEnumerable materialEnumerable)
-        //{
-        //    MaterialResourcesContainer.UpdateMaterialBars(materialEnumerable.GetMaterialEnumerable());
-        //}
     }
 }
