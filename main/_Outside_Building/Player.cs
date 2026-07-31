@@ -19,7 +19,6 @@ public enum MovementTypes
 public partial class Player : AnimatedSprite2D
 {
     [Export] private float _movementSpeed = 50f;
-
     protected BasicScene ParentScene;
 
     // Called when the node enters the scene tree for the first time.
@@ -34,24 +33,30 @@ public partial class Player : AnimatedSprite2D
     public override void _Process(double delta)
     {
         var direction = new Vector2();
-        if (Input.IsActionPressed("ui_right"))
-        {
-            direction.X += _movementSpeed * (float)delta;
-        }
-
-        if (Input.IsActionPressed("ui_left"))
-        {
-            direction.X -= _movementSpeed * (float)delta;
-        }
-
         if (Input.IsActionPressed("ui_down"))
         {
             direction.Y += _movementSpeed * (float)delta;
+            Animation = "Front";
         }
 
         if (Input.IsActionPressed("ui_up"))
         {
             direction.Y -= _movementSpeed * (float)delta;
+            Animation = "Front";
+        }
+
+        if (Input.IsActionPressed("ui_right"))
+        {
+            direction.X += _movementSpeed * (float)delta;
+            Animation = "Side";
+            FlipH = false;
+        }
+
+        if (Input.IsActionPressed("ui_left"))
+        {
+            direction.X -= _movementSpeed * (float)delta;
+            Animation = "Side";
+            FlipH = true;
         }
 
         Movement(direction, MovementTypes.Walk);

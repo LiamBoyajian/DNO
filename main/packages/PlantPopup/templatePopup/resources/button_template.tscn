@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://brckcheb5r5d4" path="res://main/sprites/window_panels/plant_upgrade/plant_upgrade_button.ase_layer_tex" id="1_0get2"]
 
 [node name="Button" type="TextureButton" unique_id=809638746]
+custom_minimum_size = Vector2(30, 30)
 clip_contents = true
 offset_right = 30.0
 offset_bottom = 30.0

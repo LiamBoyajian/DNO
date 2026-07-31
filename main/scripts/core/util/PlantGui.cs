@@ -106,7 +106,7 @@ public partial class PlantGui : AnimatedSprite2D
     {
         if (!@event.IsAction("alt_click"))
             return;
-        TwoSidedPlantPopup.Instance.Popup(ParentPlant);
+        packages.PlantPopup.TwoSidedPlantPopup.Instance.Popup(ParentPlant);
     }
 
     private void BodyEnteredEventHandler(Node2D node2D)

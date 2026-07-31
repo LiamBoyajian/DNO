@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b0a7fa50wbr07"]
 
-[ext_resource type="Theme" uid="uid://b7am0k6ih57f5" path="res://main/common/ui/templatePopup/plantPopup.tres" id="1_mt6h6"]
+[ext_resource type="Theme" uid="uid://b7am0k6ih57f5" path="res://main/packages/PlantPopup/templatePopup/plantPopup.tres" id="1_mt6h6"]
 
 [node name="ProgressBar" type="ProgressBar" unique_id=549938670]
 anchors_preset = 15
@@ -14,9 +14,3 @@ theme = ExtResource("1_mt6h6")
 theme_type_variation = &"ResourceProgressBar"
 value = 50.0
 fill_mode = 3
-
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1099046831]
-layout_mode = 0
-offset_top = 166.0
-offset_right = 31.0
-offset_bottom = 197.0

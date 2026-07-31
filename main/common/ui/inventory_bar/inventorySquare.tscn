@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://jtre2oi7wlqn"]
 
-[ext_resource type="Script" uid="uid://cokr7pkm3d1y3" path="res://main/scripts/core/util/inventory/InventorySlot.cs" id="1_g1png"]
+[ext_resource type="Script" uid="uid://cokr7pkm3d1y3" path="res://main/packages/inventory/InventorySlot.cs" id="1_g1png"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wakri"]
 bg_color = Color(0, 0, 0, 0.31764707)
