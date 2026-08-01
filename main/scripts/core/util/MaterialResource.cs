@@ -7,6 +7,13 @@ public interface IMaterialResource
     public double Max { get; }
 
     public double Amount { get; }
+
+    public bool IsEmpty();
+
+    /**
+    * returns the val of amount is > val; otherwise returns the current amount
+    */
+    public double HasValue(double val);
 }
 
 public class MaterialResource(double amount, double max) : IMaterialResource
@@ -105,9 +112,6 @@ public class MaterialResource(double amount, double max) : IMaterialResource
         return change;
     }
 
-    /**
-     * returns the val of amount is > val; otherwise returns the current amount
-     */
     public double HasValue(double val)
     {
         return (val <= Amount) ? val : Amount;

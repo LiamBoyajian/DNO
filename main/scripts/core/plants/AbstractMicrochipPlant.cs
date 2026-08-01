@@ -64,8 +64,6 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
         ObtainGlucose();
         //CheckHeadGenes();
 
-        //THESE VALUES ARE TESTING CONSTANTS :: SHOULD BE REPLACED WITH SOME SET CONSTANT LATER
-
         EnergyHp(ConvertHpToGluRatio, ConvertGluToEnergyRatio);
 
 

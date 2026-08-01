@@ -47,8 +47,15 @@ public abstract partial class AbstractPlant : Node
     };
 
     //-----------------------------
-    public IReadOnlyDictionary<Rt, IMaterialResource> MyResources =>
-        Resources.ToDictionary(k => k.Key, IMaterialResource (v) => v.Value);
+
+    public static IReadOnlyDictionary<TEnumType, IMaterialResource> ConvertToReadOnlyDictionary<TEnumType>(
+        Dictionary<TEnumType, MaterialResource> dict) where TEnumType : Enum
+    {
+        return dict.ToDictionary(k => k.Key, IMaterialResource (v) => v.Value);
+    }
+
+    public IReadOnlyDictionary<Rt, IMaterialResource> MyResources => ConvertToReadOnlyDictionary(Resources);
+
 
     protected double FrameSum = 0.0;
     public event Action DugUp;

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 using Main.main.scripts.core.plants.interfaces;
-using Main.main.scripts.core.util.interfaces;
 using Main.main.scripts.core.util.inventory;
 using Main.Source.main;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
 
 namespace Main.main.scripts.core.plants.species;
 
 public partial class Tomato(int dbId)
-    : AbstractMicrochipPlant(dbId), IAttributeEnumerable, IMaterialEnumerable, IUpgradable, IObtainable,
+    : AbstractMicrochipPlant(dbId), IConcatEnumerable, IUpgradable, IObtainable,
         IBroadcastsUpdate, IShearable
 {
     public Tomato() : this(-1)
@@ -53,17 +53,17 @@ public partial class Tomato(int dbId)
         Fruit,
     }
 
-    protected Dictionary<TomatoOrgans, int> Organs = new()
+    protected Dictionary<TomatoOrgans, MaterialResource> Organs = new()
     {
-        { TomatoOrgans.LeafStem, 1 },
-        { TomatoOrgans.FlowerStem, 0 },
-        { TomatoOrgans.Leaf, 1 },
-        { TomatoOrgans.Root, 0 },
-        { TomatoOrgans.Flower, 0 },
-        { TomatoOrgans.Fruit, 0 },
+        { TomatoOrgans.LeafStem, new MaterialResource(1, 5) },
+        { TomatoOrgans.FlowerStem, new MaterialResource(1, 5) },
+        { TomatoOrgans.Leaf, new MaterialResource(1, 5) },
+        { TomatoOrgans.Root, new MaterialResource(1, 5) },
+        { TomatoOrgans.Flower, new MaterialResource(1, 5) },
+        { TomatoOrgans.Fruit, new MaterialResource(1, 5) },
     };
 
-    public IReadOnlyDictionary<TomatoOrgans, int> MyOrgans => Organs.ToDictionary();
+    public IReadOnlyDictionary<TomatoOrgans, IMaterialResource> MyOrgans => ConvertToReadOnlyDictionary(Organs);
 
     public override void _Ready()
     {
@@ -140,37 +140,37 @@ public partial class Tomato(int dbId)
         switch (key)
         {
             case TomatoOrgans.LeafStem:
-                Organs[TomatoOrgans.LeafStem] += 1;
+                Organs[TomatoOrgans.LeafStem].Give(1);
                 result = true;
                 break;
 
             case TomatoOrgans.FlowerStem:
-                Organs[TomatoOrgans.FlowerStem] += 1;
+                Organs[TomatoOrgans.FlowerStem].Give(1);
                 result = true;
                 break;
 
             case TomatoOrgans.Leaf:
-                Organs[TomatoOrgans.Leaf] += 2;
+                Organs[TomatoOrgans.Leaf].Give(2);
                 result = true;
                 break;
 
             case TomatoOrgans.Root:
 
-                Organs[TomatoOrgans.Root] += 1;
+                Organs[TomatoOrgans.Root].Give(1);
                 result = true;
                 break;
 
             case TomatoOrgans.Flower:
 
-                Organs[TomatoOrgans.Flower] += 2;
+                Organs[TomatoOrgans.Flower].Give(2);
                 result = true;
                 break;
 
             case TomatoOrgans.Fruit:
-                if (Organs[TomatoOrgans.Flower] <= 0)
+                if (Organs[TomatoOrgans.Flower].Amount <= 0)
                     break;
-                Organs[TomatoOrgans.Flower] -= 1;
-                Organs[TomatoOrgans.Fruit] += 1;
+                Organs[TomatoOrgans.Flower].Take(1);
+                Organs[TomatoOrgans.Fruit].Give(1);
                 result = true;
                 break;
         }
@@ -182,22 +182,22 @@ public partial class Tomato(int dbId)
     }
 
 
-    public IEnumerable<(string, IMaterialResource)> GetMaterialEnumerable()
-    {
-        foreach (var r in Resources)
-        {
-            if (r.Key is Rt.H2O or Rt.Glucose or Rt.Health)
-                yield return (r.Key.ToString(), (IMaterialResource)r.Value);
-        }
-    }
-
-    public IEnumerable<(string, double)> GetAttributeEnumerable()
-    {
-        foreach (var r in Organs)
-        {
-            yield return (r.Key.ToString(), r.Value);
-        }
-    }
+    //public IEnumerable<(string, IMaterialResource)> GetMaterialEnumerable()
+    //{
+    //    foreach (var r in Resources)
+    //    {
+    //        if (r.Key is Rt.H2O or Rt.Glucose or Rt.Health)
+    //            yield return (r.Key.ToString(), (IMaterialResource)r.Value);
+    //    }
+    //}
+    //
+    //public IEnumerable<(string, double)> GetAttributeEnumerable()
+    //{
+    //    foreach (var r in Organs)
+    //    {
+    //        yield return (r.Key.ToString(), r.Value);
+    //    }
+    //}
 
     /**
      * Can upgrade doubles and MaterialResource
@@ -221,8 +221,7 @@ public partial class Tomato(int dbId)
         }
         else if (Enum.TryParse(s, out TomatoOrgans tomatoKey))
         {
-            GD.Print("asdojaosijdasoipjd\n");
-            var tempCost = GlucoseUpgradeFunction(Organs[tomatoKey] * ORGANPURCHASEMULTIPLIER);
+            var tempCost = GlucoseUpgradeFunction(Organs[tomatoKey].Amount * ORGANPURCHASEMULTIPLIER);
             if (tempCost <= Resources[Rt.Glucose].Amount)
             {
                 Resources[Rt.Glucose].Take(tempCost);
@@ -284,7 +283,7 @@ public partial class Tomato(int dbId)
             case >= 500:
                 GuiManager.Animation = "fruiting";
                 GuiManager.Stop();
-                GuiManager.Frame = Mathf.Clamp(Organs[TomatoOrgans.Fruit], 0, 8);
+                GuiManager.Frame = (int)Mathf.Clamp(Organs[TomatoOrgans.Fruit].Amount, 0, 8);
                 break;
             case >= 200:
                 GuiManager.Frame = 4;
@@ -309,7 +308,7 @@ public partial class Tomato(int dbId)
 
     public int GetShear()
     {
-        return Organs[TomatoOrgans.Fruit];
+        return (int)Organs[TomatoOrgans.Fruit].Amount;
     }
 
     public int Shear(int sheared)
@@ -317,18 +316,31 @@ public partial class Tomato(int dbId)
         if (sheared <= 0) return 0;
 
         int result;
-        if (sheared <= Organs[TomatoOrgans.Fruit])
+        if (sheared <= Organs[TomatoOrgans.Fruit].Amount)
         {
             result = sheared;
-            Organs[TomatoOrgans.Fruit] -= sheared;
+            Organs[TomatoOrgans.Fruit].Take(sheared);
         }
         else
         {
-            result = Organs[TomatoOrgans.Fruit];
-            Organs[TomatoOrgans.Fruit] = 0;
+            result = (int)Organs[TomatoOrgans.Fruit].Amount;
+            Organs[TomatoOrgans.Fruit].SetEmpty();
         }
 
         Updated?.Invoke();
         return result;
+    }
+
+    public IEnumerable<(Enum, IMaterialResource)> GetDictionaryConcatEnumerable()
+    {
+        foreach (var r in MyResources)
+        {
+            yield return (r.Key, r.Value);
+        }
+
+        foreach (var o in Organs)
+        {
+            yield return (o.Key, o.Value);
+        }
     }
 }

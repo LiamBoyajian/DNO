@@ -19,6 +19,14 @@ public partial interface IMaterialEnumerable : IAttributeDictionary
     public IEnumerable<(string, IMaterialResource)> GetMaterialEnumerable();
 }
 
+public partial interface IConcatEnumerable : IAttributeDictionary
+{
+    /**
+    * Allows users to cycle through all plant attributes.
+    */
+    public IEnumerable<(Enum, IMaterialResource)> GetDictionaryConcatEnumerable();
+}
+
 /**
  * Can increase resource max
  */

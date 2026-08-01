@@ -27,6 +27,7 @@
         <PackageReference Include="gdUnit4.test.adapter" Version="*"/>
     </ItemGroup>
     <ItemGroup>
+        <Content Include="addons\EnumToIcon\EnumToStringDatabase\plugin.cfg"/>
         <Content Include="addons\gdUnit4\bin\GdUnitCmdTool.gd"/>
         <Content Include="addons\gdUnit4\bin\GdUnitCopyLog.gd"/>
         <Content Include="addons\gdUnit4\LICENSE"/>
@@ -42,6 +43,9 @@
         <Folder Include="main\common\core\templates\"/>
         <Folder Include="main\common\ui\templatePopup\resources\"/>
         <Folder Include="main\icons\"/>
+        <Folder Include="main\packages\inventory\"/>
+        <Folder Include="main\packages\mc\"/>
+        <Folder Include="main\packages\PlantPopup\"/>
         <Folder Include="main\scripts\tests\"/>
     </ItemGroup>
     <ItemGroup>
