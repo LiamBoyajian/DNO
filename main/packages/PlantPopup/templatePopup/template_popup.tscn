@@ -7,74 +7,55 @@
 [ext_resource type="Script" uid="uid://caencktyra53p" path="res://main/packages/ResourceDisplay/UpgradeButtons.cs" id="5_3l5yu"]
 [ext_resource type="PackedScene" uid="uid://ddo46dt3lkkoi" path="res://main/packages/PlantPopup/templatePopup/resources/button_template.tscn" id="5_cb8lb"]
 
-[node name="TemplatePopup" type="Window" unique_id=754308462]
-transparent_bg = true
-oversampling_override = 1.0
-title = "TEST"
-initial_position = 1
-size = Vector2i(580, 300)
-transient = true
-transient_to_focused = true
-unresizable = true
-always_on_top = true
-transparent = true
-popup_window = true
-popup_wm_hint = true
-minimize_disabled = true
-maximize_disabled = true
+[node name="TemplatePopup" type="PanelContainer" unique_id=39766280]
+z_index = 6
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -290.0
+offset_top = -150.0
+offset_right = 290.0
+offset_bottom = 150.0
+grow_horizontal = 2
+grow_vertical = 2
 theme = ExtResource("1_insi4")
 theme_type_variation = &"plantInfoPopup"
 script = ExtResource("2_3l5yu")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=332772352]
-anchors_preset = -1
-anchor_left = 0.024
-anchor_top = 0.047000002
-anchor_right = 0.024
-anchor_bottom = 0.047000002
-offset_left = 0.07999992
-offset_top = -0.10000038
-offset_right = 552.08
-offset_bottom = 271.9
+layout_mode = 2
 theme_override_constants/margin_left = 3
 theme_override_constants/margin_top = 3
 theme_override_constants/margin_right = 3
 theme_override_constants/margin_bottom = 3
 
-[node name="HSplitContainer" type="HSplitContainer" parent="MarginContainer" unique_id=2090352720]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1744562380]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/HBoxContainer" unique_id=1711219863]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_constants/margin_right = 3
+
+[node name="material_resource_display" type="HBoxContainer" parent="MarginContainer/HBoxContainer/MarginContainer" unique_id=1894650845]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-split_offsets = PackedInt32Array(0, 0)
-drag_area_margin_begin = 2
-drag_area_margin_end = 2
-drag_area_highlight_in_editor = true
-
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/HSplitContainer" unique_id=534223365]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_stretch_ratio = 3.0
-
-[node name="material_resource_display" type="HBoxContainer" parent="MarginContainer/HSplitContainer/ScrollContainer" unique_id=1894650845]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
+alignment = 1
 script = ExtResource("3_3xf5o")
 ProgressBarTemplate = ExtResource("4_epeu7")
 
-[node name="ScrollContainer2" type="ScrollContainer" parent="MarginContainer/HSplitContainer" unique_id=1402104531]
+[node name="ScrollContainer2" type="ScrollContainer" parent="MarginContainer/HBoxContainer" unique_id=1402104531]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
 
-[node name="FlowContainer" type="FlowContainer" parent="MarginContainer/HSplitContainer/ScrollContainer2" unique_id=1644486352]
+[node name="FlowContainer" type="FlowContainer" parent="MarginContainer/HBoxContainer/ScrollContainer2" unique_id=1644486352]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 last_wrap_alignment = 1
 script = ExtResource("5_3l5yu")
 TextureButtonTemplate = ExtResource("5_cb8lb")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HSplitContainer" unique_id=910707194]
-layout_mode = 2
-size_flags_horizontal = 3

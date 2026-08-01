@@ -7,9 +7,9 @@ using AbstractPlant = Main.main.scripts.core.plants.AbstractPlant;
 
 namespace Main.main.packages.PlantPopup;
 
-public partial class TwoSidedPlantPopup : Window
+public partial class PlantPopup : PanelContainer
 {
-    public static TwoSidedPlantPopup Instance { get; private set; }
+    public static PlantPopup Instance { get; private set; }
     public AbstractPlant SelectedPlant { get; set; }
 
     public List<IResourceDisplay<Node>> DisplayTo { get; set; } = [];
@@ -70,7 +70,7 @@ public partial class TwoSidedPlantPopup : Window
 
         ClearElements();
         Show();
-        PopupCentered();
+        //PopupCentered();
 
         if (parent is IConcatEnumerable parentAsDictionaryEnumerable)
         {
@@ -86,6 +86,16 @@ public partial class TwoSidedPlantPopup : Window
                 foreach (var display in DisplayTo)
                 {
                     //Can later use suffixes to distinguish between nodes
+                    if (display is ProgressBars)
+                    {
+                        //Testing: hardcoded
+                        if (item1 is not (AbstractPlant.Rt.Health or AbstractPlant.Rt.H2O
+                            or AbstractPlant.Rt.Glucose))
+                        {
+                            continue;
+                        }
+                    }
+
                     display.AddElement(enumerable.Current);
                 }
             }
@@ -113,17 +123,17 @@ public partial class TwoSidedPlantPopup : Window
             .Split(ResourceDisplayTools.Delimiter);
         bool refresh = false;
 
-
+        //TODO
         //Future implementation: use suffixes to identify button presses.
-        if (temp[0].Contains(UpgradeButtons.ClassNamePrefix) && LastAttributeDictionary is IObtainable obtainable)
-        {
-            refresh = obtainable.ParseObtain(temp[1]);
-        }
-        else if ((temp[0].Contains("Max") || temp[0].Contains("Infinite")) &&
-                 LastAttributeDictionary is IUpgradable upgradable)
-        {
-            refresh = upgradable.ParseUpgrade(temp[1]);
-        }
+        //if (temp[0].Contains(UpgradeButtons.ClassNamePrefix) && LastAttributeDictionary is IObtainable obtainable)
+        //{
+        //    refresh = obtainable.ParseObtain(temp[1]);
+        //}
+        //else if ((temp[0].Contains("Max") || temp[0].Contains("Infinite")) &&
+        //         LastAttributeDictionary is IUpgradable upgradable)
+        //{
+        //    refresh = upgradable.ParseUpgrade(temp[1]);
+        //}
 
         if (refresh)
             Refresh();

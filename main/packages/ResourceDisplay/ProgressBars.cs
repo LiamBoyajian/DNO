@@ -9,10 +9,15 @@ namespace Main.main.packages.ResourceDisplay;
 
 public partial class ProgressBars : BoxContainer, IResourceDisplay<ProgressBar>
 {
-    public List<Enum> AllowDisplay { get; }
-    public ButtonGroup Buttons { get; } = null;
+    public ButtonGroup Buttons { get; private set; }
     [Export] public PackedScene ProgressBarTemplate { get; set; }
     public static string ClassNamePrefix { get; set; } = "IconProgressBar";
+
+    public override void _Ready()
+    {
+        base._Ready();
+        Buttons = new ButtonGroup();
+    }
 
     public bool ClearChildren()
     {

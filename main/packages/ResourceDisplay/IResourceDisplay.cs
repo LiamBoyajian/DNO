@@ -13,8 +13,6 @@ public static class ResourceDisplayTools
 public interface IResourceDisplay<out TNode> where TNode : Node
 {
     //Not 100% needed?
-
-    public List<Enum> AllowDisplay { get; }
     public ButtonGroup Buttons { get; }
     public bool ClearChildren();
     //public string ClassNamePrefix { get; set; }

@@ -9,7 +9,6 @@ namespace Main.main.packages.ResourceDisplay;
 
 public partial class UpgradeButtons : FlowContainer, IResourceDisplay<TextureButton>
 {
-    public List<Enum> AllowDisplay { get; }
     public ButtonGroup Buttons { get; private set; }
     [Export] public PackedScene TextureButtonTemplate { get; set; }
     public static string ClassNamePrefix { get; set; } = "UpgradeButton";
@@ -18,6 +17,7 @@ public partial class UpgradeButtons : FlowContainer, IResourceDisplay<TextureBut
     {
         base._Ready();
         Buttons = new ButtonGroup();
+        MouseFilter = MouseFilterEnum.Pass;
     }
 
     public bool ClearChildren()
@@ -53,6 +53,8 @@ public partial class UpgradeButtons : FlowContainer, IResourceDisplay<TextureBut
             pendingTextureButton.SetTextureNormal(icon);
         pendingTextureButton.Name = $"{ClassNamePrefix}{ResourceDisplayTools.Delimiter}{item1.GetType().FullName}";
         pendingTextureButton.TooltipText = $"{item2.Amount}/{item2.Max}";
+
+        pendingTextureButton.ButtonGroup = Buttons;
 
         return true;
     }

@@ -14,3 +14,4 @@ theme = ExtResource("1_mt6h6")
 theme_type_variation = &"ResourceProgressBar"
 value = 50.0
 fill_mode = 3
+show_percentage = false
