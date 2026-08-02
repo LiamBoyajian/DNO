@@ -12,21 +12,34 @@ public partial class PlantPopup : PanelContainer
     public static PlantPopup Instance { get; private set; }
     public AbstractPlant SelectedPlant { get; set; }
 
-    public List<IResourceDisplay<Node>> DisplayTo { get; set; } = [];
+    public Dictionary<IResourceDisplay<Node>, EnumGate> DisplayTo { get; set; } = [];
+
     //[Export] public ResourceDisplay MaterialResourcesContainer;
     //[Export] public ResourceDisplay InfiniteResourcesContainer;
-
+    //public EnumGate @EnumGate { get; set; }
     protected IAttributeDictionary LastAttributeDictionary { get; private set; }
 
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
+        //@EnumGate = new EnumGate();
+
+
         foreach (var child in FindChildren("*"))
         {
             if (child is not IResourceDisplay<Node> resourceDisplay) continue;
 
-            DisplayTo.Add(resourceDisplay);
+            if (resourceDisplay is ProgressBars progressBar)
+            {
+                var temp = new EnumGate();
+                temp.CreateGate(typeof(AbstractPlant.Rt), 0, 3, 4);
+                DisplayTo.Add(progressBar, temp);
+            }
+            else
+            {
+                DisplayTo.Add(resourceDisplay, new EnumGate());
+            }
         }
 
         Instance = this;
@@ -34,7 +47,7 @@ public partial class PlantPopup : PanelContainer
 
         foreach (var display in DisplayTo)
         {
-            display.Buttons.Pressed += ButtonGroupWasPressed;
+            display.Key.Buttons.Pressed += ButtonGroupWasPressed;
         }
 
         OnClose();
@@ -86,17 +99,12 @@ public partial class PlantPopup : PanelContainer
                 foreach (var display in DisplayTo)
                 {
                     //Can later use suffixes to distinguish between nodes
-                    if (display is ProgressBars)
+                    if (display.Key is ProgressBars && !display.Value.Permits(item1, false))
                     {
-                        //Testing: hardcoded
-                        if (item1 is not (AbstractPlant.Rt.Health or AbstractPlant.Rt.H2O
-                            or AbstractPlant.Rt.Glucose))
-                        {
-                            continue;
-                        }
+                        continue;
                     }
 
-                    display.AddElement(enumerable.Current);
+                    display.Key.AddElement(enumerable.Current);
                 }
             }
         }
@@ -108,7 +116,7 @@ public partial class PlantPopup : PanelContainer
         //ensure "|| result" comes at the end
         foreach (var display in DisplayTo)
         {
-            result = display.ClearChildren() || result;
+            result = display.Key.ClearChildren() || result;
         }
 
         return result;
@@ -166,7 +174,7 @@ public partial class PlantPopup : PanelContainer
                 var item2 = enumerable.Current.Item2;
 
 
-                display.Update(item1.GetType().Name, item2);
+                display.Key.Update(item1.GetType().Name, item2);
             }
         }
     }
