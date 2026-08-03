@@ -58,6 +58,11 @@ folder_colors={
 "res://Sprites/": "purple"
 }
 
+[gdunit4]
+
+settings/test/test_lookup_folder=""
+settings/test/test_discovery=true
+
 [input]
 
 ui_focus_next={

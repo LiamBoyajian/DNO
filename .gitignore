@@ -12,8 +12,8 @@
 /dataSources/
 /dataSources.local.xml
 
-/addons/*
-!/addons/EnumToIcon/
+addons/
+
 
 
 
@@ -28,6 +28,7 @@
 bin/
 obj/
 *.sln
+/.runsettings
 #*.csproj
 *.user
 *.suo

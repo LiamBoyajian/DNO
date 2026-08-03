@@ -1,12 +1,10 @@
 [gd_resource type="Theme" format=4 uid="uid://bccati3tbihud"]
 
-[ext_resource type="Texture2D" uid="uid://d15dv8rcnsb04" path="res://main/_UI_Computer/gene viewer window/Window Popup_minimize.ase_layer_tex" id="1_g76qb"]
 [ext_resource type="StyleBox" uid="uid://bgraddpb3vbox" path="res://main/_UI_Computer/gene viewer window/RoundBox.tres" id="1_lqao0"]
 [ext_resource type="StyleBox" uid="uid://dqfri3l75pg27" path="res://main/_UI_Computer/gene viewer window/GeneBox.tres" id="2_47osk"]
 [ext_resource type="StyleBox" uid="uid://im50wynnapc3" path="res://main/_UI_Computer/gene viewer window/confirm.tres" id="2_vh5xo"]
 [ext_resource type="StyleBox" uid="uid://bjlsw0q7twhpu" path="res://main/_UI_Computer/gene viewer window/pc_embedded_border.tres" id="3_161gr"]
 [ext_resource type="StyleBox" uid="uid://c5gjgmd5tbr41" path="res://main/_UI_Computer/gene viewer window/pc_embedded_unfocused_border.tres" id="4_47osk"]
-[ext_resource type="Texture2D" uid="uid://b34dmod6y0md6" path="res://main/_UI_Computer/gene viewer window/Window Popup_close.ase_layer_tex" id="4_k5c1e"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_mrq1q"]
 
@@ -628,8 +626,8 @@ GeneButton/styles/pressed = ExtResource("2_47osk")
 HBoxContainer/constants/separation = 0
 MenuButton/styles/normal = SubResource("StyleBoxFlat_1ygq3")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_g76qb")
-PopupPanel/icons/close = ExtResource("4_k5c1e")
-PopupPanel/icons/close_pressed = ExtResource("4_k5c1e")
+PopupPanel/icons/close = null
+PopupPanel/icons/close_pressed = null
 VBoxContainer/constants/separation = 5
 Window/colors/title_color = Color(0.875, 0.875, 0.875, 1)
 Window/colors/title_outline_modulate = Color(0, 0, 0, 1)
@@ -642,9 +640,9 @@ Window/constants/title_height = 28
 Window/constants/title_outline_size = 0
 Window/font_sizes/title_font_size = 16
 Window/fonts/title_font = SubResource("FontFile_34esj")
-Window/icons/close = ExtResource("1_g76qb")
-Window/icons/close_pressed = ExtResource("1_g76qb")
-Window/icons/minimize = ExtResource("1_g76qb")
-Window/icons/minimize_pressed = ExtResource("1_g76qb")
+Window/icons/close = null
+Window/icons/close_pressed = null
+Window/icons/minimize = null
+Window/icons/minimize_pressed = null
 Window/styles/embedded_border = ExtResource("3_161gr")
 Window/styles/embedded_unfocused_border = ExtResource("4_47osk")
