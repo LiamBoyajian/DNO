@@ -49,8 +49,7 @@ public partial class ProgressBars : BoxContainer, IResourceDisplay<ProgressBar>
 
         pendingProgressBar.MaxValue = item2.Max;
         pendingProgressBar.Value = item2.Amount;
-        pendingProgressBar.Name =
-            $"{ClassNamePrefix}{ResourceDisplayTools.Delimiter}{item1.GetType().FullName}{ResourceDisplayTools.Delimiter}{suffix}";
+        pendingProgressBar.Name = ResourceDisplayTools.DelimiterIdName(ClassNamePrefix, item1, suffix);
 
         var pendingTextureRect = new TextureRect();
         pendingVBox.AddChild(pendingTextureRect);
@@ -62,23 +61,30 @@ public partial class ProgressBars : BoxContainer, IResourceDisplay<ProgressBar>
         return true;
     }
 
-    public ProgressBar Find(string key)
+    /**
+     * returns found progressbar; otherwise null
+     */
+    public ProgressBar Find(Enum @enum, string suffix = "*")
     {
-        return FindChild(ClassNamePrefix + key, true, false) as ProgressBar;
+        return FindChild(ResourceDisplayTools.DelimiterIdName(ClassNamePrefix, @enum, suffix), true, false) as
+            ProgressBar;
     }
 
-    public ProgressBar Update(string key, IMaterialResource material)
+    /**
+     * Attempts to update a progressbar with this key
+     * returns updated progressbar; otherwise null
+     */
+    public ProgressBar Update(Enum @enum, IMaterialResource material, string suffix = "*")
     {
-        if (Find(key) is not { } b)
+        if (Find(@enum, suffix) is not { } b)
             return null;
 
-        b.MaxValue = material.Max;
         b.Value = material.Amount;
-
+        b.MaxValue = material.Max;
         return b;
     }
 
-    public void UpdateAll(IEnumerable<(string, IMaterialResource)> getMaterialEnumerable)
+    public void UpdateAll(IEnumerable<(Enum, IMaterialResource)> getMaterialEnumerable)
     {
         foreach (var r in getMaterialEnumerable)
         {

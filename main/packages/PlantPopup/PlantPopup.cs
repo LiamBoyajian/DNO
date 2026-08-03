@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Godot;
@@ -7,7 +8,7 @@ using AbstractPlant = Main.main.scripts.core.plants.AbstractPlant;
 
 namespace Main.main.packages.PlantPopup;
 
-public partial class PlantPopup : PanelContainer
+public partial class PlantPopup : Window
 {
     public static PlantPopup Instance { get; private set; }
     public AbstractPlant SelectedPlant { get; set; }
@@ -19,6 +20,7 @@ public partial class PlantPopup : PanelContainer
     //public EnumGate @EnumGate { get; set; }
     protected IAttributeDictionary LastAttributeDictionary { get; private set; }
 
+    private string _purchaseSuffix = "purchase";
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -83,7 +85,7 @@ public partial class PlantPopup : PanelContainer
 
         ClearElements();
         Show();
-        //PopupCentered();
+        PopupCentered();
 
         if (parent is IConcatEnumerable parentAsDictionaryEnumerable)
         {
@@ -96,15 +98,22 @@ public partial class PlantPopup : PanelContainer
                 if (item1 == null || item2 == null)
                     continue;
 
+
                 foreach (var display in DisplayTo)
                 {
-                    //Can later use suffixes to distinguish between nodes
+                    var suffix = "";
+
                     if (display.Key is ProgressBars && !display.Value.Permits(item1, false))
                     {
                         continue;
                     }
 
-                    display.Key.AddElement(enumerable.Current);
+                    if (display.Key is UpgradeButtons ub)
+                    {
+                        suffix = _purchaseSuffix;
+                    }
+
+                    display.Key.AddElement(enumerable.Current, suffix);
                 }
             }
         }
@@ -127,21 +136,25 @@ public partial class PlantPopup : PanelContainer
         if (LastAttributeDictionary == null) return;
 
 
-        var temp = button.Name.ToString()
+        var alternateSplitDelimiter = button.Name.ToString()
+            .Split(ResourceDisplayTools.DelimiterAlternate);
+        var primarySplitDelimiter = alternateSplitDelimiter[2]
             .Split(ResourceDisplayTools.Delimiter);
+
+
+        var @enum = ResourceDisplayTools.ConvertStringToEnum(alternateSplitDelimiter[1].Replace('_', '.'),
+            Convert.ToInt32(primarySplitDelimiter[0]));
+        if (@enum == null) throw new Exception("Button pressed has no valid enum");
+
         bool refresh = false;
 
         //TODO
         //Future implementation: use suffixes to identify button presses.
-        //if (temp[0].Contains(UpgradeButtons.ClassNamePrefix) && LastAttributeDictionary is IObtainable obtainable)
-        //{
-        //    refresh = obtainable.ParseObtain(temp[1]);
-        //}
-        //else if ((temp[0].Contains("Max") || temp[0].Contains("Infinite")) &&
-        //         LastAttributeDictionary is IUpgradable upgradable)
-        //{
-        //    refresh = upgradable.ParseUpgrade(temp[1]);
-        //}
+        if (string.CompareOrdinal(primarySplitDelimiter[1], _purchaseSuffix) == 0 &&
+            LastAttributeDictionary is IUpgradable upgradable)
+        {
+            refresh = upgradable.ParseUpgrade(@enum);
+        }
 
         if (refresh)
             Refresh();
@@ -155,6 +168,7 @@ public partial class PlantPopup : PanelContainer
 
     public void Refresh(bool fullRefresh = false)
     {
+        //TODO overload refresh specific instance
         if (fullRefresh)
         {
             ClearElements();
@@ -173,8 +187,8 @@ public partial class PlantPopup : PanelContainer
                 var item1 = enumerable.Current.Item1;
                 var item2 = enumerable.Current.Item2;
 
-
-                display.Key.Update(item1.GetType().Name, item2);
+                display.Key.Update(item1,
+                    item2); //TODO need to be able to differentiate between duplicate values if identical names are present
             }
         }
     }

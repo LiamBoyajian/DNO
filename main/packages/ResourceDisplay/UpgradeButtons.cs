@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using CommandLine;
 using Godot;
 using Main.addons.EnumToIcon.EnumToStringDatabase;
 using Main.addons.EnumToIcon.EnumToStringDatabase.main;
@@ -38,9 +39,6 @@ public partial class UpgradeButtons : FlowContainer, IResourceDisplay<TextureBut
         var item1 = item.Item1;
         var item2 = item.Item2;
 
-        //var pendingVBox = new VBoxContainer();
-        //AddChild(pendingVBox);
-
         var pendingTextureButton = TextureButtonTemplate.Instantiate() as TextureButton;
         if (pendingTextureButton == null)
             return false;
@@ -51,8 +49,7 @@ public partial class UpgradeButtons : FlowContainer, IResourceDisplay<TextureBut
         var icon = MemoryToDb.GetTextureFromEntry(new Entry(item1));
         if (icon != null)
             pendingTextureButton.SetTextureNormal(icon);
-        pendingTextureButton.Name =
-            $"{ClassNamePrefix}{ResourceDisplayTools.Delimiter}{item1.GetType().FullName}{ResourceDisplayTools.Delimiter}{suffix}";
+        pendingTextureButton.Name = ResourceDisplayTools.DelimiterIdName(ClassNamePrefix, item1, suffix);
         pendingTextureButton.TooltipText = $"{item2.Amount}/{item2.Max}";
 
         pendingTextureButton.ButtonGroup = Buttons;
@@ -61,28 +58,29 @@ public partial class UpgradeButtons : FlowContainer, IResourceDisplay<TextureBut
     }
 
     /**
-     * returns found progressbar; otherwise null
+     * returns found texturebutton; otherwise null
      */
-    public TextureButton Find(string key)
+    public TextureButton Find(Enum @enum, string suffix = "*")
     {
-        return FindChild(ClassNamePrefix + key, true, false) as TextureButton;
+        return FindChild(ResourceDisplayTools.DelimiterIdName(ClassNamePrefix, @enum, suffix), true, false) as
+            TextureButton;
     }
 
     /**
-     * Attempts to update a progressbar with this key
-     * returns updated progressbar; otherwise null
+     * Attempts to update a texturebutton with this key
+     * returns updated texturebutton; otherwise null
      */
-    public TextureButton Update(string key, IMaterialResource material)
+    public TextureButton Update(Enum @enum, IMaterialResource material, string suffix = "*")
     {
-        if (Find(key) is not { } b)
+        if (Find(@enum, suffix) is not { } b)
             return null;
 
-        b.TooltipText = $"{material.Amount}/{material.Max}";
+        b.TooltipText = $"{(float)material.Amount}/{material.Max}";
 
         return b;
     }
 
-    public void UpdateAll(IEnumerable<(string, IMaterialResource)> getMaterialEnumerable)
+    public void UpdateAll(IEnumerable<(Enum, IMaterialResource)> getMaterialEnumerable)
     {
         foreach (var r in getMaterialEnumerable)
         {

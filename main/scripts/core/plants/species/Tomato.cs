@@ -56,11 +56,11 @@ public partial class Tomato(int dbId)
     protected Dictionary<TomatoOrgans, MaterialResource> Organs = new()
     {
         { TomatoOrgans.LeafStem, new MaterialResource(1, 5) },
-        { TomatoOrgans.FlowerStem, new MaterialResource(1, 5) },
+        { TomatoOrgans.FlowerStem, new MaterialResource(0, 5) },
         { TomatoOrgans.Leaf, new MaterialResource(1, 5) },
         { TomatoOrgans.Root, new MaterialResource(1, 5) },
-        { TomatoOrgans.Flower, new MaterialResource(1, 5) },
-        { TomatoOrgans.Fruit, new MaterialResource(1, 5) },
+        { TomatoOrgans.Flower, new MaterialResource(0, 5) },
+        { TomatoOrgans.Fruit, new MaterialResource(0, 5) },
     };
 
     public IReadOnlyDictionary<TomatoOrgans, IMaterialResource> MyOrgans => ConvertToReadOnlyDictionary(Organs);
@@ -181,34 +181,15 @@ public partial class Tomato(int dbId)
         return result;
     }
 
-
-    //public IEnumerable<(string, IMaterialResource)> GetMaterialEnumerable()
-    //{
-    //    foreach (var r in Resources)
-    //    {
-    //        if (r.Key is Rt.H2O or Rt.Glucose or Rt.Health)
-    //            yield return (r.Key.ToString(), (IMaterialResource)r.Value);
-    //    }
-    //}
-    //
-    //public IEnumerable<(string, double)> GetAttributeEnumerable()
-    //{
-    //    foreach (var r in Organs)
-    //    {
-    //        yield return (r.Key.ToString(), r.Value);
-    //    }
-    //}
-
     /**
      * Can upgrade doubles and MaterialResource
-     * String can parse to Rt and TomatoOrgans
      *
      * returns true if change was made
      */
-    public virtual bool ParseUpgrade(string s)
+    public virtual bool ParseUpgrade(Enum @enum)
     {
         bool result = false;
-        if (Enum.TryParse(s, out Rt rtKey))
+        if (@enum is Rt rtKey)
         {
             var tempCost = GlucoseUpgradeFunction(Resources[rtKey].Max);
 
@@ -219,7 +200,7 @@ public partial class Tomato(int dbId)
                 result = true;
             }
         }
-        else if (Enum.TryParse(s, out TomatoOrgans tomatoKey))
+        else if (@enum is TomatoOrgans tomatoKey)
         {
             var tempCost = GlucoseUpgradeFunction(Organs[tomatoKey].Amount * ORGANPURCHASEMULTIPLIER);
             if (tempCost <= Resources[Rt.Glucose].Amount)
@@ -232,14 +213,14 @@ public partial class Tomato(int dbId)
         return result;
     }
 
-    public virtual bool ParseObtain(string s)
+    public virtual bool ParseObtain(Enum @enum)
     {
         bool result = false;
-        if (Enum.TryParse(s, out Rt rtKey))
+        if (@enum is Rt rtKey)
         {
             if (rtKey == Rt.Glucose)
             {
-                //Do nothing
+                return false;
             }
             else if (rtKey == Rt.H2O)
             {
