@@ -17,7 +17,7 @@ public interface IResourceDisplay<out TNode> where TNode : Node
     public bool ClearChildren();
     //public string ClassNamePrefix { get; set; }
 
-    public bool AddElement((Enum, IMaterialResource) item);
+    public bool AddElement((Enum, IMaterialResource) item, string suffix = "");
 
     /**
      * returns found progressbar; otherwise null

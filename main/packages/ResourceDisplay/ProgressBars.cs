@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Godot;
 using Main.addons.EnumToIcon.EnumToStringDatabase;
 using Main.addons.EnumToIcon.EnumToStringDatabase.main;
+using Main.main.scripts.core.plants;
 using Main.Source.main;
 
 namespace Main.main.packages.ResourceDisplay;
@@ -32,7 +33,7 @@ public partial class ProgressBars : BoxContainer, IResourceDisplay<ProgressBar>
         return true;
     }
 
-    public bool AddElement((Enum, IMaterialResource) item)
+    public bool AddElement((Enum, IMaterialResource) item, string suffix = "")
     {
         var item1 = item.Item1;
         var item2 = item.Item2;
@@ -48,7 +49,8 @@ public partial class ProgressBars : BoxContainer, IResourceDisplay<ProgressBar>
 
         pendingProgressBar.MaxValue = item2.Max;
         pendingProgressBar.Value = item2.Amount;
-        pendingProgressBar.Name = $"{ClassNamePrefix}{ResourceDisplayTools.Delimiter}{item1.GetType().FullName}";
+        pendingProgressBar.Name =
+            $"{ClassNamePrefix}{ResourceDisplayTools.Delimiter}{item1.GetType().FullName}{ResourceDisplayTools.Delimiter}{suffix}";
 
         var pendingTextureRect = new TextureRect();
         pendingVBox.AddChild(pendingTextureRect);

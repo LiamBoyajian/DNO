@@ -33,7 +33,7 @@ public partial class UpgradeButtons : FlowContainer, IResourceDisplay<TextureBut
         return true;
     }
 
-    public bool AddElement((Enum, IMaterialResource) item)
+    public bool AddElement((Enum, IMaterialResource) item, string suffix = "")
     {
         var item1 = item.Item1;
         var item2 = item.Item2;
@@ -51,7 +51,8 @@ public partial class UpgradeButtons : FlowContainer, IResourceDisplay<TextureBut
         var icon = MemoryToDb.GetTextureFromEntry(new Entry(item1));
         if (icon != null)
             pendingTextureButton.SetTextureNormal(icon);
-        pendingTextureButton.Name = $"{ClassNamePrefix}{ResourceDisplayTools.Delimiter}{item1.GetType().FullName}";
+        pendingTextureButton.Name =
+            $"{ClassNamePrefix}{ResourceDisplayTools.Delimiter}{item1.GetType().FullName}{ResourceDisplayTools.Delimiter}{suffix}";
         pendingTextureButton.TooltipText = $"{item2.Amount}/{item2.Max}";
 
         pendingTextureButton.ButtonGroup = Buttons;
