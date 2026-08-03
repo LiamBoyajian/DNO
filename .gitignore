@@ -13,7 +13,7 @@
 /dataSources.local.xml
 
 addons/
-
+reports/
 
 
 
@@ -28,7 +28,7 @@ addons/
 bin/
 obj/
 *.sln
-/.runsettings
+.runsettings
 #*.csproj
 *.user
 *.suo
