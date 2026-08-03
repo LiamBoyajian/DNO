@@ -36,7 +36,7 @@ public partial interface IUpgradable : IAttributeDictionary
      * where string corresponds to an enum key
      * if valid the plant will attempt to spend glucose to increase the "s" type of resource max
      */
-    public bool ParseUpgrade(string s);
+    public bool ParseUpgrade(Enum @enum);
 }
 
 /**
@@ -48,7 +48,7 @@ public partial interface IObtainable : IAttributeDictionary
      * where string corresponds to an enum key
      * if valid the plant will attempt to spend glucose to obtain the "s" type of resource
      */
-    public bool ParseObtain(string s);
+    public bool ParseObtain(Enum @enum);
 }
 
 public partial interface IBroadcastsUpdate : IAttributeDictionary
