@@ -28,6 +28,7 @@ addons/
 bin/
 obj/
 *.sln
+/.runsettings
 #*.csproj
 *.user
 *.suo
