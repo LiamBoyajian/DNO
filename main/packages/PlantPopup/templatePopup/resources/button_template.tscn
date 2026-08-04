@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://ddo46dt3lkkoi"]
 
-[ext_resource type="Texture2D" uid="uid://brckcheb5r5d4" path="res://main/sprites/window_panels/plant_upgrade/plant_upgrade_button.ase_layer_tex" id="1_4dyq2"]
+[ext_resource type="Texture2D" uid="uid://brckcheb5r5d4" path="res://main/packages/PlantPopup/plant_upgrade/plant_upgrade_button.ase_layer_tex" id="1_4dyq2"]
 
 [node name="Button" type="TextureButton" unique_id=809638746]
 custom_minimum_size = Vector2(30, 30)

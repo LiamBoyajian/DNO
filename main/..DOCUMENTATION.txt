@@ -1,9 +1,0 @@
-Each scene should be created in a folder.
-- any assets that are local to the scene should be in this folder
-- if an asset is created that is expected to be used outside of this scene. Place into the "lib" folder
-
-
-Any scene-folder should start with a _
-
-Sprites should have their own folder in the scene.
-- non-local sprites should use the common/sprites folder (when, or likely to be, used in multiple scenes)

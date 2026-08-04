@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://cx6bs6vejxjwf"]
+
+[ext_resource type="Texture2D" uid="uid://5n0ty3ksommf" path="res://main/packages/mc/MC.png" id="1_hijq5"]
+[ext_resource type="Script" uid="uid://db824lfx7ay2x" path="res://main/scenes/_Outside_Building/Player.cs" id="2_ow770"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ow770"]
+atlas = ExtResource("1_hijq5")
+region = Rect2(0, 0, 100, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dcf70"]
+atlas = ExtResource("1_hijq5")
+region = Rect2(100, 0, 100, 200)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hijq5"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ow770")
+}],
+"loop": 0,
+"name": &"Front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dcf70")
+}],
+"loop": 0,
+"name": &"Side",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mrq1q"]
+radius = 26.0
+height = 172.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
+size = Vector2(46.666664, 10)
+
+[node name="mc" type="AnimatedSprite2D" unique_id=2056976437]
+y_sort_enabled = true
+scale = Vector2(0.3, 0.3)
+sprite_frames = SubResource("SpriteFrames_hijq5")
+animation = &"Front"
+offset = Vector2(0, -100)
+script = ExtResource("2_ow770")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1328171528]
+
+[node name="main" type="CollisionShape2D" parent="Area2D" unique_id=427556266]
+position = Vector2(0, -96.666664)
+shape = SubResource("CapsuleShape2D_mrq1q")
+debug_color = Color(0.2846623, 0.63099706, 0, 0.41960785)
+
+[node name="feet" type="CollisionShape2D" parent="Area2D" unique_id=2097187693]
+position = Vector2(-5.9604645e-07, -5)
+shape = SubResource("RectangleShape2D_mrq1q")

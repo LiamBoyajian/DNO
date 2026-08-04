@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://0ppe36qdwjp8"
+path="res://.godot/imported/plant_upgrade_costsGlucoseTag.ase_layer_tex-3ca140e18d0673238dcb7404fec95e87.res"
+
+[deps]
+
+source_file="res://main/packages/PlantPopup/plant_upgrade/plant_upgrade_costsGlucoseTag.ase_layer_tex"
+dest_files=["res://.godot/imported/plant_upgrade_costsGlucoseTag.ase_layer_tex-3ca140e18d0673238dcb7404fec95e87.res"]
+
+[params]
+

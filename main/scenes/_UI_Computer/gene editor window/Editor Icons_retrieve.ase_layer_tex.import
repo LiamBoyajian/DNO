@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://c71k0ngx0yx5r"
+path="res://.godot/imported/Editor Icons_retrieve.ase_layer_tex-e8ee315be54dcf34f4de6071fce75108.res"
+
+[deps]
+
+source_file="res://main/scenes/_UI_Computer/gene editor window/Editor Icons_retrieve.ase_layer_tex"
+dest_files=["res://.godot/imported/Editor Icons_retrieve.ase_layer_tex-e8ee315be54dcf34f4de6071fce75108.res"]
+
+[params]
+

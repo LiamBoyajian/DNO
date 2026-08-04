@@ -1,6 +1,6 @@
 [gd_resource type="Theme" format=4 uid="uid://b7am0k6ih57f5"]
 
-[ext_resource type="Texture2D" uid="uid://b23lo714mr5dg" path="res://main/sprites/window_panels/plant_upgrade/plant_upgrade_ProgressBar.ase_layer_tex" id="1_axj06"]
+[ext_resource type="Texture2D" uid="uid://b23lo714mr5dg" path="res://main/packages/PlantPopup/plant_upgrade/plant_upgrade_ProgressBar.ase_layer_tex" id="1_axj06"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xtptm"]
 texture = ExtResource("1_axj06")
