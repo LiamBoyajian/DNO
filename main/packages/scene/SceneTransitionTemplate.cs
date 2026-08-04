@@ -1,4 +1,5 @@
 using Godot;
+using Main.main._Outside_Building;
 
 namespace Main.main.scripts.scene;
 
@@ -19,7 +20,6 @@ public partial class SceneTransitionTemplate : Area2D
         InputEvent += InputEventHandler;
     }
 
-
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
     {
@@ -27,13 +27,19 @@ public partial class SceneTransitionTemplate : Area2D
 
     private void InputEventHandler(Node viewport, InputEvent @event, long shapeIdx)
     {
-        if (@event.IsActionPressed("Click"))
+        if (@event.IsActionPressed("left_click"))
         {
-            TriggerSceneTransition(true);
+            foreach (var area in GetOverlappingAreas())
+            {
+                if (area.GetParent() is Player p)
+                {
+                    TriggerSceneTransition(p, true);
+                }
+            }
         }
     }
 
-    public bool TriggerSceneTransition(bool clearMe = true)
+    public bool TriggerSceneTransition(Player player, bool clearMe = true)
     {
         if (!Enabled)
             return false;
@@ -46,6 +52,8 @@ public partial class SceneTransitionTemplate : Area2D
 
         Node nextScene = _targetScene.Instantiate();
         _root.AddChild(nextScene);
+        player.GetParent().RemoveChild(player);
+        nextScene.AddChild(player);
         Node oldScene = GetTree().CurrentScene;
         GetTree().CurrentScene = nextScene;
 

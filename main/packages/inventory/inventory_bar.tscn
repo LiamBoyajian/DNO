@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://336qp8djyjhc"]
 
 [ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/scenes/_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="2_bcq0x"]
-[ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/packages/ui/inventory_bar/inventorySquare.tscn" id="2_egnjp"]
+[ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/packages/inventory/inventorySquare.tscn" id="2_egnjp"]
 [ext_resource type="Script" uid="uid://02ud7o278srr" path="res://main/packages/util/ItemSeed.cs" id="3_n8cn1"]
 [ext_resource type="Script" uid="uid://cw6gylr1o30f0" path="res://main/packages/plants/species/Tomato.cs" id="4_siwgq"]
 [ext_resource type="SpriteFrames" uid="uid://blvnsm74f8kri" path="res://main/packages/plants/species/tomato.aseprite" id="5_raamd"]
@@ -48,27 +48,36 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 alignment = 1
 
-[node name="Panel" parent="MarginContainer/HBoxContainer" unique_id=1930195085 instance=ExtResource("2_egnjp")]
+[node name="Panel2" parent="MarginContainer/HBoxContainer" unique_id=1930195085 instance=ExtResource("2_egnjp")]
 layout_mode = 2
 
-[node name="Seed" type="TextureRect" parent="MarginContainer/HBoxContainer/Panel" unique_id=380287928]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="Seed" type="TextureRect" parent="MarginContainer/HBoxContainer/Panel2" unique_id=380287928]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -16.0
+offset_top = -16.0
+offset_right = 16.0
+offset_bottom = 16.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("2_bcq0x")
 script = ExtResource("3_n8cn1")
 PlantType = ExtResource("4_siwgq")
 Frames = ExtResource("5_raamd")
 PlantScene = ExtResource("6_afs1a")
 
-[node name="Panel2" parent="MarginContainer/HBoxContainer" unique_id=1427122132 instance=ExtResource("2_egnjp")]
+[node name="Panel" parent="MarginContainer/HBoxContainer" unique_id=1326678647 instance=ExtResource("2_egnjp")]
 layout_mode = 2
 
-[node name="Panel3" parent="MarginContainer/HBoxContainer" unique_id=1074039616 instance=ExtResource("2_egnjp")]
+[node name="Panel3" parent="MarginContainer/HBoxContainer" unique_id=1659929311 instance=ExtResource("2_egnjp")]
 layout_mode = 2
 
-[node name="Panel4" parent="MarginContainer/HBoxContainer" unique_id=1380297166 instance=ExtResource("2_egnjp")]
+[node name="Panel4" parent="MarginContainer/HBoxContainer" unique_id=2135350188 instance=ExtResource("2_egnjp")]
 layout_mode = 2
 
-[node name="Panel5" parent="MarginContainer/HBoxContainer" unique_id=964355614 instance=ExtResource("2_egnjp")]
+[node name="Panel5" parent="MarginContainer/HBoxContainer" unique_id=1920672122 instance=ExtResource("2_egnjp")]
 layout_mode = 2

@@ -35,7 +35,7 @@ public partial class AbstractTool : AnimatedSprite2D
 
     protected void Equip(Node viewport, InputEvent @event, long shapeIdx)
     {
-        if (@event.IsAction("Click"))
+        if (@event.IsAction("left_click"))
         {
             IsEquipped = !IsEquipped;
         }

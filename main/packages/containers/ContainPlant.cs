@@ -2,13 +2,15 @@ using System;
 using System.Linq;
 using Godot;
 using Godot.Collections;
+using Main.main._Outside_Building;
+using Main.main.packages.items;
 using Main.main.scripts.core.plants;
 using Main.Source.main;
 
 namespace Main.main.scripts.core.util;
 
 [GlobalClass]
-public partial class ContainPlant : Sprite2D
+public partial class ContainPlant : Sprite2D, IDeployable
 {
     public MaterialResource Water = new MaterialResource(500.0, 1000.0);
 
@@ -22,14 +24,31 @@ public partial class ContainPlant : Sprite2D
 
     protected bool Broken = false;
 
+    protected Area2D Area;
+
     public override void _Ready()
     {
+        Area = GetNode<Area2D>("Area2D");
+        if (Area == null) throw new Exception("area is null in: " + this);
         if (_acceptSeed == null)
             _acceptSeed = GetNode<AcceptSeed>("AcceptSeed");
 
-        //Offset = new Vector2(0, Texture.GetSize().Y / 2f);
-
+        //DisplayOffset = new Vector2(0, Texture.GetSize().Y / 2f);
+        Area.InputEvent += InputHandler;
         //Console.Write($"\n {GetTotalLoad()}");
+    }
+
+    private void InputHandler(Node viewport, InputEvent @event, long shapeIdx)
+    {
+        if (!@event.IsAction("lift_object")) return;
+        foreach (var area in Area.GetOverlappingAreas())
+        {
+            if (area.GetParent() is Player p)
+            {
+                p.PickedUp(this);
+                return;
+            }
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -134,5 +153,31 @@ public partial class ContainPlant : Sprite2D
     {
         Plant.DugUp -= DugUpEventHandler;
         _acceptSeed.IsAccepting();
+    }
+
+    public void Deploy(Node viewport, Vector2 pos)
+    {
+        viewport.AddChild(this);
+        Position = pos;
+    }
+
+    public Blueprint GetBlueprint()
+    {
+        var result = new Blueprint();
+        result.Texture = Texture;
+        result.Area = (Area2D)GetChild<Area2D>(0).Duplicate();
+        result.AddChild(result.Area);
+
+        return result;
+    }
+
+    public bool CanCarry()
+    {
+        return true;
+    }
+
+    public Texture GetCarriedTexture()
+    {
+        return Texture;
     }
 }

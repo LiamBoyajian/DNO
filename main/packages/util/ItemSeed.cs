@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Godot;
+using Main.main.packages.items;
 
 // Ensure this inherits from the exact C# name of your base class
 namespace Main.main.scripts.core.util;

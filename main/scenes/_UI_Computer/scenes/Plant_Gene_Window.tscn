@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://ds37ymi7uqccg"]
 
-[ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://main/packages/ui/_base computer window/window.tscn" id="1_g3fb6"]
+[ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://main/packages/_base computer window/window.tscn" id="1_g3fb6"]
 [ext_resource type="Script" uid="uid://jrxqsfi1hjqg" path="res://main/packages/scene/UiGeneDisplay.cs" id="2_wvhgo"]
 [ext_resource type="PackedScene" uid="uid://7ruahpj7upcc" path="res://main/scenes/_UI_Computer/scenes/util/PanelContainer_GeneBG.tscn" id="3_c1kx8"]
 [ext_resource type="PackedScene" uid="uid://d3xfn6wc8nwga" path="res://main/scenes/_UI_Computer/scenes/util/HBox_GeneContainer.tscn" id="4_hinv1"]

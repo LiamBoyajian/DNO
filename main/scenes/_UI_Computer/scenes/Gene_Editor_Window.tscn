@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bg7g70dd654ew"]
 
-[ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://main/packages/ui/_base computer window/window.tscn" id="1_rm35y"]
+[ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://main/packages/_base computer window/window.tscn" id="1_rm35y"]
 [ext_resource type="Script" uid="uid://c5c4ab86240ik" path="res://main/packages/scene/UiGeneEdit.cs" id="2_aub61"]
 [ext_resource type="Texture2D" uid="uid://dsmivlkfsjpei" path="res://main/scenes/_UI_Computer/gene editor window/Editor Icons_consume.ase_layer_tex" id="3_50biq"]
 [ext_resource type="Texture2D" uid="uid://uiqe0efeow02" path="res://main/scenes/_UI_Computer/gene editor window/Editor Icons_clean.ase_layer_tex" id="3_ro2bu"]
