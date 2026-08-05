@@ -11,7 +11,7 @@ public partial class BasicScene : Node2D
     {
         if (Boundaries == null)
         {
-            Boundaries = GetNode<Area2D>("Boundaries");
+            Boundaries = GetNode<Area2D>("Boundary");
         }
     }
 

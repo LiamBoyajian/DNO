@@ -15,9 +15,12 @@ public partial interface IItem<out TType> where TType : GodotObject
 
 public interface IDeployable
 {
-    public void Deploy(Node viewport, Vector2 pos);
+    public bool Deploy(Blueprint blueprint);
 
     public Blueprint GetBlueprint();
+
     public bool CanCarry();
+
+    public void Collisions(bool enable);
     //TODO ensure these are each needed
 }

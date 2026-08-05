@@ -1,15 +1,19 @@
 using System;
+using System.Collections.Generic;
 using Godot;
+using Main.main.packages.Boundaries;
 using Main.main.packages.items;
 using Main.main.scripts.core.util;
 using Main.main.scripts.scene;
 
 namespace Main.main._Outside_Building;
 
-public enum MovementTypes
+public enum MovementType
 {
     Walk,
     Run,
+    Stand,
+    Carrying,
     Jump,
     Climb,
     Crouch,
@@ -18,28 +22,31 @@ public enum MovementTypes
     Roll,
 }
 
-public enum FacingDirections
-{
-    Left,
-    Right,
-    Behind,
-    Forward,
-}
-
 public partial class Player : AnimatedSprite2D
 {
-    [Export] private float _movementSpeed = .02f;
+    [Export] protected float MovementSpeed = .02f;
     public Vector2 ItemPositon { get; protected set; }
     protected BasicScene ParentScene;
+
 
     protected IDeployable Deployable = null;
     protected Blueprint Blueprint = null;
 
+    protected Vector2 FacingUnitVector = Vector2.Zero;
 
     protected Area2D Proximity;
     protected Area2D Hitbox;
+    protected Area2D Base;
 
-    private FacingDirections _facing = FacingDirections.Forward;
+    protected Dictionary<MovementType, float> MovementSpeedRatio = new Dictionary<MovementType, float>()
+    {
+        { MovementType.Walk, 1f },
+        { MovementType.Run, 1.25f },
+        { MovementType.Stand, 0f },
+        { MovementType.Carrying, .5f },
+    };
+
+    private MovementType _movementType = MovementType.Walk;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
@@ -55,6 +62,10 @@ public partial class Player : AnimatedSprite2D
         Hitbox = GetNode("Hitbox") as Area2D;
         if (Hitbox == null)
             GD.PrintErr("Player hitbox not found");
+
+        Base = GetNode("Base") as Area2D;
+        if (Base == null)
+            GD.PrintErr("Player base not found");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -62,54 +73,40 @@ public partial class Player : AnimatedSprite2D
     {
         var direction = Input.GetVector("ui_left", "ui_right", "ui_up", "ui_down");
 
-        if (direction.X < 0) _facing = FacingDirections.Left;
-        if (direction.X > 0) _facing = FacingDirections.Right;
-        if (direction.Y > 0) _facing = FacingDirections.Forward;
-        if (direction.Y < 0) _facing = FacingDirections.Behind;
 
-        if (Input.IsActionJustPressed("right_click"))
+        if (direction != Vector2.Zero)
         {
-            if (Blueprint == null)
+            Movement(direction * MovementSpeed * MovementSpeedRatio[_movementType]); // * (float)delta);
+            FacingUnitVector = direction.Normalized();
+
+            if (FacingUnitVector.Y > 0)
             {
-                Blueprint = Deployable.GetBlueprint();
-                GetTree().Root.AddChild(Blueprint);
+                direction.Y += MovementSpeed * (float)delta;
+                Animation = "Front";
             }
-            else
+            else if (FacingUnitVector.Y < 0)
             {
-                Blueprint = null;
+                direction.Y -= MovementSpeed * (float)delta;
+                Animation = "Front";
             }
+            else if (FacingUnitVector.X > 0)
+            {
+                direction.X += MovementSpeed * (float)delta;
+                Animation = "Side";
+                FlipH = false;
+            }
+            else if (FacingUnitVector.X < 0)
+            {
+                direction.X -= MovementSpeed * (float)delta;
+                Animation = "Side";
+                FlipH = true;
+            }
+            //Blueprint?.ChangeDisplayOffset(0, true);
         }
 
         if (Blueprint != null)
         {
-            var offset = FacingUnitVector() * Blueprint.DisplayOffset;
-            Blueprint.GlobalPosition = GlobalPosition + offset;
-        }
-
-        if (direction != Vector2.Zero)
-            Movement(direction * _movementSpeed, MovementTypes.Walk);
-
-        if (_facing == FacingDirections.Forward)
-        {
-            direction.Y += _movementSpeed * (float)delta;
-            Animation = "Front";
-        }
-        else if (_facing == FacingDirections.Behind)
-        {
-            direction.Y -= _movementSpeed * (float)delta;
-            Animation = "Front";
-        }
-        else if (_facing == FacingDirections.Right)
-        {
-            direction.X += _movementSpeed * (float)delta;
-            Animation = "Side";
-            FlipH = false;
-        }
-        else if (_facing == FacingDirections.Left)
-        {
-            direction.X -= _movementSpeed * (float)delta;
-            Animation = "Side";
-            FlipH = true;
+            Blueprint.GlobalPosition = GlobalPosition + (FacingUnitVector * Blueprint.DisplayOffset);
         }
     }
 
@@ -118,52 +115,138 @@ public partial class Player : AnimatedSprite2D
         base._UnhandledInput(@event);
 
 
+        //Carrying an object
+        if (Deployable != null)
+        {
+            if (@event.IsAction("left_click"))
+            {
+                if (Blueprint is { ValidPlacement: true })
+                {
+                    PutDown();
+                }
+            }
+            else if (@event.IsActionPressed("right_click"))
+            {
+                if (Blueprint == null)
+                {
+                    Blueprint = Deployable.GetBlueprint();
+                    GetTree().CurrentScene.AddChild(Blueprint);
+                    Blueprint.Visible = false;
+                }
+
+                Blueprint.Visible = !Blueprint.Visible;
+                _movementType = (Blueprint.Visible) ? MovementType.Stand : MovementType.Carrying;
+            }
+
+            if (Blueprint != null)
+            {
+                if (@event.IsAction("distance_increase"))
+                {
+                    Blueprint.ChangeDisplayOffset(1);
+                }
+
+                if (@event.IsAction("distance_decrease"))
+                {
+                    Blueprint.ChangeDisplayOffset(-1);
+                }
+            }
+        }
         //if (@event.IsActionPressed(""))
     }
 
-    protected bool Movement(Vector2 direction, MovementTypes movementType)
+    protected void Movement(Vector2 change)
     {
-        if (movementType is MovementTypes.Run or MovementTypes.Walk)
+        var targetPosition = GlobalPosition + change;
+
+        var baseShape = Base.GetChild(0);
+        if (baseShape is not CollisionShape2D shape) throw new Exception();
+
+        // 1. Take the actual global transform of the CollisionShape2D (preserving its exact scale & rotation)
+        Transform2D queryTransform = shape.GlobalTransform;
+
+        // 2. Calculate the position offset relative to the Player's position
+        Vector2 shapeOffset = shape.GlobalPosition - GlobalPosition;
+
+        // 3. Set the query transform's origin to the target position + local shape offset
+        queryTransform.Origin = targetPosition + shapeOffset;
+
+        var query = new PhysicsShapeQueryParameters2D()
         {
-            if (!ParentScene.IsInBoundaries(GlobalPosition + direction))
-                GlobalPosition += direction;
+            Shape = shape.GetShape(),
+            Transform = queryTransform,
+            CollisionMask = Base.CollisionMask,
+            CollideWithAreas = true,
+            //CollideWithBodies =  true,
+            Exclude = [Proximity.GetRid(), Hitbox.GetRid(), Base.GetRid()]
+        };
+
+        var hits = GetWorld2D().DirectSpaceState.IntersectShape(query);
+
+        bool blocked = false;
+        bool withinBoundary = false;
+
+        foreach (var hit in hits)
+        {
+            if (hit["collider"].AsGodotObject() is CollisionObject2D col)
+            {
+                if (col.GetCollisionLayerValue(1)) blocked = true;
+                if (col.GetCollisionLayerValue(3)) withinBoundary = true;
+            }
         }
 
-        return true;
+        if (!blocked && withinBoundary)
+        {
+            GlobalPosition = targetPosition;
+        }
     }
 
     public void PickedUp(IDeployable deployable)
     {
+        if (!deployable.CanCarry())
+            return;
+
         Deployable = deployable;
-        if (Deployable is Node n)
+        Deployable.Collisions(false);
+
+        if (Deployable is Node2D n)
         {
             n.GetParent().RemoveChild(n);
             AddChild(n);
+            n.Position = new Vector2(0, -50);
+
+            n.GlobalScale = new Vector2(1, 1);
         }
+
+        _movementType = MovementType.Carrying;
     }
 
     /**
      * returns whether Deployable was deployed
      */
-    public bool PutDown(Node viewport, Vector2 pos)
+    public bool PutDown()
     {
-        if (Deployable is Node n)
+        Blueprint.Visible = false;
+        _movementType = MovementType.Walk;
+
+        if (Deployable is Node2D n)
+        {
             RemoveChild(n);
-        Deployable.Deploy(viewport, pos);
-        Deployable = null;
-        return true;
+            n.GlobalScale = new Vector2(1, 1);
+        }
+
+        Deployable.Collisions(true);
+        var result = Deployable.Deploy(Blueprint);
+        if (result)
+        {
+            Blueprint = null;
+            Deployable = null;
+        }
+
+        return result;
     }
 
-    public Vector2 FacingUnitVector()
+    public Area2D GetBase()
     {
-        if (_facing == FacingDirections.Forward)
-            return new Vector2(0, 1);
-        if (_facing == FacingDirections.Behind)
-            return new Vector2(0, -1);
-        if (_facing == FacingDirections.Left)
-            return new Vector2(-1, 0);
-        if (_facing == FacingDirections.Right)
-            return new Vector2(1, 0);
-        return Vector2.Zero;
+        return Base;
     }
 }

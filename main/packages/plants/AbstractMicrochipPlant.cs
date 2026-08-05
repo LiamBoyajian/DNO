@@ -201,4 +201,9 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     {
         return Resources[key].ChangeMax(change);
     }
+
+    public void PopupPlant()
+    {
+        packages.PlantPopup.PlantPopup.Instance.Popup(this);
+    }
 }

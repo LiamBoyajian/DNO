@@ -4,6 +4,7 @@ using Godot;
 using Godot.Collections;
 using Main.main._Outside_Building;
 using Main.main.packages.items;
+using Main.main.packages.PlantPopup;
 using Main.main.scripts.core.plants;
 using Main.Source.main;
 
@@ -17,7 +18,7 @@ public partial class ContainPlant : Sprite2D, IDeployable
     protected AbstractPlant Plant = null;
 
     //public Vector2 SpawnPosition { get; private set; }
-    [Export] private AcceptSeed _acceptSeed;
+    //[Export] private AcceptSeed _acceptSeed;
 
     // Called when the node enters the scene tree for the first time.
     protected const uint HealthCapacity = 100;
@@ -30,23 +31,41 @@ public partial class ContainPlant : Sprite2D, IDeployable
     {
         Area = GetNode<Area2D>("Area2D");
         if (Area == null) throw new Exception("area is null in: " + this);
-        if (_acceptSeed == null)
-            _acceptSeed = GetNode<AcceptSeed>("AcceptSeed");
+        //if (_acceptSeed == null)
+        //    _acceptSeed = GetNode<AcceptSeed>("AcceptSeed");
 
         //DisplayOffset = new Vector2(0, Texture.GetSize().Y / 2f);
         Area.InputEvent += InputHandler;
+        Area.AreaEntered += AreaEnteredHandler;
         //Console.Write($"\n {GetTotalLoad()}");
+    }
+
+    private void AreaEnteredHandler(Area2D area)
+    {
+        if (area.GetParent() is IPlantable p)
+        {
+        }
     }
 
     private void InputHandler(Node viewport, InputEvent @event, long shapeIdx)
     {
-        if (!@event.IsAction("lift_object")) return;
-        foreach (var area in Area.GetOverlappingAreas())
+        if (@event.IsActionPressed("left_click"))
         {
-            if (area.GetParent() is Player p)
+            if (Plant is AbstractMicrochipPlant mp)
             {
-                p.PickedUp(this);
-                return;
+                mp.PopupPlant();
+            }
+        }
+
+        if (@event.IsAction("lift_object"))
+        {
+            foreach (var area in Area.GetOverlappingAreas())
+            {
+                if (area.GetParent() is Player p)
+                {
+                    p.PickedUp(this);
+                    return;
+                }
             }
         }
     }
@@ -152,13 +171,16 @@ public partial class ContainPlant : Sprite2D, IDeployable
     public void DugUpEventHandler()
     {
         Plant.DugUp -= DugUpEventHandler;
-        _acceptSeed.IsAccepting();
     }
 
-    public void Deploy(Node viewport, Vector2 pos)
+    public bool Deploy(Blueprint blueprint)
     {
-        viewport.AddChild(this);
-        Position = pos;
+        if (blueprint == null) return false;
+        GlobalPosition = blueprint.GlobalPosition;
+        blueprint.GetParent().AddChild(this);
+        blueprint.Hide();
+        blueprint.QueueFree();
+        return true;
     }
 
     public Blueprint GetBlueprint()
@@ -167,6 +189,8 @@ public partial class ContainPlant : Sprite2D, IDeployable
         result.Texture = Texture;
         result.Area = (Area2D)GetChild<Area2D>(0).Duplicate();
         result.AddChild(result.Area);
+        result.Offset = Offset;
+        result.Centered = Centered;
 
         return result;
     }
@@ -174,6 +198,11 @@ public partial class ContainPlant : Sprite2D, IDeployable
     public bool CanCarry()
     {
         return true;
+    }
+
+    public void Collisions(bool enable)
+    {
+        Area.Monitorable = enable;
     }
 
     public Texture GetCarriedTexture()

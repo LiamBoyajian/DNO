@@ -21,7 +21,6 @@ public partial class PlantGui : AnimatedSprite2D
     {
         Play(Default);
         Stop();
-        ClickArea.InputEvent += OnClickMe;
         ClickArea.BodyEntered += BodyEnteredEventHandler;
         ClickArea.AreaEntered += BodyEnteredEventHandler;
 
@@ -100,13 +99,6 @@ public partial class PlantGui : AnimatedSprite2D
         Frame = frame;
 
         return true;
-    }
-
-    public void OnClickMe(Node viewport, InputEvent @event, long shapeIdx)
-    {
-        if (!@event.IsAction("alt_click"))
-            return;
-        packages.PlantPopup.PlantPopup.Instance.Popup(ParentPlant);
     }
 
     private void BodyEnteredEventHandler(Node2D node2D)

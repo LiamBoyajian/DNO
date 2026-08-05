@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://q70ssyayrj2k" path="res://main/packages/scene/SceneTransitionTemplate.cs" id="3_chwsl"]
 [ext_resource type="PackedScene" uid="uid://hkrl88j77qi4" path="res://main/scenes/_UI_Computer/UI_Computer.tscn" id="4_selno"]
 [ext_resource type="Texture2D" uid="uid://dlch3jnjbtmhp" path="res://main/scenes/_Outside_Building/sprites/outside.aseprite" id="5_ck1pw"]
+[ext_resource type="Script" uid="uid://cv8ij7c2vho13" path="res://main/packages/Boundaries/Boundary.cs" id="5_lquo6"]
 [ext_resource type="Texture2D" uid="uid://dvopcy32y8dul" path="res://main/sprites/draft/pot.aseprite" id="6_c7p8h"]
 [ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://main/packages/containers/ContainPlant.cs" id="7_yc6rp"]
 [ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/packages/util/AcceptSeed.cs" id="8_qprh5"]
@@ -16,10 +17,10 @@
 size = Vector2(90, 74)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ygq3"]
-size = Vector2(370, 61)
+size = Vector2(355, 61)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_awak5"]
-size = Vector2(20, 7)
+size = Vector2(16, 11.25)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aoqhg"]
 size = Vector2(9.192362, 50.91172)
@@ -30,7 +31,7 @@ script = ExtResource("1_selno")
 Boundaries = NodePath("Boundaries")
 
 [node name="mc" parent="." unique_id=2056976437 instance=ExtResource("2_lquo6")]
-position = Vector2(421, 336)
+position = Vector2(448, 336)
 animation = &"Side"
 
 [node name="IntoBuilding" type="Area2D" parent="." unique_id=914254641]
@@ -43,9 +44,12 @@ position = Vector2(-1, -7)
 shape = SubResource("RectangleShape2D_mrq1q")
 
 [node name="Boundaries" type="Area2D" parent="." unique_id=1040490365]
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("5_lquo6")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Boundaries" unique_id=254963865]
-position = Vector2(460, 348.5)
+position = Vector2(467.5, 348.5)
 shape = SubResource("RectangleShape2D_1ygq3")
 
 [node name="bg" type="Sprite2D" parent="." unique_id=517609415]
@@ -54,11 +58,16 @@ position = Vector2(320, 180)
 texture = ExtResource("5_ck1pw")
 
 [node name="Pot2" type="Sprite2D" parent="." unique_id=1590893432]
-position = Vector2(401, 330)
+position = Vector2(406, 339)
 texture = ExtResource("6_c7p8h")
-offset = Vector2(0, 7.5)
+offset = Vector2(0, -9)
+region_enabled = true
+region_rect = Rect2(3, 5, 18, 17)
 script = ExtResource("7_yc6rp")
 metadata/_aseprite_wizard_interface_config_ = {
+"animation_section": false,
+"layer_section": false,
+"output_section": false,
 "pending_changes": {
 "convert_fps_field": 60.0,
 "convert_ms_field": 16.0,
@@ -77,28 +86,93 @@ metadata/_aseprite_wizard_interface_config_ = {
 "source": "",
 "source_uid": -1
 },
-"slice_section": true
+"slice_section": false
 }
 
 [node name="Area2D" type="Area2D" parent="Pot2" unique_id=2051979458]
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pot2/Area2D" unique_id=1530452073]
-position = Vector2(0, 13.5)
+position = Vector2(0, -6)
 shape = SubResource("RectangleShape2D_awak5")
 
-[node name="AcceptSeed" type="Panel" parent="Pot2" unique_id=1605171934]
-modulate = Color(1, 1, 1, 0.31764707)
-anchors_preset = -1
-anchor_left = 0.48000002
-anchor_top = 0.18
-anchor_right = 0.48000002
-anchor_bottom = 0.18
-offset_left = -21.000002
-offset_top = -21.5
-offset_right = -3.0
-offset_bottom = -5.0
-offset_transform_visual_only = false
-script = ExtResource("8_qprh5")
+[node name="Pot3" type="Sprite2D" parent="." unique_id=4954497]
+position = Vector2(331, 360)
+texture = ExtResource("6_c7p8h")
+offset = Vector2(0, -9)
+region_enabled = true
+region_rect = Rect2(3, 5, 18, 17)
+script = ExtResource("7_yc6rp")
+metadata/_aseprite_wizard_interface_config_ = {
+"animation_section": false,
+"layer_section": false,
+"output_section": false,
+"pending_changes": {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"scale": "1.0",
+"slice": "",
+"source": "",
+"source_uid": -1
+},
+"slice_section": false
+}
+
+[node name="Area2D" type="Area2D" parent="Pot3" unique_id=1703136404]
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pot3/Area2D" unique_id=1681334248]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_awak5")
+
+[node name="Pot4" type="Sprite2D" parent="." unique_id=191275341]
+position = Vector2(331, 345)
+texture = ExtResource("6_c7p8h")
+offset = Vector2(0, -9)
+region_enabled = true
+region_rect = Rect2(3, 5, 18, 17)
+script = ExtResource("7_yc6rp")
+metadata/_aseprite_wizard_interface_config_ = {
+"animation_section": false,
+"layer_section": false,
+"output_section": false,
+"pending_changes": {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"scale": "1.0",
+"slice": "",
+"source": "",
+"source_uid": -1
+},
+"slice_section": false
+}
+
+[node name="Area2D" type="Area2D" parent="Pot4" unique_id=200407752]
+collision_mask = 3
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Pot4/Area2D" unique_id=1911506728]
+position = Vector2(0, -6)
+shape = SubResource("RectangleShape2D_awak5")
 
 [node name="Pot" type="Sprite2D" parent="." unique_id=1780480357]
 position = Vector2(330, 301)
@@ -128,9 +202,10 @@ metadata/_aseprite_wizard_interface_config_ = {
 }
 
 [node name="Area2D" type="Area2D" parent="Pot" unique_id=2004528416]
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Pot/Area2D" unique_id=1736108694]
-position = Vector2(0, 13.5)
+position = Vector2(0, 11)
 shape = SubResource("RectangleShape2D_awak5")
 
 [node name="AcceptSeed" type="Panel" parent="Pot" unique_id=596873023]

@@ -38,7 +38,7 @@ public partial class InventorySlot : Panel
             return default; // Equivalent to returning null/void in C# Variant
         }
 
-        Node temp = GetChild(0);
+        Node temp = GetChild(0); //TODO hardcoded
         if (temp == null)
         {
             return default;

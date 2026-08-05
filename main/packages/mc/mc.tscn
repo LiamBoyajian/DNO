@@ -32,11 +32,14 @@ animations = [{
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mrq1q"]
 radius = 30.0
-height = 186.66666
+height = 166.66666
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_aoqhg"]
 radius = 90.0
 height = 180.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
+size = Vector2(33.333332, 11.666666)
 
 [node name="mc" type="AnimatedSprite2D" unique_id=2056976437]
 y_sort_enabled = true
@@ -47,16 +50,28 @@ offset = Vector2(0, -100)
 script = ExtResource("2_ow770")
 
 [node name="Hitbox" type="Area2D" parent="." unique_id=1328171528]
+collision_layer = 2
+collision_mask = 0
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=427556266]
+[node name="Body" type="CollisionShape2D" parent="Hitbox" unique_id=427556266]
 position = Vector2(0, -96.666664)
 shape = SubResource("CapsuleShape2D_mrq1q")
 debug_color = Color(0.2846623, 0.63099706, 0, 0.41960785)
 
 [node name="Proximity" type="Area2D" parent="." unique_id=599025534]
+collision_layer = 2
+collision_mask = 0
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Proximity" unique_id=986643304]
 position = Vector2(0, -136.66666)
-rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_aoqhg")
+debug_color = Color(0.41620448, 0.5522243, 0.6810229, 0.41960785)
+
+[node name="Base" type="Area2D" parent="." unique_id=1917030019]
+position = Vector2(0, -6.6666665)
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Base" unique_id=1293477189]
+position = Vector2(0, 0.8333335)
+shape = SubResource("RectangleShape2D_mrq1q")
 debug_color = Color(0.41620448, 0.5522243, 0.6810229, 0.41960785)
