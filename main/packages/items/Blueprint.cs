@@ -6,14 +6,22 @@ using Main.main._Outside_Building;
 
 namespace Main.main.packages.items;
 
+public static class LayerControl
+{
+    public const int Object = 1;
+    public const int Interactable = 2;
+    public const int Bounds = 3;
+    public const int Placeable = 4;
+}
+
 public partial class Blueprint : Sprite2D
 {
     public Area2D Area = new();
-    public int DisplayOffset { get; private set; }
-    public const int MaxOffset = 30;
-    public Vector2 LastPos;
 
-    public bool ValidPlacement = false;
+    public int DisplayOffset { get; private set; } = 15;
+    public const int MaxOffset = 30;
+
+    public bool? ValidPlacement { get; private set; } = null; //null when unchecked for pos
 
     public Color InvalidPlacementColor = new Color(1, .1f, .1f, .5f);
     public Color ValidPlacementColor = new Color(.0f, .5f, 1, .5f);
@@ -21,50 +29,16 @@ public partial class Blueprint : Sprite2D
     public override void _Ready()
     {
         base._Ready();
-        LastPos = GlobalPosition;
-        Area.Monitoring = true;
+
+        SetVisibility(false);
+        Name = "blueprint";
+        Area.InputPickable = false;
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
-
-        if (GlobalPosition != LastPos)
-        {
-            //TODO this is a really intensive way to accomplish this. Should only check on done moving or something.
-
-            ValidPlacement = true;
-            foreach (Area2D area in Area.GetOverlappingAreas())
-            {
-                if (area.GetParent() is Player player)
-                {
-                    if (player.GetBase() == area)
-                    {
-                        ValidPlacement = false;
-                        break;
-                    }
-
-                    continue; // I mean this is amateur hour work
-                }
-
-                if (area is not Boundaries.Boundary boundary)
-                {
-                    ValidPlacement = false;
-                    break;
-                }
-            }
-
-            if (ValidPlacement)
-            {
-                Set("modulate", ValidPlacementColor);
-            }
-            else
-            {
-                Set("modulate", InvalidPlacementColor);
-            }
-
-            LastPos = GlobalPosition;
-        }
+        //ValidPlacement = CheckPlacement();
     }
 
     public int ChangeDisplayOffset(int change, bool set = false)
@@ -75,5 +49,70 @@ public partial class Blueprint : Sprite2D
             return DisplayOffset;
         DisplayOffset = newValue;
         return DisplayOffset;
+    }
+
+    public bool? CheckPlacement()
+    {
+        if (Visible)
+        {
+            bool withinBoundary = false;
+            ValidPlacement = true;
+            foreach (Area2D area in Area.GetOverlappingAreas())
+            {
+                uint collisionLayer = area.GetCollisionLayer();
+                if (collisionLayer == LayerControl.Object)
+                {
+                    ValidPlacement = false;
+                    break;
+                }
+                else if (collisionLayer == LayerControl.Bounds)
+                {
+                    withinBoundary = true;
+                }
+                else if (collisionLayer == LayerControl.Placeable)
+                {
+                    withinBoundary = true;
+                }
+            }
+
+            ValidPlacement &= withinBoundary;
+
+            if (ValidPlacement ?? false)
+            {
+                Set("modulate", ValidPlacementColor);
+            }
+            else
+            {
+                Set("modulate", InvalidPlacementColor);
+            }
+        }
+
+        return ValidPlacement;
+    }
+
+    public void SetVisibility(bool? visible = null)
+    {
+        var collisionShape = (CollisionShape2D)Area.GetChild(0);
+        if (visible is null)
+        {
+            Visible = !Visible;
+            Area.Monitoring = !Area.Monitoring;
+            Area.Monitorable = !Area.Monitorable;
+            collisionShape.Disabled = !collisionShape.Disabled;
+        }
+        else if ((bool)visible)
+        {
+            Visible = true;
+            Area.Monitoring = true;
+            Area.Monitorable = true;
+            collisionShape.Disabled = false;
+        }
+        else
+        {
+            Visible = false;
+            Area.Monitoring = false;
+            Area.Monitorable = false;
+            collisionShape.Disabled = true;
+        }
     }
 }

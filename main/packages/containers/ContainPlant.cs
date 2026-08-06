@@ -4,11 +4,11 @@ using Godot;
 using Godot.Collections;
 using Main.main._Outside_Building;
 using Main.main.packages.items;
-using Main.main.packages.PlantPopup;
 using Main.main.scripts.core.plants;
+using Main.main.scripts.core.util;
 using Main.Source.main;
 
-namespace Main.main.scripts.core.util;
+namespace Main.main.packages.containers;
 
 [GlobalClass]
 public partial class ContainPlant : Sprite2D, IDeployable
@@ -18,29 +18,33 @@ public partial class ContainPlant : Sprite2D, IDeployable
     protected AbstractPlant Plant = null;
 
     //public Vector2 SpawnPosition { get; private set; }
-    //[Export] private AcceptSeed _acceptSeed;
+    [Export] private AcceptSeed _acceptSeed;
 
     // Called when the node enters the scene tree for the first time.
     protected const uint HealthCapacity = 100;
 
     protected bool Broken = false;
 
-    protected Area2D Area;
+    protected Area2D Base;
+    protected Area2D Interactable;
 
     public override void _Ready()
     {
-        Area = GetNode<Area2D>("Area2D");
-        if (Area == null) throw new Exception("area is null in: " + this);
-        //if (_acceptSeed == null)
-        //    _acceptSeed = GetNode<AcceptSeed>("AcceptSeed");
+        Base = GetChild<Area2D>(0);
+        if (Base == null) throw new Exception("Base is null in: " + this);
+        Interactable = GetChild<Area2D>(1);
+        if (Interactable == null) throw new Exception("Interactable is null in: " + this);
 
-        //DisplayOffset = new Vector2(0, Texture.GetSize().Y / 2f);
-        Area.InputEvent += InputHandler;
-        Area.AreaEntered += AreaEnteredHandler;
-        //Console.Write($"\n {GetTotalLoad()}");
+        _acceptSeed = GetChild<AcceptSeed>(2);
+        if (_acceptSeed == null) throw new Exception("Accept seed is null in: " + this);
+
+        Base.InputEvent += InputHandler;
+        Interactable.InputEvent += InputHandler;
+
+        Base.AreaEntered += BaseEnteredHandler;
     }
 
-    private void AreaEnteredHandler(Area2D area)
+    private void BaseEnteredHandler(Area2D area)
     {
         if (area.GetParent() is IPlantable p)
         {
@@ -59,7 +63,7 @@ public partial class ContainPlant : Sprite2D, IDeployable
 
         if (@event.IsAction("lift_object"))
         {
-            foreach (var area in Area.GetOverlappingAreas())
+            foreach (var area in Base.GetOverlappingAreas())
             {
                 if (area.GetParent() is Player p)
                 {
@@ -119,15 +123,6 @@ public partial class ContainPlant : Sprite2D, IDeployable
         return (int)result;
     }
 
-    protected bool BreakOnNoCapacity()
-    {
-        return false; //DO later on TODO
-        if (GetTotalLoad() < HealthCapacity) return false;
-        Broken = true;
-        Water.SetEmpty();
-        return true;
-    }
-
     public static bool GetAtmosphRatio()
     {
         throw new NotImplementedException();
@@ -155,12 +150,11 @@ public partial class ContainPlant : Sprite2D, IDeployable
             throw new ArgumentException("Node does not contain an AbstractPlant script");
 
         Plant = p;
-        if (p is AbstractMicrochipPlant temp)
+        if (p is AbstractMicrochipPlant microchipPlant)
         {
-            temp.LinkParentContainer(this);
-            temp.SetDbId(plantId);
+            microchipPlant.LinkParentContainer(this);
+            microchipPlant.SetDbId(plantId);
         }
-
 
         AddChild(plant);
         p.DugUp += DugUpEventHandler;
@@ -176,10 +170,15 @@ public partial class ContainPlant : Sprite2D, IDeployable
     public bool Deploy(Blueprint blueprint)
     {
         if (blueprint == null) return false;
-        GlobalPosition = blueprint.GlobalPosition;
         blueprint.GetParent().AddChild(this);
+
+        GlobalPosition =
+            blueprint.GlobalPosition.Floor() -
+            new Vector2(0, -1); //Old bug temp solution. Placement causes object to be one pixel higher
+
         blueprint.Hide();
         blueprint.QueueFree();
+
         return true;
     }
 
@@ -202,7 +201,7 @@ public partial class ContainPlant : Sprite2D, IDeployable
 
     public void Collisions(bool enable)
     {
-        Area.Monitorable = enable;
+        Base.Monitorable = enable;
     }
 
     public Texture GetCarriedTexture()

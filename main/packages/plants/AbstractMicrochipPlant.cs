@@ -6,7 +6,7 @@ using Main.main.scripts.model;
 using Main.Source.main;
 using PlantGui = Main.main.scripts.core.util.PlantGui;
 using System.Linq;
-using ContainPlant = Main.main.scripts.core.util.ContainPlant;
+using ContainPlant = Main.main.packages.containers.ContainPlant;
 
 namespace Main.main.scripts.core.plants;
 
@@ -16,7 +16,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     {
     }
 
-    [Export] protected PlantGui GuiManager;
+    [Export] public PlantGui GuiManager { get; private set; }
     [Export] protected double ConvertHpToGluRatio = .1;
     [Export] protected double ConvertGluToEnergyRatio = .05;
 

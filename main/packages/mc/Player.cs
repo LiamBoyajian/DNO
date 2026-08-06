@@ -101,12 +101,13 @@ public partial class Player : AnimatedSprite2D
                 Animation = "Side";
                 FlipH = true;
             }
-            //Blueprint?.ChangeDisplayOffset(0, true);
         }
 
-        if (Blueprint != null)
+        //Inefficient: checked every frame, but bugged otherwise.
+        if (Blueprint is { Visible: true })
         {
-            Blueprint.GlobalPosition = GlobalPosition + (FacingUnitVector * Blueprint.DisplayOffset);
+            Blueprint.GlobalPosition = GlobalPosition.Floor() + (FacingUnitVector.Floor() * Blueprint.DisplayOffset);
+            Blueprint.CheckPlacement();
         }
     }
 
@@ -131,10 +132,10 @@ public partial class Player : AnimatedSprite2D
                 {
                     Blueprint = Deployable.GetBlueprint();
                     GetTree().CurrentScene.AddChild(Blueprint);
-                    Blueprint.Visible = false;
+                    Blueprint.SetVisibility(false);
                 }
 
-                Blueprint.Visible = !Blueprint.Visible;
+                Blueprint.SetVisibility();
                 _movementType = (Blueprint.Visible) ? MovementType.Stand : MovementType.Carrying;
             }
 
@@ -161,6 +162,8 @@ public partial class Player : AnimatedSprite2D
         var baseShape = Base.GetChild(0);
         if (baseShape is not CollisionShape2D shape) throw new Exception();
 
+        //ai slop:
+
         // 1. Take the actual global transform of the CollisionShape2D (preserving its exact scale & rotation)
         Transform2D queryTransform = shape.GlobalTransform;
 
@@ -170,15 +173,12 @@ public partial class Player : AnimatedSprite2D
         // 3. Set the query transform's origin to the target position + local shape offset
         queryTransform.Origin = targetPosition + shapeOffset;
 
-        var query = new PhysicsShapeQueryParameters2D()
-        {
-            Shape = shape.GetShape(),
-            Transform = queryTransform,
-            CollisionMask = Base.CollisionMask,
-            CollideWithAreas = true,
-            //CollideWithBodies =  true,
-            Exclude = [Proximity.GetRid(), Hitbox.GetRid(), Base.GetRid()]
-        };
+        using var query = new PhysicsShapeQueryParameters2D();
+        query.Shape = shape.GetShape();
+        query.Transform = queryTransform;
+        query.CollisionMask = Base.CollisionMask;
+        query.CollideWithAreas = true; //CollideWithBodies =  true,
+        query.Exclude = [Proximity.GetRid(), Hitbox.GetRid(), Base.GetRid()];
 
         var hits = GetWorld2D().DirectSpaceState.IntersectShape(query);
 

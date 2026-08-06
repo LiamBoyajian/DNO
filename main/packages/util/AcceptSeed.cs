@@ -6,19 +6,19 @@ namespace Main.main.scripts.core.util;
 
 public partial class AcceptSeed : DisappearSlot
 {
-    protected ContainPlant ParentContainer;
+    protected packages.containers.ContainPlant ParentContainer;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         base._Ready();
-        if (GetParent() is not ContainPlant parentContainPlant)
+        if (GetParent() is not packages.containers.ContainPlant parentContainPlant)
         {
             Debug.Assert(false, "parent is not type: ContainPlant");
         }
         else
         {
-            ParentContainer = (ContainPlant)parentContainPlant;
+            ParentContainer = (packages.containers.ContainPlant)parentContainPlant;
         }
     }
 
@@ -57,9 +57,7 @@ public partial class AcceptSeed : DisappearSlot
 
         var animatedSprite = plant.GetChild<AnimatedSprite2D>(0);
         animatedSprite.SpriteFrames = seed.GetFrames();
-
-        //const float scaleAmount = 4;
-        //animatedSprite.Scale *= scaleAmount;
+        animatedSprite.Offset = ParentContainer.Offset * 2 + new Vector2(0, 1);
 
         var currentAnimation = animatedSprite.Animation;
         var currentFrameIndex = animatedSprite.Frame;

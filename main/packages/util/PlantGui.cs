@@ -10,7 +10,6 @@ namespace Main.main.scripts.core.util;
 public partial class PlantGui : AnimatedSprite2D
 {
     //requires specifically named frames to run 
-    [Export] protected Area2D ClickArea;
     protected AbstractPlant ParentPlant;
     public string NoGrowth = "no_growth";
     public string Dead = "dead";
@@ -21,11 +20,6 @@ public partial class PlantGui : AnimatedSprite2D
     {
         Play(Default);
         Stop();
-        ClickArea.BodyEntered += BodyEnteredEventHandler;
-        ClickArea.AreaEntered += BodyEnteredEventHandler;
-
-        if (ClickArea is null)
-            ClickArea = GetNode<Area2D>("PopupArea");
 
         if (GetParent() is not AbstractPlant)
             System.Diagnostics.Debug.Assert(false, "Parent plant is not of type: AbstractPlant");

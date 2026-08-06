@@ -6,9 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://hkrl88j77qi4" path="res://main/scenes/_UI_Computer/UI_Computer.tscn" id="4_selno"]
 [ext_resource type="Texture2D" uid="uid://dlch3jnjbtmhp" path="res://main/scenes/_Outside_Building/sprites/outside.aseprite" id="5_ck1pw"]
 [ext_resource type="Script" uid="uid://cv8ij7c2vho13" path="res://main/packages/Boundaries/Boundary.cs" id="5_lquo6"]
-[ext_resource type="Texture2D" uid="uid://dvopcy32y8dul" path="res://main/sprites/draft/pot.aseprite" id="6_c7p8h"]
-[ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://main/packages/containers/ContainPlant.cs" id="7_yc6rp"]
-[ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/packages/util/AcceptSeed.cs" id="8_qprh5"]
+[ext_resource type="PackedScene" uid="uid://c41s6fvk4pk6o" path="res://main/packages/containers/pot.tscn" id="7_chwsl"]
 [ext_resource type="SpriteFrames" uid="uid://bt50dg3t132un" path="res://main/packages/items/shovel/shovel.aseprite" id="9_d2mmj"]
 [ext_resource type="Script" uid="uid://cb2k8gm1kk334" path="res://main/packages/items/tools/PruningShears.cs" id="10_3vbvf"]
 [ext_resource type="Script" uid="uid://cnbtcf5757nje" path="res://main/packages/items/tools/TemplateTool.cs" id="11_0efvc"]
@@ -17,10 +15,7 @@
 size = Vector2(90, 74)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ygq3"]
-size = Vector2(355, 61)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_awak5"]
-size = Vector2(16, 11.25)
+size = Vector2(355, 66)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aoqhg"]
 size = Vector2(9.192362, 50.91172)
@@ -49,178 +44,17 @@ collision_mask = 0
 script = ExtResource("5_lquo6")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Boundaries" unique_id=254963865]
-position = Vector2(467.5, 348.5)
+position = Vector2(467.5, 346)
 shape = SubResource("RectangleShape2D_1ygq3")
+debug_color = Color(0.28459144, 0.6125744, 0.4365363, 0.41960785)
 
 [node name="bg" type="Sprite2D" parent="." unique_id=517609415]
 z_index = -5
 position = Vector2(320, 180)
 texture = ExtResource("5_ck1pw")
 
-[node name="Pot2" type="Sprite2D" parent="." unique_id=1590893432]
+[node name="Pot2" parent="." unique_id=39031905 instance=ExtResource("7_chwsl")]
 position = Vector2(406, 339)
-texture = ExtResource("6_c7p8h")
-offset = Vector2(0, -9)
-region_enabled = true
-region_rect = Rect2(3, 5, 18, 17)
-script = ExtResource("7_yc6rp")
-metadata/_aseprite_wizard_interface_config_ = {
-"animation_section": false,
-"layer_section": false,
-"output_section": false,
-"pending_changes": {
-"convert_fps_field": 60.0,
-"convert_ms_field": 16.0,
-"convert_to_fps": false,
-"embed_tex": true,
-"i_mode": 0,
-"keep_anim_length": false,
-"layers": [],
-"o_ex_p": "",
-"o_folder": "",
-"o_name": "",
-"only_visible": false,
-"player": "",
-"scale": "1.0",
-"slice": "",
-"source": "",
-"source_uid": -1
-},
-"slice_section": false
-}
-
-[node name="Area2D" type="Area2D" parent="Pot2" unique_id=2051979458]
-collision_mask = 3
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Pot2/Area2D" unique_id=1530452073]
-position = Vector2(0, -6)
-shape = SubResource("RectangleShape2D_awak5")
-
-[node name="Pot3" type="Sprite2D" parent="." unique_id=4954497]
-position = Vector2(331, 360)
-texture = ExtResource("6_c7p8h")
-offset = Vector2(0, -9)
-region_enabled = true
-region_rect = Rect2(3, 5, 18, 17)
-script = ExtResource("7_yc6rp")
-metadata/_aseprite_wizard_interface_config_ = {
-"animation_section": false,
-"layer_section": false,
-"output_section": false,
-"pending_changes": {
-"convert_fps_field": 60.0,
-"convert_ms_field": 16.0,
-"convert_to_fps": false,
-"embed_tex": true,
-"i_mode": 0,
-"keep_anim_length": false,
-"layers": [],
-"o_ex_p": "",
-"o_folder": "",
-"o_name": "",
-"only_visible": false,
-"player": "",
-"scale": "1.0",
-"slice": "",
-"source": "",
-"source_uid": -1
-},
-"slice_section": false
-}
-
-[node name="Area2D" type="Area2D" parent="Pot3" unique_id=1703136404]
-collision_mask = 3
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Pot3/Area2D" unique_id=1681334248]
-position = Vector2(0, -6)
-shape = SubResource("RectangleShape2D_awak5")
-
-[node name="Pot4" type="Sprite2D" parent="." unique_id=191275341]
-position = Vector2(331, 345)
-texture = ExtResource("6_c7p8h")
-offset = Vector2(0, -9)
-region_enabled = true
-region_rect = Rect2(3, 5, 18, 17)
-script = ExtResource("7_yc6rp")
-metadata/_aseprite_wizard_interface_config_ = {
-"animation_section": false,
-"layer_section": false,
-"output_section": false,
-"pending_changes": {
-"convert_fps_field": 60.0,
-"convert_ms_field": 16.0,
-"convert_to_fps": false,
-"embed_tex": true,
-"i_mode": 0,
-"keep_anim_length": false,
-"layers": [],
-"o_ex_p": "",
-"o_folder": "",
-"o_name": "",
-"only_visible": false,
-"player": "",
-"scale": "1.0",
-"slice": "",
-"source": "",
-"source_uid": -1
-},
-"slice_section": false
-}
-
-[node name="Area2D" type="Area2D" parent="Pot4" unique_id=200407752]
-collision_mask = 3
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Pot4/Area2D" unique_id=1911506728]
-position = Vector2(0, -6)
-shape = SubResource("RectangleShape2D_awak5")
-
-[node name="Pot" type="Sprite2D" parent="." unique_id=1780480357]
-position = Vector2(330, 301)
-texture = ExtResource("6_c7p8h")
-offset = Vector2(0, 7.5)
-script = ExtResource("7_yc6rp")
-metadata/_aseprite_wizard_interface_config_ = {
-"pending_changes": {
-"convert_fps_field": 60.0,
-"convert_ms_field": 16.0,
-"convert_to_fps": false,
-"embed_tex": true,
-"i_mode": 0,
-"keep_anim_length": false,
-"layers": [],
-"o_ex_p": "",
-"o_folder": "",
-"o_name": "",
-"only_visible": false,
-"player": "",
-"scale": "1.0",
-"slice": "",
-"source": "",
-"source_uid": -1
-},
-"slice_section": true
-}
-
-[node name="Area2D" type="Area2D" parent="Pot" unique_id=2004528416]
-collision_mask = 3
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Pot/Area2D" unique_id=1736108694]
-position = Vector2(0, 11)
-shape = SubResource("RectangleShape2D_awak5")
-
-[node name="AcceptSeed" type="Panel" parent="Pot" unique_id=596873023]
-modulate = Color(1, 1, 1, 0.31764707)
-anchors_preset = -1
-anchor_left = 0.48000002
-anchor_top = 0.18
-anchor_right = 0.48000002
-anchor_bottom = 0.18
-offset_left = -21.000002
-offset_top = -21.5
-offset_right = -3.0
-offset_bottom = -5.0
-offset_transform_visual_only = false
-script = ExtResource("8_qprh5")
 
 [node name="Shears" type="AnimatedSprite2D" parent="." unique_id=97293574 node_paths=PackedStringArray("ClickArea")]
 modulate = Color(0.29862767, 0.7047631, 0.9481177, 1)
@@ -252,3 +86,9 @@ position = Vector2(3.2500305, 0.25003052)
 rotation = 0.7853982
 scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_aoqhg")
+
+[node name="Pot3" parent="." unique_id=1877160296 instance=ExtResource("7_chwsl")]
+position = Vector2(345, 347)
+
+[node name="Pot4" parent="." unique_id=79220215 instance=ExtResource("7_chwsl")]
+position = Vector2(378, 355)
