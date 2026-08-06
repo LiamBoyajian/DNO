@@ -38,6 +38,8 @@ public partial class Tomato(int dbId)
         //Resources[Rt.Health].ChangeMax(20);
         //Resources[Rt.Health].Give(100);
         //Resources[Rt.Energy].Give(100);
+        Resources[Rt.H2O].Give(30);
+        Resources[Rt.Co2].Give(60);
         UpdatePlantGuiFrame();
         Updated?.Invoke(); //
         return true;

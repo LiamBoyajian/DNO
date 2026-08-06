@@ -7,10 +7,17 @@ public static class ItemHelperMethods
     //public static 
 }
 
-public partial interface IItem<out TType> where TType : GodotObject
+public partial interface IItem
 {
-    public TType DragIcon { get; }
-    public TType Icon { get; }
+    public Vector2 Position { get; set; }
+    public Texture2D DragIcon { get; }
+    public Texture2D Icon { get; }
+
+    public Texture2D HeldIcon { get; }
+
+    public void Initialize();
+
+    public void Reparent(Node newParent, bool keepGlobalTransform = false);
 }
 
 public interface IDeployable

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Main.main.packages.Boundaries;
+using Main.main.packages.inventory;
 using Main.main.packages.items;
 using Main.main.scripts.core.util;
 using Main.main.scripts.scene;
@@ -31,6 +32,10 @@ public partial class Player : AnimatedSprite2D
 
     protected IDeployable Deployable = null;
     protected Blueprint Blueprint = null;
+
+    protected Node HeldItem = null;
+    protected int HeldItemIndex = -1;
+
 
     protected Vector2 FacingUnitVector = Vector2.Zero;
 
@@ -66,6 +71,8 @@ public partial class Player : AnimatedSprite2D
         Base = GetNode("Base") as Area2D;
         if (Base == null)
             GD.PrintErr("Player base not found");
+
+        Inventory.Instance.SelectedItemChanged += PulloutItem;
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -200,9 +207,27 @@ public partial class Player : AnimatedSprite2D
         }
     }
 
+
+    //Items
+    public void PulloutItem(Node node, int index)
+    {
+        if (_movementType == MovementType.Carrying) return;
+        if (HeldItem != null && !Inventory.Instance.ReturnItem(HeldItem, HeldItemIndex)) return;
+
+        HeldItem = node;
+        HeldItemIndex = index;
+        node?.Reparent(this);
+        if (node is IItem item)
+        {
+            item.Position = ItemPositon;
+        }
+    }
+
+
+    //Deployables
     public void PickedUp(IDeployable deployable)
     {
-        if (!deployable.CanCarry())
+        if (!deployable.CanCarry() || HeldItem != null)
             return;
 
         Deployable = deployable;

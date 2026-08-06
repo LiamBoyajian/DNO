@@ -1,30 +1,17 @@
-using System;
 using System.Diagnostics;
 using Godot;
 using Main.main.packages.items;
 
 // Ensure this inherits from the exact C# name of your base class
-namespace Main.main.scripts.core.util;
+namespace Main.main.packages.util;
 
-public partial class ItemSeed : TextureRect, IPlantable, IItem<Texture>
+public partial class ItemSeed : TextureRect, IPlantable, IItem
 {
     // SHOULD NOT BE EXPORTS; CURRENTLY USED FOR TESTING
     [Export] protected Script PlantType;
     [Export] protected SpriteFrames Frames;
     [Export] protected PackedScene PlantScene;
     [Export] protected int PlantDbId = -1;
-
-    // Called when the node enters the scene tree for the first time.
-    public override void _Ready()
-    {
-        base._Ready();
-    }
-
-    // Called every frame. 'delta' is the elapsed time since the previous frame.
-    public override void _Process(double delta)
-    {
-        base._Process(delta);
-    }
 
     public bool AssignSpecies(Script species)
     {
@@ -36,6 +23,18 @@ public partial class ItemSeed : TextureRect, IPlantable, IItem<Texture>
 
         Debug.Assert(false, "species (param) is not child of abstract plant");
         return false;
+    }
+
+
+    public void Initialize()
+    {
+        LayoutMode = 1;
+        AnchorsPreset = (int)LayoutPreset.Center;
+    }
+
+    public override void _Ready()
+    {
+        Initialize();
     }
 
     public Script GetPlantType()
@@ -58,6 +57,11 @@ public partial class ItemSeed : TextureRect, IPlantable, IItem<Texture>
         return PlantDbId;
     }
 
-    public Texture DragIcon { get; }
-    public Texture Icon => Texture;
+    public Texture2D DragIcon => Texture;
+    public Texture2D Icon => Texture;
+
+    public Texture2D HeldIcon
+    {
+        get => Texture;
+    }
 }

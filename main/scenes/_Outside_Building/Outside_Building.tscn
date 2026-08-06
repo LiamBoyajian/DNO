@@ -7,6 +7,7 @@
 [ext_resource type="Texture2D" uid="uid://dlch3jnjbtmhp" path="res://main/scenes/_Outside_Building/sprites/outside.aseprite" id="5_ck1pw"]
 [ext_resource type="Script" uid="uid://cv8ij7c2vho13" path="res://main/packages/Boundaries/Boundary.cs" id="5_lquo6"]
 [ext_resource type="PackedScene" uid="uid://c41s6fvk4pk6o" path="res://main/packages/containers/pot.tscn" id="7_chwsl"]
+[ext_resource type="SpriteFrames" uid="uid://cjvq76qeb0ln" path="res://main/packages/items/tools/shears/shears.aseprite" id="8_selno"]
 [ext_resource type="SpriteFrames" uid="uid://bt50dg3t132un" path="res://main/packages/items/shovel/shovel.aseprite" id="9_d2mmj"]
 [ext_resource type="Script" uid="uid://cb2k8gm1kk334" path="res://main/packages/items/tools/PruningShears.cs" id="10_3vbvf"]
 [ext_resource type="Script" uid="uid://cnbtcf5757nje" path="res://main/packages/items/tools/TemplateTool.cs" id="11_0efvc"]
@@ -15,10 +16,10 @@
 size = Vector2(90, 74)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ygq3"]
-size = Vector2(355, 66)
+size = Vector2(349, 11)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aoqhg"]
-size = Vector2(9.192362, 50.91172)
+size = Vector2(9.192362, 31.87008)
 
 [node name="OutsideLab" type="Node2D" unique_id=1082450297 node_paths=PackedStringArray("Boundaries")]
 y_sort_enabled = true
@@ -26,7 +27,7 @@ script = ExtResource("1_selno")
 Boundaries = NodePath("Boundaries")
 
 [node name="mc" parent="." unique_id=2056976437 instance=ExtResource("2_lquo6")]
-position = Vector2(448, 336)
+position = Vector2(438, 325)
 animation = &"Side"
 
 [node name="IntoBuilding" type="Area2D" parent="." unique_id=914254641]
@@ -44,7 +45,7 @@ collision_mask = 0
 script = ExtResource("5_lquo6")
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="Boundaries" unique_id=254963865]
-position = Vector2(467.5, 346)
+position = Vector2(470.5, 316.5)
 shape = SubResource("RectangleShape2D_1ygq3")
 debug_color = Color(0.28459144, 0.6125744, 0.4365363, 0.41960785)
 
@@ -54,25 +55,27 @@ position = Vector2(320, 180)
 texture = ExtResource("5_ck1pw")
 
 [node name="Pot2" parent="." unique_id=39031905 instance=ExtResource("7_chwsl")]
-position = Vector2(406, 339)
+position = Vector2(394, 324)
 
 [node name="Shears" type="AnimatedSprite2D" parent="." unique_id=97293574 node_paths=PackedStringArray("ClickArea")]
-modulate = Color(0.29862767, 0.7047631, 0.9481177, 1)
+visible = false
 position = Vector2(360, 264)
-sprite_frames = ExtResource("9_d2mmj")
+sprite_frames = ExtResource("8_selno")
+speed_scale = 0.0
 script = ExtResource("10_3vbvf")
 Type = 2
 ClickArea = NodePath("Area2D")
 
 [node name="Area2D" type="Area2D" parent="Shears" unique_id=1562648796]
+rotation = 1.5707964
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Shears/Area2D" unique_id=1020676441]
-position = Vector2(3.2500305, 0.25003052)
-rotation = 0.7853982
+position = Vector2(7.553047e-08, -6)
 scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_aoqhg")
 
 [node name="Shovel" type="AnimatedSprite2D" parent="." unique_id=198880228 node_paths=PackedStringArray("ClickArea")]
+visible = false
 position = Vector2(385, 213)
 sprite_frames = ExtResource("9_d2mmj")
 script = ExtResource("11_0efvc")
@@ -82,13 +85,13 @@ ClickArea = NodePath("Area2D")
 [node name="Area2D" type="Area2D" parent="Shovel" unique_id=594408302]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Shovel/Area2D" unique_id=211034142]
-position = Vector2(3.2500305, 0.25003052)
+position = Vector2(-2.2677612, 4.267761)
 rotation = 0.7853982
 scale = Vector2(0.9999999, 0.9999999)
 shape = SubResource("RectangleShape2D_aoqhg")
 
 [node name="Pot3" parent="." unique_id=1877160296 instance=ExtResource("7_chwsl")]
-position = Vector2(345, 347)
+position = Vector2(344, 311)
 
 [node name="Pot4" parent="." unique_id=79220215 instance=ExtResource("7_chwsl")]
-position = Vector2(378, 355)
+position = Vector2(366, 311)

@@ -7,6 +7,7 @@ using Main.main.packages.items;
 using Main.main.scripts.core.plants;
 using Main.main.scripts.core.util;
 using Main.Source.main;
+using AcceptSeed = Main.main.packages.util.AcceptSeed;
 
 namespace Main.main.packages.containers;
 

@@ -150,10 +150,18 @@ public partial class PlantPopup : Window
 
         //TODO
         //Future implementation: use suffixes to identify button presses.
-        if (string.CompareOrdinal(primarySplitDelimiter[1], _purchaseSuffix) == 0 &&
-            LastAttributeDictionary is IUpgradable upgradable)
+        if (string.CompareOrdinal(primarySplitDelimiter[1], _purchaseSuffix) == 0)
         {
-            refresh = upgradable.ParseUpgrade(@enum);
+            if (Input.IsKeyPressed(Key.Ctrl))
+            {
+                if (LastAttributeDictionary is IUpgradable upgradable)
+                    refresh = upgradable.ParseUpgrade(@enum);
+            }
+            else
+            {
+                if (LastAttributeDictionary is IObtainable obtainable)
+                    refresh = obtainable.ParseObtain(@enum);
+            }
         }
 
         if (refresh)

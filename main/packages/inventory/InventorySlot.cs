@@ -1,6 +1,7 @@
 using Godot;
+using Main.main.packages.items;
 
-namespace Main.main.scripts.core.util.inventory;
+namespace Main.main.packages.inventory;
 
 public partial class InventorySlot : Panel
 {
@@ -18,16 +19,15 @@ public partial class InventorySlot : Panel
 
     public override bool _CanDropData(Vector2 atPosition, Variant data)
     {
-        return true;
+        return GetChildCount() == 0;
     }
 
     public override void _DropData(Vector2 atPosition, Variant data)
     {
-        var dragNode = data.AsGodotObject() as Node2D;
-        if (dragNode != null)
+        if (data.AsGodotObject() is IItem item)
         {
-            dragNode.Reparent(this);
-            dragNode.Position = Vector2.Zero;
+            item.Reparent(this);
+            item.Initialize();
         }
     }
 
@@ -35,30 +35,34 @@ public partial class InventorySlot : Panel
     {
         if (GetChildCount() == 0)
         {
-            return default; // Equivalent to returning null/void in C# Variant
+            return default;
         }
 
-        Node temp = GetChild(0);
-        if (temp == null)
+        Node childNode = GetChild<Node>(0);
+        if (childNode == null)
         {
             return default;
         }
 
-        // Duplicate the child node to act as the visual drag preview
-        var previewNode = temp.Duplicate();
-        if (previewNode is Control previewControl)
+        var previewNode = childNode.Duplicate();
+        if (previewNode is IItem item)
         {
-            SetDragPreview(previewControl);
+            using var textureRectPreview = new TextureRect();
+            textureRectPreview.Texture = item.DragIcon;
+            SetDragPreview(textureRectPreview);
         }
-        else if (previewNode is Node2D previewNode2D)
+        else
         {
-            // If the child is a Node2D, wrap it in a Control so SetDragPreview accepts it cleanly
-            var previewWrapper = new Control();
-            previewWrapper.AddChild(previewNode2D);
-            SetDragPreview(previewWrapper);
+            GD.PrintErr("Node does not implement IItem");
         }
 
         // Return the actual node as the drag data Variant
-        return Variant.From(temp);
+        return Variant.From(childNode);
+    }
+
+    public Node GetItem()
+    {
+        if (GetChildCount() == 0) return null;
+        return GetChild<Node>(0);
     }
 }

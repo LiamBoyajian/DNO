@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Main.main.packages.inventory;
 using Main.main.scripts.core.plants;
 using Main.main.scripts.core.util.inventory;
 using Main.main.scripts.core.util.items.tools;
@@ -105,7 +106,7 @@ public partial class PlantGui : AnimatedSprite2D
                     if (ParentPlant is IShearable shearable)
                     {
                         var sheared = shearable.Shear(1);
-                        InventoryDisplay.Instance.AddMoney(sheared, true);
+                        Inventory.Instance.AddMoney(sheared, true);
                     }
 
                     break;

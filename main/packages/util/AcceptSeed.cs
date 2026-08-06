@@ -1,8 +1,9 @@
 using System.Diagnostics;
 using Godot;
+using Main.main.scripts.core.util;
 
 // Adjust "DisappearSlot" to match the actual C# class name of your base script
-namespace Main.main.scripts.core.util;
+namespace Main.main.packages.util;
 
 public partial class AcceptSeed : DisappearSlot
 {
