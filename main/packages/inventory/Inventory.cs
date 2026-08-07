@@ -25,7 +25,7 @@ public partial class Inventory(int size = 1) : Node
 
 
     //References to scene nodes
-    public Godot.Collections.Array<Panel> Slots;
+    public Godot.Collections.Array<InventorySlot> Slots;
     [Export] protected Label MoneyLabel;
 
 
@@ -34,7 +34,10 @@ public partial class Inventory(int size = 1) : Node
 
     //Signals
     [Signal]
-    public delegate void SelectedItemChangedEventHandler(Node item, int index);
+    public delegate void SelectedItemChangedEventHandler(Node item);
+
+    [Signal]
+    public delegate void NoSelectedItemEventHandler();
 
     //Godot native methods
     public override void _Ready()
@@ -78,51 +81,30 @@ public partial class Inventory(int size = 1) : Node
     {
         if (node < 0 || node >= Slots.Count) return false;
 
-        Slots[Math.Clamp(SelectedItem, 0, Count())].SelfModulate = ColorIcon;
-        if (node == SelectedItem)
+        var previousSlot = Slots[Math.Clamp(SelectedItem, 0, Count())];
+        previousSlot.SelfModulate = ColorIcon;
+        if (previousSlot.HasItem())
         {
-            EmitSignal(nameof(SelectedItemChanged), (Node)null, -1);
-            SelectedItem = -1;
-            return false;
-        }
-
-        SelectedItem = node;
-        Slots[SelectedItem].SelfModulate = ColorSelectedIcon;
-
-        if (Slots[SelectedItem] is InventorySlot inventorySlot)
-        {
-            EmitSignal(nameof(SelectedItemChanged), inventorySlot.GetItem(), SelectedItem);
-        }
-
-        return true;
-    }
-
-    public bool ReturnItem(Node item, int index, bool anySlot = true)
-    {
-        if (item == null) return true;
-        if (item is not IItem) return false;
-        if (index < 0 || index >= Slots.Count) return false;
-        var target = Slots[index];
-
-        if (target.GetChildCount() == 0)
-        {
-            item.Reparent(target);
-            return true;
-        }
-
-        if (anySlot)
-        {
-            foreach (var slot in Slots)
+            var previousSlotManager = previousSlot.GetManager();
+            previousSlotManager?.ReturnItem();
+            EmitSignal(nameof(NoSelectedItem));
+            if (node == SelectedItem)
             {
-                if (slot.GetChildCount() == 0)
-                {
-                    item.Reparent(slot);
-                    return true;
-                }
+                SelectedItem = -1;
+                return false;
             }
         }
 
-        return false;
+        SelectedItem = node;
+        var currentSlot = Slots[SelectedItem];
+        currentSlot.SelfModulate = ColorSelectedIcon;
+
+        IItem signalItem = currentSlot.GetManager()?.BorrowItem();
+        signalItem?.Show();
+
+        EmitSignal(nameof(SelectedItemChanged), (Node)signalItem);
+
+        return true;
     }
 
     public int Count()

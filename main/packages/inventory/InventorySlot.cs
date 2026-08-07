@@ -1,3 +1,4 @@
+using System;
 using Godot;
 using Main.main.packages.items;
 
@@ -9,6 +10,13 @@ public partial class InventorySlot : Panel
     public override void _Ready()
     {
         base._Ready();
+        if (GetChildCount() > 0)
+        {
+            var child = GetChild<Node>(0);
+            var wrapper = ManagerIItem.From(child);
+            if (wrapper == null) throw new Exception("Child is not valid item");
+            AddChild(wrapper);
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -19,17 +27,32 @@ public partial class InventorySlot : Panel
 
     public override bool _CanDropData(Vector2 atPosition, Variant data)
     {
-        return GetChildCount() == 0;
+        return GetChildCount() <= 1;
     }
 
     public override void _DropData(Vector2 atPosition, Variant data)
     {
-        if (data.AsGodotObject() is IItem item)
+        var dataAsObject = data.AsGodotObject();
+        var manager = dataAsObject as ManagerIItem;
+        if (dataAsObject is IItem item)
         {
-            item.Reparent(this);
-            item.Initialize();
+            manager = ManagerIItem.From(item);
+        }
+
+        if (manager != null)
+        {
+            if (GetChildCount() >= 1 && HasItem())
+            {
+                var currentChild = GetManager();
+                currentChild?.Reparent(manager.GetParent());
+                currentChild?.Initialize();
+            }
+
+            manager.Reparent(this);
+            manager.Initialize();
         }
     }
+
 
     public override Variant _GetDragData(Vector2 atPosition)
     {
@@ -38,31 +61,26 @@ public partial class InventorySlot : Panel
             return default;
         }
 
-        Node childNode = GetChild<Node>(0);
-        if (childNode == null)
+        if (GetChild<Node>(0) is not ManagerIItem managerIItem)
         {
             return default;
         }
 
-        var previewNode = childNode.Duplicate();
-        if (previewNode is IItem item)
-        {
-            using var textureRectPreview = new TextureRect();
-            textureRectPreview.Texture = item.DragIcon;
-            SetDragPreview(textureRectPreview);
-        }
-        else
-        {
-            GD.PrintErr("Node does not implement IItem");
-        }
-
-        // Return the actual node as the drag data Variant
-        return Variant.From(childNode);
+        managerIItem.ReturnItem();
+        using var textureRectPreview = new TextureRect();
+        textureRectPreview.Texture = managerIItem.GetItem().DragIcon;
+        SetDragPreview(textureRectPreview);
+        return Variant.From(managerIItem);
     }
 
-    public Node GetItem()
+    public ManagerIItem GetManager()
     {
         if (GetChildCount() == 0) return null;
-        return GetChild<Node>(0);
+        return GetChild<Node>(0) as ManagerIItem;
+    }
+
+    public bool HasItem()
+    {
+        return GetManager() != null;
     }
 }

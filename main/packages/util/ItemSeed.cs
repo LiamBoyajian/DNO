@@ -26,15 +26,13 @@ public partial class ItemSeed : TextureRect, IPlantable, IItem
     }
 
 
-    public void Initialize()
+    public bool Use(Node target = null)
     {
-        LayoutMode = 1;
-        AnchorsPreset = (int)LayoutPreset.Center;
+        throw new System.NotImplementedException();
     }
 
     public override void _Ready()
     {
-        Initialize();
     }
 
     public Script GetPlantType()

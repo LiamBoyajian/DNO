@@ -27,14 +27,10 @@ public abstract partial class DisappearSlot : Panel
     public override void _DropData(Vector2 atPosition, Variant data)
     {
         // Convert Variant to a Godot Object/Node so we can manipulate its transform
-        if (data.Obj is not IItem item)
-            return;
 
-        //item.Reparent(this);
-        //item.Position = Vector2.Zero;
+        if (data.Obj is not WrapperIItem wrapper) return;
 
-
-        if (!AfterAccepted(data)) return;
+        if (!AfterAccepted(wrapper)) return;
         IsAccepting(false);
     }
 
@@ -51,5 +47,5 @@ public abstract partial class DisappearSlot : Panel
         }
     }
 
-    public abstract bool AfterAccepted(Variant seed);
+    public abstract bool AfterAccepted(WrapperIItem item);
 }

@@ -12,7 +12,7 @@ using AcceptSeed = Main.main.packages.util.AcceptSeed;
 namespace Main.main.packages.containers;
 
 [GlobalClass]
-public partial class ContainPlant : Sprite2D, IDeployable
+public partial class ContainPlant : Sprite2D, IDeployable, IWaterable
 {
     public MaterialResource Water = new MaterialResource(500.0, 1000.0);
 
@@ -208,5 +208,10 @@ public partial class ContainPlant : Sprite2D, IDeployable
     public Texture GetCarriedTexture()
     {
         return Texture;
+    }
+
+    public double GiveWater(double amount)
+    {
+        return Water.Give(amount);
     }
 }

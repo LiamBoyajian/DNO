@@ -4,6 +4,7 @@ using Godot;
 using Main.main.packages.Boundaries;
 using Main.main.packages.inventory;
 using Main.main.packages.items;
+using Main.main.packages.mc;
 using Main.main.scripts.core.util;
 using Main.main.scripts.scene;
 
@@ -34,7 +35,6 @@ public partial class Player : AnimatedSprite2D
     protected Blueprint Blueprint = null;
 
     protected Node HeldItem = null;
-    protected int HeldItemIndex = -1;
 
 
     protected Vector2 FacingUnitVector = Vector2.Zero;
@@ -42,6 +42,7 @@ public partial class Player : AnimatedSprite2D
     protected Area2D Proximity;
     protected Area2D Hitbox;
     protected Area2D Base;
+    protected ItemUsage ItemRange;
 
     protected Dictionary<MovementType, float> MovementSpeedRatio = new Dictionary<MovementType, float>()
     {
@@ -68,12 +69,18 @@ public partial class Player : AnimatedSprite2D
         if (Hitbox == null)
             GD.PrintErr("Player hitbox not found");
 
+        ItemRange = GetNode("ItemUsage") as ItemUsage;
+        if (ItemRange == null)
+            GD.PrintErr("ItemUsage not found");
+
         Base = GetNode("Base") as Area2D;
         if (Base == null)
             GD.PrintErr("Player base not found");
 
         Inventory.Instance.SelectedItemChanged += PulloutItem;
+        Inventory.Instance.NoSelectedItem += ClearItem;
     }
+
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(double delta)
@@ -89,23 +96,23 @@ public partial class Player : AnimatedSprite2D
             if (FacingUnitVector.Y > 0)
             {
                 direction.Y += MovementSpeed * (float)delta;
-                Animation = "Front";
+                Animation = "front";
             }
             else if (FacingUnitVector.Y < 0)
             {
                 direction.Y -= MovementSpeed * (float)delta;
-                Animation = "Front";
+                Animation = "back";
             }
             else if (FacingUnitVector.X > 0)
             {
                 direction.X += MovementSpeed * (float)delta;
-                Animation = "Side";
+                Animation = "side";
                 FlipH = false;
             }
             else if (FacingUnitVector.X < 0)
             {
                 direction.X -= MovementSpeed * (float)delta;
-                Animation = "Side";
+                Animation = "side";
                 FlipH = true;
             }
         }
@@ -159,6 +166,21 @@ public partial class Player : AnimatedSprite2D
                 }
             }
         }
+
+        if (@event.IsAction("use_item"))
+        {
+            if (HeldItem is IItem item)
+            {
+                if (@event.IsActionPressed("use_item"))
+                {
+                    ItemRange.SetDirection(FacingUnitVector);
+                    ItemRange.Enable(true);
+                    var overlappingAreas = ItemRange.GetOverlappingAreas();
+                    if (overlappingAreas.Count > 0)
+                        item.Use(overlappingAreas[0].GetParent());
+                }
+            }
+        }
         //if (@event.IsActionPressed(""))
     }
 
@@ -208,21 +230,25 @@ public partial class Player : AnimatedSprite2D
     }
 
 
-    //Items
-    public void PulloutItem(Node node, int index)
+    //Items -------------------------------------------------------------
+    public void PulloutItem(Node node)
     {
         if (_movementType == MovementType.Carrying) return;
-        if (HeldItem != null && !Inventory.Instance.ReturnItem(HeldItem, HeldItemIndex)) return;
+        if (node == null) return;
 
         HeldItem = node;
-        HeldItemIndex = index;
-        node?.Reparent(this);
+        AddChild(node);
         if (node is IItem item)
         {
             item.Position = ItemPositon;
         }
     }
 
+    private void ClearItem()
+    {
+        HeldItem = null;
+        ItemRange.Enable(false);
+    }
 
     //Deployables
     public void PickedUp(IDeployable deployable)

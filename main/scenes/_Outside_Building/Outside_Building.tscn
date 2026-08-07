@@ -27,8 +27,7 @@ script = ExtResource("1_selno")
 Boundaries = NodePath("Boundaries")
 
 [node name="mc" parent="." unique_id=2056976437 instance=ExtResource("2_lquo6")]
-position = Vector2(438, 325)
-animation = &"Side"
+position = Vector2(425, 315)
 
 [node name="IntoBuilding" type="Area2D" parent="." unique_id=914254641]
 position = Vector2(499, 283)
@@ -95,3 +94,10 @@ position = Vector2(344, 311)
 
 [node name="Pot4" parent="." unique_id=79220215 instance=ExtResource("7_chwsl")]
 position = Vector2(366, 311)
+
+[node name="my measuring tape steamhappy" type="Container" parent="." unique_id=157746651]
+visible = false
+offset_left = 426.0
+offset_top = 286.0
+offset_right = 446.0
+offset_bottom = 307.0
