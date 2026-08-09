@@ -12,6 +12,9 @@ public class EnumGate
     private Dictionary<Type, int[]> _dictionary = new Dictionary<Type, int[]>();
 
 
+    /**
+     * Values represent the allowed ordinals of the given enum type
+     */
     public void CreateGate(Type @enumType, params int[] values)
     {
         ArgumentNullException.ThrowIfNull(@enumType);
@@ -26,10 +29,10 @@ public class EnumGate
     {
         if (@enumType is null) throw new ArgumentNullException(nameof(@enumType));
         if (!@enumType.IsEnum) throw new ArgumentException(nameof(@enumType));
-        if (!_dictionary.ContainsKey(@enumType))
+        if (!_dictionary.TryGetValue(@enumType, out var value))
             return (@enumType, null);
 
-        var result = (@enumType, _dictionary[@enumType]);
+        var result = (@enumType, value);
         _dictionary.Remove(@enumType);
 
         return result;

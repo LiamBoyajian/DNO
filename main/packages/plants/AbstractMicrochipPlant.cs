@@ -204,6 +204,8 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
 
     public void PopupPlant()
     {
-        packages.PlantPopup.PlantPopup.Instance.Popup(this);
+        packages.PlantPopup.PlantPopup.Instance.InitializeNode(this);
     }
+
+    public abstract double GlucoseUpgradeFunction(double x);
 }

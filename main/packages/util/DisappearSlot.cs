@@ -31,6 +31,7 @@ public abstract partial class DisappearSlot : Panel
         if (data.Obj is not WrapperIItem wrapper) return;
 
         if (!AfterAccepted(wrapper)) return;
+        if (wrapper.GetParent() != null) wrapper.GetParent().RemoveChild(wrapper);
         IsAccepting(false);
     }
 

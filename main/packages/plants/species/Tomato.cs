@@ -1,13 +1,12 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Godot;
-using Main.main.scripts.core.plants.interfaces;
+using Main.main.packages.plants.interfaces;
+using Main.main.scripts.core.plants;
 using Main.main.scripts.core.util.inventory;
 using Main.Source.main;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities.Resources;
 
-namespace Main.main.scripts.core.plants.species;
+namespace Main.main.packages.plants.species;
 
 public partial class Tomato(int dbId)
     : AbstractMicrochipPlant(dbId), IConcatEnumerable, IUpgradable, IObtainable,
@@ -126,11 +125,9 @@ public partial class Tomato(int dbId)
         return Resources[Rt.Health].Take(missingGlucose / maxHpToGluRatio);
     }
 
-    /**
-     * Unsafe if given a negative
-     */
-    protected double GlucoseUpgradeFunction(double x)
+    public override double GlucoseUpgradeFunction(double x)
     {
+        if (x < 0.0) return 0;
         return M * GrowthType(x) + B;
     }
 
@@ -215,6 +212,27 @@ public partial class Tomato(int dbId)
         return result;
     }
 
+    //-------------------------------------------------
+    public IMaterialResource GetIMaterialResource(Enum @enum)
+    {
+        throw new NotImplementedException();
+    }
+
+    public double UpgradeCost(Enum @enum)
+    {
+        if (@enum is Rt rt) return GlucoseUpgradeFunction(MyResources[rt].Max);
+        if (@enum is TomatoOrgans tomatoOrgans) return GlucoseUpgradeFunction(MyOrgans[tomatoOrgans].Max);
+        return -1;
+    }
+
+    public double ObtainCost(Enum @enum)
+    {
+        if (@enum is Rt rt) return GlucoseUpgradeFunction(MyResources[rt].Amount);
+        if (@enum is TomatoOrgans tomatoOrgans) return GlucoseUpgradeFunction(MyOrgans[tomatoOrgans].Amount);
+        return -1;
+    }
+    //-------------------------------------------------
+
     public virtual bool ParseObtain(Enum @enum)
     {
         bool result = false;
@@ -239,6 +257,7 @@ public partial class Tomato(int dbId)
 
         return result;
     }
+
 
     /**
      * returns the current frame and updates

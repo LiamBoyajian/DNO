@@ -1,6 +1,5 @@
 using System;
 using Godot;
-using Main.main.scripts.core.plants.interfaces;
 
 namespace Main.main.scripts.core.plants.species;
 
@@ -131,5 +130,10 @@ public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
         Resources[Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
 
         return glucoseGenerated;
+    }
+
+    public override double GlucoseUpgradeFunction(double x)
+    {
+        throw new NotImplementedException();
     }
 }

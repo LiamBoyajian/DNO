@@ -48,6 +48,7 @@ public partial class Inventory(int size = 1) : Node
         {
             if (childNode is not InventorySlot inventorySlot) continue;
             Slots.Add(inventorySlot);
+            inventorySlot.ItemReturned += SlotReturnedItemHandler;
         }
     }
 
@@ -138,5 +139,9 @@ public partial class Inventory(int size = 1) : Node
         return true;
     }
 
+    public void SlotReturnedItemHandler()
+    {
+        EmitSignal(nameof(NoSelectedItem));
+    }
     //
 }

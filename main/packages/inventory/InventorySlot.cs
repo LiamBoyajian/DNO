@@ -6,6 +6,9 @@ namespace Main.main.packages.inventory;
 
 public partial class InventorySlot : Panel
 {
+    [Signal]
+    public delegate void ItemReturnedEventHandler();
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
@@ -66,7 +69,11 @@ public partial class InventorySlot : Panel
             return default;
         }
 
-        managerIItem.ReturnItem();
+
+        if (managerIItem.ReturnItem())
+            EmitSignal(nameof(ItemReturned));
+
+
         using var textureRectPreview = new TextureRect();
         textureRectPreview.Texture = managerIItem.GetItem().DragIcon;
         SetDragPreview(textureRectPreview);

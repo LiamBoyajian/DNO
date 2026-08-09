@@ -6,45 +6,48 @@ using Main.Source.main;
 
 namespace Main.main.packages.ResourceDisplay;
 
-public static class ResourceDisplayTools
+public interface IResourceDisplay<TNode> where TNode : Node, IResourceElement
 {
-    public static char Delimiter { get; private set; } = '_';
-    public static char DelimiterAlternate { get; private set; } = '-';
+    [Export] public PackedScene Scene { get; set; }
+    public EnumGate EnumGate { get; set; }
 
-    public static string DelimiterIdName(string className, Enum @enum, string suffix)
+    public void ClearChildren()
     {
-        return
-            $"{className}{DelimiterAlternate}{@enum.GetType().FullName?.Replace('.', '_')}{DelimiterAlternate}{@enum.Cast<int>()}{Delimiter}{suffix}";
+        if (this is not Container c) throw new Exception("this is not a node");
+        foreach (var child in c.GetChildren())
+        {
+            child.QueueFree();
+        }
     }
 
-    public static Enum ConvertStringToEnum(string enumPath, int ordinal)
+    public void AddElement(TNode item)
     {
-        Type type = Type.GetType(enumPath ?? "");
-        if (type is null || !type.IsEnum) throw new Exception(enumPath);
-
-        return (Enum)Enum.ToObject(type, ordinal);
+        if (this is not Container c) throw new Exception("this is not a node");
+        c.AddChild(item);
     }
-}
 
-public interface IResourceDisplay<out TNode> where TNode : Node
-{
-    //Not 100% needed?
-    public ButtonGroup Buttons { get; }
-    public bool ClearChildren();
-    //public string ClassNamePrefix { get; set; }
+    //public TNode Find(Enum @enum, string suffix = "");
 
-    public bool AddElement((Enum, IMaterialResource) item, string suffix = "");
+    public TNode Get(Enum @enum)
+    {
+        if (this is not Container c) throw new Exception("this is not a node");
+        foreach (var child in c.GetChildren())
+        {
+            if (child is not TNode itemUpgrade) continue;
+            if (Equals(itemUpgrade.Enum, @enum))
+            {
+                return itemUpgrade;
+            }
+        }
 
-    /**
-     * returns found progressbar; otherwise null
-     */
-    public TNode Find(Enum @enum, string suffix = "");
-
-    /**
-     * Attempts to update a progressbar with this key
-     * returns updated progressbar; otherwise null
-     */
-    public TNode Update(Enum @enum, IMaterialResource material, string suffix = "*");
+        return null;
+    }
 
     //public void UpdateAll(IEnumerable<(string, IMaterialResource)> getMaterialEnumerable);
+    public IEnumerable<TNode> GetAll()
+    {
+        if (this is not Container c) throw new Exception("this is not a node");
+        foreach (var child in c.GetChildren())
+            yield return (TNode)child;
+    }
 }
