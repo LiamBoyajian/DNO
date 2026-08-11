@@ -43,6 +43,13 @@ public interface IResourceDisplay<TNode> where TNode : Node, IResourceElement
         return null;
     }
 
+    public bool Contains(Enum @enum)
+    {
+        //TODO reimplement later, search per enum
+        if (this is not Container c) throw new Exception("this is not a node");
+        return Get(@enum) != null;
+    }
+
     //public void UpdateAll(IEnumerable<(string, IMaterialResource)> getMaterialEnumerable);
     public IEnumerable<TNode> GetAll()
     {

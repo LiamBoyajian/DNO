@@ -134,7 +134,6 @@ public partial class Tomato(int dbId)
 
     protected bool CreateOrgan(TomatoOrgans key)
     {
-        //TODO CHANGE TO CHAGERESOURCEMAX()
         bool result = false;
         switch (key)
         {
@@ -180,42 +179,20 @@ public partial class Tomato(int dbId)
         return result;
     }
 
-    /**
-     * Can upgrade doubles and MaterialResource
-     *
-     * returns true if change was made
-     */
-    public virtual bool ParseUpgrade(Enum @enum)
-    {
-        bool result = false;
-        if (@enum is Rt rtKey)
-        {
-            var tempCost = GlucoseUpgradeFunction(Resources[rtKey].Max);
-
-            if (tempCost <= Resources[Rt.Glucose].Amount)
-            {
-                Resources[Rt.Glucose].Take(tempCost);
-                Resources[rtKey].ChangeMax(STANDARDUPGRADEVAL);
-                result = true;
-            }
-        }
-        else if (@enum is TomatoOrgans tomatoKey)
-        {
-            var tempCost = GlucoseUpgradeFunction(Organs[tomatoKey].Amount * ORGANPURCHASEMULTIPLIER);
-            if (tempCost <= Resources[Rt.Glucose].Amount)
-            {
-                Resources[Rt.Glucose].Take(tempCost);
-                result = CreateOrgan(tomatoKey);
-            }
-        }
-
-        return result;
-    }
 
     //-------------------------------------------------
     public IMaterialResource GetIMaterialResource(Enum @enum)
     {
-        throw new NotImplementedException();
+        if (@enum is Rt rtKey)
+        {
+            return MyResources[rtKey];
+        }
+        else if (@enum is TomatoOrgans tomatoKey)
+        {
+            return MyOrgans[tomatoKey];
+        }
+
+        return null;
     }
 
     public double UpgradeCost(Enum @enum)
@@ -254,10 +231,40 @@ public partial class Tomato(int dbId)
 
             result = true;
         }
+        else if (@enum is TomatoOrgans tomatoOrgans)
+        {
+            CreateOrgan(tomatoOrgans);
+        }
 
         return result;
     }
 
+    public virtual bool ParseUpgrade(Enum @enum)
+    {
+        bool result = false;
+        if (@enum is Rt rtKey)
+        {
+            var tempCost = GlucoseUpgradeFunction(Resources[rtKey].Max);
+
+            if (tempCost <= Resources[Rt.Glucose].Amount)
+            {
+                Resources[Rt.Glucose].Take(tempCost);
+                Resources[rtKey].ChangeMax(STANDARDUPGRADEVAL);
+                result = true;
+            }
+        }
+        else if (@enum is TomatoOrgans tomatoKey)
+        {
+            var tempCost = GlucoseUpgradeFunction(Organs[tomatoKey].Amount * ORGANPURCHASEMULTIPLIER);
+            if (tempCost <= Resources[Rt.Glucose].Amount)
+            {
+                Resources[Rt.Glucose].Take(tempCost);
+                result = CreateOrgan(tomatoKey);
+            }
+        }
+
+        return result;
+    }
 
     /**
      * returns the current frame and updates
@@ -282,7 +289,7 @@ public partial class Tomato(int dbId)
             case < 10:
                 GuiManager.Animation = "no_growth";
                 break;
-            case >= 500:
+            case >= 220:
                 GuiManager.Animation = "fruiting";
                 GuiManager.Stop();
                 GuiManager.Frame = (int)Mathf.Clamp(Organs[TomatoOrgans.Fruit].Amount, 0, 8);

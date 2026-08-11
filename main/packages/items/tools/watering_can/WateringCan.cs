@@ -25,9 +25,20 @@ public partial class WateringCan : AnimatedSprite2D, IItem
     public bool Use(Node target = null)
     {
         if (target == null) return false;
-        if (Water.Amount == 0) return false;
-        if (target is not IWaterable waterable) return false;
-        return Water.Take(waterable.GiveWater(Water.Amount)) > 0;
+        if (target is IWaterable waterable)
+        {
+            GD.Print(Water.Amount);
+            return Water.Take(waterable.GiveWater(Water.Amount)) > 0;
+        }
+
+        if (target is hose.Hose hose)
+        {
+            GD.Print(Water.Amount);
+            return Water.Give(hose.OutputWater()) > 0;
+        }
+
+
+        return false;
     }
 
     //IItem

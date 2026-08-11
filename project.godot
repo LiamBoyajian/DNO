@@ -157,10 +157,13 @@ inventory_slot={
 
 [layer_names]
 
-2d_physics/layer_1="Physical"
-2d_physics/layer_2="Interact"
-2d_physics/layer_3="Ground"
-2d_physics/layer_5="Player Interact"
+2d_physics/layer_1="Blocker Object, allows logic"
+2d_physics/layer_2="Player can interact with"
+2d_physics/layer_3="Ground - Player Bounded"
+2d_physics/layer_4="Blocker Player"
+2d_physics/layer_5="Player Interaction Field"
+2d_physics/layer_6="Placable not traversable"
+2d_physics/layer_9="Scene Transition"
 
 [rendering]
 

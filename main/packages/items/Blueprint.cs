@@ -6,14 +6,6 @@ using Main.main._Outside_Building;
 
 namespace Main.main.packages.items;
 
-public static class LayerControl
-{
-    public const int Object = 1;
-    public const int Interactable = 2;
-    public const int Bounds = 3;
-    public const int Placeable = 4;
-}
-
 public partial class Blueprint : Sprite2D
 {
     public Area2D Area = new();
@@ -33,6 +25,7 @@ public partial class Blueprint : Sprite2D
         SetVisibility(false);
         Name = "blueprint";
         Area.InputPickable = false;
+        Area.CollisionMask = uint.MaxValue;
     }
 
     public override void _Process(double delta)
@@ -60,16 +53,22 @@ public partial class Blueprint : Sprite2D
             foreach (Area2D area in Area.GetOverlappingAreas())
             {
                 uint collisionLayer = area.GetCollisionLayer();
-                if (collisionLayer == LayerControl.Object)
+                if (collisionLayer == 1)
                 {
                     ValidPlacement = false;
                     break;
                 }
-                else if (collisionLayer == LayerControl.Bounds)
+                else if (collisionLayer == 3)
                 {
                     withinBoundary = true;
                 }
-                else if (collisionLayer == LayerControl.Placeable)
+
+                if (collisionLayer == 5)
+                {
+                    ValidPlacement = false;
+                    break;
+                }
+                else if (collisionLayer == 6)
                 {
                     withinBoundary = true;
                 }

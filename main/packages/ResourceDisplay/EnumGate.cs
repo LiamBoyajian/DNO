@@ -18,7 +18,6 @@ public class EnumGate
     public void CreateGate(Type @enumType, params int[] values)
     {
         ArgumentNullException.ThrowIfNull(@enumType);
-        ArgumentNullException.ThrowIfNull(values);
 
         if (!@enumType.IsEnum) throw new ArgumentException(nameof(@enumType));
 

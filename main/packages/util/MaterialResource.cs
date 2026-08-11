@@ -8,7 +8,15 @@ public interface IMaterialResource
 
     public double Amount { get; }
 
-    public bool IsEmpty();
+    public bool IsEmpty()
+    {
+        return Amount == 0;
+    }
+
+    public bool IsMaxed()
+    {
+        return Amount >= Max;
+    }
 
     /**
     * returns the val of amount is > val; otherwise returns the current amount
@@ -74,6 +82,11 @@ public class MaterialResource(double amount, double max) : IMaterialResource
     public bool IsEmpty()
     {
         return Amount <= 0;
+    }
+
+    public bool IsMaxed()
+    {
+        return Amount >= Max;
     }
 
     public bool Increment()

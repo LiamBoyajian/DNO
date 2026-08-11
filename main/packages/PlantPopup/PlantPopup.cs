@@ -5,7 +5,9 @@ using Godot;
 using Main.main.packages.PlantPopup.item_progress_bar;
 using Main.main.packages.PlantPopup.item_upgrade;
 using Main.main.packages.plants.interfaces;
+using Main.main.packages.plants.species;
 using Main.main.packages.ResourceDisplay;
+using Main.Source.main;
 using AbstractPlant = Main.main.scripts.core.plants.AbstractPlant;
 using ItemProgressBar = Main.main.packages.PlantPopup.item_progress_bar.ItemProgressBar;
 
@@ -41,6 +43,7 @@ public partial class PlantPopup : Window
         ItemUpgradeDisplay?.EnumGate = new EnumGate();
         ProgressBarDisplay?.EnumGate = new EnumGate();
         ProgressBarDisplay?.EnumGate.CreateGate(typeof(AbstractPlant.Rt), 0, 3, 4);
+        ProgressBarDisplay?.EnumGate.CreateGate(typeof(Tomato.TomatoOrgans));
 
         //Default
         Instance = this;
@@ -59,8 +62,8 @@ public partial class PlantPopup : Window
         if (LastAttributeDictionary is not IObtainable obtainable) return;
         if (LastAttributeDictionary is not IConcatEnumerable concatEnumerable) return;
         obtainable.ParseObtain(itemUpgrade.Enum);
-        itemUpgrade.SetValueDisplays(obtainable.ObtainCost(itemUpgrade.Enum),
-            concatEnumerable.GetIMaterialResource(itemUpgrade.Enum).Amount);
+        Refresh();
+        //UpdateAllOfEnum(itemUpgrade.Enum);
     }
 
     public void UpgradePressedHandler(Node node)
@@ -69,8 +72,8 @@ public partial class PlantPopup : Window
         if (LastAttributeDictionary is not IUpgradable upgradable) return;
         if (LastAttributeDictionary is not IConcatEnumerable concatEnumerable) return;
         upgradable.ParseUpgrade(itemUpgrade.Enum);
-        itemUpgrade.SetValueDisplays(upgradable.UpgradeCost(itemUpgrade.Enum),
-            concatEnumerable.GetIMaterialResource(itemUpgrade.Enum).Amount);
+        Refresh();
+        //UpdateAllOfEnum(itemUpgrade.Enum);
     }
 
     //IDK
@@ -78,14 +81,9 @@ public partial class PlantPopup : Window
     public void OnClose()
     {
         Hide();
-        ClearElements();
+        //ClearElements();
     }
 
-    /**
-     *  Can display:
-     *  IAttributeEnumerable, IMaterialEnumerable
-     *
-     */
     public void InitializeNode(Node node)
     {
         if (node is IAttributeDictionary u)
@@ -98,52 +96,66 @@ public partial class PlantPopup : Window
         }
 
 
-        ClearElements();
-
-
         if (node is IConcatEnumerable concatEnumerable)
         {
-            using var enumerable = concatEnumerable.GetDictionaryConcatEnumerable().GetEnumerator();
-            while (enumerable.MoveNext())
-            {
-                var item1 = enumerable.Current.Item1;
-                var item2 = enumerable.Current.Item2;
-                if (item1 == null || item2 == null)
-                    continue;
+            if (!AllEnumsRepresented(concatEnumerable))
+                CreateElements(concatEnumerable);
+        }
 
-                //ItemUpgradeDisplay]
+        Show();
+        PopupCentered();
+    }
+
+    public void CreateElements(IConcatEnumerable concatEnumerable)
+    {
+        ClearElements();
+        using var enumerable = concatEnumerable.GetDictionaryConcatEnumerable().GetEnumerator();
+        while (enumerable.MoveNext())
+        {
+            var item1 = enumerable.Current.Item1;
+            var item2 = enumerable.Current.Item2;
+            if (item1 == null || item2 == null)
+                continue;
+
+            //These can be separated into their own methods
+
+            //ItemUpgradeDisplay]
+            if (ItemUpgradeDisplay.EnumGate.Permits(item1))
+            {
                 var newItemUpgradeScene = ItemUpgradeDisplay.Scene.Instantiate();
                 if (newItemUpgradeScene is not ItemUpgrade newItemUpgrade)
                     throw new Exception("newItemUpgradeScene is not itemupgrade");
                 if (newItemUpgradeScene is IResourceElement resourceElementUpgrade)
                     resourceElementUpgrade.SetEnum(item1);
-                double cost = -1;
-                if (node is IUpgradable upgradable)
-                    cost = (int)Math.Ceiling(upgradable.UpgradeCost(item1));
+                double upgradeCost = -1;
+                double obtainCost = -1;
+                if (concatEnumerable is IUpgradable upgradable)
+                    upgradeCost = upgradable.UpgradeCost(item1);
+                if (concatEnumerable is IObtainable obtainable)
+                    obtainCost = obtainable.ObtainCost(item1);
 
-                newItemUpgrade.SetValueDisplays(cost, item2.Amount);
+                newItemUpgrade.SetObtainCostDisplay(obtainCost);
+                newItemUpgrade.SetObtainCostDisplay(upgradeCost);
                 newItemUpgrade.UpgradePressed += UpgradePressedHandler;
                 newItemUpgrade.PurchasePressed += PurchasePressedHandler;
 
                 ItemUpgradeDisplay.AddElement(newItemUpgrade);
+            }
 
-
-                //ProgressBarDisplay
+            //ProgressBarDisplay
+            if (ProgressBarDisplay.EnumGate.Permits(item1))
+            {
                 var newItemProgressBarScene = ProgressBarDisplay.Scene.Instantiate();
                 if (newItemProgressBarScene is not ItemProgressBar newItemProgressBar)
                     throw new Exception("newItemProgressBarScene is not itemprogressBar");
                 if (newItemProgressBar is IResourceElement resourceElementProgressbar)
                     resourceElementProgressbar.SetEnum(item1);
-                newItemProgressBar.ProgressBar.Value = item2.Amount;
-                newItemProgressBar.ProgressBar.MaxValue = item2.Max;
-                newItemProgressBar.TooltipText = "" + item2.Amount + " / " + item2.Max;
 
                 ProgressBarDisplay.AddElement(newItemProgressBar);
             }
-        }
 
-        Show();
-        PopupCentered();
+            UpdateAllOfEnum(item1, item2);
+        }
     }
 
     public void ClearElements()
@@ -173,30 +185,46 @@ public partial class PlantPopup : Window
         using var enumerable = dictionaryEnumerator.GetDictionaryConcatEnumerable().GetEnumerator();
         while (enumerable.MoveNext())
         {
-            var item1 = enumerable.Current.Item1;
-            var item2 = enumerable.Current.Item2;
-            //Only need to update the values since we know no purchases were made.
-            //if (ItemUpgradeDisplay.Get(item1) is not {} itemUpgradeDisplay) GD.PrintErr("Does not contain enum");
-            if (ProgressBarDisplay.Get(item1) is not { } itemProgressBar)
-            {
-                GD.PrintErr("Does not contain enum");
-                continue;
-            }
-
-            itemProgressBar.ProgressBar.Value = item2.Amount;
-            itemProgressBar.ProgressBar.MaxValue = item2.Max;
-            itemProgressBar.TooltipText = "" + item2.Amount + " / " + item2.Max;
+            UpdateAllOfEnum(enumerable.Current.Item1, enumerable.Current.Item2);
         }
     }
-    //public void UpdateAllOfEnum(Enum @enum, )
-    //{
-    //    if (ItemUpgradeDisplay.Get(@enum) is not {} itemUpgradeDisplay) GD.PrintErr("Does not contain enum");
-    //    if (ProgressBarDisplay.Get(@enum) is not {} itemProgressBar) GD.PrintErr("Does not contain enum");
-    //    
-    //    
-    //    itemProgressBar.ProgressBar.Value = item2.Amount;
-    //    itemProgressBar.ProgressBar.MaxValue = item2.Max;
-    //    itemProgressBar.TooltipText = "" + item2.Amount + " / " + item2.Max;
-    //}
-    //
+
+    public void UpdateAllOfEnum(Enum @enum, IMaterialResource resource = null)
+    {
+        if (LastAttributeDictionary is not IConcatEnumerable dictionaryEnumerator)
+            return;
+
+        var progressbar = ProgressBarDisplay.Get(@enum);
+        var itemUpgrade = ItemUpgradeDisplay.Get(@enum);
+        var resourceMaterial = resource ?? dictionaryEnumerator.GetIMaterialResource(@enum);
+
+        if (itemUpgrade != null)
+        {
+            if (LastAttributeDictionary is IUpgradable upgradable)
+                itemUpgrade.SetUpgradeCostDisplay(upgradable.UpgradeCost(itemUpgrade.Enum));
+
+            if (LastAttributeDictionary is IObtainable obtainable)
+                itemUpgrade.SetObtainCostDisplay(obtainable.ObtainCost(itemUpgrade.Enum));
+        }
+
+        if (progressbar != null)
+        {
+            progressbar.ProgressBar.Value = resourceMaterial.Amount;
+            progressbar.ProgressBar.MaxValue = resourceMaterial.Max;
+            progressbar.TooltipText = "" + (int)resourceMaterial.Amount + " / " + (int)resourceMaterial.Max;
+        }
+    }
+
+    public bool AllEnumsRepresented(IConcatEnumerable concatEnumerable)
+    {
+        foreach (var item in concatEnumerable.GetDictionaryConcatEnumerable())
+        {
+            Enum @enum = item.Item1;
+            if (ItemUpgradeDisplay.EnumGate.Permits(@enum) && !ItemUpgradeDisplay.Contains(@enum)) return false;
+            if (ProgressBarDisplay.EnumGate.Permits(@enum) && !ProgressBarDisplay.Contains(@enum)) return false;
+        }
+
+        Refresh();
+        return true;
+    }
 }

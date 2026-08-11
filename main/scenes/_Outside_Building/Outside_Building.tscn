@@ -11,6 +11,7 @@
 [ext_resource type="SpriteFrames" uid="uid://bt50dg3t132un" path="res://main/packages/items/shovel/shovel.aseprite" id="9_d2mmj"]
 [ext_resource type="Script" uid="uid://cb2k8gm1kk334" path="res://main/packages/items/tools/PruningShears.cs" id="10_3vbvf"]
 [ext_resource type="Script" uid="uid://cnbtcf5757nje" path="res://main/packages/items/tools/TemplateTool.cs" id="11_0efvc"]
+[ext_resource type="PackedScene" uid="uid://bk66pcxbfdn4c" path="res://main/packages/hose/hose.tscn" id="12_lquo6"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
 size = Vector2(90, 74)
@@ -31,6 +32,8 @@ position = Vector2(425, 315)
 
 [node name="IntoBuilding" type="Area2D" parent="." unique_id=914254641]
 position = Vector2(499, 283)
+collision_layer = 256
+collision_mask = 2
 script = ExtResource("3_chwsl")
 _targetScene = ExtResource("4_selno")
 
@@ -96,8 +99,10 @@ position = Vector2(344, 311)
 position = Vector2(366, 311)
 
 [node name="my measuring tape steamhappy" type="Container" parent="." unique_id=157746651]
-visible = false
-offset_left = 426.0
-offset_top = 286.0
-offset_right = 446.0
-offset_bottom = 307.0
+offset_left = 548.0
+offset_top = 290.0
+offset_right = 568.0
+offset_bottom = 308.0
+
+[node name="hose" parent="." unique_id=969516004 instance=ExtResource("12_lquo6")]
+position = Vector2(555, 298)

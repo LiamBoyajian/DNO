@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Main.addons.EnumToIcon.EnumToStringDatabase;
 using Main.addons.EnumToIcon.EnumToStringDatabase.main;
 using Main.main.packages.ResourceDisplay;
 using Main.Source.main;
@@ -12,8 +13,8 @@ public partial class ItemUpgrade : Panel, IResourceElement
     [Export] protected TextureRect IconTexture;
     [Export] protected TextureButton UpgradeButton;
     [Export] protected TextureButton PurchaseButton;
-    [Export] protected Label GlucoseCost;
-    [Export] protected Label AmountLabel;
+    [Export] protected Label ObtainCost;
+    [Export] protected Label UpgradeCost;
 
     [Signal]
     public delegate void UpgradePressedEventHandler(Node node);
@@ -42,10 +43,10 @@ public partial class ItemUpgrade : Panel, IResourceElement
             GD.PrintErr("upgradeButton is null");
         if (PurchaseButton == null)
             GD.PrintErr("purchaseButton is null");
-        if (GlucoseCost == null)
-            GD.PrintErr("maxLabel is null");
-        if (AmountLabel == null)
-            GD.PrintErr("amountLabel is null");
+        if (ObtainCost == null)
+            GD.PrintErr("ObtainCost is null");
+        if (UpgradeCost == null)
+            GD.PrintErr("UpgradeCost is null");
 
         UpgradeButton?.Pressed += () => EmitSignal(nameof(UpgradePressed), this);
         PurchaseButton?.Pressed += () => EmitSignal(nameof(PurchasePressed), this);
@@ -53,17 +54,21 @@ public partial class ItemUpgrade : Panel, IResourceElement
 
     public void InitializeIcon()
     {
-        if (IconTexture.Texture == null)
+        if (IconTexture.Texture == null && MemoryToDb.GetTextureFromEntry(new Entry(Enum)) is { } texture2D)
         {
-            IconTexture.Texture = GD.Load<Texture2D>(AccessIconsDb.GetEntry(new Entry(Enum))?.Data);
+            IconTexture.Texture = texture2D;
         }
     }
 
-    public void SetValueDisplays(double cost, double amount)
+    public void SetUpgradeCostDisplay(double upgradeCost, bool roundToInt = true)
     {
-        GlucoseCost.Text = "" + (cost < 0 ? "XXX" : cost);
+        var upgradeCostDisplay = roundToInt ? Math.Ceiling(upgradeCost) : upgradeCost;
+        UpgradeCost.Text = "" + (upgradeCostDisplay < 0 ? "XXX" : upgradeCostDisplay);
+    }
 
-
-        AmountLabel.Text = "" + (amount < 0 ? "XXX" : amount);
+    public void SetObtainCostDisplay(double obtainCost, bool roundToInt = true)
+    {
+        var obtainCostDisplay = roundToInt ? Math.Ceiling(obtainCost) : obtainCost;
+        ObtainCost.Text = "" + (obtainCostDisplay < 0 ? "XXX" : obtainCostDisplay);
     }
 }

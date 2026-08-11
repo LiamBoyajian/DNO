@@ -15,8 +15,8 @@ height = 52.0
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
 size = Vector2(12, 2)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_aoqhg"]
-size = Vector2(27, 19)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gq328"]
+size = Vector2(28, 34)
 
 [node name="mc" type="AnimatedSprite2D" unique_id=2056976437]
 y_sort_enabled = true
@@ -45,6 +45,7 @@ debug_color = Color(0.41620448, 0.5522243, 0.6810229, 0.41960785)
 
 [node name="Base" type="Area2D" parent="." unique_id=1917030019]
 position = Vector2(0, -1)
+collision_layer = 8
 collision_mask = 5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Base" unique_id=1293477189]
@@ -54,11 +55,12 @@ debug_color = Color(0.41620448, 0.5522243, 0.6810229, 0.41960785)
 [node name="ItemUsage" type="Area2D" parent="." unique_id=21330126]
 position = Vector2(14, -26)
 collision_layer = 2
-collision_mask = 7
+collision_mask = 3
 input_pickable = false
 script = ExtResource("3_gq328")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ItemUsage" unique_id=1796273148]
 z_index = 1
-shape = SubResource("RectangleShape2D_aoqhg")
+position = Vector2(0, 7)
+shape = SubResource("RectangleShape2D_gq328")
 debug_color = Color(0.6956437, 0.28231463, 1, 0.41960785)

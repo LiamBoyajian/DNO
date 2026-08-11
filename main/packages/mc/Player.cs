@@ -171,13 +171,14 @@ public partial class Player : AnimatedSprite2D
         {
             if (HeldItem is IItem item)
             {
-                if (@event.IsActionPressed("use_item"))
+                ItemRange.SetDirection(FacingUnitVector);
+                //ItemRange.Enable(true);
+                var overlappingAreas = ItemRange.GetOverlappingAreas();
+
+                if (overlappingAreas.Count > 0)
                 {
-                    ItemRange.SetDirection(FacingUnitVector);
-                    ItemRange.Enable(true);
-                    var overlappingAreas = ItemRange.GetOverlappingAreas();
-                    if (overlappingAreas.Count > 0)
-                        item.Use(overlappingAreas[0].GetParent());
+                    GD.Print(overlappingAreas[0].GetParent().Name);
+                    GD.Print(item.Use(overlappingAreas[0].GetParent()));
                 }
             }
         }
@@ -242,6 +243,8 @@ public partial class Player : AnimatedSprite2D
         {
             item.Position = ItemPositon;
         }
+
+        ItemRange.Enable(true);
     }
 
     private void ClearItem()

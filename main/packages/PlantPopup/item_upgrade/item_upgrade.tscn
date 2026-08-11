@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://csflgdcauiu51" path="res://main/packages/PlantPopup/item_upgrade/layers/item_upgrade_purchase_button.ase_layer_tex" id="3_s8qf0"]
 [ext_resource type="Texture2D" uid="uid://c1pdhyl63xqcw" path="res://main/packages/PlantPopup/item_upgrade/layers/item_upgrade_upgrade_button.ase_layer_tex" id="4_yhw8r"]
 
-[node name="ItemUpgrade" type="Panel" unique_id=1572832094 node_paths=PackedStringArray("IconTexture", "UpgradeButton", "PurchaseButton", "GlucoseCost", "AmountLabel")]
+[node name="ItemUpgrade" type="Panel" unique_id=1572832094 node_paths=PackedStringArray("IconTexture", "UpgradeButton", "PurchaseButton", "ObtainCost", "UpgradeCost")]
 custom_minimum_size = Vector2(85, 45)
 custom_maximum_size = Vector2(85, 45)
 offset_right = 85.0
@@ -16,8 +16,8 @@ script = ExtResource("2_s8qf0")
 IconTexture = NodePath("MarginContainer/HBoxContainer2/icon")
 UpgradeButton = NodePath("MarginContainer/HBoxContainer2/buttons/upgrade")
 PurchaseButton = NodePath("MarginContainer/HBoxContainer2/buttons/purchase")
-GlucoseCost = NodePath("MarginContainer/HBoxContainer2/labels/cost")
-AmountLabel = NodePath("MarginContainer/HBoxContainer2/labels/amount")
+ObtainCost = NodePath("MarginContainer/HBoxContainer2/labels/purchaseCost")
+UpgradeCost = NodePath("MarginContainer/HBoxContainer2/labels/upgradeCost")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=849002306]
 custom_minimum_size = Vector2(25, 15)
@@ -48,10 +48,12 @@ size_flags_vertical = 4
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="amount" type="Label" parent="MarginContainer/HBoxContainer2/labels" unique_id=427123104]
+[node name="purchaseCost" type="Label" parent="MarginContainer/HBoxContainer2/labels" unique_id=427123104]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
+tooltip_text = "Cost to obtain resource"
+mouse_filter = 1
 theme = ExtResource("1_w3lso")
 text = "12331231231231231"
 label_settings = ExtResource("2_eq8bl")
@@ -60,10 +62,12 @@ clip_text = true
 text_overrun_behavior = 5
 uppercase = true
 
-[node name="cost" type="Label" parent="MarginContainer/HBoxContainer2/labels" unique_id=269728092]
+[node name="upgradeCost" type="Label" parent="MarginContainer/HBoxContainer2/labels" unique_id=269728092]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
+tooltip_text = "Cost to upgrade max"
+mouse_filter = 1
 theme = ExtResource("1_w3lso")
 text = "123"
 label_settings = ExtResource("2_eq8bl")
