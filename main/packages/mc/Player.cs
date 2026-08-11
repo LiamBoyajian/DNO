@@ -172,7 +172,6 @@ public partial class Player : AnimatedSprite2D
             if (HeldItem is IItem item)
             {
                 ItemRange.SetDirection(FacingUnitVector);
-                //ItemRange.Enable(true);
                 var overlappingAreas = ItemRange.GetOverlappingAreas();
 
                 if (overlappingAreas.Count > 0)

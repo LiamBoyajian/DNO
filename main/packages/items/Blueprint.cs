@@ -25,7 +25,7 @@ public partial class Blueprint : Sprite2D
         SetVisibility(false);
         Name = "blueprint";
         Area.InputPickable = false;
-        Area.CollisionMask = uint.MaxValue;
+        Area.SetCollisionMask(uint.MaxValue);
     }
 
     public override void _Process(double delta)
@@ -52,23 +52,12 @@ public partial class Blueprint : Sprite2D
             ValidPlacement = true;
             foreach (Area2D area in Area.GetOverlappingAreas())
             {
-                uint collisionLayer = area.GetCollisionLayer();
-                if (collisionLayer == 1)
+                if (area.GetCollisionLayerValue(1) || area.GetCollisionLayerValue(4))
                 {
                     ValidPlacement = false;
                     break;
                 }
-                else if (collisionLayer == 3)
-                {
-                    withinBoundary = true;
-                }
-
-                if (collisionLayer == 5)
-                {
-                    ValidPlacement = false;
-                    break;
-                }
-                else if (collisionLayer == 6)
+                else if (area.GetCollisionLayerValue(3) || area.GetCollisionLayerValue(6))
                 {
                     withinBoundary = true;
                 }
