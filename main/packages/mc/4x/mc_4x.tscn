@@ -1,0 +1,93 @@
+[gd_scene format=3 uid="uid://4vlcwftwkvvg"]
+
+[ext_resource type="Texture2D" uid="uid://5n0ty3ksommf" path="res://main/packages/mc/4x/MC.png" id="1_r8ty7"]
+[ext_resource type="Script" uid="uid://db824lfx7ay2x" path="res://main/packages/mc/Player.cs" id="2_cagw6"]
+[ext_resource type="Script" uid="uid://dcxe5rlxqdwtl" path="res://main/packages/mc/ItemUsage.cs" id="3_p7htn"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cagw6"]
+atlas = ExtResource("1_r8ty7")
+region = Rect2(0, 0, 100, 200)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p7htn"]
+atlas = ExtResource("1_r8ty7")
+region = Rect2(100, 0, 100, 200)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_mrq1q"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cagw6")
+}],
+"loop": 0,
+"name": &"back",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cagw6")
+}],
+"loop": 2,
+"name": &"front",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p7htn")
+}],
+"loop": 1,
+"name": &"side",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ygq3"]
+size = Vector2(30, 6)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_aoqhg"]
+radius = 26.0
+height = 154.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mrq1q"]
+radius = 61.204575
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
+size = Vector2(50, 60)
+
+[node name="Mc4x" type="AnimatedSprite2D" unique_id=2088346730]
+sprite_frames = SubResource("SpriteFrames_mrq1q")
+animation = &"front"
+speed_scale = 0.0
+script = ExtResource("2_cagw6")
+
+[node name="Base" type="Area2D" parent="." unique_id=1520723876]
+position = Vector2(0, 97)
+collision_layer = 8
+collision_mask = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Base" unique_id=898318419]
+shape = SubResource("RectangleShape2D_1ygq3")
+
+[node name="Hitbox" type="Area2D" parent="." unique_id=2121525466]
+position = Vector2(0, -6)
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hitbox" unique_id=185068795]
+shape = SubResource("CapsuleShape2D_aoqhg")
+debug_color = Color(0, 0.6392157, 0.34509805, 0.27058825)
+
+[node name="Proximity" type="Area2D" parent="." unique_id=1321260147]
+position = Vector2(0, -41)
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Proximity" unique_id=1865621503]
+shape = SubResource("CircleShape2D_mrq1q")
+
+[node name="ItemUsage" type="Area2D" parent="." unique_id=1929370920]
+position = Vector2(0, 5)
+collision_mask = 3
+script = ExtResource("3_p7htn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ItemUsage" unique_id=278160180]
+shape = SubResource("RectangleShape2D_mrq1q")
+debug_color = Color(0.9607843, 0, 0.52156866, 0.20392157)

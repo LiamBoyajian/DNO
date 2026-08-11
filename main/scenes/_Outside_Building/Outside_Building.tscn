@@ -1,9 +1,7 @@
 [gd_scene format=3 uid="uid://h1n7j6elr0cp"]
 
-[ext_resource type="Script" uid="uid://bofv8ccitqg80" path="res://main/packages/scene/BasicScene.cs" id="1_selno"]
-[ext_resource type="PackedScene" uid="uid://cx6bs6vejxjwf" path="res://main/packages/mc/mc.tscn" id="2_lquo6"]
+[ext_resource type="PackedScene" uid="uid://cx6bs6vejxjwf" path="res://main/packages/mc/1x/mc.tscn" id="2_lquo6"]
 [ext_resource type="Script" uid="uid://q70ssyayrj2k" path="res://main/packages/scene/SceneTransitionTemplate.cs" id="3_chwsl"]
-[ext_resource type="PackedScene" uid="uid://hkrl88j77qi4" path="res://main/scenes/_UI_Computer/UI_Computer.tscn" id="4_selno"]
 [ext_resource type="Texture2D" uid="uid://dlch3jnjbtmhp" path="res://main/scenes/_Outside_Building/sprites/outside.aseprite" id="5_ck1pw"]
 [ext_resource type="Script" uid="uid://cv8ij7c2vho13" path="res://main/packages/Boundaries/Boundary.cs" id="5_lquo6"]
 [ext_resource type="PackedScene" uid="uid://c41s6fvk4pk6o" path="res://main/packages/containers/pot.tscn" id="7_chwsl"]
@@ -22,20 +20,18 @@ size = Vector2(349, 11)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aoqhg"]
 size = Vector2(9.192362, 31.87008)
 
-[node name="OutsideLab" type="Node2D" unique_id=1082450297 node_paths=PackedStringArray("Boundaries")]
+[node name="OutsideLab" type="Node2D" unique_id=1082450297]
 y_sort_enabled = true
-script = ExtResource("1_selno")
-Boundaries = NodePath("Boundaries")
 
 [node name="mc" parent="." unique_id=2056976437 instance=ExtResource("2_lquo6")]
-position = Vector2(425, 315)
+position = Vector2(497, 313)
 
 [node name="IntoBuilding" type="Area2D" parent="." unique_id=914254641]
 position = Vector2(499, 283)
 collision_layer = 256
-collision_mask = 2
+collision_mask = 18
 script = ExtResource("3_chwsl")
-_targetScene = ExtResource("4_selno")
+_targetScenePath = "uid://dt0pby2he6fbc"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="IntoBuilding" unique_id=671539743]
 position = Vector2(-1, -7)

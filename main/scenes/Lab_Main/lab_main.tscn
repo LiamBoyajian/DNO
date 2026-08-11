@@ -1,0 +1,53 @@
+[gd_scene format=3 uid="uid://dt0pby2he6fbc"]
+
+[ext_resource type="SpriteFrames" uid="uid://iccqa8wu32m2" path="res://main/scenes/Lab_Main/labBG.aseprite" id="1_40rvs"]
+[ext_resource type="PackedScene" uid="uid://4vlcwftwkvvg" path="res://main/packages/mc/4x/mc_4x.tscn" id="2_brual"]
+[ext_resource type="Script" uid="uid://q70ssyayrj2k" path="res://main/packages/scene/SceneTransitionTemplate.cs" id="2_phde1"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
+size = Vector2(608, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_phde1"]
+size = Vector2(660, 5)
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_mrq1q"]
+normal = Vector2(0, -5)
+
+[node name="LabMain" type="Node2D" unique_id=72820539]
+
+[node name="bg" type="AnimatedSprite2D" parent="." unique_id=1184733580]
+z_index = -10
+position = Vector2(320, 180)
+sprite_frames = ExtResource("1_40rvs")
+
+[node name="table" type="Area2D" parent="." unique_id=488487994]
+position = Vector2(320, 252)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="table" unique_id=89908852]
+shape = SubResource("RectangleShape2D_mrq1q")
+debug_color = Color(0.748375, 0.46034998, 0, 0.09411765)
+
+[node name="boundary" type="Area2D" parent="." unique_id=1459836555]
+position = Vector2(320, 360)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="boundary" unique_id=1091112870]
+position = Vector2(0, 2.5)
+shape = SubResource("RectangleShape2D_phde1")
+debug_color = Color(0.36078432, 0.6156863, 0, 0.023529412)
+
+[node name="left edge" type="Area2D" parent="." unique_id=1818140322]
+position = Vector2(-10, 160)
+rotation = 1.5707964
+collision_layer = 256
+collision_mask = 8
+script = ExtResource("2_phde1")
+_targetScenePath = "uid://h1n7j6elr0cp"
+TransitionOnCollision = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="left edge" unique_id=237520824]
+shape = SubResource("WorldBoundaryShape2D_mrq1q")
+
+[node name="Mc4x" parent="." unique_id=2088346730 instance=ExtResource("2_brual")]
+position = Vector2(60, 266)

@@ -28,8 +28,6 @@ public partial class Player : AnimatedSprite2D
 {
     [Export] protected float MovementSpeed = .02f;
     public Vector2 ItemPositon { get; protected set; }
-    protected BasicScene ParentScene;
-
 
     protected IDeployable Deployable = null;
     protected Blueprint Blueprint = null;
@@ -57,10 +55,6 @@ public partial class Player : AnimatedSprite2D
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
-        ParentScene = GetParent() as BasicScene;
-        if (ParentScene == null)
-            GD.PrintErr("Player node not a child of parent scene");
-
         Proximity = GetNode("Proximity") as Area2D;
         if (Proximity == null)
             GD.PrintErr("Proximity not found");
@@ -301,5 +295,12 @@ public partial class Player : AnimatedSprite2D
     public Area2D GetBase()
     {
         return Base;
+    }
+
+    public void PrepareTransition()
+    {
+        Inventory.Instance.RequestItemReturn();
+        Inventory.Instance.SelectedItemChanged -= PulloutItem;
+        Inventory.Instance.NoSelectedItem -= ClearItem;
     }
 }

@@ -139,9 +139,14 @@ public partial class Inventory(int size = 1) : Node
         return true;
     }
 
-    public void SlotReturnedItemHandler()
+    protected void SlotReturnedItemHandler()
     {
         EmitSignal(nameof(NoSelectedItem));
     }
+
     //
+    public void RequestItemReturn()
+    {
+        SetSelectedItem(SelectedItem);
+    }
 }

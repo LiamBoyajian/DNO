@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cx6bs6vejxjwf"]
 
-[ext_resource type="SpriteFrames" uid="uid://cgpqjvwu6tavg" path="res://main/packages/mc/mc_outside.aseprite" id="1_srvv4"]
+[ext_resource type="SpriteFrames" uid="uid://cgpqjvwu6tavg" path="res://main/packages/mc/1x/mc_outside.aseprite" id="1_srvv4"]
 [ext_resource type="Script" uid="uid://db824lfx7ay2x" path="res://main/packages/mc/Player.cs" id="2_ow770"]
 [ext_resource type="Script" uid="uid://dcxe5rlxqdwtl" path="res://main/packages/mc/ItemUsage.cs" id="3_gq328"]
 

@@ -3,12 +3,12 @@
 importer="aseprite_wizard.plugin.spriteframes"
 type="SpriteFrames"
 uid="uid://cgpqjvwu6tavg"
-path="res://.godot/imported/mc_outside.aseprite-e38f092842a3a8ad6a50736a7df77cf4.res"
+path="res://.godot/imported/mc_outside.aseprite-a50f98e4a759030601e82d2e7f486437.res"
 
 [deps]
 
-source_file="res://main/packages/mc/mc_outside.aseprite"
-dest_files=["res://.godot/imported/mc_outside.aseprite-e38f092842a3a8ad6a50736a7df77cf4.res"]
+source_file="res://main/packages/mc/1x/mc_outside.aseprite"
+dest_files=["res://.godot/imported/mc_outside.aseprite-a50f98e4a759030601e82d2e7f486437.res"]
 
 [params]
 

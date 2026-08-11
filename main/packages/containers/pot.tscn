@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c41s6fvk4pk6o"]
 
-[ext_resource type="Texture2D" uid="uid://dvopcy32y8dul" path="res://main/sprites/draft/pot.aseprite" id="1_lklc0"]
+[ext_resource type="Texture2D" uid="uid://dvopcy32y8dul" path="res://main/packages/containers/pot.aseprite" id="1_lklc0"]
 [ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://main/packages/containers/ContainPlant.cs" id="2_ygfy5"]
 [ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/packages/util/AcceptSeed.cs" id="3_ygfy5"]
 
