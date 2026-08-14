@@ -33,7 +33,7 @@ public partial class Player : AnimatedSprite2D
     protected Blueprint Blueprint = null;
 
     protected Node HeldItem = null;
-
+    public Vector2 SpawnPoint { get; protected set; }
 
     protected Vector2 FacingUnitVector = Vector2.Zero;
 
@@ -73,6 +73,8 @@ public partial class Player : AnimatedSprite2D
 
         Inventory.Instance.SelectedItemChanged += PulloutItem;
         Inventory.Instance.NoSelectedItem += ClearItem;
+
+        SpawnPoint = GetGlobalPosition();
     }
 
 
