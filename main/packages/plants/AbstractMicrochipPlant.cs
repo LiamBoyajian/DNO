@@ -16,7 +16,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     {
     }
 
-    [Export] public PlantGui GuiManager { get; private set; }
+    [Export] public PlantGui GuiManager { get; set; }
     [Export] protected double ConvertHpToGluRatio = .1;
     [Export] protected double ConvertGluToEnergyRatio = .05;
 

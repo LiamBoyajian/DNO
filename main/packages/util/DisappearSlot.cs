@@ -1,7 +1,7 @@
 using Godot;
 using Main.main.packages.items;
 
-namespace Main.main.scripts.core.util;
+namespace Main.main.packages.util;
 
 public abstract partial class DisappearSlot : Panel
 {

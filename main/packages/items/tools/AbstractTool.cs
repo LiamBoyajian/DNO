@@ -1,5 +1,4 @@
 using Godot;
-using Main.main.scripts.core.util.inventory;
 
 namespace Main.main.scripts.core.util.items.tools;
 

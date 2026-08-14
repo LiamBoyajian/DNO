@@ -27,7 +27,7 @@ public enum MovementType
 public partial class Player : AnimatedSprite2D
 {
     [Export] protected float MovementSpeed = .02f;
-    public Vector2 ItemPositon { get; protected set; }
+    public Vector2 ItemPositon = new Vector2(0, -30);
 
     protected IDeployable Deployable = null;
     protected Blueprint Blueprint = null;
@@ -170,12 +170,10 @@ public partial class Player : AnimatedSprite2D
 
                 if (overlappingAreas.Count > 0)
                 {
-                    GD.Print(overlappingAreas[0].GetParent().Name);
-                    GD.Print(item.Use(overlappingAreas[0].GetParent()));
+                    item.Use(overlappingAreas[0].GetParent());
                 }
             }
         }
-        //if (@event.IsActionPressed(""))
     }
 
     protected void Movement(Vector2 change)

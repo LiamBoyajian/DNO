@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://duehloieqxkns"
+path="res://.godot/imported/microscope.aseprite-baa97104e2f3a325e3eb686b86f01331.res"
+
+[deps]
+
+source_file="res://main/packages/machines/microscope/microscope.aseprite"
+dest_files=["res://.godot/imported/microscope.aseprite-baa97104e2f3a325e3eb686b86f01331.res"]
+
+[params]
+

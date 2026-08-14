@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://b1h8p1myhpblk"]
+
+[ext_resource type="SpriteFrames" uid="uid://csue7uvgb8n3d" path="res://main/packages/plants/templates/fruiting/tomato_fruit.aseprite" id="1_dgxex"]
+
+[node name="TomatoFruit" type="AnimatedSprite2D" unique_id=1466346398]
+sprite_frames = ExtResource("1_dgxex")

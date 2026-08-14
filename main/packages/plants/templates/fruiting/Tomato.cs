@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Main.main.packages.plants.interfaces;
+using Main.main.packages.plants.util;
 using Main.main.scripts.core.plants;
-using Main.main.scripts.core.util.inventory;
 using Main.Source.main;
+using PlantGui = Main.main.scripts.core.util.PlantGui;
 
 namespace Main.main.packages.plants.species;
 
@@ -16,6 +17,10 @@ public partial class Tomato(int dbId)
     {
     }
 
+    protected new FruitingPlantGui GuiManager => base.GuiManager as FruitingPlantGui;
+    protected RandomNumberGenerator R = new RandomNumberGenerator();
+    [Export] protected PackedScene Fruit;
+
     // GROWTH VALUES
     protected double M = 5;
     protected double B = 5;
@@ -25,6 +30,7 @@ public partial class Tomato(int dbId)
     protected const int STANDARDUPGRADEVAL = 10;
     protected const int ORGANPURCHASEMULTIPLIER = 20;
     protected const double GLUCOSETORESOURCE = 7.14;
+
 
     public event Action Updated;
     //public event UpdatedEventHandler
@@ -37,8 +43,7 @@ public partial class Tomato(int dbId)
         //Resources[Rt.Health].ChangeMax(20);
         //Resources[Rt.Health].Give(100);
         //Resources[Rt.Energy].Give(100);
-        Resources[Rt.H2O].Give(30);
-        Resources[Rt.Co2].Give(60);
+        //Resources[Rt.H2O].Give(30);
         UpdatePlantGuiFrame();
         Updated?.Invoke(); //
         return true;
@@ -69,10 +74,13 @@ public partial class Tomato(int dbId)
     public override void _Ready()
     {
         base._Ready();
+
         DbId = -1;
+
         GuiManager.NoGrowth = "no_growth";
         GuiManager.Dead = "no_growth";
         GuiManager.Default = "default";
+        if (Fruit is null) GD.PrintErr("Could not find Fruit");
     }
 
     protected override double ObtainGlucose()
@@ -83,14 +91,13 @@ public partial class Tomato(int dbId)
 
     protected override double Photosynthesize()
     {
-        double waterCo2Max = Math.Min(Resources[Rt.H2O].HasValue(PhotoSynthAmount * GetSunLevel()),
-            Resources[Rt.Co2].HasValue(PhotoSynthAmount));
-        if (waterCo2Max <= 0.0)
+        double waterTaken = Resources[Rt.H2O].HasValue(PhotoSynthAmount * GetSunLevel());
+
+        if (waterTaken == 0.0)
             return 0;
-        Resources[Rt.Co2].Take(PhotoSynthAmount);
         Resources[Rt.H2O].Take(PhotoSynthAmount);
-        Resources[Rt.Glucose].Give(waterCo2Max);
-        return waterCo2Max;
+        Resources[Rt.Glucose].Give(waterTaken);
+        return waterTaken;
     }
 
     protected double GlucoseUpgradeMax(Rt key, double glucose)
@@ -134,49 +141,36 @@ public partial class Tomato(int dbId)
 
     protected bool CreateOrgan(TomatoOrgans key)
     {
-        bool result = false;
-        switch (key)
+        if (key is TomatoOrgans.Flower)
         {
-            case TomatoOrgans.LeafStem:
-                Organs[TomatoOrgans.LeafStem].Give(1);
-                result = true;
-                break;
+            AnimatedSprite2D fruit = Fruit.Instantiate() as AnimatedSprite2D;
+            if (fruit is null)
+                throw new Exception("Could not find valid Fruit");
 
-            case TomatoOrgans.FlowerStem:
-                Organs[TomatoOrgans.FlowerStem].Give(1);
-                result = true;
-                break;
+            fruit.ZIndex = R.RandiRange(-3, 3);
+            fruit.FlipH = (R.Randi() & 1) == 1;
 
-            case TomatoOrgans.Leaf:
-                Organs[TomatoOrgans.Leaf].Give(2);
-                result = true;
-                break;
-
-            case TomatoOrgans.Root:
-
-                Organs[TomatoOrgans.Root].Give(1);
-                result = true;
-                break;
-
-            case TomatoOrgans.Flower:
-
-                Organs[TomatoOrgans.Flower].Give(2);
-                result = true;
-                break;
-
-            case TomatoOrgans.Fruit:
-                if (Organs[TomatoOrgans.Flower].Amount <= 0)
-                    break;
-                Organs[TomatoOrgans.Flower].Take(1);
-                Organs[TomatoOrgans.Fruit].Give(1);
-                result = true;
-                break;
+            if (!GuiManager.AddFruit(fruit)) return false;
+            Organs[key].Increment();
         }
 
-        if (result)
-            Resources[Rt.Health].ChangeMax(10);
+        if (key is TomatoOrgans.Fruit)
+        {
+            if (Organs[TomatoOrgans.Flower].IsEmpty())
+                return false;
+            if (!GuiManager.ConvertFlowerToFruit()) return false;
+            Organs[TomatoOrgans.Flower].Decrement();
+        }
 
-        return result;
+        if (key is TomatoOrgans.Leaf)
+        {
+            Organs[key].Increment();
+        }
+
+        Organs[key].Increment();
+        Resources[Rt.Health].ChangeMax(10);
+
+        return true;
     }
 
 
@@ -215,14 +209,10 @@ public partial class Tomato(int dbId)
         bool result = false;
         if (@enum is Rt rtKey)
         {
-            if (rtKey == Rt.Glucose)
+            if (rtKey == Rt.Glucose) return false;
+            if (rtKey == Rt.H2O && MyContainer.HasWater())
             {
-                return false;
-            }
-            else if (rtKey == Rt.H2O)
-            {
-                if (MyContainer.HasWater())
-                    DrawWater(GLUCOSETORESOURCE * Resources[Rt.Glucose].Take(STANDARDUPGRADEVAL));
+                DrawWater(GLUCOSETORESOURCE * Resources[Rt.Glucose].Take(STANDARDUPGRADEVAL));
             }
             else
             {
@@ -280,7 +270,6 @@ public partial class Tomato(int dbId)
         var result = -2;
         double healthMax = Resources[Rt.Health].Max;
         if (healthMax <= 0) return -2; //dead
-        GD.Print("HEALTH MAX: " + healthMax);
         switch (healthMax)
         {
             case < 0:
@@ -290,9 +279,7 @@ public partial class Tomato(int dbId)
                 GuiManager.Animation = "no_growth";
                 break;
             case >= 220:
-                GuiManager.Animation = "fruiting";
-                GuiManager.Stop();
-                GuiManager.Frame = (int)Mathf.Clamp(Organs[TomatoOrgans.Fruit].Amount, 0, 8);
+                GuiManager.Frame = 5;
                 break;
             case >= 200:
                 GuiManager.Frame = 4;
@@ -320,24 +307,22 @@ public partial class Tomato(int dbId)
         return (int)Organs[TomatoOrgans.Fruit].Amount;
     }
 
-    public int Shear(int sheared)
+    public int Shear(int toShear)
     {
-        if (sheared <= 0) return 0;
+        if (toShear <= 0) return 0;
 
-        int result;
-        if (sheared <= Organs[TomatoOrgans.Fruit].Amount)
+        int sheared = 0;
+        for (int i = 0; sheared < toShear && i < GuiManager.GetSlotMax(); i++)
         {
-            result = sheared;
-            Organs[TomatoOrgans.Fruit].Take(sheared);
+            if (GuiManager.RemoveFruit())
+                ++sheared;
         }
-        else
-        {
-            result = (int)Organs[TomatoOrgans.Fruit].Amount;
-            Organs[TomatoOrgans.Fruit].SetEmpty();
-        }
+
+        Organs[TomatoOrgans.Fruit].Take(sheared);
+
 
         Updated?.Invoke();
-        return result;
+        return sheared;
     }
 
     public IEnumerable<(Enum, IMaterialResource)> GetDictionaryConcatEnumerable()

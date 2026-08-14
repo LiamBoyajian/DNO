@@ -56,13 +56,13 @@ public partial class AcceptSeed : DisappearSlot
 
         var animatedSprite = plant.GetChild<AnimatedSprite2D>(0);
         animatedSprite.SpriteFrames = seed.GetFrames();
-        animatedSprite.Offset = ParentContainer.Offset * 2 + new Vector2(0, 1); //hardcoded +1 pixel for bug
 
         var currentAnimation = animatedSprite.Animation;
         var currentFrameIndex = animatedSprite.Frame;
         var texture = animatedSprite.SpriteFrames.GetFrameTexture(currentAnimation, currentFrameIndex);
 
-        animatedSprite.Position = new Vector2(0, -(texture.GetSize().Y / 2f));
+        animatedSprite.Position =
+            new Vector2(0, -(texture.GetSize().Y / 2f)) + ParentContainer.Offset * 2 + new Vector2(0, 1);
 
 
         var newPlant = ParentContainer.AcceptSeed(plant, seed.GetPlantDbId());
