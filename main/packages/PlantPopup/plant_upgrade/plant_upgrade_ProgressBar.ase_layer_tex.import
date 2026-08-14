@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://b23lo714mr5dg"
+path="res://.godot/imported/plant_upgrade_ProgressBar.ase_layer_tex-f8f63b5f0a15587b9cd6d63e51f086ce.res"
+
+[deps]
+
+source_file="res://main/packages/PlantPopup/plant_upgrade/plant_upgrade_ProgressBar.ase_layer_tex"
+dest_files=["res://.godot/imported/plant_upgrade_ProgressBar.ase_layer_tex-f8f63b5f0a15587b9cd6d63e51f086ce.res"]
+
+[params]
+

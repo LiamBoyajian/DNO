@@ -2,6 +2,7 @@
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
         <EnableDynamicLoading>true</EnableDynamicLoading>
+        <LangVersion>14</LangVersion>
     </PropertyGroup>
     <ItemGroup>
         <Compile Remove="addons\gdUnit4\**\*.cs"/>
@@ -25,8 +26,6 @@
     </ItemGroup>
     <ItemGroup>
         <Content Include="addons\EnumToIcon\EnumToStringDatabase\plugin.cfg"/>
-        <Content Include="main\scripts\scene\Gene_Window_Item_List.gd"/>
-        <Content Include="main\scripts\scene\Gene_Window_Item_List.gd.uid"/>
     </ItemGroup>
     <ItemGroup>
         <Content Include="addons\EnumToIcon\EnumToStringDatabase\main\db_declaration.sql">

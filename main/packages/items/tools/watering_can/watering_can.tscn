@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://b7gpdknjq00hg"]
+
+[ext_resource type="SpriteFrames" uid="uid://c2bllorvc52wv" path="res://main/packages/items/tools/watering_can/wateringcan.aseprite" id="1_lppkl"]
+
+[node name="WateringCan" type="AnimatedSprite2D" unique_id=1057700105]
+sprite_frames = ExtResource("1_lppkl")
+animation = &"empty"
+
+[node name="grab" type="Node2D" parent="." unique_id=1490160108]
+position = Vector2(-9, -1)

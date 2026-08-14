@@ -1,0 +1,36 @@
+[gd_scene format=3 uid="uid://b0a7fa50wbr07"]
+
+[ext_resource type="Theme" uid="uid://b7am0k6ih57f5" path="res://main/packages/PlantPopup/plantPopup.tres" id="1_i0qkt"]
+[ext_resource type="Script" uid="uid://dcftd7bmfid28" path="res://main/packages/PlantPopup/item_progress_bar/ItemProgressBar.cs" id="2_tumqm"]
+[ext_resource type="StyleBox" uid="uid://rqwqnvomxbgc" path="res://main/packages/PlantPopup/item_progress_bar/Item_Progress_Bar.tres" id="3_4pr3s"]
+[ext_resource type="StyleBox" uid="uid://b7g66spsqx64m" path="res://main/packages/PlantPopup/item_progress_bar/Item_Progress_Bar_Fill.tres" id="4_feqds"]
+
+[node name="ProgressBar" type="VBoxContainer" unique_id=1445562619 node_paths=PackedStringArray("ProgressBar", "IconTexture")]
+custom_maximum_size = Vector2(50, -1)
+propagate_maximum_size = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 287.0
+offset_right = -303.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_i0qkt")
+theme_type_variation = &"ResourceProgressBar"
+script = ExtResource("2_tumqm")
+ProgressBar = NodePath("ProgressBar")
+IconTexture = NodePath("icon")
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=683943559]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/background = ExtResource("3_4pr3s")
+theme_override_styles/fill = ExtResource("4_feqds")
+value = 50.0
+fill_mode = 3
+show_percentage = false
+
+[node name="icon" type="TextureRect" parent="." unique_id=369737749]
+layout_mode = 2

@@ -1,0 +1,23 @@
+[gd_scene format=3 uid="uid://bk66pcxbfdn4c"]
+
+[ext_resource type="SpriteFrames" uid="uid://blf24fkcmb2ol" path="res://main/packages/hose/faucet_hose.aseprite" id="1_pb5xr"]
+[ext_resource type="Script" uid="uid://bdj6e8eyas6yd" path="res://main/packages/hose/Hose.cs" id="2_bevo3"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
+size = Vector2(24, 16)
+
+[node name="hose" type="AnimatedSprite2D" unique_id=969516004]
+sprite_frames = ExtResource("1_pb5xr")
+animation = &"drip"
+frame_progress = 0.3170721
+speed_scale = 0.3
+script = ExtResource("2_bevo3")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=1157094124]
+position = Vector2(0, 4)
+collision_layer = 3
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=699793053]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_mrq1q")

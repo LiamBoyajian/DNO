@@ -1,0 +1,70 @@
+[gd_scene format=3 uid="uid://c41s6fvk4pk6o"]
+
+[ext_resource type="Texture2D" uid="uid://dvopcy32y8dul" path="res://main/packages/containers/pot.aseprite" id="1_lklc0"]
+[ext_resource type="Script" uid="uid://b1fljtns53ucj" path="res://main/packages/containers/ContainPlant.cs" id="2_ygfy5"]
+[ext_resource type="Script" uid="uid://bm06onxtp1jni" path="res://main/packages/util/AcceptSeed.cs" id="3_ygfy5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_awak5"]
+size = Vector2(14, 12)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
+size = Vector2(18, 8)
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_aoqhg"]
+
+[node name="Pot2" type="Sprite2D" unique_id=39031905]
+texture = ExtResource("1_lklc0")
+offset = Vector2(0, -9)
+region_enabled = true
+region_rect = Rect2(3, 5, 18, 17)
+script = ExtResource("2_ygfy5")
+metadata/_aseprite_wizard_interface_config_ = {
+"animation_section": false,
+"layer_section": false,
+"output_section": false,
+"pending_changes": {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"scale": "1.0",
+"slice": "",
+"source": "",
+"source_uid": -1
+},
+"slice_section": false
+}
+
+[node name="Base" type="Area2D" parent="." unique_id=1337724621]
+collision_mask = 29
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Base" unique_id=1543902320]
+position = Vector2(0, -5.75)
+shape = SubResource("RectangleShape2D_awak5")
+
+[node name="Plantable" type="Area2D" parent="." unique_id=668618480]
+collision_layer = 2
+collision_mask = 29
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Plantable" unique_id=974010859]
+position = Vector2(0, -13)
+shape = SubResource("RectangleShape2D_mrq1q")
+debug_color = Color(0, 0.6372875, 0.3981051, 0.41960785)
+
+[node name="AcceptSeed" type="Panel" parent="." unique_id=1866233845]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -18.0
+offset_top = -17.0
+offset_bottom = -9.0
+theme_override_styles/panel = SubResource("StyleBoxEmpty_aoqhg")
+script = ExtResource("3_ygfy5")

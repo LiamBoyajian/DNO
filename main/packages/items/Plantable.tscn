@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bjibya0e5l2ct"]
+
+[ext_resource type="Script" uid="uid://csyx60nex15po" path="res://main/packages/items/SeedPlantable.cs" id="1_tvb1x"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
+size = Vector2(4, 8)
+
+[node name="Plantable" type="RigidBody2D" unique_id=323950535]
+script = ExtResource("1_tvb1x")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=132490736]
+offset_left = -2.0
+offset_right = 2.0
+offset_bottom = 8.0
+color = Color(0.40574875, 0.51672214, 0.17122635, 1)
+metadata/_edit_use_anchors_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1007662830]
+position = Vector2(0, 4)
+shape = SubResource("RectangleShape2D_mrq1q")

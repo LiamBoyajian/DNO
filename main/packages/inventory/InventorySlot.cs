@@ -1,13 +1,25 @@
+using System;
 using Godot;
+using Main.main.packages.items;
 
-namespace Main.main.scripts.core.util.inventory;
+namespace Main.main.packages.inventory;
 
 public partial class InventorySlot : Panel
 {
+    [Signal]
+    public delegate void ItemReturnedEventHandler();
+
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
     {
         base._Ready();
+        if (GetChildCount() > 0)
+        {
+            var child = GetChild<Node>(0);
+            var wrapper = ManagerIItem.From(child);
+            if (wrapper == null) throw new Exception("Child is not valid item");
+            AddChild(wrapper);
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -18,47 +30,64 @@ public partial class InventorySlot : Panel
 
     public override bool _CanDropData(Vector2 atPosition, Variant data)
     {
-        return true;
+        return GetChildCount() <= 1;
     }
 
     public override void _DropData(Vector2 atPosition, Variant data)
     {
-        var dragNode = data.AsGodotObject() as Node2D;
-        if (dragNode != null)
+        var dataAsObject = data.AsGodotObject();
+        var manager = dataAsObject as ManagerIItem;
+        if (dataAsObject is IItem item)
         {
-            dragNode.Reparent(this);
-            dragNode.Position = Vector2.Zero;
+            manager = ManagerIItem.From(item);
+        }
+
+        if (manager != null)
+        {
+            if (GetChildCount() >= 1 && HasItem())
+            {
+                var currentChild = GetManager();
+                currentChild?.Reparent(manager.GetParent());
+                currentChild?.Initialize();
+            }
+
+            manager.Reparent(this);
+            manager.Initialize();
         }
     }
+
 
     public override Variant _GetDragData(Vector2 atPosition)
     {
         if (GetChildCount() == 0)
         {
-            return default; // Equivalent to returning null/void in C# Variant
+            return default;
         }
 
-        Node temp = GetChild(0);
-        if (temp == null)
+        if (GetChild<Node>(0) is not ManagerIItem managerIItem)
         {
             return default;
         }
 
-        // Duplicate the child node to act as the visual drag preview
-        var previewNode = temp.Duplicate();
-        if (previewNode is Control previewControl)
-        {
-            SetDragPreview(previewControl);
-        }
-        else if (previewNode is Node2D previewNode2D)
-        {
-            // If the child is a Node2D, wrap it in a Control so SetDragPreview accepts it cleanly
-            var previewWrapper = new Control();
-            previewWrapper.AddChild(previewNode2D);
-            SetDragPreview(previewWrapper);
-        }
 
-        // Return the actual node as the drag data Variant
-        return Variant.From(temp);
+        if (managerIItem.ReturnItem())
+            EmitSignal(nameof(ItemReturned));
+
+
+        using var textureRectPreview = new TextureRect();
+        textureRectPreview.Texture = managerIItem.GetItem().DragIcon;
+        SetDragPreview(textureRectPreview);
+        return Variant.From(managerIItem);
+    }
+
+    public ManagerIItem GetManager()
+    {
+        if (GetChildCount() == 0) return null;
+        return GetChild<Node>(0) as ManagerIItem;
+    }
+
+    public bool HasItem()
+    {
+        return GetManager() != null;
     }
 }

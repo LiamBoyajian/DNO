@@ -1,0 +1,10 @@
+[gd_resource type="StyleBoxTexture" format=3 uid="uid://rqwqnvomxbgc"]
+
+[ext_resource type="Texture2D" uid="uid://b23lo714mr5dg" path="res://main/packages/PlantPopup/plant_upgrade/plant_upgrade_ProgressBar.ase_layer_tex" id="1_qki02"]
+
+[resource]
+texture = ExtResource("1_qki02")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0

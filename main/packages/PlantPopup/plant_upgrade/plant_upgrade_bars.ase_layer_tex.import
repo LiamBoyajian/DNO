@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://bu4djxygo4k5y"
+path="res://.godot/imported/plant_upgrade_bars.ase_layer_tex-31d1ac6fc08136575b844365c57d2731.res"
+
+[deps]
+
+source_file="res://main/packages/PlantPopup/plant_upgrade/plant_upgrade_bars.ase_layer_tex"
+dest_files=["res://.godot/imported/plant_upgrade_bars.ase_layer_tex-31d1ac6fc08136575b844365c57d2731.res"]
+
+[params]
+

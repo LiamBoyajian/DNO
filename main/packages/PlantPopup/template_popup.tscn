@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://dxw4yx0ij5eme"]
+
+[ext_resource type="Theme" uid="uid://b7am0k6ih57f5" path="res://main/packages/PlantPopup/plantPopup.tres" id="1_insi4"]
+[ext_resource type="Script" uid="uid://bjp8l4c5ivbr0" path="res://main/packages/PlantPopup/PlantPopup.cs" id="2_3l5yu"]
+[ext_resource type="Script" uid="uid://chd8qyccgki31" path="res://main/packages/PlantPopup/item_progress_bar/ItemProgressBarWrapper.cs" id="3_caq3g"]
+[ext_resource type="PackedScene" uid="uid://b0a7fa50wbr07" path="res://main/packages/PlantPopup/item_progress_bar/progress_bar_template.tscn" id="4_epeu7"]
+[ext_resource type="Script" uid="uid://cgwrcghm6ukv5" path="res://main/packages/PlantPopup/item_upgrade/ItemUpgradeWrapper.cs" id="5_5dbl0"]
+[ext_resource type="PackedScene" uid="uid://d3nhlp3a37koj" path="res://main/packages/PlantPopup/item_upgrade/item_upgrade.tscn" id="6_3l5yu"]
+
+[node name="TemplatePopup" type="Window" unique_id=1243887180 node_paths=PackedStringArray("ContainerItemUpgradeDisplay", "ContainerProgressBarDisplay")]
+transparent_bg = true
+oversampling_override = 1.0
+title = "PlantPopup"
+initial_position = 1
+size = Vector2i(620, 340)
+unresizable = true
+transparent = true
+popup_window = true
+theme = ExtResource("1_insi4")
+theme_type_variation = &"plantInfoPopup"
+script = ExtResource("2_3l5yu")
+ContainerItemUpgradeDisplay = NodePath("MarginContainer/HBoxContainer/ScrollContainer2/item_upgrade_display")
+ContainerProgressBarDisplay = NodePath("MarginContainer/HBoxContainer/progressbar_display")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=332772352]
+offset_top = 22.0
+offset_right = 620.0
+offset_bottom = 340.0
+theme_override_constants/margin_left = 3
+theme_override_constants/margin_top = 3
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1744562380]
+layout_mode = 2
+
+[node name="progressbar_display" type="HBoxContainer" parent="MarginContainer/HBoxContainer" unique_id=1894650845]
+layout_mode = 2
+size_flags_vertical = 3
+alignment = 1
+script = ExtResource("3_caq3g")
+Scene = ExtResource("4_epeu7")
+
+[node name="ScrollContainer2" type="ScrollContainer" parent="MarginContainer/HBoxContainer" unique_id=1402104531]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[node name="item_upgrade_display" type="FlowContainer" parent="MarginContainer/HBoxContainer/ScrollContainer2" unique_id=1350256782]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("5_5dbl0")
+Scene = ExtResource("6_3l5yu")
+
+[node name="ItemUpgrade2" parent="MarginContainer/HBoxContainer/ScrollContainer2/item_upgrade_display" unique_id=1572832094 instance=ExtResource("6_3l5yu")]
+visible = false
+layout_mode = 2
+
+[node name="ItemUpgrade" parent="MarginContainer/HBoxContainer/ScrollContainer2/item_upgrade_display" unique_id=620644598 instance=ExtResource("6_3l5yu")]
+visible = false
+layout_mode = 2

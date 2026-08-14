@@ -1,0 +1,96 @@
+[gd_scene format=3 uid="uid://d3nhlp3a37koj"]
+
+[ext_resource type="Theme" uid="uid://o87fm8pxq223" path="res://main/packages/PlantPopup/item_upgrade/item_upgrade.tres" id="1_w3lso"]
+[ext_resource type="LabelSettings" uid="uid://5ylg84r2om21" path="res://main/packages/PlantPopup/item_upgrade/item_upgrade_price_display.tres" id="2_eq8bl"]
+[ext_resource type="Script" uid="uid://c70c4sh3mdja5" path="res://main/packages/PlantPopup/item_upgrade/ItemUpgrade.cs" id="2_s8qf0"]
+[ext_resource type="Texture2D" uid="uid://csflgdcauiu51" path="res://main/packages/PlantPopup/item_upgrade/layers/item_upgrade_purchase_button.ase_layer_tex" id="3_s8qf0"]
+[ext_resource type="Texture2D" uid="uid://c1pdhyl63xqcw" path="res://main/packages/PlantPopup/item_upgrade/layers/item_upgrade_upgrade_button.ase_layer_tex" id="4_yhw8r"]
+
+[node name="ItemUpgrade" type="Panel" unique_id=1572832094 node_paths=PackedStringArray("IconTexture", "UpgradeButton", "PurchaseButton", "ObtainCost", "UpgradeCost")]
+custom_minimum_size = Vector2(85, 45)
+custom_maximum_size = Vector2(85, 45)
+offset_right = 85.0
+offset_bottom = 45.0
+theme = ExtResource("1_w3lso")
+script = ExtResource("2_s8qf0")
+IconTexture = NodePath("MarginContainer/HBoxContainer2/icon")
+UpgradeButton = NodePath("MarginContainer/HBoxContainer2/buttons/upgrade")
+PurchaseButton = NodePath("MarginContainer/HBoxContainer2/buttons/purchase")
+ObtainCost = NodePath("MarginContainer/HBoxContainer2/labels/purchaseCost")
+UpgradeCost = NodePath("MarginContainer/HBoxContainer2/labels/upgradeCost")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=849002306]
+custom_minimum_size = Vector2(25, 15)
+propagate_maximum_size = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 2
+theme_override_constants/margin_top = 2
+theme_override_constants/margin_right = 3
+theme_override_constants/margin_bottom = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer" unique_id=1121735152]
+layout_mode = 2
+size_flags_vertical = 4
+theme_override_constants/separation = 2
+
+[node name="icon" type="TextureRect" parent="MarginContainer/HBoxContainer2" unique_id=882075337]
+custom_maximum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 6
+size_flags_vertical = 4
+
+[node name="labels" type="VBoxContainer" parent="MarginContainer/HBoxContainer2" unique_id=2038688027]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="purchaseCost" type="Label" parent="MarginContainer/HBoxContainer2/labels" unique_id=427123104]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+tooltip_text = "Cost to obtain resource"
+mouse_filter = 1
+theme = ExtResource("1_w3lso")
+text = "12331231231231231"
+label_settings = ExtResource("2_eq8bl")
+horizontal_alignment = 2
+clip_text = true
+text_overrun_behavior = 5
+uppercase = true
+
+[node name="upgradeCost" type="Label" parent="MarginContainer/HBoxContainer2/labels" unique_id=269728092]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 6
+tooltip_text = "Cost to upgrade max"
+mouse_filter = 1
+theme = ExtResource("1_w3lso")
+text = "123"
+label_settings = ExtResource("2_eq8bl")
+horizontal_alignment = 2
+clip_text = true
+text_overrun_behavior = 5
+uppercase = true
+
+[node name="buttons" type="VBoxContainer" parent="MarginContainer/HBoxContainer2" unique_id=1565924351]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 4
+
+[node name="purchase" type="TextureButton" parent="MarginContainer/HBoxContainer2/buttons" unique_id=224143052]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource("1_w3lso")
+texture_normal = ExtResource("3_s8qf0")
+
+[node name="upgrade" type="TextureButton" parent="MarginContainer/HBoxContainer2/buttons" unique_id=1464969020]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme = ExtResource("1_w3lso")
+texture_normal = ExtResource("4_yhw8r")
