@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Main.main.packages.model.Dna;
 using Main.main.packages.plants.interfaces;
 using Main.main.packages.plants.util;
 using Main.main.scripts.core.plants;
@@ -11,7 +12,7 @@ namespace Main.main.packages.plants.species;
 
 public partial class Tomato(int dbId)
     : AbstractMicrochipPlant(dbId), IConcatEnumerable, IUpgradable, IObtainable,
-        IBroadcastsUpdate, IShearable
+        IBroadcastsUpdate, IShearable, IDirigent
 {
     public Tomato() : this(-1)
     {
@@ -143,6 +144,7 @@ public partial class Tomato(int dbId)
     {
         if (key is TomatoOrgans.Flower)
         {
+            if (Resources[Rt.Health].Max < 200) return false;
             AnimatedSprite2D fruit = Fruit.Instantiate() as AnimatedSprite2D;
             if (fruit is null)
                 throw new Exception("Could not find valid Fruit");
@@ -336,5 +338,17 @@ public partial class Tomato(int dbId)
         {
             yield return (o.Key, o.Value);
         }
+    }
+
+    public void RequestProteinSynthesis()
+    {
+        throw new NotImplementedException();
+    }
+
+    public double UptakeWaterAmount { get; private set; }
+
+    public double UptakeWater(double uptakeAmount)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -1,22 +1,41 @@
-CREATE TABLE IF NOT EXISTS DNA
+CREATE TABLE IF NOT EXISTS Nucleus
+(
+    Id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    ParentId INTEGER,
+    Name     TEXT,
+    FOREIGN KEY (ParentId) REFERENCES Nucleus (Id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Chromosome
+(
+    Id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    ParentId INTEGER,
+    Name     TEXT,
+    FOREIGN KEY (ParentId) REFERENCES Nucleus (Id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE IF NOT EXISTS Dna
 (
     Id             INTEGER PRIMARY KEY AUTOINCREMENT,
     ParentId       INTEGER,
     Name           TEXT,
     EnumType       TEXT,
     Ordinal        INTEGER,
-    ComparisonType TEXT
+    ComparisonType TEXT,
+    FOREIGN KEY (ParentId) REFERENCES Chromosome (Id) ON DELETE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS GENE
+CREATE TABLE IF NOT EXISTS Gene
 (
     Id       INTEGER PRIMARY KEY AUTOINCREMENT,
     ParentId INTEGER,
-    FOREIGN KEY (ParentId) REFERENCES DNA (Id) ON DELETE CASCADE
+    Protein TEXT,
+    FOREIGN KEY (ParentId) REFERENCES Dna (Id) ON DELETE CASCADE
 );
     
 
-    
+
     
     
     

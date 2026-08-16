@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Main.main.packages.model.Dna;
 
 /**
@@ -6,4 +8,8 @@ namespace Main.main.packages.model.Dna;
  */
 public class Chromosome
 {
+    public int Id { get; set; }
+    public int ParentId { get; set; }
+    public string Name { get; set; }
+    public List<DnaStrand> DnaStrands { get; set; } = new List<DnaStrand>();
 }

@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://sofps6o4wx1"]
+
+[ext_resource type="Script" uid="uid://dako1bwrukm87" path="res://main/packages/util/MarketPopup.cs" id="1_2xo0o"]
+[ext_resource type="Theme" uid="uid://crrxuxlvi8vlo" path="res://main/packages/market/MarketPopup/MarketPopup.tres" id="1_ang42"]
+
+[node name="Control" type="Window" unique_id=321788059]
+transparent_bg = true
+oversampling_override = 1.0
+transient = true
+transient_to_focused = true
+unresizable = true
+always_on_top = true
+transparent = true
+popup_window = true
+popup_wm_hint = true
+minimize_disabled = true
+maximize_disabled = true
+theme = ExtResource("1_ang42")
+script = ExtResource("1_2xo0o")

@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bjo87ogg8gek2" path="res://main/packages/inventory/Inventory.cs" id="1_qkh3k"]
 [ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/packages/inventory/inventorySquare.tscn" id="3_a3cp1"]
-[ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/scenes/_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="4_h3bw8"]
+[ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/scenes/outdated_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="4_h3bw8"]
 [ext_resource type="Script" uid="uid://02ud7o278srr" path="res://main/packages/util/ItemSeed.cs" id="5_7lm6c"]
 [ext_resource type="Script" uid="uid://cw6gylr1o30f0" path="res://main/packages/plants/templates/fruiting/Tomato.cs" id="6_iui54"]
 [ext_resource type="PackedScene" uid="uid://d0h0ohjbk718x" path="res://main/packages/plants/templates/fruiting/tomato_plant.tscn" id="7_iui54"]

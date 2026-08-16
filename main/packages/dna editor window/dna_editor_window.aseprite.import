@@ -1,0 +1,24 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split"
+type="PackedDataContainer"
+uid="uid://h75w7qka64cp"
+path="res://.godot/imported/dna_editor_window.aseprite-9dad4a40266d97f202e310d181d08357.res"
+
+[deps]
+
+source_file="res://main/packages/dna editor window/dna_editor_window.aseprite"
+dest_files=["res://.godot/imported/dna_editor_window.aseprite-9dad4a40266d97f202e310d181d08357.res"]
+
+[params]
+
+first_frame_only=true
+layer/exclude_layers_pattern=""
+layer/only_visible_layers=false
+layer/merge_duplicate_layers=false
+sheet/trim_cels=true
+sheet/sheet_type="packed"
+sheet/sheet_columns=12
+sheet/frame_padding=0
+sheet/scale=1
+output/layers_resources_folder="res://main/packages/dna editor window/resources/"

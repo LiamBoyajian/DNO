@@ -26,8 +26,15 @@
     </ItemGroup>
     <ItemGroup>
         <Content Include="addons\EnumToIcon\EnumToStringDatabase\plugin.cfg"/>
-        <Content Include="main\packages\model\Dna\dna.sql"/>
-        <Content Include="main\packages\model\Dna\Nuclei.db"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="main\packages\model\Dna\Nuclei.db">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <None Include="main\packages\model\Dna\dna.sql">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+            <Link>packages\model\Dna\dna.sql</Link> <!-- Keeps original output directory structure -->
+        </None>
     </ItemGroup>
     <ItemGroup>
         <Content Include="addons\EnumToIcon\EnumToStringDatabase\main\db_declaration.sql">

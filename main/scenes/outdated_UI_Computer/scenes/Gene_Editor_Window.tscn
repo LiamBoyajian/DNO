@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://bg7g70dd654ew"]
+
+[ext_resource type="PackedScene" uid="uid://2ae25ckj888j" path="res://main/packages/_base computer window/window.tscn" id="1_rm35y"]
+[ext_resource type="Script" uid="uid://c5c4ab86240ik" path="res://main/packages/scene/UiGeneEdit.cs" id="2_aub61"]
+[ext_resource type="Texture2D" uid="uid://dsmivlkfsjpei" path="res://main/scenes/outdated_UI_Computer/gene editor window/Editor Icons_consume.ase_layer_tex" id="3_50biq"]
+[ext_resource type="Texture2D" uid="uid://uiqe0efeow02" path="res://main/scenes/outdated_UI_Computer/gene editor window/Editor Icons_clean.ase_layer_tex" id="3_ro2bu"]
+[ext_resource type="Texture2D" uid="uid://c124aqok7h0ij" path="res://main/scenes/outdated_UI_Computer/gene editor window/Editor Icons_cycle.ase_layer_tex" id="4_yc1ea"]
+[ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/scenes/outdated_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="5_2lgeg"]
+[ext_resource type="Texture2D" uid="uid://y8a8nldtjytj" path="res://main/scenes/outdated_UI_Computer/gene editor window/Editor Icons_perform.ase_layer_tex" id="6_47k3j"]
+[ext_resource type="Texture2D" uid="uid://bld52gt5na50p" path="res://main/scenes/outdated_UI_Computer/gene editor window/Editor Icons_photosynth.ase_layer_tex" id="7_2dcbh"]
+[ext_resource type="Texture2D" uid="uid://c71k0ngx0yx5r" path="res://main/scenes/outdated_UI_Computer/gene editor window/Editor Icons_retrieve.ase_layer_tex" id="8_m051d"]
+[ext_resource type="Texture2D" uid="uid://cmrb5nrqi7jvj" path="res://main/scenes/outdated_UI_Computer/gene editor window/Editor Icons_store.ase_layer_tex" id="9_gdwfk"]
+[ext_resource type="Texture2D" uid="uid://0rfm0pa5x1fl" path="res://main/scenes/outdated_UI_Computer/gene editor window/Editor Icons_trade.ase_layer_tex" id="10_txglq"]
+[ext_resource type="StyleBox" uid="uid://dqfri3l75pg27" path="res://main/scenes/outdated_UI_Computer/gene viewer window/GeneBox.tres" id="13_jk21i"]
+[ext_resource type="Theme" uid="uid://bccati3tbihud" path="res://main/scenes/outdated_UI_Computer/gene viewer window/pc_design.tres" id="13_v8xl2"]
+
+[node name="Gene_Editor_Window" unique_id=1004885525 node_paths=PackedStringArray("GeneDisplay", "StrandDisplay", "Push") instance=ExtResource("1_rm35y")]
+position = Vector2i(0, 28)
+script = ExtResource("2_aub61")
+GeneDisplay = NodePath("MarginContainer/FlowContainer/GeneDisplay")
+StrandDisplay = NodePath("MarginContainer/FlowContainer/StrandDisplay")
+Push = NodePath("MarginContainer/FlowContainer/push")
+
+[node name="MarginContainer" type="MarginContainer" parent="." index="0" unique_id=822070023]
+offset_top = -3.0
+offset_right = 620.0
+offset_bottom = 330.0
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="FlowContainer" type="FlowContainer" parent="MarginContainer" index="0" unique_id=670942992]
+layout_mode = 2
+alignment = 1
+vertical = true
+
+[node name="StrandDisplay" type="TextEdit" parent="MarginContainer/FlowContainer" index="0" unique_id=547752383]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+tooltip_text = "$\"{Type}: {Lo} {Operator} {Hi}\""
+placeholder_text = "Encode Strand...."
+
+[node name="GeneDisplay" type="TextEdit" parent="MarginContainer/FlowContainer" index="1" unique_id=1699088471]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+tooltip_text = "        return $\"{PlantAction}:{Amount};{(int)Input}?{(int)Output}\";
+"
+placeholder_text = "Encode Gene...."
+
+[node name="Dropdown" type="OptionButton" parent="MarginContainer/FlowContainer" index="2" unique_id=1274222902]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+item_count = 9
+popup/item_0/text = "Perform"
+popup/item_0/icon = ExtResource("6_47k3j")
+popup/item_0/id = 0
+popup/item_1/text = "Photosynthesize"
+popup/item_1/icon = ExtResource("7_2dcbh")
+popup/item_1/id = 1
+popup/item_2/text = "Retrive"
+popup/item_2/icon = ExtResource("8_m051d")
+popup/item_2/id = 2
+popup/item_3/text = "Store"
+popup/item_3/icon = ExtResource("9_gdwfk")
+popup/item_3/id = 3
+popup/item_4/text = "Trade"
+popup/item_4/icon = ExtResource("10_txglq")
+popup/item_4/id = 4
+popup/item_5/text = "Clean"
+popup/item_5/icon = ExtResource("3_ro2bu")
+popup/item_5/id = 5
+popup/item_6/text = "Consume"
+popup/item_6/icon = ExtResource("3_50biq")
+popup/item_6/id = 6
+popup/item_7/text = "Cycle"
+popup/item_7/icon = ExtResource("4_yc1ea")
+popup/item_7/id = 7
+popup/item_8/text = "Grow"
+popup/item_8/icon = ExtResource("5_2lgeg")
+popup/item_8/id = 8
+
+[node name="push" type="Button" parent="MarginContainer/FlowContainer" index="3" unique_id=572754905]
+custom_minimum_size = Vector2(20, 10)
+custom_maximum_size = Vector2(100, 50)
+layout_mode = 2
+theme = ExtResource("13_v8xl2")
+theme_type_variation = &"ConfirmButton"
+text = "Push"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/FlowContainer" index="4" unique_id=7892865]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="LeftBound" type="Panel" parent="MarginContainer/FlowContainer/HBoxContainer" index="0" unique_id=578814192]
+self_modulate = Color(0, 0, 0, 0.46666667)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = ExtResource("13_jk21i")
+
+[node name="Panel" type="Panel" parent="MarginContainer/FlowContainer/HBoxContainer" index="1" unique_id=1618341844]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.41
+theme_override_styles/panel = ExtResource("13_jk21i")
+
+[node name="RightBound" type="Panel" parent="MarginContainer/FlowContainer/HBoxContainer" index="2" unique_id=1110873115]
+self_modulate = Color(0, 0, 0, 0.46666667)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 2.7
+theme_override_styles/panel = ExtResource("13_jk21i")

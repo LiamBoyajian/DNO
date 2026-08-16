@@ -7,6 +7,6 @@ public interface IProteins
 
 public interface IDirigent : IProteins
 {
-    double UptakeWaterAmount { get; set; }
+    double UptakeWaterAmount { get; }
     double UptakeWater(double uptakeAmount);
 }

@@ -1,0 +1,38 @@
+[gd_resource type="Theme" format=3 uid="uid://dqxt6qdo5ngjb"]
+
+[ext_resource type="Texture2D" uid="uid://66alu41c1qyp" path="res://main/packages/dna editor window/resources/dna_editor_window_subwindow.ase_layer_tex" id="1_bw1wh"]
+[ext_resource type="Texture2D" uid="uid://xna1dcypfuq3" path="res://main/packages/dna editor window/resources/dna_editor_window_window_bg.ase_layer_tex" id="2_pujmt"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_42o67"]
+texture = ExtResource("1_bw1wh")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_muplx"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_vn4aq"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_wu1jv"]
+texture = ExtResource("2_pujmt")
+texture_margin_left = 4.0
+texture_margin_top = 4.0
+texture_margin_right = 4.0
+texture_margin_bottom = 4.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[resource]
+MarginContainer/constants/margin_bottom = 5
+MarginContainer/constants/margin_left = 5
+MarginContainer/constants/margin_right = 5
+MarginContainer/constants/margin_top = 5
+PanelContainer/styles/panel = SubResource("StyleBoxTexture_42o67")
+Window/constants/title_height = 4
+Window/icons/close = SubResource("PlaceholderTexture2D_muplx")
+Window/icons/close_pressed = SubResource("PlaceholderTexture2D_vn4aq")
+Window/styles/embedded_border = SubResource("StyleBoxTexture_wu1jv")
+Window/styles/embedded_unfocused_border = SubResource("StyleBoxTexture_wu1jv")
