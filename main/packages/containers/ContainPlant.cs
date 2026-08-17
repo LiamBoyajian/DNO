@@ -155,6 +155,7 @@ public partial class ContainPlant : Sprite2D, IDeployable, IWaterable
         {
             microchipPlant.LinkParentContainer(this);
             microchipPlant.SetDbId(plantId);
+            microchipPlant.Init();
         }
 
         AddChild(plant);

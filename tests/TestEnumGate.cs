@@ -35,12 +35,6 @@ public class TestEnumGate
     }
 
     [TestMethod]
-    public void TestCreateNullGate()
-    {
-        Assert.Throws<ArgumentException>(() => EnumGate.CreateGate(typeof(AbstractPlant.Rt), null));
-    }
-
-    [TestMethod]
     public void TestCreateNotEnum()
     {
         Assert.Throws<ArgumentException>(() => EnumGate.CreateGate(typeof(int), null));

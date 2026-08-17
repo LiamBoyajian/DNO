@@ -1,6 +1,10 @@
 [gd_resource type="Theme" format=3 uid="uid://o87fm8pxq223"]
 
+[ext_resource type="Texture2D" uid="uid://7ecbld1ukfb2" path="res://main/packages/PlantPopup/item_upgrade/layers/item_upgrade_price_display.ase_layer_tex" id="1_1v8ih"]
+[ext_resource type="Texture2D" uid="uid://dcwlh08o2wpaa" path="res://main/packages/PlantPopup/item_upgrade/layers/item_upgrade_window.ase_layer_tex" id="2_fh6hv"]
+
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_kkou1"]
+texture = ExtResource("1_1v8ih")
 texture_margin_left = 1.0
 texture_margin_top = 1.0
 texture_margin_right = 1.0
@@ -10,6 +14,7 @@ axis_stretch_vertical = 1
 region_rect = Rect2(0, 0, 15, 15)
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_128mx"]
+texture = ExtResource("2_fh6hv")
 texture_margin_left = 2.0
 texture_margin_top = 2.0
 texture_margin_right = 2.0

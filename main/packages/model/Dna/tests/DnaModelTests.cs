@@ -1,4 +1,5 @@
 using Main.main.packages.model.Dna;
+using Main.Source.main;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Main.tests;
@@ -33,18 +34,16 @@ public class DnaModelTests
     {
         var promoter = new Promoter();
 
-        Assert.AreEqual(0, promoter.Id);
         Assert.IsNull(promoter.Target);
-        Assert.IsNull(promoter.ComparisonType);
+        Assert.IsNull(promoter.PromoterText);
     }
 
     [TestMethod]
     public void TestPromoterSetProperties()
     {
-        var promoter = new Promoter { Id = 3, ComparisonType = "GreaterThan" };
+        var promoter = new Promoter { PromoterText = ">=" };
 
-        Assert.AreEqual(3, promoter.Id);
-        Assert.AreEqual("GreaterThan", promoter.ComparisonType);
+        Assert.AreEqual(">=", promoter.PromoterText);
     }
 
     // DNASTRAND --------
@@ -76,12 +75,11 @@ public class DnaModelTests
     [TestMethod]
     public void TestDnaStrandSetProperties()
     {
-        var strand = new DnaStrand { Id = 7, Name = "StrandA", Promoter = new Promoter { Id = 1 } };
+        var strand = new DnaStrand { Id = 7, Name = "StrandA", Promoter = new Promoter { } };
         strand.Genes.Add(new Gene { Id = 2 });
 
         Assert.AreEqual(7, strand.Id);
         Assert.AreEqual("StrandA", strand.Name);
-        Assert.AreEqual(1, strand.Promoter.Id);
         Assert.AreEqual(1, strand.Genes.Count);
     }
 
@@ -164,17 +162,119 @@ public class DnaModelTests
         Assert.AreEqual(1, nucleus.Chromosomes.Count);
     }
 
-    // EXECUTEPROTEINS --------
-
-    [TestMethod]
-    public void TestExecuteProteinsCanBeInstantiated()
-    {
-        var executeProteins = new ExecuteProteins();
-
-        Assert.IsNotNull(executeProteins);
-    }
-
     // IPROTEINS --------
-    // IProteins / IDirigent have no concrete implementation in the codebase yet,
+    // IProtein / IDirigent have no concrete implementation in the codebase yet,
     // so there is nothing to instantiate or exercise. Revisit once a class implements them.
+
+    [TestClass]
+    public class PromoterTests
+    {
+        private class FakeMaterialResource : IMaterialResource
+        {
+            public double Amount { get; set; }
+
+            public double Max { get; set; }
+        }
+
+        [TestMethod]
+        public void TestPromoterDefaults()
+        {
+            var promoter = new Promoter();
+
+            Assert.IsNull(promoter.Target);
+            Assert.AreEqual(null, promoter.PromoterText);
+            Assert.IsFalse(promoter.IsPercent);
+            Assert.AreEqual(0, promoter.ComparisonValue);
+        }
+
+        [TestMethod]
+        public void TestSetComparisonTypeStandardValue()
+        {
+            var promoter = new Promoter { PromoterText = ">50" };
+
+            Assert.AreEqual(">", promoter.PromoterText);
+            Assert.IsFalse(promoter.IsPercent);
+            Assert.AreEqual(50, promoter.ComparisonValue);
+        }
+
+        [TestMethod]
+        public void TestSetComparisonTypePercent()
+        {
+            var promoter = new Promoter { PromoterText = ">=75%" };
+
+            Assert.AreEqual(">=", promoter.PromoterText);
+            Assert.IsTrue(promoter.IsPercent);
+            Assert.AreEqual(75, promoter.ComparisonValue);
+        }
+
+        [TestMethod]
+        public void TestSetComparisonTypeWildcardWithoutDigits()
+        {
+            var promoter = new Promoter { PromoterText = "*=" };
+
+            Assert.AreEqual("*=", promoter.PromoterText);
+            Assert.IsFalse(promoter.IsPercent);
+            Assert.AreEqual(0, promoter.ComparisonValue);
+        }
+
+        [TestMethod]
+        public void TestSetComparisonTypeNullHandled()
+        {
+            var promoter = new Promoter { PromoterText = null };
+
+            Assert.AreEqual(null, promoter.PromoterText);
+            Assert.IsFalse(promoter.IsPercent);
+            Assert.AreEqual(0, promoter.ComparisonValue);
+        }
+
+        [TestMethod]
+        public void TestCompareStandardGreaterThan()
+        {
+            var promoter = new Promoter { PromoterText = ">50" };
+            var resource = new FakeMaterialResource { Amount = 60, Max = 100 };
+
+            Assert.IsTrue(promoter.Compare(resource));
+
+            resource.Amount = 40;
+            Assert.IsFalse(promoter.Compare(resource));
+        }
+
+        [TestMethod]
+        public void TestComparePercentBased()
+        {
+            var promoter = new Promoter { PromoterText = ">=50%" };
+            var resource = new FakeMaterialResource { Amount = 50, Max = 100 };
+
+            Assert.IsTrue(promoter.Compare(resource));
+
+            resource.Amount = 49;
+            Assert.IsFalse(promoter.Compare(resource));
+        }
+
+        [TestMethod]
+        public void TestCompareEqualsWithTolerance()
+        {
+            var promoter = new Promoter { PromoterText = "==100" };
+            var resource = new FakeMaterialResource { Amount = 100.00001, Max = 200 };
+
+            Assert.IsTrue(promoter.Compare(resource));
+        }
+
+        [TestMethod]
+        public void TestCompareWildcardAlwaysTrue()
+        {
+            var promoter = new Promoter { PromoterText = "*=" };
+            var resource = new FakeMaterialResource { Amount = 10, Max = 100 };
+
+            Assert.IsTrue(promoter.Compare(resource));
+        }
+
+        [TestMethod]
+        public void TestCompareNullResourceReturnsFalse()
+        {
+            var promoter = new Promoter { PromoterText = ">0" };
+
+            Assert.IsFalse(promoter.Compare(null));
+        }
+    }
 }

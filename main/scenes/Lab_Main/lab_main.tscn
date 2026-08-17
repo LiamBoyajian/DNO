@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://4vlcwftwkvvg" path="res://main/packages/mc/4x/mc_4x.tscn" id="2_brual"]
 [ext_resource type="Script" uid="uid://q70ssyayrj2k" path="res://main/packages/scene/SceneTransitionTemplate.cs" id="2_phde1"]
 [ext_resource type="SpriteFrames" uid="uid://dd7j0d76je8p2" path="res://main/scenes/Lab_Main/centrifuge.aseprite" id="4_0wy4p"]
+[ext_resource type="PackedScene" uid="uid://b0vsxvg7ui4pt" path="res://main/packages/computer/computer.tscn" id="5_0gdys"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
 size = Vector2(608, 12)
@@ -46,7 +47,6 @@ collision_mask = 8
 script = ExtResource("2_phde1")
 _targetScenePath = "uid://h1n7j6elr0cp"
 TransitionOnCollision = true
-ReopenPoint = Vector2(60, 266)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="left edge" unique_id=237520824]
 shape = SubResource("WorldBoundaryShape2D_mrq1q")
@@ -64,3 +64,5 @@ offset_left = 199.0
 offset_top = 185.0
 offset_right = 264.0
 offset_bottom = 250.0
+
+[node name="Computa" parent="." unique_id=1679950382 instance=ExtResource("5_0gdys")]

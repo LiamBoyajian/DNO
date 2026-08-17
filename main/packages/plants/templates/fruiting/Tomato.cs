@@ -33,7 +33,7 @@ public partial class Tomato(int dbId)
     protected const double GLUCOSETORESOURCE = 7.14;
 
 
-    public event Action Updated;
+    public new event Action Updated;
     //public event UpdatedEventHandler
     //protected int HpToStemRatio = 10;
 
@@ -177,7 +177,7 @@ public partial class Tomato(int dbId)
 
 
     //-------------------------------------------------
-    public IMaterialResource GetIMaterialResource(Enum @enum)
+    public override IMaterialResource GetIMaterialResource(Enum @enum)
     {
         if (@enum is Rt rtKey)
         {
@@ -327,7 +327,7 @@ public partial class Tomato(int dbId)
         return sheared;
     }
 
-    public IEnumerable<(Enum, IMaterialResource)> GetDictionaryConcatEnumerable()
+    public override IEnumerable<(Enum, IMaterialResource)> GetDictionaryConcatEnumerable()
     {
         foreach (var r in MyResources)
         {
@@ -338,17 +338,5 @@ public partial class Tomato(int dbId)
         {
             yield return (o.Key, o.Value);
         }
-    }
-
-    public void RequestProteinSynthesis()
-    {
-        throw new NotImplementedException();
-    }
-
-    public double UptakeWaterAmount { get; private set; }
-
-    public double UptakeWater(double uptakeAmount)
-    {
-        throw new NotImplementedException();
     }
 }

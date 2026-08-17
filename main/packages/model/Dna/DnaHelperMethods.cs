@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Data.Sqlite;
 using System.Collections.Generic;
 using System.IO;
@@ -177,6 +178,13 @@ public static class DnaHelperMethods
         using var reader = command.ExecuteReader();
         if (!reader.Read()) return null;
 
+        Enum @enum = null;
+        var enumType = Type.GetType(reader.GetString(2));
+        if (enumType?.IsEnum ?? false)
+        {
+            @enum = (Enum)Enum.Parse(enumType, reader.GetString(3));
+        }
+
         return new DnaStrand
         {
             Id = reader.GetInt32(0),
@@ -185,7 +193,8 @@ public static class DnaHelperMethods
             {
                 // See the equivalent note in GetDnaStrands below - Target/Ordinal are
                 // left unset for the same reasons.
-                ComparisonType = reader.IsDBNull(4) ? "" : reader.GetString(4)
+                Target = @enum,
+                PromoterText = reader.IsDBNull(4) ? "" : reader.GetString(4),
             }
         };
     }
@@ -198,7 +207,7 @@ public static class DnaHelperMethods
     private static Gene GetGene(SqliteConnection connection, int id)
     {
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id FROM Gene WHERE Id = @Id;";
+        command.CommandText = "SELECT Id, Protein FROM Gene WHERE Id = @Id;";
         command.Parameters.AddWithValue("@Id", id);
 
         using var reader = command.ExecuteReader();
@@ -206,7 +215,8 @@ public static class DnaHelperMethods
 
         return new Gene
         {
-            Id = reader.GetInt32(0)
+            Id = reader.GetInt32(0),
+            ProteinName = reader.GetString(1),
             // ProteinName has no matching column in the Gene table - see the note in
             // GetGenes below.
         };
@@ -254,6 +264,13 @@ public static class DnaHelperMethods
             using var reader = command.ExecuteReader();
             while (reader.Read())
             {
+                Enum @enum = null;
+                var enumType = Type.GetType(reader.GetString(2));
+                if (enumType?.IsEnum ?? false)
+                {
+                    @enum = (Enum)Enum.Parse(enumType, reader.GetString(3));
+                }
+
                 strands.Add(new DnaStrand
                 {
                     Id = reader.GetInt32(0),
@@ -265,7 +282,8 @@ public static class DnaHelperMethods
                         // string into an actual enum value needs reflection (Type.GetType +
                         // Enum.Parse), which needs "using System;" - not added here since it's
                         // a new import. Left unset for now; see note below.
-                        ComparisonType = reader.IsDBNull(4) ? "" : reader.GetString(4)
+                        Target = @enum,
+                        PromoterText = reader.IsDBNull(4) ? "" : reader.GetString(4)
                         // Ordinal (index 3) also has no home on Promoter right now - see note below.
                     }
                 });
@@ -285,7 +303,7 @@ public static class DnaHelperMethods
         var genes = new List<Gene>();
 
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id FROM Gene WHERE ParentId = @ParentId;";
+        command.CommandText = "SELECT Id, Protein FROM Gene WHERE ParentId = @ParentId;";
         command.Parameters.AddWithValue("@ParentId", dnaId);
 
         using var reader = command.ExecuteReader();
@@ -293,7 +311,8 @@ public static class DnaHelperMethods
         {
             genes.Add(new Gene
             {
-                Id = reader.GetInt32(0)
+                Id = reader.GetInt32(0),
+                ProteinName = reader.GetString(1),
                 // ProteinName has no matching column in the Gene table (Id, ParentId only),
                 // so it's left unset - see note below.
             });

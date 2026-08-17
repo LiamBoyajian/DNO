@@ -67,7 +67,7 @@ public partial class AcceptSeed : DisappearSlot
 
         var newPlant = ParentContainer.AcceptSeed(plant, seed.GetPlantDbId());
 
-        plant.Call("Init");
+        //plant.Call("Init");
 
         return true;
     }

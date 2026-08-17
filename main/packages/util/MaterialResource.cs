@@ -21,7 +21,9 @@ public interface IMaterialResource
     /**
     * returns the val of amount is > val; otherwise returns the current amount
     */
-    public double HasValue(double val);
+    public double ReturnPercent() => Max <= 0.0 ? 0 : Amount / Max;
+
+    public double HasValue(double val) => val <= Amount ? val : Amount;
 }
 
 public class MaterialResource(double amount, double max) : IMaterialResource
@@ -35,11 +37,8 @@ public class MaterialResource(double amount, double max) : IMaterialResource
 
     public double Amount { get; private set; } = amount;
 
-    public double ReturnPercent()
-    {
-        if (Max == 0.0) return 0;
-        return Amount / Max;
-    }
+    public double ReturnPercent() => Max <= 0.0 ? 0 : Amount / Max;
+    public double HasValue(double val) => val <= Amount ? val : Amount;
 
     /**
      * Param: amount to add to this.Amount
@@ -89,18 +88,28 @@ public class MaterialResource(double amount, double max) : IMaterialResource
         return Amount >= Max;
     }
 
-    public bool Increment()
+    public void Increment()
     {
-        if (Amount + 1.0 >= Max) return false;
-        Amount++;
-        return true;
+        if (Amount + 1.0 >= Max)
+        {
+            Amount = Max;
+        }
+        else
+        {
+            Amount++;
+        }
     }
 
-    public bool Decrement()
+    public void Decrement()
     {
-        if (Amount - 1.0 <= 0.0) return false;
-        Amount--;
-        return true;
+        if (Amount - 1.0 <= 0.0)
+        {
+            Amount = 0;
+        }
+        else
+        {
+            Amount--;
+        }
     }
 
     public void SetEmpty()
@@ -122,11 +131,10 @@ public class MaterialResource(double amount, double max) : IMaterialResource
         }
 
         Max += change;
-        return change;
-    }
 
-    public double HasValue(double val)
-    {
-        return (val <= Amount) ? val : Amount;
+        if (Amount > Max)
+            Amount = Max;
+
+        return change;
     }
 }

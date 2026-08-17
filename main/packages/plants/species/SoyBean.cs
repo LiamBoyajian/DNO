@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Godot;
+using Main.Source.main;
 
 namespace Main.main.scripts.core.plants.species;
 
@@ -133,6 +135,16 @@ public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
     }
 
     public override double GlucoseUpgradeFunction(double x)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override IEnumerable<(Enum, IMaterialResource)> GetDictionaryConcatEnumerable()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override IMaterialResource GetIMaterialResource(Enum @enum)
     {
         throw new NotImplementedException();
     }

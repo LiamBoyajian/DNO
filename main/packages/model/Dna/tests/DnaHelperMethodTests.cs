@@ -116,14 +116,14 @@ public class DnaHelperMethodsTests
         using (var command = _connection.CreateCommand())
         {
             command.CommandText = """
-                                  INSERT INTO Dna (ParentId, Name, EnumType, Ordinal, ComparisonType)
-                                  VALUES (@ParentId, @Name, @EnumType, @Ordinal, @ComparisonType);
+                                  INSERT INTO Dna (ParentId, Name, EnumType, Ordinal, PromoterText)
+                                  VALUES (@ParentId, @Name, @EnumType, @Ordinal, @PromoterText);
                                   """;
             command.Parameters.AddWithValue("@ParentId", parentId);
             command.Parameters.AddWithValue("@Name", (object)name ?? DBNull.Value);
             command.Parameters.AddWithValue("@EnumType", (object)enumType ?? DBNull.Value);
             command.Parameters.AddWithValue("@Ordinal", ordinal);
-            command.Parameters.AddWithValue("@ComparisonType", (object)comparisonType ?? DBNull.Value);
+            command.Parameters.AddWithValue("@PromoterText", (object)comparisonType ?? DBNull.Value);
             command.ExecuteNonQuery();
         }
 
@@ -235,7 +235,7 @@ public class DnaHelperMethodsTests
         Assert.AreEqual(1, nucleus.Chromosomes[0].DnaStrands.Count);
         Assert.AreEqual("StrandA", strand.Name);
         Assert.IsNotNull(strand.Promoter);
-        Assert.AreEqual("GreaterThan", strand.Promoter.ComparisonType);
+        Assert.AreEqual("GreaterThan", strand.Promoter.PromoterText);
         // Target is a System.Enum built from the EnumType column via reflection - not wired
         // up yet in DnaHelperMethods, so it is expected to stay unset for now.
         Assert.IsNull(strand.Promoter.Target);
@@ -252,7 +252,7 @@ public class DnaHelperMethodsTests
         var strand = nucleus.Chromosomes[0].DnaStrands[0];
 
         Assert.AreEqual("", strand.Name);
-        Assert.AreEqual("", strand.Promoter.ComparisonType);
+        Assert.AreEqual("", strand.Promoter.PromoterText);
     }
 
     // GET NUCLEUS - GENES --------
@@ -413,7 +413,7 @@ public class DnaHelperMethodsTests
         Assert.AreEqual((int)dnaId, strand.Id);
         Assert.AreEqual("StrandA", strand.Name);
         Assert.IsNotNull(strand.Promoter);
-        Assert.AreEqual("GreaterThan", strand.Promoter.ComparisonType);
+        Assert.AreEqual("GreaterThan", strand.Promoter.PromoterText);
         Assert.IsNotNull(strand.Genes);
         Assert.AreEqual(0, strand.Genes.Count);
     }
@@ -428,7 +428,7 @@ public class DnaHelperMethodsTests
         var strand = DnaHelperMethods.GetDnaStrand((int)dnaId);
 
         Assert.AreEqual("", strand.Name);
-        Assert.AreEqual("", strand.Promoter.ComparisonType);
+        Assert.AreEqual("", strand.Promoter.PromoterText);
     }
 
     [TestMethod]
