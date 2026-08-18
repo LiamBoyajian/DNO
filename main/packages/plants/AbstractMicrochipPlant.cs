@@ -7,6 +7,7 @@ using Main.Source.main;
 using PlantGui = Main.main.scripts.core.util.PlantGui;
 using System.Linq;
 using Main.main.packages.model.Dna;
+using Main.main.packages.plants.enums;
 using Main.main.packages.plants.interfaces;
 using ContainPlant = Main.main.packages.containers.ContainPlant;
 
@@ -125,7 +126,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId)
     protected double DrawWater(double amount)
     {
         if (!MyContainer.HasWater()) return 0;
-        return Resources[Rt.H2O].Give(MyContainer.Water.Take(amount));
+        return Resources[EnumLibrary.Rt.H2O].Give(MyContainer.Water.Take(amount));
     }
 
     public ContainPlant LinkParentContainer(ContainPlant container)
@@ -153,7 +154,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId)
 
     protected abstract double Photosynthesize();
 
-    protected double ChangeResourceMax(Rt key, double change)
+    protected double ChangeResourceMax(EnumLibrary.Rt key, double change)
     {
         return Resources[key].ChangeMax(change);
     }

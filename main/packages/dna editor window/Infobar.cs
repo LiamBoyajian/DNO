@@ -5,12 +5,12 @@ namespace Main.main.packages.dna_editor_window;
 
 public partial class Infobar : PanelContainer
 {
-    [Export] protected TextureButton Back;
-    [Export] protected TextureButton Add;
-    [Export] protected TextureButton Delete;
-    [Export] protected TextEdit Name;
-    [Export] protected TextEdit Id;
-    [Export] protected Label SelectedElements;
+    [Export] public TextureButton Back;
+    [Export] public TextureButton Add;
+    [Export] public TextureButton Delete;
+    [Export] public TextEdit NameDisplay;
+    [Export] public TextEdit Id;
+    [Export] public Label SelectedElements;
 
     [Signal]
     public delegate void BackPressedEventHandler();
@@ -26,9 +26,6 @@ public partial class Infobar : PanelContainer
 
     [Signal]
     public delegate void IdChangedEventHandler();
-
-    public bool IdUnupdated { get; private set; }
-    public bool NameUnupdated { get; private set; }
 
     public override void _Ready()
     {
@@ -48,24 +45,16 @@ public partial class Infobar : PanelContainer
         Back.Pressed += () => EmitSignal(nameof(BackPressed));
         Add.Pressed += () => EmitSignal(nameof(AddPressed));
         Delete.Pressed += () => EmitSignal(nameof(DeletePressed));
-        Id.TextChanged += () => IdUnupdated = true;
-        Name.TextChanged += () => NameUnupdated = true;
-    }
-
-    public override void _UnhandledKeyInput(InputEvent @event)
-    {
-        base._UnhandledKeyInput(@event);
-        if (@event.IsAction("update_window"))
-        {
-            if (IdUnupdated)
-                EmitSignal(nameof(IdChanged));
-            if (NameUnupdated)
-                EmitSignal(nameof(NameChanged));
-        }
+        Id.TextChanged += () => EmitSignal(nameof(IdChanged));
     }
 
     public int GetId()
     {
         return Convert.ToInt32(Id.Text);
+    }
+
+    public void SetNameTitle(string s)
+    {
+        NameDisplay.Text = s;
     }
 }

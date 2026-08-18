@@ -15,7 +15,7 @@ compatibility/default_parent_skeleton_in_mesh_instance_3d=true
 [application]
 
 config/name="DNO"
-run/main_scene="uid://h1n7j6elr0cp"
+run/main_scene="uid://6cqh5ogb7edn"
 config/features=PackedStringArray("4.7", "C#", "Forward Plus")
 boot_splash/show_image=false
 config/icon="res://icon.svg"

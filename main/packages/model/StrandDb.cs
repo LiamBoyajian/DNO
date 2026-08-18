@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Godot;
+using Main.main.packages.plants.enums;
 using Main.Source.main;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
@@ -22,7 +23,7 @@ public partial class StrandDb : GodotObject
     public int Lo { get; set; }
     public int Hi { get; set; }
 
-    public AbstractPlant.Rt Type { get; set; }
+    public EnumLibrary.Rt Type { get; set; }
     public string Operator { get; set; }
 
     public GeneDb[] GetChildren()

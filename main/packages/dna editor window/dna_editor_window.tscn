@@ -10,6 +10,9 @@
 [ext_resource type="Script" uid="uid://dbjnbno1vlalx" path="res://main/packages/dna editor window/NucleusDisplay.cs" id="8_idpuu"]
 [ext_resource type="Texture2D" uid="uid://c8gbffl8fdjbv" path="res://main/packages/dna editor window/resources/cell_elements_Chromosome.ase_layer_tex" id="9_vn4aq"]
 [ext_resource type="Texture2D" uid="uid://d2q2mw3k4wvbp" path="res://main/packages/dna editor window/resources/cell_elements_DnaStrand.ase_layer_tex" id="10_suawh"]
+[ext_resource type="Script" uid="uid://jlj287ribsmu" path="res://main/packages/dna editor window/DnaStrandDisplay.cs" id="11_suawh"]
+[ext_resource type="Script" uid="uid://chuq2466psiy6" path="res://main/packages/dna editor window/GeneEditor.cs" id="13_7q5sl"]
+[ext_resource type="PackedScene" uid="uid://dhnbs4qly87h6" path="res://main/packages/dna editor window/indexer/indexer.tscn" id="14_7q5sl"]
 
 [sub_resource type="SystemFont" id="SystemFont_idpuu"]
 font_names = PackedStringArray("Comic Sans MS")
@@ -36,13 +39,12 @@ oversampling_override = 1.0
 position = Vector2i(5, 4)
 size = Vector2i(630, 340)
 unresizable = true
-always_on_top = true
 transparent = true
 popup_window = true
 theme = ExtResource("1_0ov3a")
 script = ExtResource("1_c4x1s")
-NucleusDisplay = NodePath("MarginContainer/HFlowContainer/HBoxContainer/PanelContainer/List")
-DnaStrandDisplay = NodePath("MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display")
+NucleusDisplay = NodePath("MarginContainer/HFlowContainer/HBoxContainer/PanelContainer")
+DnaStrandDisplay = NodePath("MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay")
 InfobarDisplay = NodePath("MarginContainer/HFlowContainer/Infobar")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1397520860]
@@ -55,14 +57,14 @@ grow_vertical = 2
 [node name="HFlowContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1053845293]
 layout_mode = 2
 
-[node name="Infobar" type="PanelContainer" parent="MarginContainer/HFlowContainer" unique_id=940686035 node_paths=PackedStringArray("Back", "Add", "Delete", "Name", "Id", "SelectedElements")]
+[node name="Infobar" type="PanelContainer" parent="MarginContainer/HFlowContainer" unique_id=940686035 node_paths=PackedStringArray("Back", "Add", "Delete", "NameDisplay", "Id", "SelectedElements")]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 script = ExtResource("3_idpuu")
 Back = NodePath("HBoxContainer/Back")
 Add = NodePath("HBoxContainer/Add")
 Delete = NodePath("HBoxContainer/Remove")
-Name = NodePath("HBoxContainer/Name")
+NameDisplay = NodePath("HBoxContainer/Name")
 Id = NodePath("HBoxContainer/Nucleus_Id")
 SelectedElements = NodePath("HBoxContainer/Selected Elements")
 
@@ -79,6 +81,8 @@ texture_normal = ExtResource("2_82v4t")
 custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 size_flags_horizontal = 3
+theme = ExtResource("1_0ov3a")
+theme_type_variation = &"TitleTextEdit"
 theme_override_fonts/font = SubResource("SystemFont_idpuu")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxTexture_0ov3a")
@@ -90,6 +94,8 @@ placeholder_text = "XXXXXXXXXXXXXXX"
 custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 size_flags_horizontal = 4
+theme = ExtResource("1_0ov3a")
+theme_type_variation = &"TitleTextEdit"
 theme_override_fonts/font = SubResource("SystemFont_idpuu")
 theme_override_font_sizes/font_size = 16
 theme_override_styles/normal = SubResource("StyleBoxTexture_0ov3a")
@@ -119,29 +125,65 @@ split_offset = 8
 layout_mode = 2
 size_flags_horizontal = 3
 mouse_filter = 1
+script = ExtResource("8_idpuu")
+ChromosomeTexture = ExtResource("9_vn4aq")
+DnaTexture = ExtResource("10_suawh")
 
 [node name="List" type="HFlowContainer" parent="MarginContainer/HFlowContainer/HBoxContainer/PanelContainer" unique_id=1807197965]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-script = ExtResource("8_idpuu")
-ChromosomeTexture = ExtResource("9_vn4aq")
-DnaTexture = ExtResource("10_suawh")
 
-[node name="DnaStrandDisplay" type="PanelContainer" parent="MarginContainer/HFlowContainer/HBoxContainer" unique_id=2015402695]
+[node name="DnaStrandDisplay" type="PanelContainer" parent="MarginContainer/HFlowContainer/HBoxContainer" unique_id=2015402695 node_paths=PackedStringArray("ComparisonSymbolDropdown", "EnumDropdown", "GeneEditor")]
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 0
+script = ExtResource("11_suawh")
+ComparisonSymbolDropdown = NodePath("selected_dna_display/DnaComparisonEditor/HFlowContainer/Comparison")
+EnumDropdown = NodePath("selected_dna_display/DnaComparisonEditor/HFlowContainer/EnumSelectionDisplay")
+GeneEditor = NodePath("selected_dna_display/GeneEditor")
 
 [node name="selected_dna_display" type="VBoxContainer" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay" unique_id=174018353]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
-size_flags_horizontal = 0
 size_flags_vertical = 3
 
-[node name="OptionButton" type="OptionButton" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display" unique_id=1506348381]
+[node name="DnaComparisonEditor" type="PanelContainer" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display" unique_id=189140929]
+layout_mode = 2
+
+[node name="HFlowContainer" type="HFlowContainer" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display/DnaComparisonEditor" unique_id=1808730056]
+layout_mode = 2
+
+[node name="EnumSelectionDisplay" type="OptionButton" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display/DnaComparisonEditor/HFlowContainer" unique_id=1425977929]
 layout_mode = 2
 item_count = 2
-popup/item_0/text = "asdasdsa"
+popup/item_0/text = "Wjat"
 popup/item_0/id = 0
-popup/item_1/text = "asdasd"
+popup/item_1/text = "zsdrfgvasdfg"
 popup/item_1/id = 1
+
+[node name="Comparison" type="OptionButton" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display/DnaComparisonEditor/HFlowContainer" unique_id=1143184128]
+layout_mode = 2
+
+[node name="Value" type="TextEdit" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display/DnaComparisonEditor/HFlowContainer" unique_id=1994363662]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "### (optional tag: %)"
+
+[node name="GeneEditor" type="PanelContainer" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display" unique_id=1418138321 node_paths=PackedStringArray("Indexer", "GeneTextEditor")]
+layout_mode = 2
+script = ExtResource("13_7q5sl")
+Indexer = NodePath("HBoxContainer/Indexer")
+GeneTextEditor = NodePath("HBoxContainer/GeneName")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display/GeneEditor" unique_id=754929167]
+layout_mode = 2
+
+[node name="Indexer" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display/GeneEditor/HBoxContainer" unique_id=1471146507 instance=ExtResource("14_7q5sl")]
+layout_mode = 2
+
+[node name="GeneName" type="TextEdit" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display/GeneEditor/HBoxContainer" unique_id=762920687]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("1_0ov3a")
+placeholder_text = "Enter gene name..."

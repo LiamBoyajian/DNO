@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Godot;
+using Main.main.packages.plants.enums;
 using Main.Source.main;
 using SQLite;
 using SQLiteNetExtensions.Attributes;
@@ -17,8 +18,8 @@ public partial class GeneDb : GodotObject
     [ManyToOne(CascadeOperations = CascadeOperation.All)]
     public StrandDb Parent { get; set; }
 
-    public AbstractPlant.Rt Input { get; set; }
-    public AbstractPlant.Rt Output { get; set; }
+    public EnumLibrary.Rt Input { get; set; }
+    public EnumLibrary.Rt Output { get; set; }
 
     public double Amount { get; set; }
 

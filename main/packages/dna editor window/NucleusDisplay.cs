@@ -6,7 +6,7 @@ using Main.main.packages.ResourceDisplay;
 
 namespace Main.main.packages.dna_editor_window;
 
-public partial class NucleusDisplay : HFlowContainer
+public partial class NucleusDisplay : PanelContainer
 {
     [Export] protected Texture2D ChromosomeTexture;
     [Export] protected Texture2D DnaTexture;
@@ -17,12 +17,22 @@ public partial class NucleusDisplay : HFlowContainer
     public System.Collections.Generic.Dictionary<TextureButton, Chromosome> ChromosomeDictionary = new();
     public System.Collections.Generic.Dictionary<TextureButton, DnaStrand> DnaStrandDictionary = new();
 
+    [Export] public Container ElementContainer;
+
+
     [Signal]
     public delegate void DnaStrandSelectedEventHandler();
 
     public override void _Ready()
     {
         base._Ready();
+        if (ElementContainer == null)
+        {
+            ElementContainer = GetChild<Container>(0);
+            if (ElementContainer == null)
+                throw new Exception("ElementContainer is null");
+        }
+
         Buttons = new();
         Buttons.Pressed += PressHandler;
     }
@@ -41,7 +51,7 @@ public partial class NucleusDisplay : HFlowContainer
             textureButton.ButtonGroup = Buttons;
             textureButton.Name = chromosome.Id + chromosome.Name;
             ChromosomeDictionary.Add(textureButton, chromosome);
-            AddChild(textureButton);
+            ElementContainer.AddChild(textureButton);
         }
     }
 
@@ -56,7 +66,7 @@ public partial class NucleusDisplay : HFlowContainer
             textureButton.ButtonGroup = Buttons;
             textureButton.Name = dnaStrand.Id + dnaStrand.Name;
             DnaStrandDictionary.Add(textureButton, dnaStrand);
-            AddChild(textureButton);
+            ElementContainer.AddChild(textureButton);
         }
     }
 

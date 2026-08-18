@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Main.main.packages.model.Dna;
+using Main.main.packages.plants.enums;
 using Main.main.packages.plants.interfaces;
 using Main.main.packages.plants.util;
 using Main.main.scripts.core.plants;
@@ -50,27 +51,19 @@ public partial class Tomato(int dbId)
         return true;
     }
 
-    public enum TomatoOrgans
-    {
-        LeafStem,
-        FlowerStem,
-        Leaf,
-        Root,
-        Flower,
-        Fruit,
-    }
 
-    protected Dictionary<TomatoOrgans, MaterialResource> Organs = new()
+    protected Dictionary<EnumLibrary.BasicOrgans, MaterialResource> Organs = new()
     {
-        { TomatoOrgans.LeafStem, new MaterialResource(1, 5) },
-        { TomatoOrgans.FlowerStem, new MaterialResource(0, 5) },
-        { TomatoOrgans.Leaf, new MaterialResource(1, 5) },
-        { TomatoOrgans.Root, new MaterialResource(1, 5) },
-        { TomatoOrgans.Flower, new MaterialResource(0, 5) },
-        { TomatoOrgans.Fruit, new MaterialResource(0, 5) },
+        { EnumLibrary.BasicOrgans.LeafStem, new MaterialResource(1, 5) },
+        { EnumLibrary.BasicOrgans.FlowerStem, new MaterialResource(0, 5) },
+        { EnumLibrary.BasicOrgans.Leaf, new MaterialResource(1, 5) },
+        { EnumLibrary.BasicOrgans.Root, new MaterialResource(1, 5) },
+        { EnumLibrary.BasicOrgans.Flower, new MaterialResource(0, 5) },
+        { EnumLibrary.BasicOrgans.Fruit, new MaterialResource(0, 5) },
     };
 
-    public IReadOnlyDictionary<TomatoOrgans, IMaterialResource> MyOrgans => ConvertToReadOnlyDictionary(Organs);
+    public IReadOnlyDictionary<EnumLibrary.BasicOrgans, IMaterialResource> MyOrgans =>
+        ConvertToReadOnlyDictionary(Organs);
 
     public override void _Ready()
     {
@@ -92,23 +85,23 @@ public partial class Tomato(int dbId)
 
     protected override double Photosynthesize()
     {
-        double waterTaken = Resources[Rt.H2O].HasValue(PhotoSynthAmount * GetSunLevel());
+        double waterTaken = Resources[EnumLibrary.Rt.H2O].HasValue(PhotoSynthAmount * GetSunLevel());
 
         if (waterTaken == 0.0)
             return 0;
-        Resources[Rt.H2O].Take(PhotoSynthAmount);
-        Resources[Rt.Glucose].Give(waterTaken);
+        Resources[EnumLibrary.Rt.H2O].Take(PhotoSynthAmount);
+        Resources[EnumLibrary.Rt.Glucose].Give(waterTaken);
         return waterTaken;
     }
 
-    protected double GlucoseUpgradeMax(Rt key, double glucose)
+    protected double GlucoseUpgradeMax(EnumLibrary.Rt key, double glucose)
     {
         if (glucose <= 0.0)
             return 0.0;
         return ChangeResourceMax(key, GlucoseUpgradeFunction(glucose));
     }
 
-    protected double GlucoseAddOrgan(Rt key, double glucose)
+    protected double GlucoseAddOrgan(EnumLibrary.Rt key, double glucose)
     {
         if (glucose <= 0.0)
             return 0.0;
@@ -125,12 +118,13 @@ public partial class Tomato(int dbId)
     protected new double EnergyHp(double maxHpToGluRatio, double gluToEnergyRatio)
     {
         //GD.Print("asdpoijnasodoiasjd\n");
-        double toTake = Resources[Rt.Health].Max * maxHpToGluRatio * gluToEnergyRatio; //Energy required in this run
-        double missingEnergy = toTake - Resources[Rt.Energy].Take(toTake);
+        double toTake = Resources[EnumLibrary.Rt.Health].Max * maxHpToGluRatio *
+                        gluToEnergyRatio; //Energy required in this run
+        double missingEnergy = toTake - Resources[EnumLibrary.Rt.Energy].Take(toTake);
 
         double missingGlucose =
-            (toTake / gluToEnergyRatio) - Resources[Rt.Glucose].Take(missingEnergy / gluToEnergyRatio);
-        return Resources[Rt.Health].Take(missingGlucose / maxHpToGluRatio);
+            (toTake / gluToEnergyRatio) - Resources[EnumLibrary.Rt.Glucose].Take(missingEnergy / gluToEnergyRatio);
+        return Resources[EnumLibrary.Rt.Health].Take(missingGlucose / maxHpToGluRatio);
     }
 
     public override double GlucoseUpgradeFunction(double x)
@@ -140,11 +134,11 @@ public partial class Tomato(int dbId)
     }
 
 
-    protected bool CreateOrgan(TomatoOrgans key)
+    protected bool CreateOrgan(EnumLibrary.BasicOrgans key)
     {
-        if (key is TomatoOrgans.Flower)
+        if (key is EnumLibrary.BasicOrgans.Flower)
         {
-            if (Resources[Rt.Health].Max < 200) return false;
+            if (Resources[EnumLibrary.Rt.Health].Max < 200) return false;
             AnimatedSprite2D fruit = Fruit.Instantiate() as AnimatedSprite2D;
             if (fruit is null)
                 throw new Exception("Could not find valid Fruit");
@@ -156,21 +150,21 @@ public partial class Tomato(int dbId)
             Organs[key].Increment();
         }
 
-        if (key is TomatoOrgans.Fruit)
+        if (key is EnumLibrary.BasicOrgans.Fruit)
         {
-            if (Organs[TomatoOrgans.Flower].IsEmpty())
+            if (Organs[EnumLibrary.BasicOrgans.Flower].IsEmpty())
                 return false;
             if (!GuiManager.ConvertFlowerToFruit()) return false;
-            Organs[TomatoOrgans.Flower].Decrement();
+            Organs[EnumLibrary.BasicOrgans.Flower].Decrement();
         }
 
-        if (key is TomatoOrgans.Leaf)
+        if (key is EnumLibrary.BasicOrgans.Leaf)
         {
             Organs[key].Increment();
         }
 
         Organs[key].Increment();
-        Resources[Rt.Health].ChangeMax(10);
+        Resources[EnumLibrary.Rt.Health].ChangeMax(10);
 
         return true;
     }
@@ -179,11 +173,11 @@ public partial class Tomato(int dbId)
     //-------------------------------------------------
     public override IMaterialResource GetIMaterialResource(Enum @enum)
     {
-        if (@enum is Rt rtKey)
+        if (@enum is EnumLibrary.Rt rtKey)
         {
             return MyResources[rtKey];
         }
-        else if (@enum is TomatoOrgans tomatoKey)
+        else if (@enum is EnumLibrary.BasicOrgans tomatoKey)
         {
             return MyOrgans[tomatoKey];
         }
@@ -193,15 +187,15 @@ public partial class Tomato(int dbId)
 
     public double UpgradeCost(Enum @enum)
     {
-        if (@enum is Rt rt) return GlucoseUpgradeFunction(MyResources[rt].Max);
-        if (@enum is TomatoOrgans tomatoOrgans) return GlucoseUpgradeFunction(MyOrgans[tomatoOrgans].Max);
+        if (@enum is EnumLibrary.Rt rt) return GlucoseUpgradeFunction(MyResources[rt].Max);
+        if (@enum is EnumLibrary.BasicOrgans tomatoOrgans) return GlucoseUpgradeFunction(MyOrgans[tomatoOrgans].Max);
         return -1;
     }
 
     public double ObtainCost(Enum @enum)
     {
-        if (@enum is Rt rt) return GlucoseUpgradeFunction(MyResources[rt].Amount);
-        if (@enum is TomatoOrgans tomatoOrgans) return GlucoseUpgradeFunction(MyOrgans[tomatoOrgans].Amount);
+        if (@enum is EnumLibrary.Rt rt) return GlucoseUpgradeFunction(MyResources[rt].Amount);
+        if (@enum is EnumLibrary.BasicOrgans tomatoOrgans) return GlucoseUpgradeFunction(MyOrgans[tomatoOrgans].Amount);
         return -1;
     }
     //-------------------------------------------------
@@ -209,21 +203,21 @@ public partial class Tomato(int dbId)
     public virtual bool ParseObtain(Enum @enum)
     {
         bool result = false;
-        if (@enum is Rt rtKey)
+        if (@enum is EnumLibrary.Rt rtKey)
         {
-            if (rtKey == Rt.Glucose) return false;
-            if (rtKey == Rt.H2O && MyContainer.HasWater())
+            if (rtKey == EnumLibrary.Rt.Glucose) return false;
+            if (rtKey == EnumLibrary.Rt.H2O && MyContainer.HasWater())
             {
-                DrawWater(GLUCOSETORESOURCE * Resources[Rt.Glucose].Take(STANDARDUPGRADEVAL));
+                DrawWater(GLUCOSETORESOURCE * Resources[EnumLibrary.Rt.Glucose].Take(STANDARDUPGRADEVAL));
             }
             else
             {
-                Resources[rtKey].Give(GLUCOSETORESOURCE * Resources[Rt.Glucose].Take(STANDARDUPGRADEVAL));
+                Resources[rtKey].Give(GLUCOSETORESOURCE * Resources[EnumLibrary.Rt.Glucose].Take(STANDARDUPGRADEVAL));
             }
 
             result = true;
         }
-        else if (@enum is TomatoOrgans tomatoOrgans)
+        else if (@enum is EnumLibrary.BasicOrgans tomatoOrgans)
         {
             CreateOrgan(tomatoOrgans);
         }
@@ -234,23 +228,23 @@ public partial class Tomato(int dbId)
     public virtual bool ParseUpgrade(Enum @enum)
     {
         bool result = false;
-        if (@enum is Rt rtKey)
+        if (@enum is EnumLibrary.Rt rtKey)
         {
             var tempCost = GlucoseUpgradeFunction(Resources[rtKey].Max);
 
-            if (tempCost <= Resources[Rt.Glucose].Amount)
+            if (tempCost <= Resources[EnumLibrary.Rt.Glucose].Amount)
             {
-                Resources[Rt.Glucose].Take(tempCost);
+                Resources[EnumLibrary.Rt.Glucose].Take(tempCost);
                 Resources[rtKey].ChangeMax(STANDARDUPGRADEVAL);
                 result = true;
             }
         }
-        else if (@enum is TomatoOrgans tomatoKey)
+        else if (@enum is EnumLibrary.BasicOrgans tomatoKey)
         {
             var tempCost = GlucoseUpgradeFunction(Organs[tomatoKey].Amount * ORGANPURCHASEMULTIPLIER);
-            if (tempCost <= Resources[Rt.Glucose].Amount)
+            if (tempCost <= Resources[EnumLibrary.Rt.Glucose].Amount)
             {
-                Resources[Rt.Glucose].Take(tempCost);
+                Resources[EnumLibrary.Rt.Glucose].Take(tempCost);
                 result = CreateOrgan(tomatoKey);
             }
         }
@@ -270,7 +264,7 @@ public partial class Tomato(int dbId)
     {
         //TODO Horrible method/design -- replacing later surely 
         var result = -2;
-        double healthMax = Resources[Rt.Health].Max;
+        double healthMax = Resources[EnumLibrary.Rt.Health].Max;
         if (healthMax <= 0) return -2; //dead
         switch (healthMax)
         {
@@ -306,7 +300,7 @@ public partial class Tomato(int dbId)
 
     public int GetShear()
     {
-        return (int)Organs[TomatoOrgans.Fruit].Amount;
+        return (int)Organs[EnumLibrary.BasicOrgans.Fruit].Amount;
     }
 
     public int Shear(int toShear)
@@ -320,7 +314,7 @@ public partial class Tomato(int dbId)
                 ++sheared;
         }
 
-        Organs[TomatoOrgans.Fruit].Take(sheared);
+        Organs[EnumLibrary.BasicOrgans.Fruit].Take(sheared);
 
 
         Updated?.Invoke();

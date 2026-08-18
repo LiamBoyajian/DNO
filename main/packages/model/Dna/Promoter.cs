@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Source.main;
 
 namespace Main.main.packages.model.Dna;
@@ -52,6 +53,11 @@ public class Promoter
     public int ComparisonValue { get; private set; } = 0;
 
     private static readonly double Tolerance = 0.0001;
+
+    public static IReadOnlyList<string> ComparisonKeys
+    {
+        get => Comparators.Keys.ToList();
+    }
 
     private static readonly Dictionary<string, Func<double, double, bool>> Comparators = new()
     {

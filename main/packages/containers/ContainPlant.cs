@@ -4,6 +4,7 @@ using Godot;
 using Godot.Collections;
 using Main.main._Outside_Building;
 using Main.main.packages.items;
+using Main.main.packages.plants.enums;
 using Main.main.scripts.core.plants;
 using Main.main.scripts.core.util;
 using Main.Source.main;
@@ -120,7 +121,7 @@ public partial class ContainPlant : Sprite2D, IDeployable, IWaterable
     public int GetTotalLoad()
     {
         double result = GetPlants().Sum(plant =>
-            plant.MyResources[AbstractPlant.Rt.Health].Amount);
+            plant.MyResources[EnumLibrary.Rt.Health].Amount);
         return (int)result;
     }
 
