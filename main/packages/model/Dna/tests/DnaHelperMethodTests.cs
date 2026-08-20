@@ -118,13 +118,13 @@ public class DnaHelperMethodsTests
         using (var command = _connection.CreateCommand())
         {
             command.CommandText = """
-                                  INSERT INTO Dna (Name, EnumType, Ordinal, ComparisonType)
-                                  VALUES (@Name, @EnumType, @Ordinal, @ComparisonType);
+                                  INSERT INTO Dna (Name, EnumType, Ordinal, ComparisonSymbol)
+                                  VALUES (@Name, @EnumType, @Ordinal, @ComparisonSymbol);
                                   """;
             command.Parameters.AddWithValue("@Name", (object)name ?? DBNull.Value);
             command.Parameters.AddWithValue("@EnumType", (object)enumType ?? DBNull.Value);
             command.Parameters.AddWithValue("@Ordinal", ordinal);
-            command.Parameters.AddWithValue("@ComparisonType", (object)comparisonType ?? DBNull.Value);
+            command.Parameters.AddWithValue("@ComparisonSymbol", (object)comparisonType ?? DBNull.Value);
             command.ExecuteNonQuery();
         }
 
@@ -337,7 +337,7 @@ public class DnaHelperMethodsTests
         Assert.AreEqual(1, nucleus.Chromosomes[0].DnaStrands.Count);
         Assert.AreEqual("StrandA", strand.Name);
         Assert.IsNotNull(strand.Promoter);
-        Assert.AreEqual("GreaterThan", strand.Promoter.PromoterText);
+        Assert.AreEqual("GreaterThan", strand.Promoter.ComparisonSymbol);
         // Target is a System.Enum built from the EnumType column via reflection - not wired
         // up yet in DnaHelperMethods, so it is expected to stay unset for now.
         Assert.IsNull(strand.Promoter.Target);
@@ -354,7 +354,7 @@ public class DnaHelperMethodsTests
         var strand = nucleus.Chromosomes[0].DnaStrands[0];
 
         Assert.AreEqual("", strand.Name);
-        Assert.AreEqual("", strand.Promoter.PromoterText);
+        Assert.AreEqual("", strand.Promoter.ComparisonSymbol);
     }
 
     // GET NUCLEUS - GENES --------
@@ -519,7 +519,7 @@ public class DnaHelperMethodsTests
         Assert.AreEqual((int)dnaId, strand.Id);
         Assert.AreEqual("StrandA", strand.Name);
         Assert.IsNotNull(strand.Promoter);
-        Assert.AreEqual("GreaterThan", strand.Promoter.PromoterText);
+        Assert.AreEqual("GreaterThan", strand.Promoter.ComparisonSymbol);
         Assert.IsNotNull(strand.Genes);
         Assert.AreEqual(0, strand.Genes.Count);
     }
@@ -534,7 +534,7 @@ public class DnaHelperMethodsTests
         var strand = DnaHelperMethods.GetDnaStrand((int)dnaId);
 
         Assert.AreEqual("", strand.Name);
-        Assert.AreEqual("", strand.Promoter.PromoterText);
+        Assert.AreEqual("", strand.Promoter.ComparisonSymbol);
     }
 
     [TestMethod]
@@ -1048,7 +1048,7 @@ public class DnaHelperMethodsTests
                         new DnaStrand
                         {
                             Name = "StrandA",
-                            Promoter = new Promoter { PromoterText = "GreaterThan" },
+                            Promoter = new Promoter { ComparisonSymbol = "GreaterThan" },
                             Genes = new List<Gene> { new Gene { ProteinName = "Chlorophyll Synthase" } }
                         }
                     }
@@ -1158,7 +1158,7 @@ public class DnaHelperMethodsTests
                 new DnaStrand
                 {
                     Name = "StrandA",
-                    Promoter = new Promoter { PromoterText = "GreaterThan" },
+                    Promoter = new Promoter { ComparisonSymbol = "GreaterThan" },
                     Genes = new List<Gene> { new Gene { ProteinName = "ProteinA" } }
                 }
             }
@@ -1229,7 +1229,7 @@ public class DnaHelperMethodsTests
     {
         long nucleusId = InsertNucleus(null, "Root");
         long chromosomeId = InsertChromosome((int)nucleusId, "ChromA");
-        var strand = new DnaStrand { Name = "StrandA", Promoter = new Promoter { PromoterText = "GreaterThan" } };
+        var strand = new DnaStrand { Name = "StrandA", Promoter = new Promoter { ComparisonSymbol = "GreaterThan" } };
 
         int dnaId = DnaHelperMethods.AddDnaStrand(strand, (int)chromosomeId, cascade: false);
 
@@ -1238,15 +1238,15 @@ public class DnaHelperMethodsTests
     }
 
     [TestMethod]
-    public void TestAddDnaStrandWritesPromoterTextToComparisonTypeColumn()
+    public void TestAddDnaStrandWritesComparisonSymbolColumn()
     {
         long nucleusId = InsertNucleus(null, "Root");
         long chromosomeId = InsertChromosome((int)nucleusId, "ChromA");
-        var strand = new DnaStrand { Name = "StrandA", Promoter = new Promoter { PromoterText = "GreaterThan" } };
+        var strand = new DnaStrand { Name = "StrandA", Promoter = new Promoter { ComparisonSymbol = "GreaterThan" } };
 
         int dnaId = DnaHelperMethods.AddDnaStrand(strand, (int)chromosomeId, cascade: false);
 
-        Assert.AreEqual("GreaterThan", GetColumnValue("Dna", "ComparisonType", dnaId));
+        Assert.AreEqual("GreaterThan", GetColumnValue("Dna", "ComparisonSymbol", dnaId));
     }
 
     [TestMethod]
@@ -1257,7 +1257,7 @@ public class DnaHelperMethodsTests
         var strand = new DnaStrand
         {
             Name = "StrandA",
-            Promoter = new Promoter { Target = TestPromoterEnum.Alpha, PromoterText = "GreaterThan" }
+            Promoter = new Promoter { Target = TestPromoterEnum.Alpha, ComparisonSymbol = "GreaterThan" }
         };
 
         int dnaId = DnaHelperMethods.AddDnaStrand(strand, (int)chromosomeId, cascade: false);
@@ -1266,7 +1266,7 @@ public class DnaHelperMethodsTests
     }
 
     [TestMethod]
-    public void TestAddDnaStrandOrdinalDefaultsToZeroOnInsert()
+    public void TestAddDnaStrandNullTargetWritesNullOrdinalAndEnumType()
     {
         long nucleusId = InsertNucleus(null, "Root");
         long chromosomeId = InsertChromosome((int)nucleusId, "ChromA");
@@ -1274,7 +1274,11 @@ public class DnaHelperMethodsTests
 
         int dnaId = DnaHelperMethods.AddDnaStrand(strand, (int)chromosomeId, cascade: false);
 
-        Assert.AreEqual(0L, Convert.ToInt64(GetColumnValue("Dna", "Ordinal", dnaId)));
+        // No Target means there is no enum member to record, so both halves of
+        // the pair are NULL rather than a misleading 0 (which is a real member
+        // value for most enums).
+        Assert.AreEqual(DBNull.Value, GetColumnValue("Dna", "Ordinal", dnaId));
+        Assert.AreEqual(DBNull.Value, GetColumnValue("Dna", "EnumType", dnaId));
     }
 
     [TestMethod]
@@ -1493,13 +1497,13 @@ public class DnaHelperMethodsTests
         {
             Id = (int)dnaId,
             Name = "Updated",
-            Promoter = new Promoter { Target = TestPromoterEnum.Beta, PromoterText = "LessThan" }
+            Promoter = new Promoter { Target = TestPromoterEnum.Beta, ComparisonSymbol = "LessThan" }
         });
 
         Assert.IsTrue(updated);
         var fetched = DnaHelperMethods.GetDnaStrand((int)dnaId);
         Assert.AreEqual("Updated", fetched.Name);
-        Assert.AreEqual("LessThan", fetched.Promoter.PromoterText);
+        Assert.AreEqual("LessThan", fetched.Promoter.ComparisonSymbol);
         Assert.AreEqual(typeof(TestPromoterEnum).AssemblyQualifiedName, GetColumnValue("Dna", "EnumType", (int)dnaId));
     }
 
@@ -1510,7 +1514,27 @@ public class DnaHelperMethodsTests
     }
 
     [TestMethod]
-    public void TestUpdateDnaStrandDoesNotModifyOrdinal()
+    public void TestUpdateDnaStrandWritesOrdinalFromTarget()
+    {
+        long nucleusId = InsertNucleus(null, "Root");
+        long chromosomeId = InsertChromosome((int)nucleusId, "ChromA");
+        long dnaId = InsertDna((int)chromosomeId, "Original", "SomeEnumType", 7, "GreaterThan");
+
+        DnaHelperMethods.UpdateDnaStrand(new DnaStrand
+        {
+            Id = (int)dnaId,
+            Name = "Updated",
+            Promoter = new Promoter { Target = TestPromoterEnum.Beta, ComparisonSymbol = "LessThan" }
+        });
+
+        // Ordinal tracks Target's numeric value - it is no longer left stale,
+        // because a stale Ordinal would rebuild the wrong enum member on read.
+        Assert.AreEqual((long)(int)TestPromoterEnum.Beta,
+            Convert.ToInt64(GetColumnValue("Dna", "Ordinal", (int)dnaId)));
+    }
+
+    [TestMethod]
+    public void TestUpdateDnaStrandNullTargetClearsEnumTypeAndOrdinal()
     {
         long nucleusId = InsertNucleus(null, "Root");
         long chromosomeId = InsertChromosome((int)nucleusId, "ChromA");
@@ -1518,7 +1542,46 @@ public class DnaHelperMethodsTests
 
         DnaHelperMethods.UpdateDnaStrand(new DnaStrand { Id = (int)dnaId, Name = "Updated" });
 
-        Assert.AreEqual(7L, Convert.ToInt64(GetColumnValue("Dna", "Ordinal", (int)dnaId)));
+        Assert.IsNull(GetColumnValue("Dna", "EnumType", (int)dnaId) as string);
+        Assert.AreEqual(DBNull.Value, GetColumnValue("Dna", "Ordinal", (int)dnaId));
+    }
+
+    [TestMethod]
+    public void TestDnaStrandPromoterTargetRoundTripsThroughAddAndGet()
+    {
+        long nucleusId = InsertNucleus(null, "Root");
+        long chromosomeId = InsertChromosome((int)nucleusId, "ChromA");
+
+        var strand = new DnaStrand
+        {
+            Name = "StrandA",
+            Promoter = new Promoter { Target = TestPromoterEnum.Beta, ComparisonSymbol = "GreaterThan" }
+        };
+        int dnaId = DnaHelperMethods.AddDnaStrand(strand, (int)chromosomeId, cascade: false);
+
+        var fetched = DnaHelperMethods.GetDnaStrand(dnaId);
+
+        Assert.IsNotNull(fetched.Promoter.Target);
+        Assert.AreEqual(TestPromoterEnum.Beta, fetched.Promoter.Target);
+    }
+
+    [TestMethod]
+    public void TestDnaStrandPromoterTargetRoundTripsThroughSync()
+    {
+        long nucleusId = InsertNucleus(null, "Root");
+        long chromosomeId = InsertChromosome((int)nucleusId, "ChromA");
+        long dnaId = InsertDna((int)chromosomeId, "Original", null, 0, "GreaterThan");
+
+        DnaHelperMethods.SyncDnaStrand(new DnaStrand
+        {
+            Id = (int)dnaId,
+            Name = "Updated",
+            Promoter = new Promoter { Target = TestPromoterEnum.Beta, ComparisonSymbol = "LessThan" }
+        }, (int)chromosomeId, cascade: false);
+
+        var fetched = DnaHelperMethods.GetDnaStrand((int)dnaId);
+        Assert.AreEqual(TestPromoterEnum.Beta, fetched.Promoter.Target);
+        Assert.AreEqual("LessThan", fetched.Promoter.ComparisonSymbol);
     }
 
     // -------------------------------------------------------------------------
@@ -1678,7 +1741,7 @@ public class DnaHelperMethodsTests
                         new DnaStrand
                         {
                             Name = "StrandA",
-                            Promoter = new Promoter { PromoterText = "GreaterThan" },
+                            Promoter = new Promoter { ComparisonSymbol = "GreaterThan" },
                             Genes = new List<Gene> { new Gene { ProteinName = "ProteinA" } }
                         }
                     }
@@ -1821,13 +1884,13 @@ public class DnaHelperMethodsTests
     {
         long nucleusId = InsertNucleus(null, "Root");
         long chromosomeId = InsertChromosome((int)nucleusId, "ChromA");
-        var strand = new DnaStrand { Name = "StrandA", Promoter = new Promoter { PromoterText = "GreaterThan" } };
+        var strand = new DnaStrand { Name = "StrandA", Promoter = new Promoter { ComparisonSymbol = "GreaterThan" } };
 
         int id = DnaHelperMethods.SyncDnaStrand(strand, (int)chromosomeId, cascade: false);
 
         Assert.IsTrue(id > 0);
         Assert.IsTrue(LinkExists("ChromosomeDna", "ChromosomeId", (int)chromosomeId, "DnaId", id));
-        Assert.AreEqual("GreaterThan", GetColumnValue("Dna", "ComparisonType", id));
+        Assert.AreEqual("GreaterThan", GetColumnValue("Dna", "ComparisonSymbol", id));
     }
 
     [TestMethod]
@@ -1841,26 +1904,49 @@ public class DnaHelperMethodsTests
         {
             Id = (int)dnaId,
             Name = "Updated",
-            Promoter = new Promoter { Target = TestPromoterEnum.Beta, PromoterText = "LessThan" }
+            Promoter = new Promoter { Target = TestPromoterEnum.Beta, ComparisonSymbol = "LessThan" }
         }, (int)chromosomeId, cascade: false);
 
         Assert.AreEqual(1, CountRows("Dna"));
         Assert.AreEqual("Updated", GetColumnValue("Dna", "Name", (int)dnaId));
-        Assert.AreEqual("LessThan", GetColumnValue("Dna", "ComparisonType", (int)dnaId));
+        Assert.AreEqual("LessThan", GetColumnValue("Dna", "ComparisonSymbol", (int)dnaId));
         Assert.AreEqual(typeof(TestPromoterEnum).AssemblyQualifiedName, GetColumnValue("Dna", "EnumType", (int)dnaId));
     }
 
     [TestMethod]
-    public void TestSyncDnaStrandDoesNotModifyOrdinalOnUpdate()
+    public void TestSyncDnaStrandWritesOrdinalFromTargetOnUpdate()
     {
         long nucleusId = InsertNucleus(null, "Root");
         long chromosomeId = InsertChromosome((int)nucleusId, "ChromA");
         long dnaId = InsertDna((int)chromosomeId, "Original", null, 7, "GreaterThan");
 
-        DnaHelperMethods.SyncDnaStrand(
-            new DnaStrand { Id = (int)dnaId, Name = "Updated" }, (int)chromosomeId, cascade: false);
+        DnaHelperMethods.SyncDnaStrand(new DnaStrand
+        {
+            Id = (int)dnaId,
+            Name = "Updated",
+            Promoter = new Promoter { Target = TestPromoterEnum.Beta }
+        }, (int)chromosomeId, cascade: false);
 
-        Assert.AreEqual(7L, Convert.ToInt64(GetColumnValue("Dna", "Ordinal", (int)dnaId)));
+        Assert.AreEqual((long)(int)TestPromoterEnum.Beta,
+            Convert.ToInt64(GetColumnValue("Dna", "Ordinal", (int)dnaId)));
+    }
+
+    [TestMethod]
+    public void TestSyncDnaStrandWritesOrdinalOnInsert()
+    {
+        long nucleusId = InsertNucleus(null, "Root");
+        long chromosomeId = InsertChromosome((int)nucleusId, "ChromA");
+
+        var strand = new DnaStrand
+        {
+            Name = "StrandA",
+            Promoter = new Promoter { Target = TestPromoterEnum.Beta, ComparisonSymbol = "GreaterThan" }
+        };
+        int dnaId = DnaHelperMethods.SyncDnaStrand(strand, (int)chromosomeId, cascade: false);
+
+        Assert.AreEqual((long)(int)TestPromoterEnum.Beta,
+            Convert.ToInt64(GetColumnValue("Dna", "Ordinal", dnaId)));
+        Assert.AreEqual(typeof(TestPromoterEnum).AssemblyQualifiedName, GetColumnValue("Dna", "EnumType", dnaId));
     }
 
     [TestMethod]

@@ -12,5 +12,6 @@ public class DnaStrand
     public DnaStrand()
     {
         Genes = new List<Gene>();
+        Promoter = new Promoter();
     }
 }

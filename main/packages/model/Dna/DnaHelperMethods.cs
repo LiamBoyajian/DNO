@@ -216,7 +216,8 @@ public static class DnaHelperMethods
     private static bool TryGetDnaStrandRow(SqliteConnection connection, int id, out DnaStrand strand)
     {
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id, Name, EnumType, Ordinal, ComparisonType FROM Dna WHERE Id = @Id;";
+        command.CommandText = "SELECT Id, Name, EnumType, Ordinal, ComparisonSymbol, ComparisonValue, IsPercent " +
+                              "FROM Dna WHERE Id = @Id;";
         command.Parameters.AddWithValue("@Id", id);
 
         using var reader = command.ExecuteReader();
@@ -359,11 +360,12 @@ public static class DnaHelperMethods
      * child IDs from a junction table. The query must use @ParentId as its
      * sole parameter.
      */
-    private static List<int> GetLinkedIds(SqliteConnection connection, string sql, int parentId)
+    private static List<int> GetLinkedIds(SqliteConnection connection, string sql, int parentId,
+        SqliteTransaction transaction = null)
     {
         var ids = new List<int>();
 
-        using var command = connection.CreateCommand();
+        using var command = CreateCommand(connection, transaction);
         command.CommandText = sql;
         command.Parameters.AddWithValue("@ParentId", parentId);
 
@@ -382,10 +384,13 @@ public static class DnaHelperMethods
      * Builds a DnaStrand from the current reader row. Shared by the single-row
      * fetch (TryGetDnaStrandRow) and future list-fetchers that may SELECT
      * multiple Dna rows in one query.
-     * Reader column order: 0=Id, 1=Name, 2=EnumType, 3=Ordinal, 4=ComparisonType.
-     * Note: the DB column is ComparisonType; it maps to the Promoter.PromoterText
-     * C# property (PromoterText's setter is what parses/derives ComparisonType,
-     * IsPercent, and ComparisonValue — see Promoter.cs).
+     * Reader column order: 0=Id, 1=Name, 2=EnumType, 3=Ordinal,
+     * 4=ComparisonSymbol, 5=ComparisonValue, 6=IsPercent.
+     *
+     * Each Promoter field is read straight into its property - PromoterText is
+     * a composed display string with no setter, so nothing is parsed here.
+     * Target is rebuilt from EnumType (assembly-qualified type name) plus
+     * Ordinal (the member's numeric value).
      */
     private static DnaStrand BuildDnaStrandFromReader(SqliteDataReader reader)
     {
@@ -394,7 +399,7 @@ public static class DnaHelperMethods
         {
             var enumType = Type.GetType(reader.GetString(2));
             if ((enumType?.IsEnum ?? false) && !reader.IsDBNull(3))
-                @enum = (Enum)Enum.Parse(enumType, reader.GetString(3));
+                @enum = (Enum)Enum.ToObject(enumType, reader.GetInt32(3));
         }
 
         return new DnaStrand
@@ -404,7 +409,9 @@ public static class DnaHelperMethods
             Promoter = new Promoter
             {
                 Target = @enum,
-                PromoterText = reader.IsDBNull(4) ? "" : reader.GetString(4)
+                ComparisonSymbol = reader.IsDBNull(4) ? "" : reader.GetString(4),
+                ComparisonValue = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
+                IsPercent = !reader.IsDBNull(6) && reader.GetInt32(6) != 0
             }
         };
     }
@@ -433,22 +440,22 @@ public static class DnaHelperMethods
         return RemoveNucleus(Connection, id);
     }
 
-    private static bool RemoveNucleus(SqliteConnection connection, int id)
+    private static bool RemoveNucleus(SqliteConnection connection, int id, SqliteTransaction transaction = null)
     {
-        var subtreeNucleusIds = GetNucleusSubtreeIds(connection, id);
+        var subtreeNucleusIds = GetNucleusSubtreeIds(connection, id, transaction);
 
         var linkedChromosomeIds = new HashSet<int>();
         foreach (var nucleusId in subtreeNucleusIds)
         {
             foreach (var chromId in GetLinkedIds(connection,
                          "SELECT ChromosomeId FROM NucleusChromosome WHERE NucleusId = @ParentId;",
-                         nucleusId))
+                         nucleusId, transaction))
             {
                 linkedChromosomeIds.Add(chromId);
             }
         }
 
-        bool deleted = RemoveRow(connection, "Nucleus", id);
+        bool deleted = RemoveRow(connection, "Nucleus", id, transaction);
         // SQLite's cascade has now removed the whole Nucleus subtree and every
         // NucleusChromosome row for it. Orphan-check each chromosome that was
         // touched, cascading down through its DnaStrands/Genes as needed.
@@ -457,7 +464,8 @@ public static class DnaHelperMethods
                 "SELECT COUNT(*) FROM NucleusChromosome WHERE ChromosomeId = @Id;",
                 "Chromosome",
                 chromId,
-                () => CascadeOrphanChromosomeChildren(connection, chromId));
+                () => CascadeOrphanChromosomeChildren(connection, chromId, transaction),
+                transaction);
 
         return deleted;
     }
@@ -468,14 +476,15 @@ public static class DnaHelperMethods
      * grandchildren, etc.). Used before a delete so the cascade's effects on
      * NucleusChromosome links can be reasoned about afterward.
      */
-    private static List<int> GetNucleusSubtreeIds(SqliteConnection connection, int rootId)
+    private static List<int> GetNucleusSubtreeIds(SqliteConnection connection, int rootId,
+        SqliteTransaction transaction = null)
     {
         var ids = new List<int> { rootId };
 
         foreach (var childId in GetLinkedIds(connection,
-                     "SELECT Id FROM Nucleus WHERE ParentId = @ParentId;", rootId))
+                     "SELECT Id FROM Nucleus WHERE ParentId = @ParentId;", rootId, transaction))
         {
-            ids.AddRange(GetNucleusSubtreeIds(connection, childId));
+            ids.AddRange(GetNucleusSubtreeIds(connection, childId, transaction));
         }
 
         return ids;
@@ -493,16 +502,18 @@ public static class DnaHelperMethods
         return RemoveChromosome(Connection, nucleusId, chromosomeId);
     }
 
-    private static bool RemoveChromosome(SqliteConnection connection, int nucleusId, int chromosomeId)
+    private static bool RemoveChromosome(SqliteConnection connection, int nucleusId, int chromosomeId,
+        SqliteTransaction transaction = null)
     {
         bool unlinked = RemoveJunctionRow(connection, "NucleusChromosome",
-            "NucleusId", nucleusId, "ChromosomeId", chromosomeId);
+            "NucleusId", nucleusId, "ChromosomeId", chromosomeId, transaction);
 
         DeleteIfOrphaned(connection, chromosomeId,
             "SELECT COUNT(*) FROM NucleusChromosome WHERE ChromosomeId = @Id;",
             "Chromosome",
             chromosomeId,
-            () => CascadeOrphanChromosomeChildren(connection, chromosomeId));
+            () => CascadeOrphanChromosomeChildren(connection, chromosomeId, transaction),
+            transaction);
 
         return unlinked;
     }
@@ -514,11 +525,12 @@ public static class DnaHelperMethods
      * Shared by RemoveChromosome and RemoveNucleus so both paths apply the
      * exact same downward-cascade logic once a Chromosome is confirmed orphaned.
      */
-    private static void CascadeOrphanChromosomeChildren(SqliteConnection connection, int chromosomeId)
+    private static void CascadeOrphanChromosomeChildren(SqliteConnection connection, int chromosomeId,
+        SqliteTransaction transaction = null)
     {
         var linkedStrandIds = GetLinkedIds(connection,
             "SELECT DnaId FROM ChromosomeDna WHERE ChromosomeId = @ParentId;",
-            chromosomeId);
+            chromosomeId, transaction);
 
         // This callback runs BEFORE RemoveRow deletes the Chromosome entity
         // (see DeleteIfOrphaned), so the ChromosomeDna rows for this chromosome
@@ -526,14 +538,15 @@ public static class DnaHelperMethods
         // strand's remaining-link count below would still include the link back
         // to this (about-to-be-deleted) chromosome, and a strand that's only
         // used by this one chromosome would be missed as "not orphaned".
-        DeleteAllJunctionRowsForParent(connection, "ChromosomeDna", "ChromosomeId", chromosomeId);
+        DeleteAllJunctionRowsForParent(connection, "ChromosomeDna", "ChromosomeId", chromosomeId, transaction);
 
         foreach (var strandId in linkedStrandIds)
             DeleteIfOrphaned(connection, strandId,
                 "SELECT COUNT(*) FROM ChromosomeDna WHERE DnaId = @Id;",
                 "Dna",
                 strandId,
-                () => CleanupOrphanedGenesForStrand(connection, strandId));
+                () => CleanupOrphanedGenesForStrand(connection, strandId, transaction),
+                transaction);
     }
 
     /**
@@ -546,16 +559,18 @@ public static class DnaHelperMethods
         return RemoveDnaStrand(Connection, chromosomeId, dnaId);
     }
 
-    private static bool RemoveDnaStrand(SqliteConnection connection, int chromosomeId, int dnaId)
+    private static bool RemoveDnaStrand(SqliteConnection connection, int chromosomeId, int dnaId,
+        SqliteTransaction transaction = null)
     {
         bool unlinked = RemoveJunctionRow(connection, "ChromosomeDna",
-            "ChromosomeId", chromosomeId, "DnaId", dnaId);
+            "ChromosomeId", chromosomeId, "DnaId", dnaId, transaction);
 
         DeleteIfOrphaned(connection, dnaId,
             "SELECT COUNT(*) FROM ChromosomeDna WHERE DnaId = @Id;",
             "Dna",
             dnaId,
-            () => CleanupOrphanedGenesForStrand(connection, dnaId));
+            () => CleanupOrphanedGenesForStrand(connection, dnaId, transaction),
+            transaction);
 
         return unlinked;
     }
@@ -570,15 +585,18 @@ public static class DnaHelperMethods
         return RemoveGene(Connection, dnaId, geneId);
     }
 
-    private static bool RemoveGene(SqliteConnection connection, int dnaId, int geneId)
+    private static bool RemoveGene(SqliteConnection connection, int dnaId, int geneId,
+        SqliteTransaction transaction = null)
     {
         bool unlinked = RemoveJunctionRow(connection, "DnaGene",
-            "DnaId", dnaId, "GeneId", geneId);
+            "DnaId", dnaId, "GeneId", geneId, transaction);
 
         DeleteIfOrphaned(connection, geneId,
             "SELECT COUNT(*) FROM DnaGene WHERE GeneId = @Id;",
             "Gene",
-            geneId);
+            geneId,
+            null,
+            transaction);
 
         return unlinked;
     }
@@ -598,13 +616,14 @@ public static class DnaHelperMethods
         string countSql,
         string tableName,
         int id,
-        Action cascadeCallback = null)
+        Action cascadeCallback = null,
+        SqliteTransaction transaction = null)
     {
-        long remaining = CountRows(connection, countSql, entityId);
+        long remaining = CountRows(connection, countSql, entityId, transaction);
         if (remaining > 0) return;
 
         cascadeCallback?.Invoke();
-        RemoveRow(connection, tableName, id);
+        RemoveRow(connection, tableName, id, transaction);
     }
 
     /**
@@ -612,22 +631,25 @@ public static class DnaHelperMethods
      * runs orphan-check deletion on each. Used when a strand is being deleted
      * as part of a parent-cascade.
      */
-    private static void CleanupOrphanedGenesForStrand(SqliteConnection connection, int strandId)
+    private static void CleanupOrphanedGenesForStrand(SqliteConnection connection, int strandId,
+        SqliteTransaction transaction = null)
     {
         var geneIds = GetLinkedIds(connection,
             "SELECT GeneId FROM DnaGene WHERE DnaId = @ParentId;",
-            strandId);
+            strandId, transaction);
 
         // Same reasoning as CascadeOrphanChromosomeChildren: this runs before
         // the Dna row (and its auto-cascaded DnaGene rows) are actually
         // deleted, so sever this strand's gene links explicitly first.
-        DeleteAllJunctionRowsForParent(connection, "DnaGene", "DnaId", strandId);
+        DeleteAllJunctionRowsForParent(connection, "DnaGene", "DnaId", strandId, transaction);
 
         foreach (var geneId in geneIds)
             DeleteIfOrphaned(connection, geneId,
                 "SELECT COUNT(*) FROM DnaGene WHERE GeneId = @Id;",
                 "Gene",
-                geneId);
+                geneId,
+                null,
+                transaction);
     }
 
     /**
@@ -638,25 +660,27 @@ public static class DnaHelperMethods
      * junctionTable/parentColumn are only ever passed as hardcoded literals.
      */
     private static void DeleteAllJunctionRowsForParent(
-        SqliteConnection connection, string junctionTable, string parentColumn, int parentId)
+        SqliteConnection connection, string junctionTable, string parentColumn, int parentId,
+        SqliteTransaction transaction = null)
     {
-        using var command = connection.CreateCommand();
+        using var command = CreateCommand(connection, transaction);
         command.CommandText = $"DELETE FROM {junctionTable} WHERE {parentColumn} = @Id;";
         command.Parameters.AddWithValue("@Id", parentId);
         command.ExecuteNonQuery();
     }
 
-    private static long CountRows(SqliteConnection connection, string sql, int id)
+    private static long CountRows(SqliteConnection connection, string sql, int id, SqliteTransaction transaction = null)
     {
-        using var command = connection.CreateCommand();
+        using var command = CreateCommand(connection, transaction);
         command.CommandText = sql;
         command.Parameters.AddWithValue("@Id", id);
         return (long)command.ExecuteScalar();
     }
 
-    private static bool RemoveRow(SqliteConnection connection, string tableName, int id)
+    private static bool RemoveRow(SqliteConnection connection, string tableName, int id,
+        SqliteTransaction transaction = null)
     {
-        using var command = connection.CreateCommand();
+        using var command = CreateCommand(connection, transaction);
         command.CommandText = $"DELETE FROM {tableName} WHERE Id = @Id;";
         command.Parameters.AddWithValue("@Id", id);
         return command.ExecuteNonQuery() > 0;
@@ -672,9 +696,10 @@ public static class DnaHelperMethods
         SqliteConnection connection,
         string junctionTable,
         string col1, int val1,
-        string col2, int val2)
+        string col2, int val2,
+        SqliteTransaction transaction = null)
     {
-        using var command = connection.CreateCommand();
+        using var command = CreateCommand(connection, transaction);
         command.CommandText =
             $"DELETE FROM {junctionTable} WHERE {col1} = @Val1 AND {col2} = @Val2;";
         command.Parameters.AddWithValue("@Val1", val1);
@@ -687,6 +712,49 @@ public static class DnaHelperMethods
      * transaction (if any) so this participates in the same atomic operation
      * as the INSERT that preceded it.
      */
+    /**
+     * The EnumType column value for a Promoter: the assembly-qualified name of
+     * Target's type, or DBNull when there's no Target. Paired with
+     * PromoterOrdinalValue so Type.GetType + Enum.ToObject can rebuild it.
+     */
+    private static object PromoterEnumTypeValue(Promoter promoter)
+    {
+        return (object)promoter?.Target?.GetType().AssemblyQualifiedName ?? DBNull.Value;
+    }
+
+    /**
+     * The Ordinal column value for a Promoter: Target's underlying numeric
+     * value, or DBNull when there's no Target. Convert.ToInt32 is used rather
+     * than a direct (int) cast because Target is typed as System.Enum (a
+     * reference type - no direct numeric cast exists) and because it also
+     * handles enums whose underlying type isn't int.
+     *
+     * NOTE: this stores the enum's *value*, not its name, so renumbering or
+     * reordering members of a stored enum will remap previously-saved rows.
+     */
+    private static object PromoterOrdinalValue(Promoter promoter)
+    {
+        return promoter?.Target == null ? DBNull.Value : Convert.ToInt32(promoter.Target);
+    }
+
+    /** The ComparisonSymbol column value (">", ">=", "*=", ...). */
+    private static object PromoterSymbolValue(Promoter promoter)
+    {
+        return (object)promoter?.ComparisonSymbol ?? DBNull.Value;
+    }
+
+    /** The ComparisonValue column value (the numeric threshold). */
+    private static object PromoterComparisonValue(Promoter promoter)
+    {
+        return promoter == null ? DBNull.Value : promoter.ComparisonValue;
+    }
+
+    /** The IsPercent column value, stored as SQLite 0/1. */
+    private static object PromoterIsPercentValue(Promoter promoter)
+    {
+        return promoter == null ? DBNull.Value : (promoter.IsPercent ? 1 : 0);
+    }
+
     private static long GetLastInsertRowId(SqliteConnection connection, SqliteTransaction transaction = null)
     {
         using var command = connection.CreateCommand();
@@ -865,12 +933,10 @@ public static class DnaHelperMethods
      * links it to parentId via ChromosomeDna (skipped if parentId is null).
      *
      * On insert, strand.Promoter.Target and .PromoterText are written to the
-     * EnumType and ComparisonType columns respectively (Target's
-     * AssemblyQualifiedName, so it round-trips through the Type.GetType(...)
-     * call on the read path). Ordinal has no corresponding Promoter property
-     * (a pre-existing model/schema gap - see the Get-path notes) so it is
-     * written as 0 on insert and left untouched on update rather than
-     * fabricated.
+     * EnumType/Ordinal and ComparisonType columns respectively - Target's
+     * assembly-qualified type name plus its numeric value, which together let
+     * the read path rebuild the exact enum member via Type.GetType +
+     * Enum.ToObject. A null Target writes NULL to both.
      *
      * cascade = true additionally adds/links every Gene in strand.Genes.
      *
@@ -900,17 +966,17 @@ public static class DnaHelperMethods
 
         if (isNew)
         {
-            string enumTypeName = strand.Promoter?.Target?.GetType().AssemblyQualifiedName;
-
             using var command = CreateCommand(connection, transaction);
             command.CommandText = """
-                                  INSERT INTO Dna (Name, EnumType, Ordinal, ComparisonType)
-                                  VALUES (@Name, @EnumType, @Ordinal, @ComparisonType);
+                                  INSERT INTO Dna (Name, EnumType, Ordinal, ComparisonSymbol, ComparisonValue, IsPercent)
+                                  VALUES (@Name, @EnumType, @Ordinal, @ComparisonSymbol, @ComparisonValue, @IsPercent);
                                   """;
             command.Parameters.AddWithValue("@Name", (object)strand.Name ?? DBNull.Value);
-            command.Parameters.AddWithValue("@EnumType", (object)enumTypeName ?? DBNull.Value);
-            command.Parameters.AddWithValue("@Ordinal", 0);
-            command.Parameters.AddWithValue("@ComparisonType", (object)strand.Promoter?.PromoterText ?? DBNull.Value);
+            command.Parameters.AddWithValue("@EnumType", PromoterEnumTypeValue(strand.Promoter));
+            command.Parameters.AddWithValue("@Ordinal", PromoterOrdinalValue(strand.Promoter));
+            command.Parameters.AddWithValue("@ComparisonSymbol", PromoterSymbolValue(strand.Promoter));
+            command.Parameters.AddWithValue("@ComparisonValue", PromoterComparisonValue(strand.Promoter));
+            command.Parameters.AddWithValue("@IsPercent", PromoterIsPercentValue(strand.Promoter));
             command.ExecuteNonQuery();
 
             strand.Id = (int)GetLastInsertRowId(connection, transaction);
@@ -1026,9 +1092,11 @@ public static class DnaHelperMethods
     }
 
     /**
-     * Updates a DnaStrand's Name, EnumType, and ComparisonType columns by Id
-     * (from Name, Promoter.Target, and Promoter.PromoterText respectively).
-     * Ordinal is intentionally left untouched — see the note on AddDnaStrand.
+     * Updates a DnaStrand's Name, EnumType, Ordinal, and ComparisonType
+     * columns by Id (from Name, Promoter.Target, and Promoter.PromoterText).
+     * Ordinal now carries Target's numeric value, so it IS written here -
+     * leaving it stale would desync it from EnumType and rebuild the wrong
+     * enum member on read.
      * Returns true if a row with that Id existed and was updated.
      */
     public static bool UpdateDnaStrand(DnaStrand strand)
@@ -1039,14 +1107,17 @@ public static class DnaHelperMethods
     private static bool UpdateDnaStrand(
         SqliteConnection connection, SqliteTransaction transaction, DnaStrand strand)
     {
-        string enumTypeName = strand.Promoter?.Target?.GetType().AssemblyQualifiedName;
-
         using var command = CreateCommand(connection, transaction);
         command.CommandText =
-            "UPDATE Dna SET Name = @Name, EnumType = @EnumType, ComparisonType = @ComparisonType WHERE Id = @Id;";
+            "UPDATE Dna SET Name = @Name, EnumType = @EnumType, Ordinal = @Ordinal, " +
+            "ComparisonSymbol = @ComparisonSymbol, ComparisonValue = @ComparisonValue, " +
+            "IsPercent = @IsPercent WHERE Id = @Id;";
         command.Parameters.AddWithValue("@Name", (object)strand.Name ?? DBNull.Value);
-        command.Parameters.AddWithValue("@EnumType", (object)enumTypeName ?? DBNull.Value);
-        command.Parameters.AddWithValue("@ComparisonType", (object)strand.Promoter?.PromoterText ?? DBNull.Value);
+        command.Parameters.AddWithValue("@EnumType", PromoterEnumTypeValue(strand.Promoter));
+        command.Parameters.AddWithValue("@Ordinal", PromoterOrdinalValue(strand.Promoter));
+        command.Parameters.AddWithValue("@ComparisonSymbol", PromoterSymbolValue(strand.Promoter));
+        command.Parameters.AddWithValue("@ComparisonValue", PromoterComparisonValue(strand.Promoter));
+        command.Parameters.AddWithValue("@IsPercent", PromoterIsPercentValue(strand.Promoter));
         command.Parameters.AddWithValue("@Id", strand.Id);
         return command.ExecuteNonQuery() > 0;
     }
@@ -1201,7 +1272,8 @@ public static class DnaHelperMethods
     /**
      * Upserts a DnaStrand, links it to parentId via ChromosomeDna (if
      * parentId is given), and with cascade = true syncs its Genes.
-     * Ordinal is left untouched on both paths - see the AddDnaStrand note.
+     * Ordinal carries Target's numeric value and is written on both the
+     * insert and update paths - see the AddDnaStrand note.
      * Returns the DnaStrand's Id.
      */
     public static int SyncDnaStrand(DnaStrand strand, int? parentId = null, bool cascade = true)
@@ -1232,18 +1304,17 @@ public static class DnaHelperMethods
         }
         else
         {
-            string enumTypeName = strand.Promoter?.Target?.GetType().AssemblyQualifiedName;
-
             using var command = CreateCommand(connection, transaction);
             command.CommandText = """
-                                  INSERT INTO Dna (Name, EnumType, Ordinal, ComparisonType)
-                                  VALUES (@Name, @EnumType, @Ordinal, @ComparisonType);
+                                  INSERT INTO Dna (Name, EnumType, Ordinal, ComparisonSymbol, ComparisonValue, IsPercent)
+                                  VALUES (@Name, @EnumType, @Ordinal, @ComparisonSymbol, @ComparisonValue, @IsPercent);
                                   """;
             command.Parameters.AddWithValue("@Name", (object)strand.Name ?? DBNull.Value);
-            command.Parameters.AddWithValue("@EnumType", (object)enumTypeName ?? DBNull.Value);
-            command.Parameters.AddWithValue("@Ordinal", 0);
-            command.Parameters.AddWithValue("@ComparisonType",
-                (object)strand.Promoter?.PromoterText ?? DBNull.Value);
+            command.Parameters.AddWithValue("@EnumType", PromoterEnumTypeValue(strand.Promoter));
+            command.Parameters.AddWithValue("@Ordinal", PromoterOrdinalValue(strand.Promoter));
+            command.Parameters.AddWithValue("@ComparisonSymbol", PromoterSymbolValue(strand.Promoter));
+            command.Parameters.AddWithValue("@ComparisonValue", PromoterComparisonValue(strand.Promoter));
+            command.Parameters.AddWithValue("@IsPercent", PromoterIsPercentValue(strand.Promoter));
             command.ExecuteNonQuery();
 
             strand.Id = (int)GetLastInsertRowId(connection, transaction);

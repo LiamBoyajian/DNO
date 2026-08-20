@@ -47,6 +47,8 @@ public partial class DnaEditorWindow : Window
         };
         NucleusDisplay.Updated += UpdateDisplay;
 
+        DnaStrandDisplay.ChangesMade += () => { InfobarDisplay.UnsavedChanges(true); };
+
         WarnWindow.ConfirmButton.Pressed += RemoveSelectedElement;
         WarnWindow.CancelButton.Pressed += () =>
         {
@@ -132,6 +134,8 @@ public partial class DnaEditorWindow : Window
 
     public void PopulateItemList()
     {
+        NucleusDisplay.Clear();
+        DnaStrandDisplay.Hide();
         var requestedNucleusId = InfobarDisplay.GetId();
         var nucleus = DnaDb.Instance.GetNucleus(requestedNucleusId);
         InfobarDisplay.SetTitleSilent(nucleus?.Name);

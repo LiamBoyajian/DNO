@@ -30,13 +30,22 @@ CREATE TABLE IF NOT EXISTS Chromosome
     Name TEXT NULL
 );
 
+-- Promoter is stored inline on the Dna row, one column per field, so nothing
+-- ever has to be parsed back out of a string. Column -> Promoter property:
+--   EnumType + Ordinal -> Target  (assembly-qualified type name + member value)
+--   ComparisonSymbol   -> ComparisonSymbol
+--   ComparisonValue    -> ComparisonValue
+--   IsPercent          -> IsPercent (0/1)
+-- PromoterText is composed from these on demand and is never persisted.
 CREATE TABLE IF NOT EXISTS Dna
 (
-    Id             INTEGER PRIMARY KEY AUTOINCREMENT,
-    Name           TEXT,
-    EnumType       TEXT,
-    Ordinal        INTEGER,
-    ComparisonType TEXT
+    Id               INTEGER PRIMARY KEY AUTOINCREMENT,
+    Name             TEXT,
+    EnumType         TEXT,
+    Ordinal          INTEGER,
+    ComparisonSymbol TEXT,
+    ComparisonValue  INTEGER,
+    IsPercent        INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS Gene
