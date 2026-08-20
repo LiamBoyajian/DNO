@@ -2,13 +2,14 @@
 
 [ext_resource type="Script" uid="uid://bjo87ogg8gek2" path="res://main/packages/inventory/Inventory.cs" id="1_qkh3k"]
 [ext_resource type="PackedScene" uid="uid://jtre2oi7wlqn" path="res://main/packages/inventory/inventorySquare.tscn" id="3_a3cp1"]
-[ext_resource type="Texture2D" uid="uid://bdpi8f8qibw5o" path="res://main/scenes/_UI_Computer/gene editor window/Editor Icons_grow.ase_layer_tex" id="4_h3bw8"]
 [ext_resource type="Script" uid="uid://02ud7o278srr" path="res://main/packages/util/ItemSeed.cs" id="5_7lm6c"]
-[ext_resource type="Script" uid="uid://cw6gylr1o30f0" path="res://main/packages/plants/species/Tomato.cs" id="6_iui54"]
+[ext_resource type="Script" uid="uid://cw6gylr1o30f0" path="res://main/packages/plants/templates/fruiting/Tomato.cs" id="6_iui54"]
+[ext_resource type="PackedScene" uid="uid://d0h0ohjbk718x" path="res://main/packages/plants/templates/fruiting/tomato_plant.tscn" id="7_iui54"]
 [ext_resource type="SpriteFrames" uid="uid://blvnsm74f8kri" path="res://main/packages/plants/species/tomato.aseprite" id="7_png0b"]
-[ext_resource type="PackedScene" uid="uid://c4ll7m6ooasli" path="res://main/packages/plants/_Template_Plant.tscn" id="8_060kw"]
 [ext_resource type="PackedScene" uid="uid://b7gpdknjq00hg" path="res://main/packages/items/tools/watering_can/watering_can.tscn" id="8_a3cp1"]
 [ext_resource type="Script" uid="uid://ioq4p4dx1it4" path="res://main/packages/items/tools/watering_can/WateringCan.cs" id="9_h3bw8"]
+[ext_resource type="SpriteFrames" uid="uid://cjvq76qeb0ln" path="res://main/packages/items/tools/shears/shears.aseprite" id="10_iui54"]
+[ext_resource type="Script" uid="uid://blux8yu7u4kni" path="res://main/packages/items/tools/shears/Shears.cs" id="11_iui54"]
 
 [node name="Inventory" type="Control" unique_id=2012663484 node_paths=PackedStringArray("MoneyLabel")]
 layout_mode = 3
@@ -63,6 +64,7 @@ size_flags_vertical = 4
 alignment = 1
 
 [node name="0" parent="MarginContainer/MarginContainer/HBoxContainer2" unique_id=1930195085 instance=ExtResource("3_a3cp1")]
+z_index = -1
 layout_mode = 2
 
 [node name="Seed" type="TextureRect" parent="MarginContainer/MarginContainer/HBoxContainer2/0" unique_id=1867861797]
@@ -78,13 +80,14 @@ offset_right = 16.0
 offset_bottom = 16.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("4_h3bw8")
 script = ExtResource("5_7lm6c")
 PlantType = ExtResource("6_iui54")
 Frames = ExtResource("7_png0b")
-PlantScene = ExtResource("8_060kw")
+PlantScene = ExtResource("7_iui54")
+PlantDbId = 1
 
 [node name="1" parent="MarginContainer/MarginContainer/HBoxContainer2" unique_id=1459463402 instance=ExtResource("3_a3cp1")]
+z_index = -1
 layout_mode = 2
 
 [node name="WateringCan" parent="MarginContainer/MarginContainer/HBoxContainer2/1" unique_id=1057700105 instance=ExtResource("8_a3cp1")]
@@ -92,10 +95,18 @@ position = Vector2(18, 17)
 script = ExtResource("9_h3bw8")
 
 [node name="2" parent="MarginContainer/MarginContainer/HBoxContainer2" unique_id=541193469 instance=ExtResource("3_a3cp1")]
+z_index = -1
 layout_mode = 2
 
+[node name="Shears" type="AnimatedSprite2D" parent="MarginContainer/MarginContainer/HBoxContainer2/2" unique_id=1930087337]
+position = Vector2(29, 17)
+sprite_frames = ExtResource("10_iui54")
+script = ExtResource("11_iui54")
+
 [node name="3" parent="MarginContainer/MarginContainer/HBoxContainer2" unique_id=1041955478 instance=ExtResource("3_a3cp1")]
+z_index = -1
 layout_mode = 2
 
 [node name="4" parent="MarginContainer/MarginContainer/HBoxContainer2" unique_id=2099290406 instance=ExtResource("3_a3cp1")]
+z_index = -1
 layout_mode = 2

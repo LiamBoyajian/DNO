@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://d0h0ohjbk718x"]
+
+[ext_resource type="Script" uid="uid://cw6gylr1o30f0" path="res://main/packages/plants/templates/fruiting/Tomato.cs" id="1_mkmtp"]
+[ext_resource type="SpriteFrames" uid="uid://blvnsm74f8kri" path="res://main/packages/plants/species/tomato.aseprite" id="2_t8c6y"]
+[ext_resource type="PackedScene" uid="uid://b1h8p1myhpblk" path="res://main/packages/plants/templates/fruiting/tomato_fruit.tscn" id="2_yyydi"]
+[ext_resource type="Script" uid="uid://cckobeiro3dxe" path="res://main/packages/plants/util/FruitingPlantGui.cs" id="4_t8c6y"]
+[ext_resource type="Script" uid="uid://dtf0pjbrfs1lv" path="res://main/packages/plants/util/FruitSpawns.cs" id="4_yqf5s"]
+
+[node name="Tomato" type="Node2D" unique_id=1009616533 node_paths=PackedStringArray("GuiManager")]
+script = ExtResource("1_mkmtp")
+Fruit = ExtResource("2_yyydi")
+GuiManager = NodePath("AnimatedSprite2D")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1164080422]
+sprite_frames = ExtResource("2_t8c6y")
+script = ExtResource("4_t8c6y")
+
+[node name="fruit_spawns" type="Node2D" parent="AnimatedSprite2D" unique_id=438045199]
+script = ExtResource("4_yqf5s")
+
+[node name="point" type="Node2D" parent="AnimatedSprite2D/fruit_spawns" unique_id=1028181099]
+position = Vector2(3, 13)
+
+[node name="point2" type="Node2D" parent="AnimatedSprite2D/fruit_spawns" unique_id=1394728836]
+position = Vector2(-6, 9)
+
+[node name="point3" type="Node2D" parent="AnimatedSprite2D/fruit_spawns" unique_id=1752131732]
+position = Vector2(-9, 10)
+
+[node name="point4" type="Node2D" parent="AnimatedSprite2D/fruit_spawns" unique_id=1438700747]
+position = Vector2(-8, 13)
+
+[node name="point5" type="Node2D" parent="AnimatedSprite2D/fruit_spawns" unique_id=1645089386]
+position = Vector2(4, 3)
+
+[node name="point6" type="Node2D" parent="AnimatedSprite2D/fruit_spawns" unique_id=617594309]
+position = Vector2(2, 1)
+
+[node name="point7" type="Node2D" parent="AnimatedSprite2D/fruit_spawns" unique_id=1170522847]
+position = Vector2(4, -6)
+
+[node name="point8" type="Node2D" parent="AnimatedSprite2D/fruit_spawns" unique_id=1868417588]
+position = Vector2(-6, 0)
+
+[node name="point9" type="Node2D" parent="AnimatedSprite2D/fruit_spawns" unique_id=1243624970]
+position = Vector2(-4, -2)

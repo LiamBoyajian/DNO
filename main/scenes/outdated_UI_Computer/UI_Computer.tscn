@@ -1,0 +1,275 @@
+[gd_scene format=3 uid="uid://hkrl88j77qi4"]
+
+[ext_resource type="Texture2D" uid="uid://pls7gvlumkg6" path="res://main/scenes/outdated_UI_Computer/sprites/idkDNa.aseprite" id="2_n1dxk"]
+[ext_resource type="Texture2D" uid="uid://c1b1h42mndlqg" path="res://main/scenes/outdated_UI_Computer/sprites/dnaRing.aseprite" id="2_t5aub"]
+[ext_resource type="Texture2D" uid="uid://bw1vwtjqi24me" path="res://main/scenes/outdated_UI_Computer/gene viewer window/Window Popup_window base.ase_layer_tex" id="3_n1dxk"]
+[ext_resource type="Texture2D" uid="uid://doyehftuisbr3" path="res://main/scenes/outdated_UI_Computer/gene viewer window/Window Popup_Closed_window_Icon.ase_layer_tex" id="7_wf25g"]
+[ext_resource type="Script" uid="uid://drjfdi7qawa8o" path="res://main/packages/scene/floatingOpener.gd" id="8_24r0m"]
+[ext_resource type="PackedScene" uid="uid://ds37ymi7uqccg" path="res://main/scenes/outdated_UI_Computer/scenes/Plant_Gene_Window.tscn" id="8_igb03"]
+[ext_resource type="PackedScene" uid="uid://bg7g70dd654ew" path="res://main/scenes/outdated_UI_Computer/scenes/Gene_Editor_Window.tscn" id="9_34esj"]
+[ext_resource type="Texture2D" uid="uid://bs1c0cp6jvco5" path="res://main/scenes/outdated_UI_Computer/gene viewer window/Window Popup_Open_Editor.ase_layer_tex" id="9_igb03"]
+
+[sub_resource type="Animation" id="Animation_n1dxk"]
+resource_name = "Cell_Bobbing"
+length = 10.033334
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:position")
+tracks/0/interp = 2
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 5.033333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(330, 170), Vector2(330, 180)]
+}
+
+[sub_resource type="Animation" id="Animation_33q2i"]
+resource_name = "DNA_Circle_360"
+length = 20.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 20),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.283185307179586]
+}
+
+[sub_resource type="Animation" id="Animation_t5aub"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0001, 10),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, 0.0, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_33q2i"]
+_data = {
+&"Cell_Bobbing": SubResource("Animation_n1dxk"),
+&"DNA_Circle_360": SubResource("Animation_33q2i"),
+&"RESET": SubResource("Animation_t5aub")
+}
+
+[sub_resource type="Animation" id="Animation_iba45"]
+resource_name = "DNA_Circle 360"
+length = 20.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 20),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [0.0, 6.283185307179586]
+}
+
+[sub_resource type="Animation" id="Animation_g0duu"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wf25g"]
+_data = {
+&"DNA_Circle 360": SubResource("Animation_iba45"),
+&"RESET": SubResource("Animation_g0duu")
+}
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_n1dxk"]
+texture = ExtResource("3_n1dxk")
+texture_margin_left = 6.0
+texture_margin_top = 26.0
+texture_margin_right = 6.0
+texture_margin_bottom = 6.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+
+[sub_resource type="ButtonGroup" id="ButtonGroup_q3kti"]
+allow_unpress = true
+
+[sub_resource type="CanvasTexture" id="CanvasTexture_34esj"]
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_6pemv"]
+particle_flag_disable_z = true
+emission_shape = 3
+emission_box_extents = Vector3(1, 1, 1)
+direction = Vector3(0, 0, 0)
+spread = 180.0
+orbit_velocity_min = -0.13599992
+orbit_velocity_max = 0.1280001
+radial_velocity_min = -18.180021
+radial_velocity_max = 31.819977
+gravity = Vector3(0, 0, 0)
+linear_accel_min = -6.820002
+linear_accel_max = 8.6399975
+radial_accel_min = -16.810001
+radial_accel_max = 92.28
+hue_variation_min = -0.13000003
+hue_variation_max = 0.16999997
+turbulence_enabled = true
+collision_mode = 1
+collision_friction = 1.0
+collision_bounce = 1.0
+
+[sub_resource type="OccluderPolygon2D" id="OccluderPolygon2D_34esj"]
+polygon = PackedVector2Array(-124.38338, -62.46421, 55.605103, -66.09141, 62.498993, 66.74486, -120.41382, 72.48111, -124.38338, -62.46421)
+
+[node name="TestLab" type="Node2D" unique_id=502175854]
+
+[node name="Cell" type="Sprite2D" parent="." unique_id=1292420218]
+position = Vector2(330, 176)
+texture = ExtResource("2_n1dxk")
+metadata/_aseprite_wizard_interface_config_ = {
+"layer_section": true,
+"pending_changes": {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"scale": "1.0",
+"slice": "",
+"source": "res://Sprites/asprite/labBG.aseprite",
+"source_uid": -1
+}
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Cell" unique_id=1429791387]
+libraries/ = SubResource("AnimationLibrary_33q2i")
+autoplay = &"Cell_Bobbing"
+
+[node name="DNA_Circle" type="Sprite2D" parent="." unique_id=1704384706]
+position = Vector2(0.0025943518, 179.07196)
+texture = ExtResource("2_t5aub")
+offset = Vector2(-42, 0)
+metadata/_aseprite_wizard_interface_config_ = {
+"layer_section": true,
+"pending_changes": {
+"convert_fps_field": 60.0,
+"convert_ms_field": 16.0,
+"convert_to_fps": false,
+"embed_tex": true,
+"i_mode": 0,
+"keep_anim_length": false,
+"layers": [],
+"o_ex_p": "",
+"o_folder": "",
+"o_name": "",
+"only_visible": false,
+"player": "",
+"scale": "1.0",
+"slice": "",
+"source": "res://Sprites/asprite/labBG.aseprite",
+"source_uid": -1
+}
+}
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="DNA_Circle" unique_id=1621545584]
+libraries/ = SubResource("AnimationLibrary_wf25g")
+autoplay = &"DNA_Circle 360"
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=377568576]
+layer = -10
+
+[node name="ColorRect" type="ColorRect" parent="CanvasLayer" unique_id=1822128348]
+z_index = -20
+offset_top = -1.0
+offset_right = 640.0
+offset_bottom = 359.0
+color = Color(0.019607844, 0.019607844, 0.05490196, 1)
+
+[node name="Organism_Genes" type="Panel" parent="." unique_id=705191473]
+visible = false
+offset_left = 11.0
+offset_top = 5.0
+offset_right = 631.0
+offset_bottom = 345.0
+tooltip_text = "Nihao"
+focus_mode = 1
+theme_override_styles/panel = SubResource("StyleBoxTexture_n1dxk")
+
+[node name="Open_Genes" type="TextureButton" parent="." unique_id=1044970604 node_paths=PackedStringArray("target_node")]
+z_index = -1
+offset_left = 567.0
+offset_top = 336.0
+offset_right = 596.0
+offset_bottom = 355.0
+tooltip_text = "Open DNA editor
+"
+texture_normal = ExtResource("7_wf25g")
+script = ExtResource("8_24r0m")
+target_node = NodePath("../Plant_Gene_Window")
+
+[node name="Plant_Gene_Window" parent="." unique_id=1004885525 instance=ExtResource("8_igb03")]
+visible = false
+GeneButtonGroup = SubResource("ButtonGroup_q3kti")
+
+[node name="Open_Editor" type="TextureButton" parent="." unique_id=748450391 node_paths=PackedStringArray("target_node")]
+z_index = -1
+offset_left = 603.0
+offset_top = 342.0
+offset_right = 632.0
+offset_bottom = 361.0
+texture_normal = ExtResource("9_igb03")
+script = ExtResource("8_24r0m")
+target_node = NodePath("../Gene_Editor_Window")
+
+[node name="Gene_Editor_Window" parent="." unique_id=1912597706 instance=ExtResource("9_34esj")]
+visible = false
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="." unique_id=145163715]
+visible = false
+position = Vector2(318.99997, 182)
+emitting = false
+amount = 356
+texture = SubResource("CanvasTexture_34esj")
+lifetime = 41.79
+interp_to_end = 0.014
+speed_scale = 3.83
+explosiveness = 0.07
+interpolate = false
+fract_delta = false
+collision_base_size = 0.0
+local_coords = true
+process_material = SubResource("ParticleProcessMaterial_6pemv")
+
+[node name="LightOccluder2D" type="LightOccluder2D" parent="." unique_id=943931753]
+visible = false
+position = Vector2(353, 172)
+rotation = 0.036814757
+occluder = SubResource("OccluderPolygon2D_34esj")

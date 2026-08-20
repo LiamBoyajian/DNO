@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Main.main.packages.plants.enums;
 using Main.main.scripts.core.util;
 using Main.main.scripts.model;
 using Main.Source.main;
@@ -65,8 +66,8 @@ public partial class UiGeneEdit : CloseWindow
 
         result.PlantAction = param[0];
         result.Amount = double.Parse(param[1]);
-        result.Input = (AbstractPlant.Rt)int.Parse(param[2]);
-        result.Input = (AbstractPlant.Rt)int.Parse(param[3]);
+        result.Input = (EnumLibrary.Rt)int.Parse(param[2]);
+        result.Input = (EnumLibrary.Rt)int.Parse(param[3]);
 
 
         return result; //STUB TODO
@@ -80,7 +81,7 @@ public partial class UiGeneEdit : CloseWindow
         var param = s.Split(ParamSeparators);
         StrandDb result = strand.Clone();
 
-        result.Type = (AbstractPlant.Rt)int.Parse(param[0]);
+        result.Type = (EnumLibrary.Rt)int.Parse(param[0]);
         result.Lo = int.Parse(param[1]);
         result.Operator = param[2];
         result.Hi = int.Parse(param[3]);

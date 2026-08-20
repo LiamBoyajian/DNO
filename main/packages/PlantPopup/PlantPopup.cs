@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Godot;
 using Main.main.packages.PlantPopup.item_progress_bar;
 using Main.main.packages.PlantPopup.item_upgrade;
+using Main.main.packages.plants.enums;
 using Main.main.packages.plants.interfaces;
 using Main.main.packages.plants.species;
 using Main.main.packages.ResourceDisplay;
@@ -42,8 +43,8 @@ public partial class PlantPopup : Window
         //---------------
         ItemUpgradeDisplay?.EnumGate = new EnumGate();
         ProgressBarDisplay?.EnumGate = new EnumGate();
-        ProgressBarDisplay?.EnumGate.CreateGate(typeof(AbstractPlant.Rt), 0, 3, 4);
-        ProgressBarDisplay?.EnumGate.CreateGate(typeof(Tomato.TomatoOrgans));
+        ProgressBarDisplay?.EnumGate.CreateGate(typeof(EnumLibrary.Rt), 0, 3, 4);
+        ProgressBarDisplay?.EnumGate.CreateGate(typeof(EnumLibrary.BasicOrgans));
 
         //Default
         Instance = this;

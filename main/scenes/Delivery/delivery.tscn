@@ -1,0 +1,57 @@
+[gd_scene format=3 uid="uid://douyfecb748fn"]
+
+[ext_resource type="Texture2D" uid="uid://b8whw4nugmwi3" path="res://main/scenes/Delivery/Delivery.aseprite" id="1_wt4i1"]
+[ext_resource type="Script" uid="uid://q70ssyayrj2k" path="res://main/packages/scene/SceneTransitionTemplate.cs" id="2_g1kf6"]
+[ext_resource type="PackedScene" uid="uid://cx6bs6vejxjwf" path="res://main/packages/mc/1x/mc.tscn" id="3_5rc78"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5rc78"]
+normal = Vector2(0, -5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aoqhg"]
+size = Vector2(74, 66)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5rc78"]
+size = Vector2(32.374115, 303.90063)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_yrfgr"]
+size = Vector2(77.237946, 44.976673)
+
+[node name="Delivery" type="Node2D" unique_id=1779542726]
+
+[node name="Delivery" type="Sprite2D" parent="." unique_id=59551010]
+position = Vector2(320, 180)
+texture = ExtResource("1_wt4i1")
+
+[node name="left edge" type="Area2D" parent="Delivery" unique_id=1751484163]
+position = Vector2(0, 190)
+collision_layer = 256
+collision_mask = 8
+script = ExtResource("2_g1kf6")
+_targetScenePath = "uid://h1n7j6elr0cp"
+TransitionOnCollision = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Delivery/left edge" unique_id=972528460]
+shape = SubResource("WorldBoundaryShape2D_5rc78")
+
+[node name="mc" parent="." unique_id=2056976437 instance=ExtResource("3_5rc78")]
+position = Vector2(319, 197)
+
+[node name="boundary" type="Area2D" parent="." unique_id=114690032]
+position = Vector2(276, 261)
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="boundary" unique_id=601158587]
+position = Vector2(-126, 83)
+shape = SubResource("RectangleShape2D_aoqhg")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="boundary" unique_id=1239218703]
+position = Vector2(-1.3798218, 11.044586)
+rotation = 1.2234758
+scale = Vector2(0.9999999, 0.9999999)
+shape = SubResource("RectangleShape2D_5rc78")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="boundary" unique_id=2067086791]
+position = Vector2(81.61896, -46.511658)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_yrfgr")

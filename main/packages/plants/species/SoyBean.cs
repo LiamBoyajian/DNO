@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using Godot;
+using Main.main.packages.plants.enums;
+using Main.Source.main;
 
 namespace Main.main.scripts.core.plants.species;
 
@@ -20,7 +23,7 @@ public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
 
     protected bool GrowAtMilestones()
     {
-        switch (MyResources[Rt.Health].Max)
+        switch (MyResources[EnumLibrary.Rt.Health].Max)
         {
             case >= 250:
                 GuiManager.SetAnimation("default");
@@ -90,12 +93,13 @@ public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
     //--------------------------------------------------------------------------
     protected override double Consume(double amount)
     {
-        return base.Consume(Resources[Rt.Glucose].Take(MyResources[Rt.Energy].Max) / ConvertGluToEnergyRatio);
+        return base.Consume(Resources[EnumLibrary.Rt.Glucose].Take(MyResources[EnumLibrary.Rt.Energy].Max) /
+                            ConvertGluToEnergyRatio);
     }
 
     protected override double Grow(Enum resource, double amount)
     {
-        if (resource is not Rt rt)
+        if (resource is not EnumLibrary.Rt rt)
             throw new ArgumentException(resource + " is not an Rt.");
 
         var result = base.Grow(rt, TESTVALUE);
@@ -105,7 +109,7 @@ public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
 
     protected override double Clean(Enum resource, double amount)
     {
-        if (resource is not Rt rt)
+        if (resource is not EnumLibrary.Rt rt)
             throw new ArgumentException(resource + " is not an Rt.");
 
 
@@ -116,23 +120,34 @@ public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
 
     protected override double Photosynthesize()
     {
-        Resources[Rt.Health].ChangeMax(20);
+        Resources[EnumLibrary.Rt.Health].ChangeMax(20);
         GrowAtMilestones();
         var sunlevel = (float)MyContainer.GetSunlevel() * 100;
         const float oxygenByproductRatio = 6f;
         const float waterAndCo2Min = 6f;
 
         var glucoseGenerated =
-            ((Math.Max(Resources[Rt.H2O].Amount, Resources[Rt.Co2].Amount) * sunlevel) / waterAndCo2Min);
-        Resources[Rt.Glucose].Give(glucoseGenerated);
-        Resources[Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
-        Resources[Rt.H2O].Take(glucoseGenerated * waterAndCo2Min);
-        Resources[Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
+            ((Math.Max(Resources[EnumLibrary.Rt.H2O].Amount, Resources[EnumLibrary.Rt.Co2].Amount) * sunlevel) /
+             waterAndCo2Min);
+        Resources[EnumLibrary.Rt.Glucose].Give(glucoseGenerated);
+        Resources[EnumLibrary.Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
+        Resources[EnumLibrary.Rt.H2O].Take(glucoseGenerated * waterAndCo2Min);
+        Resources[EnumLibrary.Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
 
         return glucoseGenerated;
     }
 
     public override double GlucoseUpgradeFunction(double x)
+    {
+        throw new NotImplementedException();
+    }
+
+    public override IEnumerable<(Enum, IMaterialResource)> GetDictionaryConcatEnumerable()
+    {
+        throw new NotImplementedException();
+    }
+
+    public override IMaterialResource GetIMaterialResource(Enum @enum)
     {
         throw new NotImplementedException();
     }

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://2ae25ckj888j"]
 
-[ext_resource type="Theme" uid="uid://bccati3tbihud" path="res://main/scenes/_UI_Computer/gene viewer window/pc_design.tres" id="1_0xhjo"]
+[ext_resource type="Theme" uid="uid://bccati3tbihud" path="res://main/scenes/outdated_UI_Computer/gene viewer window/pc_design.tres" id="1_0xhjo"]
 
 [node name="BLANKwindow" type="Window" unique_id=1004885525]
 transparent_bg = true

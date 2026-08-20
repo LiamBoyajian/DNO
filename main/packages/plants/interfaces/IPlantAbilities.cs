@@ -1,4 +1,4 @@
-namespace Main.main.scripts.core.util.inventory;
+namespace Main.main.packages.plants.interfaces;
 
 public interface IPlantAbilities
 {

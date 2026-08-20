@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://dc2vvsd3bb7ul"]
+
+[ext_resource type="Texture2D" uid="uid://c007jc5o5kpdw" path="res://main/packages/dna editor window/resources/dna_editor_window_indexer_kebab_dot_des.ase_layer_tex" id="1_b17qe"]
+[ext_resource type="Texture2D" uid="uid://mpnaycmhog3e" path="res://main/packages/dna editor window/resources/dna_editor_window_indexer_kebab_dot_sel.ase_layer_tex" id="2_gkdao"]
+
+[node name="kebab_dot1" type="TextureButton" unique_id=685780816]
+size_flags_horizontal = 4
+toggle_mode = true
+texture_normal = ExtResource("1_b17qe")
+texture_pressed = ExtResource("2_gkdao")

@@ -1,8 +1,9 @@
 using System;
 using Godot;
 using Main.main.packages.inventory;
+using Main.main.packages.plants;
+using Main.main.packages.plants.interfaces;
 using Main.main.scripts.core.plants;
-using Main.main.scripts.core.util.inventory;
 using Main.main.scripts.core.util.items.tools;
 using Shovel = Main.main.scripts.core.util.items.tools.Shovel;
 
@@ -12,6 +13,8 @@ public partial class PlantGui : AnimatedSprite2D
 {
     //requires specifically named frames to run 
     protected AbstractPlant ParentPlant;
+
+
     public string NoGrowth = "no_growth";
     public string Dead = "dead";
     public string Default = "default";
@@ -60,21 +63,6 @@ public partial class PlantGui : AnimatedSprite2D
         return true;
     }
 
-    /**
-     * Play the frame-loop for the current animation (e.g. to show wind or some other looping animation)
-     *
-     */
-    public void CurrentGrowthPlayAnimation()
-    {
-        return;
-    }
-
-    /**
-     * Switches to the next animation
-     */
-    public void NextGrowthAnimation()
-    {
-    }
 
     public bool IsFinalGrowthFrame()
     {
@@ -129,5 +117,15 @@ public partial class PlantGui : AnimatedSprite2D
                 DugUp?.Invoke();
             }
         }
+    }
+
+    public virtual bool AddFruit(Node2D node2D)
+    {
+        return true;
+    }
+
+    public virtual bool RemoveFruit(Vector2? pos = null)
+    {
+        return true;
     }
 }

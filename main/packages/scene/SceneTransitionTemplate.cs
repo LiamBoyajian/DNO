@@ -19,12 +19,12 @@ public partial class SceneTransitionTemplate : Area2D
 
 
         //Short-term solution
-        var persistentNode = GetTree().Root.GetNodeOrNull("InventoryDisplay");
-        if (persistentNode != null && persistentNode.GetParent() is null)
-        {
-            GetTree().Root.CallDeferred(Node.MethodName.RemoveChild, persistentNode);
-            AddChild(persistentNode);
-        }
+        //var persistentNode = GetTree().Root.GetNodeOrNull("InventoryDisplay");
+        //if (persistentNode != null && persistentNode.GetParent() is null)
+        //{
+        //    GetTree().Root.CallDeferred(Node.MethodName.RemoveChild, persistentNode);
+        //    AddChild(persistentNode);
+        //}
 
 
         InputEvent += InputEventHandler;
@@ -44,7 +44,7 @@ public partial class SceneTransitionTemplate : Area2D
             {
                 if (area.GetParent() is Player p)
                 {
-                    TriggerSceneTransition(p, true);
+                    TriggerSceneTransition(p);
                 }
             }
         }
@@ -54,10 +54,12 @@ public partial class SceneTransitionTemplate : Area2D
     {
         if (!TransitionOnCollision) return;
         if (area.GetParent() is not Player p) return;
+
+        p.GlobalPosition = p.SpawnPoint;
         TriggerSceneTransition(p);
     }
 
-    public bool TriggerSceneTransition(Player player, bool clearMe = true)
+    public bool TriggerSceneTransition(Player player)
     {
         if (!Enabled)
             return false;
@@ -79,7 +81,7 @@ public partial class SceneTransitionTemplate : Area2D
         GetTree().Root.AddChild(persistentNode);
 
 
-        Callable.From(() => { tree?.ChangeSceneToFile(targetPath); }).CallDeferred();
+        Callable.From(() => { packages.scene.SceneManager.Instance.ChangeScene(_targetScenePath); }).CallDeferred();
 
         return true;
     }

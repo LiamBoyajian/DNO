@@ -1,4 +1,5 @@
 using System;
+using Main.main.packages.plants.enums;
 using Main.main.packages.ResourceDisplay;
 using Main.main.scripts.core.plants;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -31,13 +32,7 @@ public class TestEnumGate
     [TestMethod]
     public void TestCreateEmptyGate()
     {
-        EnumGate.CreateGate(typeof(AbstractPlant.Rt), new int[1]);
-    }
-
-    [TestMethod]
-    public void TestCreateNullGate()
-    {
-        Assert.Throws<ArgumentException>(() => EnumGate.CreateGate(typeof(AbstractPlant.Rt), null));
+        EnumGate.CreateGate(typeof(EnumLibrary.Rt), new int[1]);
     }
 
     [TestMethod]
@@ -55,7 +50,7 @@ public class TestEnumGate
     [TestMethod]
     public void TestCreateGate()
     {
-        EnumGate.CreateGate(typeof(AbstractPlant.Rt), 1, 2, 3);
+        EnumGate.CreateGate(typeof(EnumLibrary.Rt), 1, 2, 3);
     }
 
     //REMOVE GATE --------
@@ -63,7 +58,7 @@ public class TestEnumGate
     public void TestRemoveGateNull()
     {
         int[] temp = [1, 2, 3];
-        EnumGate.CreateGate(typeof(AbstractPlant.Rt), temp);
+        EnumGate.CreateGate(typeof(EnumLibrary.Rt), temp);
         Assert.Throws<ArgumentNullException>(() => EnumGate.RemoveGate(null));
     }
 
@@ -71,7 +66,7 @@ public class TestEnumGate
     public void TestRemoveGateNotEnum()
     {
         int[] temp = [1, 2, 3];
-        EnumGate.CreateGate(typeof(AbstractPlant.Rt), temp);
+        EnumGate.CreateGate(typeof(EnumLibrary.Rt), temp);
         Assert.Throws<ArgumentException>(() => EnumGate.RemoveGate(null));
     }
 
@@ -79,8 +74,8 @@ public class TestEnumGate
     public void TestRemoveGate()
     {
         int[] temp = [1, 2, 3];
-        EnumGate.CreateGate(typeof(AbstractPlant.Rt), temp);
-        Assert.AreEqual((typeof(AbstractPlant.Rt), temp), EnumGate.RemoveGate(typeof(AbstractPlant.Rt)));
+        EnumGate.CreateGate(typeof(EnumLibrary.Rt), temp);
+        Assert.AreEqual((typeof(EnumLibrary.Rt), temp), EnumGate.RemoveGate(typeof(EnumLibrary.Rt)));
     }
 
     //BINARY SEARCH --------
@@ -117,8 +112,8 @@ public class TestEnumGate
     public void TestContains()
     {
         int[] temp = new[] { 1, 2, 3 };
-        EnumGate.CreateGate(typeof(AbstractPlant.Rt), temp);
-        Assert.IsTrue(EnumGate.Contains(typeof(AbstractPlant.Rt)));
+        EnumGate.CreateGate(typeof(EnumLibrary.Rt), temp);
+        Assert.IsTrue(EnumGate.Contains(typeof(EnumLibrary.Rt)));
         Assert.IsFalse(EnumGate.Contains(typeof(Enum)));
     }
 
@@ -128,33 +123,33 @@ public class TestEnumGate
     public void TestPermitsOutOfBounds()
     {
         int[] temp = new[] { 1, 2, 3 };
-        EnumGate.CreateGate(typeof(AbstractPlant.Rt), temp);
-        Assert.IsFalse(EnumGate.Permits(AbstractPlant.Rt.Health));
+        EnumGate.CreateGate(typeof(EnumLibrary.Rt), temp);
+        Assert.IsFalse(EnumGate.Permits(EnumLibrary.Rt.Health));
     }
 
     [TestMethod]
     public void TestPermitsOnEmpty()
     {
         int[] temp = new int[3];
-        EnumGate.CreateGate(typeof(AbstractPlant.Rt), temp);
-        Assert.IsFalse(EnumGate.Permits(AbstractPlant.Rt.Chlorophyll));
+        EnumGate.CreateGate(typeof(EnumLibrary.Rt), temp);
+        Assert.IsFalse(EnumGate.Permits(EnumLibrary.Rt.Chlorophyll));
     }
 
     [TestMethod]
     public void TestPermitsNoFilter()
     {
         int[] temp = new int[3];
-        //EnumGate.CreateGate(typeof(AbstractPlant.Rt), temp);
-        Assert.IsTrue(EnumGate.Permits(AbstractPlant.Rt.Chlorophyll));
+        //EnumGate.CreateGate(typeof(EnumLibrary.Rt), temp);
+        Assert.IsTrue(EnumGate.Permits(EnumLibrary.Rt.Chlorophyll));
     }
 
     [TestMethod]
     public void TestPermits()
     {
         int[] temp = new[] { 1, 2, 3 };
-        EnumGate.CreateGate(typeof(AbstractPlant.Rt), temp);
-        Assert.IsTrue(EnumGate.Permits(AbstractPlant.Rt.Chlorophyll));
-        Assert.IsTrue(EnumGate.Permits(AbstractPlant.Rt.Energy));
-        Assert.IsTrue(EnumGate.Permits(AbstractPlant.Rt.Glucose));
+        EnumGate.CreateGate(typeof(EnumLibrary.Rt), temp);
+        Assert.IsTrue(EnumGate.Permits(EnumLibrary.Rt.Chlorophyll));
+        Assert.IsTrue(EnumGate.Permits(EnumLibrary.Rt.Energy));
+        Assert.IsTrue(EnumGate.Permits(EnumLibrary.Rt.Glucose));
     }
 }

@@ -6,29 +6,34 @@ using Main.main.scripts.model;
 using Main.Source.main;
 using PlantGui = Main.main.scripts.core.util.PlantGui;
 using System.Linq;
+using Main.main.packages.model.Dna;
+using Main.main.packages.plants.enums;
+using Main.main.packages.plants.interfaces;
 using ContainPlant = Main.main.packages.containers.ContainPlant;
 
 namespace Main.main.scripts.core.plants;
 
-public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
+public abstract partial class AbstractMicrochipPlant(int dbId)
+    : AbstractPlant, IConcatEnumerable, IDirigent, IBroadcastsUpdate
 {
     protected AbstractMicrochipPlant() : this(-1)
     {
     }
 
-    [Export] public PlantGui GuiManager { get; private set; }
+    [Export] public PlantGui GuiManager { get; set; }
     [Export] protected double ConvertHpToGluRatio = .1;
     [Export] protected double ConvertGluToEnergyRatio = .05;
 
     /**
      * Seconds
      */
-    [Export] protected double TickSpeed = 10;
+    [Export] protected double SecondsPerTick = 10;
 
-    protected PlantDb PlantInstance;
     protected int MaxStrands;
+    public event Action Updated;
 
     [Export] protected int DbId = dbId;
+    protected Nucleus Nucleus;
     protected string DatabasePath = ProjectSettings.GlobalizePath("user://greenhouse.db");
 
     protected ContainPlant
@@ -58,96 +63,48 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     public override bool Tick(double delta)
     {
         FrameSum += delta;
-        if (FrameSum < TickSpeed)
+        if (FrameSum < SecondsPerTick)
             return false;
 
         ObtainGlucose();
-        //CheckHeadGenes();
 
         EnergyHp(ConvertHpToGluRatio, ConvertGluToEnergyRatio);
-
+        CheckPromoters();
 
         IsDeadThenDeadFrame();
         FrameSum = 0.0;
         return true;
     }
 
-
-    protected bool CheckHeadGenes()
+    public void CheckPromoters()
     {
-        if (PlantInstance == null)
-            return false;
-        if (ConnectToPlant() == null)
-            return false;
-
-        bool result = false;
-        foreach (var strand in PlantInstance.Children)
+        var completeEnumDictionary = ((IConcatEnumerable)this).GetDictionary();
+        foreach (var chromosome in Nucleus.Chromosomes)
         {
-            var resourceAmount = Resources[strand.Type].Amount;
-
-            var lo = strand.Lo;
-            var hi = strand.Hi;
-
-            bool headGeneActivated = strand.Operator switch
+            foreach (var dna in chromosome.DnaStrands)
             {
-                "==" => (int)resourceAmount == hi,
-                "!=" => (int)resourceAmount != hi,
-
-                "<" => lo < resourceAmount && resourceAmount < hi,
-                "<=" => lo <= resourceAmount && resourceAmount <= hi,
-                ">" => lo > resourceAmount && resourceAmount > hi,
-                ">=" => lo >= resourceAmount && resourceAmount >= hi,
-                _ => false
-            };
-
-            if (headGeneActivated)
-            {
-                result = true;
-
-                foreach (var gene in strand.Children)
-                {
-                    this.StringToPlantAction(gene.PlantAction);
-                    var del = this.StringToPlantAction(gene.PlantAction);
-                    if (del is Func<Enum, double, double> temp)
-                    {
-                        temp(gene.Input, gene.Amount);
-                    }
-                    else if (del is Func<double, double> temp2)
-                    {
-                        temp2(gene.Amount);
-                    }
-                    else
-                    {
-                        throw new Exception($"Unknown PlantAction {gene.PlantAction}"); //idk 
-                    }
-                }
+                if (dna.Promoter.Target == null) continue;
+                if (!completeEnumDictionary.ContainsKey(dna.Promoter.Target)) continue;
+                if (dna.Promoter.Compare(completeEnumDictionary[dna.Promoter.Target]))
+                    RunGenes(dna);
             }
         }
-
-        return result;
     }
 
-    public PlantDb ConnectToPlant()
+    private void RunGenes(DnaStrand dna)
+    {
+        foreach (var gene in dna.Genes)
+        {
+            IProtein.RunGene(this, gene);
+        }
+    }
+
+    public bool ConnectToPlant()
     {
         if (DbId < 0)
-            return null;
-
-        return PlantInstance = DbManager.Instance?.GetPlant(DbId, true);
-    }
-
-    public virtual Delegate StringToPlantAction(string plantAction)
-    {
-        switch (plantAction.ToLower())
-        {
-            case "grow":
-                return new Func<Enum, double, double>(Grow);
-            case "clean":
-                return new Func<Enum, double, double>(Clean);
-            case "consume":
-                return new Func<double, double>(Consume);
-            default:
-                return null;
-        }
+            return false;
+        Nucleus = DnaDb.Instance.GetNucleus(DbId);
+        return Nucleus != null;
     }
 
     protected override bool GrowthUpdateFrame()
@@ -169,7 +126,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     protected double DrawWater(double amount)
     {
         if (!MyContainer.HasWater()) return 0;
-        return Resources[Rt.H2O].Give(MyContainer.Water.Take(amount));
+        return Resources[EnumLibrary.Rt.H2O].Give(MyContainer.Water.Take(amount));
     }
 
     public ContainPlant LinkParentContainer(ContainPlant container)
@@ -186,7 +143,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
 
     public void SetDbId(int id)
     {
-        if (DbId < 0)
+        if (id >= 0)
             DbId = id;
     }
 
@@ -197,7 +154,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
 
     protected abstract double Photosynthesize();
 
-    protected double ChangeResourceMax(Rt key, double change)
+    protected double ChangeResourceMax(EnumLibrary.Rt key, double change)
     {
         return Resources[key].ChangeMax(change);
     }
@@ -208,4 +165,15 @@ public abstract partial class AbstractMicrochipPlant(int dbId) : AbstractPlant
     }
 
     public abstract double GlucoseUpgradeFunction(double x);
+    public abstract IEnumerable<(Enum, IMaterialResource)> GetDictionaryConcatEnumerable();
+    public abstract IMaterialResource GetIMaterialResource(Enum @enum);
+
+
+    double IDirigent.RunProtein()
+    {
+        var waterUptakeAmount = 100;
+        var result = DrawWater(waterUptakeAmount);
+        Updated?.Invoke();
+        return result;
+    }
 }

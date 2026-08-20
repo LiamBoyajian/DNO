@@ -1,0 +1,10 @@
+[gd_resource type="Theme" format=3 uid="uid://crrxuxlvi8vlo"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_xnx3i"]
+
+[resource]
+Window/constants/close_h_offset = 4
+Window/constants/close_v_offset = 4
+Window/constants/title_height = 4
+Window/icons/close = SubResource("PlaceholderTexture2D_xnx3i")
+Window/icons/close_pressed = SubResource("PlaceholderTexture2D_xnx3i")

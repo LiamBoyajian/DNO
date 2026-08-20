@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Godot;
+using Main.main.packages.plants.enums;
 using Main.Source.main;
 
 namespace Main.main.scripts.core.plants;
@@ -12,38 +13,18 @@ public abstract partial class AbstractPlant : Node
     /**
      * ResourceTypes
      */
-    public enum Rt
-    {
-        //Abstract:
-        Health,
-        Chlorophyll,
-        Energy,
-
-        //Definite attributes:
-        Glucose,
-        H2O,
-        Co2,
-        Oxygen,
-
-        //hormones
-        //circadian rhythm
-        //injury types:
-        DamagedCells, //maybe add types of cells or damage idk (types of broken proteins.)
-        Null,
-    }
-
-    protected Dictionary<Rt, MaterialResource> Resources = new()
+    protected Dictionary<EnumLibrary.Rt, MaterialResource> Resources = new()
     {
         //Arbitrary base values -- should be removed outside of testing
-        { Rt.Health, new MaterialResource(10.0, 10.0) },
-        { Rt.Chlorophyll, new MaterialResource(10.0, 100.0) },
-        { Rt.Energy, new MaterialResource(10.0, 100.0) },
-        { Rt.Glucose, new MaterialResource(1000.0, 1000.0) },
-        { Rt.H2O, new MaterialResource(10.0, 1000.0) },
-        { Rt.Co2, new MaterialResource(10.0, 1000.0) },
-        { Rt.Oxygen, new MaterialResource(10.0, 100.0) },
+        { EnumLibrary.Rt.Health, new MaterialResource(10.0, 10.0) },
+        { EnumLibrary.Rt.Chlorophyll, new MaterialResource(10.0, 100.0) },
+        { EnumLibrary.Rt.Energy, new MaterialResource(10.0, 100.0) },
+        { EnumLibrary.Rt.Glucose, new MaterialResource(1000.0, 1000.0) },
+        { EnumLibrary.Rt.H2O, new MaterialResource(10.0, 1000.0) },
+        { EnumLibrary.Rt.Co2, new MaterialResource(10.0, 1000.0) },
+        { EnumLibrary.Rt.Oxygen, new MaterialResource(10.0, 100.0) },
 
-        { Rt.DamagedCells, new MaterialResource(50.0, 100.0) },
+        { EnumLibrary.Rt.DamagedCells, new MaterialResource(50.0, 100.0) },
     };
 
     //-----------------------------
@@ -54,7 +35,7 @@ public abstract partial class AbstractPlant : Node
         return dict.ToDictionary(k => k.Key, IMaterialResource (v) => v.Value);
     }
 
-    public IReadOnlyDictionary<Rt, IMaterialResource> MyResources => ConvertToReadOnlyDictionary(Resources);
+    public IReadOnlyDictionary<EnumLibrary.Rt, IMaterialResource> MyResources => ConvertToReadOnlyDictionary(Resources);
 
 
     protected double FrameSum = 0.0;
@@ -78,7 +59,7 @@ public abstract partial class AbstractPlant : Node
     //Clean: remove a resource permanently
     protected virtual double Clean(Enum resource, double amount)
     {
-        if (resource is not Rt rt)
+        if (resource is not EnumLibrary.Rt rt)
             throw new ArgumentException(resource + " is not an Rt.");
 
         return Resources[rt].Take(amount);
@@ -90,7 +71,7 @@ public abstract partial class AbstractPlant : Node
      */
     protected virtual double Consume(double amount)
     {
-        return Resources[Rt.Energy].Give(amount);
+        return Resources[EnumLibrary.Rt.Energy].Give(amount);
     }
 
     /**
@@ -99,7 +80,7 @@ public abstract partial class AbstractPlant : Node
      */
     protected virtual double Grow(Enum resource, double amount)
     {
-        if (resource is not Rt rt)
+        if (resource is not EnumLibrary.Rt rt)
             throw new ArgumentException(resource + " is not an Rt.");
 
         return Resources[rt].ChangeMax(amount);
@@ -108,7 +89,7 @@ public abstract partial class AbstractPlant : Node
 
     public virtual bool IsAlive()
     {
-        return Resources[Rt.Health].Amount > 0.0;
+        return Resources[EnumLibrary.Rt.Health].Amount > 0.0;
     }
 
     /**
@@ -122,9 +103,9 @@ public abstract partial class AbstractPlant : Node
      */
     protected virtual double EnergyHp(double maxHpToEnergyRatio, double gluToEnergyRatio)
     {
-        double toTake = Resources[Rt.Health].Max * maxHpToEnergyRatio; //Energy required in this run
-        double underflow = toTake - Resources[Rt.Energy].Take(toTake); //Energy # not met
-        Resources[Rt.Health].Take(Resources[Rt.Glucose].Take(underflow * gluToEnergyRatio));
+        double toTake = Resources[EnumLibrary.Rt.Health].Max * maxHpToEnergyRatio; //Energy required in this run
+        double underflow = toTake - Resources[EnumLibrary.Rt.Energy].Take(toTake); //Energy # not met
+        Resources[EnumLibrary.Rt.Health].Take(Resources[EnumLibrary.Rt.Glucose].Take(underflow * gluToEnergyRatio));
         return underflow;
     }
 
@@ -133,7 +114,7 @@ public abstract partial class AbstractPlant : Node
      */
     protected double AcceptWater(double waterAmount)
     {
-        return Resources[Rt.H2O].Give(waterAmount);
+        return Resources[EnumLibrary.Rt.H2O].Give(waterAmount);
     }
 
     public virtual void DigUp()

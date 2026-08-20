@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://bjk4xnbicg45o"
+path="res://.godot/imported/cell_elements_Nucleus.ase_layer_tex-326f819e7f7c23352a71552caa69821d.res"
+
+[deps]
+
+source_file="res://main/packages/dna editor window/resources/cell_elements_Nucleus.ase_layer_tex"
+dest_files=["res://.godot/imported/cell_elements_Nucleus.ase_layer_tex-326f819e7f7c23352a71552caa69821d.res"]
+
+[params]
+
