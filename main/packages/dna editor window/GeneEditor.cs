@@ -26,7 +26,12 @@ public partial class GeneEditor : PanelContainer
 
     private void DisplayGene(int index)
     {
-        if (!Indexer.ValidIndex) return;
+        if (!Indexer.ValidIndex)
+        {
+            ClearSelection();
+            return;
+        }
+
         Gene gene = Genes[index];
         GeneTextEditor.Text = gene.ProteinName;
     }
@@ -37,13 +42,19 @@ public partial class GeneEditor : PanelContainer
     {
         Indexer.SetMax(genes.Count);
         Genes = genes;
-        GeneTextEditor.Text = "Select a gene to display its value";
+        ClearSelection();
     }
 
-    public void CloseGenes()
+    public void Clear()
     {
         Genes = null;
         Indexer.Clear();
+        GeneTextEditor.Text = null;
+    }
+
+    public void ClearSelection()
+    {
+        GeneTextEditor.Text = null;
     }
 
     public override void _UnhandledInput(InputEvent @event)

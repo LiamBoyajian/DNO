@@ -5,7 +5,6 @@ using System.IO;
 
 namespace Main.main.packages.model.Dna;
 
-//Made with claude. 
 public static class DnaHelperMethods
 {
     public static string ConnectionPath = "main/packages/model/Dna/Nuclei.db";
@@ -15,11 +14,9 @@ public static class DnaHelperMethods
 
     /**
      * Shared connection reused across all helper method calls. Opened lazily
-     * on first use and kept open for the lifetime of the process - helper
-     * methods do NOT open/close a fresh connection per call, they all read
-     * against this single connection so ConnectionPath is referenced
-     * consistently. Test code (using isolated temp SQLite files) is expected
-     * to manage its own per-call connections rather than go through this.
+     * on first use and kept open for the lifetime of the process. Test code
+     * is expected to manage its own per-call connections rather than go
+     * through this.
      */
     private static SqliteConnection Connection
     {
@@ -44,11 +41,8 @@ public static class DnaHelperMethods
     }
 
     /**
-     * Explicit initialization hook - call this once when the owning Godot
-     * node is instantiated (see DnaDb._Ready()). Forces the shared
-     * connection to open against ConnectionPath (creating an empty SQLite
-     * file there if one doesn't exist yet) and builds the schema from
-     * SchemaPath if it isn't already in place. Safe to call more than once.
+     * Explicit initialization hook — call this once when the owning Godot
+     * node is instantiated (see DnaDb._Ready()). Safe to call more than once.
      */
     public static void Initialize()
     {
@@ -57,10 +51,8 @@ public static class DnaHelperMethods
 
     /**
      * Runs dna.sql against the connection to create any missing tables. Every
-     * CREATE TABLE statement in dna.sql uses IF NOT EXISTS, so this doubles
-     * as the "does the database exist" check - it's a no-op against a
-     * database that already has the schema, and builds it from scratch
-     * against a brand-new (empty) database file.
+     * CREATE TABLE uses IF NOT EXISTS, so this is a no-op on an already-built
+     * database.
      */
     private static void EnsureSchema(SqliteConnection connection)
     {
@@ -70,11 +62,8 @@ public static class DnaHelperMethods
     }
 
     /**
-     * Closes and disposes the current shared connection, if one is open, so
-     * the next helper method call opens a fresh connection against whatever
-     * ConnectionPath is currently set to. Call this after changing
-     * ConnectionPath at runtime (e.g. switching save files) - otherwise the
-     * shared connection keeps pointing at the old path.
+     * Closes and disposes the current shared connection so the next call
+     * opens a fresh one against whatever ConnectionPath is currently set to.
      */
     public static void ResetConnection()
     {
@@ -82,24 +71,80 @@ public static class DnaHelperMethods
         _connection = null;
     }
 
+    // -------------------------------------------------------------------------
+    // GET — public entry points
+    // -------------------------------------------------------------------------
+
+    /**
+     * Loads a full Nucleus → Chromosome → DnaStrand → Gene tree by Id.
+     * Pass includeParent = true to also walk upward through Nucleus.ParentId.
+     *
+     * Within a single call, any Chromosome/DnaStrand/Gene that is shared
+     * across multiple parents is returned as the same C# instance (identity
+     * map scoped to this call). Edits to that instance will therefore be
+     * visible from every parent that references it in the returned graph.
+     */
     public static Nucleus GetNucleus(int id, bool includeParent = false)
     {
-        return GetNucleus(Connection, id, includeParent);
+        var chromosomeCache = new Dictionary<int, Chromosome>();
+        var strandCache = new Dictionary<int, DnaStrand>();
+        var geneCache = new Dictionary<int, Gene>();
+
+        return GetNucleus(Connection, id, includeParent, chromosomeCache, strandCache, geneCache);
     }
 
-    private static Nucleus GetNucleus(SqliteConnection connection, int id, bool includeParent)
+    /**
+     * Loads a single Chromosome by Id, with its DnaStrands (and their Genes)
+     * populated. Shared children within this call are the same instance.
+     */
+    public static Chromosome GetChromosome(int id)
+    {
+        var strandCache = new Dictionary<int, DnaStrand>();
+        var geneCache = new Dictionary<int, Gene>();
+
+        return GetChromosome(Connection, id, strandCache, geneCache);
+    }
+
+    /**
+     * Loads a single DnaStrand by Id, with its Genes populated.
+     * Shared genes within this call are the same instance.
+     */
+    public static DnaStrand GetDnaStrand(int id)
+    {
+        var geneCache = new Dictionary<int, Gene>();
+
+        return GetDnaStrand(Connection, id, geneCache);
+    }
+
+    /**
+     * Loads a single Gene by Id.
+     */
+    public static Gene GetGene(int id)
+    {
+        return GetGene(Connection, id);
+    }
+
+    // -------------------------------------------------------------------------
+    // GET — private implementation
+    // -------------------------------------------------------------------------
+
+    private static Nucleus GetNucleus(
+        SqliteConnection connection,
+        int id,
+        bool includeParent,
+        Dictionary<int, Chromosome> chromosomeCache,
+        Dictionary<int, DnaStrand> strandCache,
+        Dictionary<int, Gene> geneCache)
     {
         var nucleus = GetNucleusRow(connection, id);
         if (nucleus == null) return null;
 
-        nucleus.Chromosomes = GetChromosomes(connection, nucleus.Id);
+        nucleus.Chromosomes = GetChromosomes(connection, nucleus.Id, chromosomeCache, strandCache, geneCache);
 
-        if (includeParent)
+        if (includeParent && nucleus.ParentId > 0)
         {
-            // Recurses upward one NucleusDisplay row at a time. Infinite recursion (e.g. a
-            // ParentId cycle) is not guarded against here - that's expected to be
-            // enforced wherever rows get added to the NucleusDisplay table.
-            nucleus.Parent = GetNucleus(connection, nucleus.ParentId, true);
+            // Recurse upward. Cycle prevention is enforced on the write side.
+            nucleus.Parent = GetNucleus(connection, nucleus.ParentId, true, chromosomeCache, strandCache, geneCache);
         }
 
         return nucleus;
@@ -122,86 +167,67 @@ public static class DnaHelperMethods
         };
     }
 
-    public static Chromosome GetChromosome(int id)
+    private static Chromosome GetChromosome(
+        SqliteConnection connection,
+        int id,
+        Dictionary<int, DnaStrand> strandCache,
+        Dictionary<int, Gene> geneCache)
     {
-        return GetChromosome(Connection, id);
-    }
+        if (!TryGetChromosomeRow(connection, id, out var chromosome)) return null;
 
-    private static Chromosome GetChromosome(SqliteConnection connection, int id)
-    {
-        var chromosome = GetChromosomeRow(connection, id);
-        if (chromosome == null) return null;
-
-        chromosome.DnaStrands = GetDnaStrands(connection, chromosome.Id);
+        chromosome.DnaStrands = GetDnaStrands(connection, chromosome.Id, strandCache, geneCache);
 
         return chromosome;
     }
 
-    private static Chromosome GetChromosomeRow(SqliteConnection connection, int id)
+    private static bool TryGetChromosomeRow(SqliteConnection connection, int id, out Chromosome chromosome)
     {
         using var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id, ParentId, Name FROM Chromosome WHERE Id = @Id;";
+        command.CommandText = "SELECT Id, Name FROM Chromosome WHERE Id = @Id;";
         command.Parameters.AddWithValue("@Id", id);
 
         using var reader = command.ExecuteReader();
-        if (!reader.Read()) return null;
+        if (!reader.Read())
+        {
+            chromosome = null;
+            return false;
+        }
 
-        return new Chromosome
+        chromosome = new Chromosome
         {
             Id = reader.GetInt32(0),
-            ParentId = reader.IsDBNull(1) ? 0 : reader.GetInt32(1),
-            Name = reader.IsDBNull(2) ? "" : reader.GetString(2)
+            Name = reader.IsDBNull(1) ? "" : reader.GetString(1)
         };
+        return true;
     }
 
-    public static DnaStrand GetDnaStrand(int id)
+    private static DnaStrand GetDnaStrand(
+        SqliteConnection connection,
+        int id,
+        Dictionary<int, Gene> geneCache)
     {
-        return GetDnaStrand(Connection, id);
-    }
+        if (!TryGetDnaStrandRow(connection, id, out var strand)) return null;
 
-    private static DnaStrand GetDnaStrand(SqliteConnection connection, int id)
-    {
-        var strand = GetDnaStrandRow(connection, id);
-        if (strand == null) return null;
-
-        strand.Genes = GetGenes(connection, strand.Id);
+        strand.Genes = GetGenes(connection, strand.Id, geneCache);
 
         return strand;
     }
 
-    private static DnaStrand GetDnaStrandRow(SqliteConnection connection, int id)
+    private static bool TryGetDnaStrandRow(SqliteConnection connection, int id, out DnaStrand strand)
     {
         using var command = connection.CreateCommand();
         command.CommandText = "SELECT Id, Name, EnumType, Ordinal, ComparisonType FROM Dna WHERE Id = @Id;";
         command.Parameters.AddWithValue("@Id", id);
 
         using var reader = command.ExecuteReader();
-        if (!reader.Read()) return null;
-
-        Enum @enum = null;
-        var enumType = Type.GetType(reader.GetString(2));
-        if (enumType?.IsEnum ?? false)
+        if (!reader.Read())
         {
-            @enum = (Enum)Enum.Parse(enumType, reader.GetString(3));
+            strand = null;
+            return false;
         }
 
-        return new DnaStrand
-        {
-            Id = reader.GetInt32(0),
-            Name = reader.IsDBNull(1) ? "" : reader.GetString(1),
-            Promoter = new Promoter
-            {
-                // See the equivalent note in GetDnaStrands below - Target/Ordinal are
-                // left unset for the same reasons.
-                Target = @enum,
-                PromoterText = reader.IsDBNull(4) ? "" : reader.GetString(4),
-            }
-        };
-    }
-
-    public static Gene GetGene(int id)
-    {
-        return GetGene(Connection, id);
+        strand = BuildDnaStrandFromReader(reader);
+        return true;
     }
 
     private static Gene GetGene(SqliteConnection connection, int id)
@@ -216,147 +242,1071 @@ public static class DnaHelperMethods
         return new Gene
         {
             Id = reader.GetInt32(0),
-            ProteinName = reader.GetString(1),
-            // ProteinName has no matching column in the Gene table - see the note in
-            // GetGenes below.
+            ProteinName = reader.IsDBNull(1) ? null : reader.GetString(1)
         };
     }
 
-    private static List<Chromosome> GetChromosomes(SqliteConnection connection, int nucleusId)
+    // -------------------------------------------------------------------------
+    // GET — list fetchers (join through junction tables)
+    // -------------------------------------------------------------------------
+
+    /**
+     * Returns all Chromosomes linked to a given Nucleus via NucleusChromosome.
+     * Chromosomes already seen within this call (via the cache) are reused as
+     * the same instance rather than constructed again.
+     */
+    private static List<Chromosome> GetChromosomes(
+        SqliteConnection connection,
+        int nucleusId,
+        Dictionary<int, Chromosome> chromosomeCache,
+        Dictionary<int, DnaStrand> strandCache,
+        Dictionary<int, Gene> geneCache)
     {
-        var chromosomes = new List<Chromosome>();
+        var ids = GetLinkedIds(connection,
+            "SELECT ChromosomeId FROM NucleusChromosome WHERE NucleusId = @ParentId;",
+            nucleusId);
 
-        using (var command = connection.CreateCommand())
+        var chromosomes = new List<Chromosome>(ids.Count);
+
+        foreach (var id in ids)
         {
-            command.CommandText = "SELECT Id, ParentId, Name FROM Chromosome WHERE ParentId = @ParentId;";
-            command.Parameters.AddWithValue("@ParentId", nucleusId);
-
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
+            if (chromosomeCache.TryGetValue(id, out var cached))
             {
-                chromosomes.Add(new Chromosome
-                {
-                    Id = reader.GetInt32(0),
-                    ParentId = reader.IsDBNull(1) ? 0 : reader.GetInt32(1),
-                    Name = reader.IsDBNull(2) ? "" : reader.GetString(2)
-                });
+                chromosomes.Add(cached);
+                continue;
             }
-        }
 
-        foreach (var chromosome in chromosomes)
-        {
-            chromosome.DnaStrands = GetDnaStrands(connection, chromosome.Id);
+            if (!TryGetChromosomeRow(connection, id, out var chromosome)) continue;
+
+            chromosome.DnaStrands = GetDnaStrands(connection, chromosome.Id, strandCache, geneCache);
+            chromosomeCache[id] = chromosome;
+            chromosomes.Add(chromosome);
         }
 
         return chromosomes;
     }
 
-    private static List<DnaStrand> GetDnaStrands(SqliteConnection connection, int chromosomeId)
+    /**
+     * Returns all DnaStrands linked to a given Chromosome via ChromosomeDna.
+     * Strands already seen within this call are reused as the same instance.
+     */
+    private static List<DnaStrand> GetDnaStrands(
+        SqliteConnection connection,
+        int chromosomeId,
+        Dictionary<int, DnaStrand> strandCache,
+        Dictionary<int, Gene> geneCache)
     {
-        var strands = new List<DnaStrand>();
+        var ids = GetLinkedIds(connection,
+            "SELECT DnaId FROM ChromosomeDna WHERE ChromosomeId = @ParentId;",
+            chromosomeId);
 
-        using (var command = connection.CreateCommand())
+        var strands = new List<DnaStrand>(ids.Count);
+
+        foreach (var id in ids)
         {
-            command.CommandText =
-                "SELECT Id, Name, EnumType, Ordinal, ComparisonType FROM Dna WHERE ParentId = @ParentId;";
-            command.Parameters.AddWithValue("@ParentId", chromosomeId);
-
-            using var reader = command.ExecuteReader();
-            while (reader.Read())
+            if (strandCache.TryGetValue(id, out var cached))
             {
-                Enum @enum = null;
-                var enumType = Type.GetType(reader.GetString(2));
-                if (enumType?.IsEnum ?? false)
-                {
-                    @enum = (Enum)Enum.Parse(enumType, reader.GetString(3));
-                }
-
-                strands.Add(new DnaStrand
-                {
-                    Id = reader.GetInt32(0),
-                    Name = reader.IsDBNull(1) ? "" : reader.GetString(1),
-                    Promoter = new Promoter
-                    {
-                        // NOTE: Target is a System.Enum in Promoter.cs, but the Dna table only
-                        // stores the enum's type name as a string (EnumType). Turning that
-                        // string into an actual enum value needs reflection (Type.GetType +
-                        // Enum.Parse), which needs "using System;" - not added here since it's
-                        // a new import. Left unset for now; see note below.
-                        Target = @enum,
-                        PromoterText = reader.IsDBNull(4) ? "" : reader.GetString(4)
-                        // Ordinal (index 3) also has no home on Promoter right now - see note below.
-                    }
-                });
+                strands.Add(cached);
+                continue;
             }
-        }
 
-        foreach (var strand in strands)
-        {
-            strand.Genes = GetGenes(connection, strand.Id);
+            if (!TryGetDnaStrandRow(connection, id, out var strand)) continue;
+
+            strand.Genes = GetGenes(connection, strand.Id, geneCache);
+            strandCache[id] = strand;
+            strands.Add(strand);
         }
 
         return strands;
     }
 
-    private static List<Gene> GetGenes(SqliteConnection connection, int dnaId)
+    /**
+     * Returns all Genes linked to a given DnaStrand via DnaGene.
+     * Genes already seen within this call are reused as the same instance.
+     */
+    private static List<Gene> GetGenes(
+        SqliteConnection connection,
+        int dnaId,
+        Dictionary<int, Gene> geneCache)
     {
-        var genes = new List<Gene>();
+        var ids = GetLinkedIds(connection,
+            "SELECT GeneId FROM DnaGene WHERE DnaId = @ParentId;",
+            dnaId);
 
-        using var command = connection.CreateCommand();
-        command.CommandText = "SELECT Id, Protein FROM Gene WHERE ParentId = @ParentId;";
-        command.Parameters.AddWithValue("@ParentId", dnaId);
+        var genes = new List<Gene>(ids.Count);
 
-        using var reader = command.ExecuteReader();
-        while (reader.Read())
+        foreach (var id in ids)
         {
-            genes.Add(new Gene
+            if (geneCache.TryGetValue(id, out var cached))
             {
-                Id = reader.GetInt32(0),
-                ProteinName = reader.GetString(1),
-                // ProteinName has no matching column in the Gene table (Id, ParentId only),
-                // so it's left unset - see note below.
-            });
+                genes.Add(cached);
+                continue;
+            }
+
+            var gene = GetGene(connection, id);
+            if (gene == null) continue;
+
+            geneCache[id] = gene;
+            genes.Add(gene);
         }
 
         return genes;
     }
 
+    /**
+     * Executes a query that returns a single integer column and collects the
+     * results into a list. Used by all three list-fetchers above to read the
+     * child IDs from a junction table. The query must use @ParentId as its
+     * sole parameter.
+     */
+    private static List<int> GetLinkedIds(SqliteConnection connection, string sql, int parentId)
+    {
+        var ids = new List<int>();
+
+        using var command = connection.CreateCommand();
+        command.CommandText = sql;
+        command.Parameters.AddWithValue("@ParentId", parentId);
+
+        using var reader = command.ExecuteReader();
+        while (reader.Read())
+            ids.Add(reader.GetInt32(0));
+
+        return ids;
+    }
+
+    // -------------------------------------------------------------------------
+    // GET — DnaStrand construction helper
+    // -------------------------------------------------------------------------
+
+    /**
+     * Builds a DnaStrand from the current reader row. Shared by the single-row
+     * fetch (TryGetDnaStrandRow) and future list-fetchers that may SELECT
+     * multiple Dna rows in one query.
+     * Reader column order: 0=Id, 1=Name, 2=EnumType, 3=Ordinal, 4=ComparisonType.
+     * Note: the DB column is ComparisonType; it maps to the Promoter.PromoterText
+     * C# property (PromoterText's setter is what parses/derives ComparisonType,
+     * IsPercent, and ComparisonValue — see Promoter.cs).
+     */
+    private static DnaStrand BuildDnaStrandFromReader(SqliteDataReader reader)
+    {
+        Enum @enum = null;
+        if (!reader.IsDBNull(2))
+        {
+            var enumType = Type.GetType(reader.GetString(2));
+            if ((enumType?.IsEnum ?? false) && !reader.IsDBNull(3))
+                @enum = (Enum)Enum.Parse(enumType, reader.GetString(3));
+        }
+
+        return new DnaStrand
+        {
+            Id = reader.GetInt32(0),
+            Name = reader.IsDBNull(1) ? "" : reader.GetString(1),
+            Promoter = new Promoter
+            {
+                Target = @enum,
+                PromoterText = reader.IsDBNull(4) ? "" : reader.GetString(4)
+            }
+        };
+    }
+
+    // -------------------------------------------------------------------------
+    // REMOVE — public entry points
+    // -------------------------------------------------------------------------
+
+    /**
+     * Removes a Nucleus row and its entire descendant-Nucleus subtree.
+     * Nucleus.ParentId keeps its original ON DELETE CASCADE, which fires
+     * automatically at the SQLite level and only ever runs downward: deleting
+     * `id` cascades to every Nucleus row whose ParentId (transitively) points
+     * at it, and — via the junction table's own ON DELETE CASCADE — to every
+     * NucleusChromosome row belonging to any nucleus in that subtree. It never
+     * touches `id`'s own ancestors.
+     *
+     * Because that cascade happens inside SQLite, our C# code has no chance to
+     * inspect the junction rows once RemoveRow runs. So we walk the subtree
+     * and collect every linked Chromosome ID *before* deleting, then run the
+     * usual orphan-check/cascade logic on each of those chromosomes afterward.
+     * Returns true if the Nucleus row existed and was deleted.
+     */
     public static bool RemoveNucleus(int id)
     {
-        return RemoveRow(Connection, "Nucleus", id);
+        return RemoveNucleus(Connection, id);
     }
 
-    public static bool RemoveChromosome(int id)
+    private static bool RemoveNucleus(SqliteConnection connection, int id)
     {
-        return RemoveRow(Connection, "Chromosome", id);
-    }
+        var subtreeNucleusIds = GetNucleusSubtreeIds(connection, id);
 
-    public static bool RemoveDnaStrand(int id)
-    {
-        return RemoveRow(Connection, "Dna", id);
-    }
+        var linkedChromosomeIds = new HashSet<int>();
+        foreach (var nucleusId in subtreeNucleusIds)
+        {
+            foreach (var chromId in GetLinkedIds(connection,
+                         "SELECT ChromosomeId FROM NucleusChromosome WHERE NucleusId = @ParentId;",
+                         nucleusId))
+            {
+                linkedChromosomeIds.Add(chromId);
+            }
+        }
 
-    public static bool RemoveGene(int id)
-    {
-        return RemoveRow(Connection, "Gene", id);
+        bool deleted = RemoveRow(connection, "Nucleus", id);
+        // SQLite's cascade has now removed the whole Nucleus subtree and every
+        // NucleusChromosome row for it. Orphan-check each chromosome that was
+        // touched, cascading down through its DnaStrands/Genes as needed.
+        foreach (var chromId in linkedChromosomeIds)
+            DeleteIfOrphaned(connection, chromId,
+                "SELECT COUNT(*) FROM NucleusChromosome WHERE ChromosomeId = @Id;",
+                "Chromosome",
+                chromId,
+                () => CascadeOrphanChromosomeChildren(connection, chromId));
+
+        return deleted;
     }
 
     /**
-     * Deletes a single row by Id from the given table. Child rows (e.g.
-     * removing a Chromosome also removes its DnaStrand and Gene rows) are
-     * cleaned up automatically by the schema's ON DELETE CASCADE - that only
-     * takes effect because PRAGMA foreign_keys = ON is set when the shared
-     * Connection is opened above. tableName is only ever passed as one of
-     * the hardcoded literals in the four methods above, never user input, so
-     * building the DELETE statement with string interpolation here is safe
-     * (table names can't be parameterized as SQL parameters anyway).
+     * Recursively collects `rootId` plus every Nucleus Id transitively
+     * reachable via ParentId (i.e. the full downward subtree of children,
+     * grandchildren, etc.). Used before a delete so the cascade's effects on
+     * NucleusChromosome links can be reasoned about afterward.
      */
+    private static List<int> GetNucleusSubtreeIds(SqliteConnection connection, int rootId)
+    {
+        var ids = new List<int> { rootId };
+
+        foreach (var childId in GetLinkedIds(connection,
+                     "SELECT Id FROM Nucleus WHERE ParentId = @ParentId;", rootId))
+        {
+            ids.AddRange(GetNucleusSubtreeIds(connection, childId));
+        }
+
+        return ids;
+    }
+
+    /**
+     * Unlinks the Chromosome from one of its parent Nuclei. If the Chromosome
+     * becomes orphaned (no remaining NucleusChromosome rows), deletes it and
+     * cascades down through its DnaStrands and Genes via the same orphan logic.
+     * Returns true if the junction row existed and was removed (or if the
+     * chromosome entity was consequently deleted).
+     */
+    public static bool RemoveChromosome(int nucleusId, int chromosomeId)
+    {
+        return RemoveChromosome(Connection, nucleusId, chromosomeId);
+    }
+
+    private static bool RemoveChromosome(SqliteConnection connection, int nucleusId, int chromosomeId)
+    {
+        bool unlinked = RemoveJunctionRow(connection, "NucleusChromosome",
+            "NucleusId", nucleusId, "ChromosomeId", chromosomeId);
+
+        DeleteIfOrphaned(connection, chromosomeId,
+            "SELECT COUNT(*) FROM NucleusChromosome WHERE ChromosomeId = @Id;",
+            "Chromosome",
+            chromosomeId,
+            () => CascadeOrphanChromosomeChildren(connection, chromosomeId));
+
+        return unlinked;
+    }
+
+    /**
+     * Runs orphan-check deletion on every DnaStrand still linked to a
+     * Chromosome that is about to be deleted, and (via DeleteIfOrphaned's own
+     * cascade callback) on every Gene linked to each of those strands.
+     * Shared by RemoveChromosome and RemoveNucleus so both paths apply the
+     * exact same downward-cascade logic once a Chromosome is confirmed orphaned.
+     */
+    private static void CascadeOrphanChromosomeChildren(SqliteConnection connection, int chromosomeId)
+    {
+        var linkedStrandIds = GetLinkedIds(connection,
+            "SELECT DnaId FROM ChromosomeDna WHERE ChromosomeId = @ParentId;",
+            chromosomeId);
+
+        // This callback runs BEFORE RemoveRow deletes the Chromosome entity
+        // (see DeleteIfOrphaned), so the ChromosomeDna rows for this chromosome
+        // still exist right now. Sever them explicitly first — otherwise each
+        // strand's remaining-link count below would still include the link back
+        // to this (about-to-be-deleted) chromosome, and a strand that's only
+        // used by this one chromosome would be missed as "not orphaned".
+        DeleteAllJunctionRowsForParent(connection, "ChromosomeDna", "ChromosomeId", chromosomeId);
+
+        foreach (var strandId in linkedStrandIds)
+            DeleteIfOrphaned(connection, strandId,
+                "SELECT COUNT(*) FROM ChromosomeDna WHERE DnaId = @Id;",
+                "Dna",
+                strandId,
+                () => CleanupOrphanedGenesForStrand(connection, strandId));
+    }
+
+    /**
+     * Unlinks a DnaStrand from one of its parent Chromosomes. If the strand
+     * becomes orphaned, deletes it and cascades to its Genes.
+     * Returns true if the junction row existed and was removed.
+     */
+    public static bool RemoveDnaStrand(int chromosomeId, int dnaId)
+    {
+        return RemoveDnaStrand(Connection, chromosomeId, dnaId);
+    }
+
+    private static bool RemoveDnaStrand(SqliteConnection connection, int chromosomeId, int dnaId)
+    {
+        bool unlinked = RemoveJunctionRow(connection, "ChromosomeDna",
+            "ChromosomeId", chromosomeId, "DnaId", dnaId);
+
+        DeleteIfOrphaned(connection, dnaId,
+            "SELECT COUNT(*) FROM ChromosomeDna WHERE DnaId = @Id;",
+            "Dna",
+            dnaId,
+            () => CleanupOrphanedGenesForStrand(connection, dnaId));
+
+        return unlinked;
+    }
+
+    /**
+     * Unlinks a Gene from one of its parent DnaStrands. If the Gene becomes
+     * orphaned, deletes it.
+     * Returns true if the junction row existed and was removed.
+     */
+    public static bool RemoveGene(int dnaId, int geneId)
+    {
+        return RemoveGene(Connection, dnaId, geneId);
+    }
+
+    private static bool RemoveGene(SqliteConnection connection, int dnaId, int geneId)
+    {
+        bool unlinked = RemoveJunctionRow(connection, "DnaGene",
+            "DnaId", dnaId, "GeneId", geneId);
+
+        DeleteIfOrphaned(connection, geneId,
+            "SELECT COUNT(*) FROM DnaGene WHERE GeneId = @Id;",
+            "Gene",
+            geneId);
+
+        return unlinked;
+    }
+
+    // -------------------------------------------------------------------------
+    // REMOVE — helpers
+    // -------------------------------------------------------------------------
+
+    /**
+     * Counts remaining junction rows for a child entity. If none remain,
+     * deletes the entity row and optionally executes a cascade callback so
+     * the caller can apply the same orphan logic to the next level down.
+     */
+    private static void DeleteIfOrphaned(
+        SqliteConnection connection,
+        int entityId,
+        string countSql,
+        string tableName,
+        int id,
+        Action cascadeCallback = null)
+    {
+        long remaining = CountRows(connection, countSql, entityId);
+        if (remaining > 0) return;
+
+        cascadeCallback?.Invoke();
+        RemoveRow(connection, tableName, id);
+    }
+
+    /**
+     * Convenience wrapper: collects all gene IDs still linked to a strand and
+     * runs orphan-check deletion on each. Used when a strand is being deleted
+     * as part of a parent-cascade.
+     */
+    private static void CleanupOrphanedGenesForStrand(SqliteConnection connection, int strandId)
+    {
+        var geneIds = GetLinkedIds(connection,
+            "SELECT GeneId FROM DnaGene WHERE DnaId = @ParentId;",
+            strandId);
+
+        // Same reasoning as CascadeOrphanChromosomeChildren: this runs before
+        // the Dna row (and its auto-cascaded DnaGene rows) are actually
+        // deleted, so sever this strand's gene links explicitly first.
+        DeleteAllJunctionRowsForParent(connection, "DnaGene", "DnaId", strandId);
+
+        foreach (var geneId in geneIds)
+            DeleteIfOrphaned(connection, geneId,
+                "SELECT COUNT(*) FROM DnaGene WHERE GeneId = @Id;",
+                "Gene",
+                geneId);
+    }
+
+    /**
+     * Deletes every junction row for a given parent column/value — i.e. all of
+     * one entity's outgoing links to its children. Used right before checking
+     * those children's orphan status, so the check reflects the parent's
+     * imminent deletion rather than its still-live junction rows.
+     * junctionTable/parentColumn are only ever passed as hardcoded literals.
+     */
+    private static void DeleteAllJunctionRowsForParent(
+        SqliteConnection connection, string junctionTable, string parentColumn, int parentId)
+    {
+        using var command = connection.CreateCommand();
+        command.CommandText = $"DELETE FROM {junctionTable} WHERE {parentColumn} = @Id;";
+        command.Parameters.AddWithValue("@Id", parentId);
+        command.ExecuteNonQuery();
+    }
+
+    private static long CountRows(SqliteConnection connection, string sql, int id)
+    {
+        using var command = connection.CreateCommand();
+        command.CommandText = sql;
+        command.Parameters.AddWithValue("@Id", id);
+        return (long)command.ExecuteScalar();
+    }
+
     private static bool RemoveRow(SqliteConnection connection, string tableName, int id)
     {
         using var command = connection.CreateCommand();
         command.CommandText = $"DELETE FROM {tableName} WHERE Id = @Id;";
         command.Parameters.AddWithValue("@Id", id);
-
         return command.ExecuteNonQuery() > 0;
+    }
+
+    /**
+     * Deletes a single junction row identified by two FK columns.
+     * Column and table names are only ever passed as hardcoded literals from
+     * the Remove* methods above — never user input — so string interpolation
+     * here is safe (FK column names cannot be SQL parameters).
+     */
+    private static bool RemoveJunctionRow(
+        SqliteConnection connection,
+        string junctionTable,
+        string col1, int val1,
+        string col2, int val2)
+    {
+        using var command = connection.CreateCommand();
+        command.CommandText =
+            $"DELETE FROM {junctionTable} WHERE {col1} = @Val1 AND {col2} = @Val2;";
+        command.Parameters.AddWithValue("@Val1", val1);
+        command.Parameters.AddWithValue("@Val2", val2);
+        return command.ExecuteNonQuery() > 0;
+    }
+
+    /**
+     * Executes a SELECT that returns a single long scalar. Pass the active
+     * transaction (if any) so this participates in the same atomic operation
+     * as the INSERT that preceded it.
+     */
+    private static long GetLastInsertRowId(SqliteConnection connection, SqliteTransaction transaction = null)
+    {
+        using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = "SELECT last_insert_rowid();";
+        return (long)command.ExecuteScalar();
+    }
+
+    /**
+     * Creates a command bound to the given connection and (possibly null)
+     * transaction. Used by the Add* path so every statement in a cascade
+     * participates in the same transaction as the top-level call.
+     */
+    private static SqliteCommand CreateCommand(SqliteConnection connection, SqliteTransaction transaction)
+    {
+        var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        return command;
+    }
+
+    /**
+     * Returns true if a row with this Id already exists in tableName.
+     * tableName is only ever passed as one of the hardcoded literals in the
+     * Add* methods below, never user input.
+     */
+    private static bool EntityExists(SqliteConnection connection, SqliteTransaction transaction, string tableName,
+        int id)
+    {
+        using var command = CreateCommand(connection, transaction);
+        command.CommandText = $"SELECT COUNT(*) FROM {tableName} WHERE Id = @Id;";
+        command.Parameters.AddWithValue("@Id", id);
+        return (long)command.ExecuteScalar() > 0;
+    }
+
+    /**
+     * Writes a junction row linking parent to child, unless that exact link
+     * already exists (INSERT OR IGNORE against the junction table's composite
+     * primary key) - this is the "link the existing record instead of
+     * duplicating it" dedup behavior for Add*. junctionTable/col1/col2 are
+     * only ever passed as hardcoded literals from the Add* methods below.
+     */
+    private static void LinkIfMissing(
+        SqliteConnection connection, SqliteTransaction transaction,
+        string junctionTable, string col1, int val1, string col2, int val2)
+    {
+        using var command = CreateCommand(connection, transaction);
+        command.CommandText =
+            $"INSERT OR IGNORE INTO {junctionTable} ({col1}, {col2}) VALUES (@Val1, @Val2);";
+        command.Parameters.AddWithValue("@Val1", val1);
+        command.Parameters.AddWithValue("@Val2", val2);
+        command.ExecuteNonQuery();
+    }
+
+    // -------------------------------------------------------------------------
+    // ADD — public entry points
+    // -------------------------------------------------------------------------
+
+    /**
+     * Inserts (or, if nucleus.Id already exists in the DB, reuses) a Nucleus
+     * row. Nucleus.ParentId is a direct column (the Nucleus-to-Nucleus
+     * relationship stays one-to-one, not M2M) — parentId, if given, becomes
+     * that column's value at insert time. It only applies on insert: calling
+     * AddNucleus again for an already-existing Id does not re-parent it
+     * (use UpdateNucleus for that).
+     *
+     * cascade = true additionally adds/links every Chromosome in
+     * nucleus.Chromosomes (and, transitively, their DnaStrands and Genes).
+     * cascade = false writes only this Nucleus row.
+     *
+     * Returns the Nucleus's Id (new or existing). On insert, nucleus.Id and
+     * nucleus.ParentId are updated in place to reflect what was written.
+     */
+    public static int AddNucleus(Nucleus nucleus, int? parentId = null, bool cascade = true)
+    {
+        using var transaction = Connection.BeginTransaction();
+        try
+        {
+            int id = AddNucleus(Connection, transaction, nucleus, parentId, cascade);
+            transaction.Commit();
+            return id;
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    private static int AddNucleus(
+        SqliteConnection connection, SqliteTransaction transaction,
+        Nucleus nucleus, int? parentId, bool cascade)
+    {
+        bool isNew = nucleus.Id <= 0 || !EntityExists(connection, transaction, "Nucleus", nucleus.Id);
+
+        if (isNew)
+        {
+            int resolvedParentId = parentId ?? nucleus.ParentId;
+
+            using var command = CreateCommand(connection, transaction);
+            command.CommandText = "INSERT INTO Nucleus (ParentId, Name) VALUES (@ParentId, @Name);";
+            command.Parameters.AddWithValue("@ParentId",
+                resolvedParentId > 0 ? resolvedParentId : (object)DBNull.Value);
+            command.Parameters.AddWithValue("@Name", (object)nucleus.Name ?? DBNull.Value);
+            command.ExecuteNonQuery();
+
+            nucleus.Id = (int)GetLastInsertRowId(connection, transaction);
+            nucleus.ParentId = resolvedParentId;
+        }
+
+        if (cascade)
+        {
+            foreach (var chromosome in nucleus.Chromosomes ?? new List<Chromosome>())
+                AddChromosome(connection, transaction, chromosome, nucleus.Id, true);
+        }
+
+        return nucleus.Id;
+    }
+
+    /**
+     * Inserts (or reuses, if chromosome.Id already exists) a Chromosome row,
+     * then links it to parentId via NucleusChromosome (skipped if parentId is
+     * null). If the link already exists, it is left as-is (no duplicate).
+     *
+     * cascade = true additionally adds/links every DnaStrand in
+     * chromosome.DnaStrands (and, transitively, their Genes).
+     *
+     * Returns the Chromosome's Id (new or existing).
+     */
+    public static int AddChromosome(Chromosome chromosome, int? parentId = null, bool cascade = true)
+    {
+        using var transaction = Connection.BeginTransaction();
+        try
+        {
+            int id = AddChromosome(Connection, transaction, chromosome, parentId, cascade);
+            transaction.Commit();
+            return id;
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    private static int AddChromosome(
+        SqliteConnection connection, SqliteTransaction transaction,
+        Chromosome chromosome, int? parentId, bool cascade)
+    {
+        bool isNew = chromosome.Id <= 0 || !EntityExists(connection, transaction, "Chromosome", chromosome.Id);
+
+        if (isNew)
+        {
+            using var command = CreateCommand(connection, transaction);
+            command.CommandText = "INSERT INTO Chromosome (Name) VALUES (@Name);";
+            command.Parameters.AddWithValue("@Name", (object)chromosome.Name ?? DBNull.Value);
+            command.ExecuteNonQuery();
+
+            chromosome.Id = (int)GetLastInsertRowId(connection, transaction);
+        }
+
+        if (parentId.HasValue && parentId.Value > 0)
+            LinkIfMissing(connection, transaction, "NucleusChromosome",
+                "NucleusId", parentId.Value, "ChromosomeId", chromosome.Id);
+
+        if (cascade)
+        {
+            foreach (var strand in chromosome.DnaStrands ?? new List<DnaStrand>())
+                AddDnaStrand(connection, transaction, strand, chromosome.Id, true);
+        }
+
+        return chromosome.Id;
+    }
+
+    /**
+     * Inserts (or reuses, if strand.Id already exists) a DnaStrand row, then
+     * links it to parentId via ChromosomeDna (skipped if parentId is null).
+     *
+     * On insert, strand.Promoter.Target and .PromoterText are written to the
+     * EnumType and ComparisonType columns respectively (Target's
+     * AssemblyQualifiedName, so it round-trips through the Type.GetType(...)
+     * call on the read path). Ordinal has no corresponding Promoter property
+     * (a pre-existing model/schema gap - see the Get-path notes) so it is
+     * written as 0 on insert and left untouched on update rather than
+     * fabricated.
+     *
+     * cascade = true additionally adds/links every Gene in strand.Genes.
+     *
+     * Returns the DnaStrand's Id (new or existing).
+     */
+    public static int AddDnaStrand(DnaStrand strand, int? parentId = null, bool cascade = true)
+    {
+        using var transaction = Connection.BeginTransaction();
+        try
+        {
+            int id = AddDnaStrand(Connection, transaction, strand, parentId, cascade);
+            transaction.Commit();
+            return id;
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    private static int AddDnaStrand(
+        SqliteConnection connection, SqliteTransaction transaction,
+        DnaStrand strand, int? parentId, bool cascade)
+    {
+        bool isNew = strand.Id <= 0 || !EntityExists(connection, transaction, "Dna", strand.Id);
+
+        if (isNew)
+        {
+            string enumTypeName = strand.Promoter?.Target?.GetType().AssemblyQualifiedName;
+
+            using var command = CreateCommand(connection, transaction);
+            command.CommandText = """
+                                  INSERT INTO Dna (Name, EnumType, Ordinal, ComparisonType)
+                                  VALUES (@Name, @EnumType, @Ordinal, @ComparisonType);
+                                  """;
+            command.Parameters.AddWithValue("@Name", (object)strand.Name ?? DBNull.Value);
+            command.Parameters.AddWithValue("@EnumType", (object)enumTypeName ?? DBNull.Value);
+            command.Parameters.AddWithValue("@Ordinal", 0);
+            command.Parameters.AddWithValue("@ComparisonType", (object)strand.Promoter?.PromoterText ?? DBNull.Value);
+            command.ExecuteNonQuery();
+
+            strand.Id = (int)GetLastInsertRowId(connection, transaction);
+        }
+
+        if (parentId.HasValue && parentId.Value > 0)
+            LinkIfMissing(connection, transaction, "ChromosomeDna",
+                "ChromosomeId", parentId.Value, "DnaId", strand.Id);
+
+        if (cascade)
+        {
+            foreach (var gene in strand.Genes ?? new List<Gene>())
+                AddGene(connection, transaction, gene, strand.Id, true);
+        }
+
+        return strand.Id;
+    }
+
+    /**
+     * Inserts (or reuses, if gene.Id already exists) a Gene row, then links
+     * it to parentId via DnaGene (skipped if parentId is null).
+     * cascade has no effect — Gene is a leaf with no children in the
+     * hierarchy — it's accepted only for signature uniformity with the other
+     * Add* methods.
+     *
+     * Returns the Gene's Id (new or existing).
+     */
+    public static int AddGene(Gene gene, int? parentId = null, bool cascade = true)
+    {
+        using var transaction = Connection.BeginTransaction();
+        try
+        {
+            int id = AddGene(Connection, transaction, gene, parentId, cascade);
+            transaction.Commit();
+            return id;
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    private static int AddGene(
+        SqliteConnection connection, SqliteTransaction transaction,
+        Gene gene, int? parentId, bool cascade)
+    {
+        bool isNew = gene.Id <= 0 || !EntityExists(connection, transaction, "Gene", gene.Id);
+
+        if (isNew)
+        {
+            using var command = CreateCommand(connection, transaction);
+            command.CommandText = "INSERT INTO Gene (Protein) VALUES (@Protein);";
+            command.Parameters.AddWithValue("@Protein", (object)gene.ProteinName ?? DBNull.Value);
+            command.ExecuteNonQuery();
+
+            gene.Id = (int)GetLastInsertRowId(connection, transaction);
+        }
+
+        if (parentId.HasValue && parentId.Value > 0)
+            LinkIfMissing(connection, transaction, "DnaGene",
+                "DnaId", parentId.Value, "GeneId", gene.Id);
+
+        return gene.Id;
+    }
+
+    // -------------------------------------------------------------------------
+    // UPDATE — in-place edits by Id
+    // -------------------------------------------------------------------------
+    // Update* methods write directly to the entity's own row, so a shared
+    // child (referenced by multiple parents) is changed for every parent that
+    // references it — there's only ever one row. None of these touch junction
+    // rows; relationships are left exactly as they were unless a caller uses
+    // Add*/Remove* to change them explicitly.
+
+    /**
+     * Updates a Nucleus's Name and ParentId columns by Id. Returns true if a
+     * row with that Id existed and was updated.
+     */
+    public static bool UpdateNucleus(Nucleus nucleus)
+    {
+        return UpdateNucleus(Connection, null, nucleus, nucleus.ParentId);
+    }
+
+    private static bool UpdateNucleus(
+        SqliteConnection connection, SqliteTransaction transaction, Nucleus nucleus, int resolvedParentId)
+    {
+        using var command = CreateCommand(connection, transaction);
+        command.CommandText = "UPDATE Nucleus SET ParentId = @ParentId, Name = @Name WHERE Id = @Id;";
+        command.Parameters.AddWithValue("@ParentId", resolvedParentId > 0 ? resolvedParentId : (object)DBNull.Value);
+        command.Parameters.AddWithValue("@Name", (object)nucleus.Name ?? DBNull.Value);
+        command.Parameters.AddWithValue("@Id", nucleus.Id);
+        return command.ExecuteNonQuery() > 0;
+    }
+
+    /**
+     * Updates a Chromosome's Name column by Id. Returns true if a row with
+     * that Id existed and was updated.
+     */
+    public static bool UpdateChromosome(Chromosome chromosome)
+    {
+        return UpdateChromosome(Connection, null, chromosome);
+    }
+
+    private static bool UpdateChromosome(
+        SqliteConnection connection, SqliteTransaction transaction, Chromosome chromosome)
+    {
+        using var command = CreateCommand(connection, transaction);
+        command.CommandText = "UPDATE Chromosome SET Name = @Name WHERE Id = @Id;";
+        command.Parameters.AddWithValue("@Name", (object)chromosome.Name ?? DBNull.Value);
+        command.Parameters.AddWithValue("@Id", chromosome.Id);
+        return command.ExecuteNonQuery() > 0;
+    }
+
+    /**
+     * Updates a DnaStrand's Name, EnumType, and ComparisonType columns by Id
+     * (from Name, Promoter.Target, and Promoter.PromoterText respectively).
+     * Ordinal is intentionally left untouched — see the note on AddDnaStrand.
+     * Returns true if a row with that Id existed and was updated.
+     */
+    public static bool UpdateDnaStrand(DnaStrand strand)
+    {
+        return UpdateDnaStrand(Connection, null, strand);
+    }
+
+    private static bool UpdateDnaStrand(
+        SqliteConnection connection, SqliteTransaction transaction, DnaStrand strand)
+    {
+        string enumTypeName = strand.Promoter?.Target?.GetType().AssemblyQualifiedName;
+
+        using var command = CreateCommand(connection, transaction);
+        command.CommandText =
+            "UPDATE Dna SET Name = @Name, EnumType = @EnumType, ComparisonType = @ComparisonType WHERE Id = @Id;";
+        command.Parameters.AddWithValue("@Name", (object)strand.Name ?? DBNull.Value);
+        command.Parameters.AddWithValue("@EnumType", (object)enumTypeName ?? DBNull.Value);
+        command.Parameters.AddWithValue("@ComparisonType", (object)strand.Promoter?.PromoterText ?? DBNull.Value);
+        command.Parameters.AddWithValue("@Id", strand.Id);
+        return command.ExecuteNonQuery() > 0;
+    }
+
+    /**
+     * Updates a Gene's Protein column (from ProteinName) by Id. Returns true
+     * if a row with that Id existed and was updated.
+     */
+    public static bool UpdateGene(Gene gene)
+    {
+        return UpdateGene(Connection, null, gene);
+    }
+
+    private static bool UpdateGene(
+        SqliteConnection connection, SqliteTransaction transaction, Gene gene)
+    {
+        using var command = CreateCommand(connection, transaction);
+        command.CommandText = "UPDATE Gene SET Protein = @Protein WHERE Id = @Id;";
+        command.Parameters.AddWithValue("@Protein", (object)gene.ProteinName ?? DBNull.Value);
+        command.Parameters.AddWithValue("@Id", gene.Id);
+        return command.ExecuteNonQuery() > 0;
+    }
+
+    // -------------------------------------------------------------------------
+    // SYNC — upsert (update-or-insert) + link
+    // -------------------------------------------------------------------------
+    // Sync* is the "align the DB to this object graph" entry point. For each
+    // element it either UPDATEs the existing row (Id > 0 and present) or
+    // INSERTs a new one, then ensures the parent-child junction link exists.
+    // With cascade = true it walks the whole attached subtree doing the same.
+    //
+    // IMPORTANT — Sync is additive with respect to relationships. It creates
+    // and updates, but never unlinks: a child that exists in the DB but is no
+    // longer present in the object's collection keeps its junction row. If you
+    // remove a Chromosome from nucleus.Chromosomes and Sync, that link
+    // survives - call Remove*(parentId, childId) explicitly to drop it. This
+    // keeps Sync non-destructive; a partially-populated graph (e.g. one built
+    // with cascade = false reads) can be synced without silently deleting the
+    // relationships it simply doesn't know about.
+
+    /**
+     * Upserts a Nucleus and, with cascade = true, its whole attached subtree.
+     * parentId (or, if null, nucleus.ParentId) becomes the Nucleus's ParentId
+     * column - unlike the other levels this is a direct column, not a
+     * junction, since Nucleus-to-Nucleus stays one-to-one.
+     * Returns the Nucleus's Id (existing or newly assigned).
+     */
+    public static int SyncNucleus(Nucleus nucleus, int? parentId = null, bool cascade = true)
+    {
+        using var transaction = Connection.BeginTransaction();
+        try
+        {
+            int id = SyncNucleus(Connection, transaction, nucleus, parentId, cascade);
+            transaction.Commit();
+            return id;
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    private static int SyncNucleus(
+        SqliteConnection connection, SqliteTransaction transaction,
+        Nucleus nucleus, int? parentId, bool cascade)
+    {
+        int resolvedParentId = parentId ?? nucleus.ParentId;
+        bool exists = nucleus.Id > 0 && EntityExists(connection, transaction, "Nucleus", nucleus.Id);
+
+        if (exists)
+        {
+            UpdateNucleus(connection, transaction, nucleus, resolvedParentId);
+            nucleus.ParentId = resolvedParentId;
+        }
+        else
+        {
+            using var command = CreateCommand(connection, transaction);
+            command.CommandText = "INSERT INTO Nucleus (ParentId, Name) VALUES (@ParentId, @Name);";
+            command.Parameters.AddWithValue("@ParentId",
+                resolvedParentId > 0 ? resolvedParentId : (object)DBNull.Value);
+            command.Parameters.AddWithValue("@Name", (object)nucleus.Name ?? DBNull.Value);
+            command.ExecuteNonQuery();
+
+            nucleus.Id = (int)GetLastInsertRowId(connection, transaction);
+            nucleus.ParentId = resolvedParentId;
+        }
+
+        if (cascade)
+        {
+            foreach (var chromosome in nucleus.Chromosomes ?? new List<Chromosome>())
+                SyncChromosome(connection, transaction, chromosome, nucleus.Id, true);
+        }
+
+        return nucleus.Id;
+    }
+
+    /**
+     * Upserts a Chromosome, links it to parentId via NucleusChromosome (if
+     * parentId is given), and with cascade = true syncs its DnaStrands and
+     * their Genes. Returns the Chromosome's Id.
+     */
+    public static int SyncChromosome(Chromosome chromosome, int? parentId = null, bool cascade = true)
+    {
+        using var transaction = Connection.BeginTransaction();
+        try
+        {
+            int id = SyncChromosome(Connection, transaction, chromosome, parentId, cascade);
+            transaction.Commit();
+            return id;
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    private static int SyncChromosome(
+        SqliteConnection connection, SqliteTransaction transaction,
+        Chromosome chromosome, int? parentId, bool cascade)
+    {
+        bool exists = chromosome.Id > 0 && EntityExists(connection, transaction, "Chromosome", chromosome.Id);
+
+        if (exists)
+        {
+            UpdateChromosome(connection, transaction, chromosome);
+        }
+        else
+        {
+            using var command = CreateCommand(connection, transaction);
+            command.CommandText = "INSERT INTO Chromosome (Name) VALUES (@Name);";
+            command.Parameters.AddWithValue("@Name", (object)chromosome.Name ?? DBNull.Value);
+            command.ExecuteNonQuery();
+
+            chromosome.Id = (int)GetLastInsertRowId(connection, transaction);
+        }
+
+        if (parentId.HasValue && parentId.Value > 0)
+            LinkIfMissing(connection, transaction, "NucleusChromosome",
+                "NucleusId", parentId.Value, "ChromosomeId", chromosome.Id);
+
+        if (cascade)
+        {
+            foreach (var strand in chromosome.DnaStrands ?? new List<DnaStrand>())
+                SyncDnaStrand(connection, transaction, strand, chromosome.Id, true);
+        }
+
+        return chromosome.Id;
+    }
+
+    /**
+     * Upserts a DnaStrand, links it to parentId via ChromosomeDna (if
+     * parentId is given), and with cascade = true syncs its Genes.
+     * Ordinal is left untouched on both paths - see the AddDnaStrand note.
+     * Returns the DnaStrand's Id.
+     */
+    public static int SyncDnaStrand(DnaStrand strand, int? parentId = null, bool cascade = true)
+    {
+        using var transaction = Connection.BeginTransaction();
+        try
+        {
+            int id = SyncDnaStrand(Connection, transaction, strand, parentId, cascade);
+            transaction.Commit();
+            return id;
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    private static int SyncDnaStrand(
+        SqliteConnection connection, SqliteTransaction transaction,
+        DnaStrand strand, int? parentId, bool cascade)
+    {
+        bool exists = strand.Id > 0 && EntityExists(connection, transaction, "Dna", strand.Id);
+
+        if (exists)
+        {
+            UpdateDnaStrand(connection, transaction, strand);
+        }
+        else
+        {
+            string enumTypeName = strand.Promoter?.Target?.GetType().AssemblyQualifiedName;
+
+            using var command = CreateCommand(connection, transaction);
+            command.CommandText = """
+                                  INSERT INTO Dna (Name, EnumType, Ordinal, ComparisonType)
+                                  VALUES (@Name, @EnumType, @Ordinal, @ComparisonType);
+                                  """;
+            command.Parameters.AddWithValue("@Name", (object)strand.Name ?? DBNull.Value);
+            command.Parameters.AddWithValue("@EnumType", (object)enumTypeName ?? DBNull.Value);
+            command.Parameters.AddWithValue("@Ordinal", 0);
+            command.Parameters.AddWithValue("@ComparisonType",
+                (object)strand.Promoter?.PromoterText ?? DBNull.Value);
+            command.ExecuteNonQuery();
+
+            strand.Id = (int)GetLastInsertRowId(connection, transaction);
+        }
+
+        if (parentId.HasValue && parentId.Value > 0)
+            LinkIfMissing(connection, transaction, "ChromosomeDna",
+                "ChromosomeId", parentId.Value, "DnaId", strand.Id);
+
+        if (cascade)
+        {
+            foreach (var gene in strand.Genes ?? new List<Gene>())
+                SyncGene(connection, transaction, gene, strand.Id, true);
+        }
+
+        return strand.Id;
+    }
+
+    /**
+     * Upserts a Gene and links it to parentId via DnaGene (if parentId is
+     * given). cascade has no effect - Gene is a leaf - and is accepted only
+     * for signature uniformity. Returns the Gene's Id.
+     */
+    public static int SyncGene(Gene gene, int? parentId = null, bool cascade = true)
+    {
+        using var transaction = Connection.BeginTransaction();
+        try
+        {
+            int id = SyncGene(Connection, transaction, gene, parentId, cascade);
+            transaction.Commit();
+            return id;
+        }
+        catch
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
+
+    private static int SyncGene(
+        SqliteConnection connection, SqliteTransaction transaction,
+        Gene gene, int? parentId, bool cascade)
+    {
+        bool exists = gene.Id > 0 && EntityExists(connection, transaction, "Gene", gene.Id);
+
+        if (exists)
+        {
+            UpdateGene(connection, transaction, gene);
+        }
+        else
+        {
+            using var command = CreateCommand(connection, transaction);
+            command.CommandText = "INSERT INTO Gene (Protein) VALUES (@Protein);";
+            command.Parameters.AddWithValue("@Protein", (object)gene.ProteinName ?? DBNull.Value);
+            command.ExecuteNonQuery();
+
+            gene.Id = (int)GetLastInsertRowId(connection, transaction);
+        }
+
+        if (parentId.HasValue && parentId.Value > 0)
+            LinkIfMissing(connection, transaction, "DnaGene",
+                "DnaId", parentId.Value, "GeneId", gene.Id);
+
+        return gene.Id;
     }
 }

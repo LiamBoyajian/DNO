@@ -11,17 +11,55 @@ public partial class NucleusDisplay : PanelContainer
     [Export] protected Texture2D ChromosomeTexture;
     [Export] protected Texture2D DnaTexture;
     protected ButtonGroup Buttons;
+
+    public TextureButton ChromosomeButton { get; private set; }
+
+    public TextureButton DnaStrandButton { get; private set; }
+
+
     public Nucleus SelectedNucleus { get; private set; } = null;
-    public Chromosome SelectedChromosome { get; private set; } = null;
-    public DnaStrand SelectedDna { get; private set; } = null;
-    public System.Collections.Generic.Dictionary<TextureButton, Chromosome> ChromosomeDictionary = new();
-    public System.Collections.Generic.Dictionary<TextureButton, DnaStrand> DnaStrandDictionary = new();
+
+    public Chromosome SelectedChromosome
+    {
+        get
+        {
+            if (ChromosomeButton == null) return null;
+            ChromosomeDictionary.TryGetValue(ChromosomeButton, out Chromosome chromosome);
+            return chromosome;
+        }
+        set
+        {
+            if (ChromosomeButton == null) return;
+            if (!ChromosomeDictionary.ContainsKey(ChromosomeButton)) return;
+            ChromosomeDictionary[ChromosomeButton] = value;
+        }
+    }
+
+    public DnaStrand SelectedDna
+    {
+        get
+        {
+            if (DnaStrandButton == null) return null;
+            DnaStrandDictionary.TryGetValue(DnaStrandButton, out DnaStrand dnaStrand);
+            return dnaStrand;
+        }
+        set
+        {
+            if (DnaStrandButton == null) return;
+            if (!DnaStrandDictionary.ContainsKey(DnaStrandButton)) return;
+            DnaStrandDictionary[DnaStrandButton] = value;
+        }
+    }
+
+
+    protected System.Collections.Generic.Dictionary<TextureButton, Chromosome> ChromosomeDictionary = new();
+    protected System.Collections.Generic.Dictionary<TextureButton, DnaStrand> DnaStrandDictionary = new();
 
     [Export] public Container ElementContainer;
 
 
     [Signal]
-    public delegate void DnaStrandSelectedEventHandler();
+    public delegate void UpdatedEventHandler();
 
     public override void _Ready()
     {
@@ -45,29 +83,41 @@ public partial class NucleusDisplay : PanelContainer
         SelectedNucleus = nucleus;
         foreach (var chromosome in nucleus.Chromosomes)
         {
-            var textureButton = new TextureButton();
-            textureButton.ToggleMode = true;
-            textureButton.TextureNormal = ChromosomeTexture;
-            textureButton.ButtonGroup = Buttons;
-            textureButton.Name = chromosome.Id + chromosome.Name;
-            ChromosomeDictionary.Add(textureButton, chromosome);
-            ElementContainer.AddChild(textureButton);
+            InitializeChromosome(chromosome);
         }
     }
 
+
     public void Populate(Chromosome chromosome)
     {
-        ClearAllChildren();
+        ChildrenVisibility(false);
+        DnaStrandDictionary.Clear();
         foreach (var dnaStrand in chromosome.DnaStrands)
         {
-            var textureButton = new TextureButton();
-            textureButton.ToggleMode = true;
-            textureButton.TextureNormal = DnaTexture;
-            textureButton.ButtonGroup = Buttons;
-            textureButton.Name = dnaStrand.Id + dnaStrand.Name;
-            DnaStrandDictionary.Add(textureButton, dnaStrand);
-            ElementContainer.AddChild(textureButton);
+            InitializeDna(dnaStrand);
         }
+    }
+
+    protected void InitializeDna(DnaStrand dnaStrand)
+    {
+        var textureButton = new TextureButton();
+        textureButton.ToggleMode = true;
+        textureButton.TextureNormal = DnaTexture;
+        textureButton.ButtonGroup = Buttons;
+        textureButton.Name = dnaStrand.Id + dnaStrand.Name;
+        DnaStrandDictionary.Add(textureButton, dnaStrand);
+        ElementContainer.AddChild(textureButton);
+    }
+
+    protected void InitializeChromosome(Chromosome chromosome)
+    {
+        var textureButton = new TextureButton();
+        textureButton.ToggleMode = true;
+        textureButton.TextureNormal = ChromosomeTexture;
+        textureButton.ButtonGroup = Buttons;
+        textureButton.Name = chromosome.Id + chromosome.Name;
+        ChromosomeDictionary.Add(textureButton, chromosome);
+        ElementContainer.AddChild(textureButton);
     }
 
     private void PressHandler(BaseButton button)
@@ -75,53 +125,146 @@ public partial class NucleusDisplay : PanelContainer
         if (button is not TextureButton textureButton) return;
         if (ChromosomeDictionary.TryGetValue(textureButton, out Chromosome chromosome))
         {
-            SelectedChromosome = chromosome;
-            Populate(SelectedChromosome);
+            //SelectedChromosome = chromosome;
+            Populate(chromosome);
         }
         else if (DnaStrandDictionary.TryGetValue(textureButton, out DnaStrand dnStrand))
         {
-            SelectedDna = dnStrand;
-            EmitSignal(nameof(DnaStrandSelected));
+            //SelectedDna = dnStrand;
+            button.SelfModulate = new Color(5f, 5f, 5f);
         }
 
-        button.SelfModulate = new Color(5f, 5f, 5f);
-    }
-
-    protected void ClearAllChildren()
-    {
-        foreach (var child in GetChildren())
-        {
-            child.QueueFree();
-        }
+        EmitSignal(nameof(Updated));
     }
 
     protected void Initialize()
     {
         SelectedNucleus = null;
-        SelectedChromosome = null;
-        SelectedDna = null;
-        ChromosomeDictionary.Clear();
-        DnaStrandDictionary.Clear();
-        ClearAllChildren();
+        Clear();
     }
 
     public void CloseOpenedElement(bool ifNucleusClear = false)
     {
-        if (SelectedDna != null)
+        if (DnaStrandButton != null)
         {
-            if (Buttons.GetPressedButton() is TextureButton textureButton)
-                textureButton.SelfModulate = new Color(1f, 1f, 1f);
-
-            SelectedDna = null;
-            EmitSignal(nameof(DnaStrandSelected));
+            DnaStrandButton.SelfModulate = new Color(1.0f, 1.0f, 1.0f);
+            DnaStrandButton = null;
+            GD.Print("tests");
         }
-        else if (SelectedChromosome != null)
+        else if (ChromosomeButton != null)
         {
-            SelectedChromosome = null;
+            ChromosomeButton = null;
             DnaStrandDictionary.Clear();
-            Populate(SelectedNucleus);
+            ClearChildren(true);
+            ChildrenVisibility(true);
         }
         else if (SelectedNucleus != null && ifNucleusClear)
+        {
+            Initialize();
+        }
+
+        EmitSignal(nameof(Updated));
+    }
+
+    public void Clear()
+    {
+        foreach (var child in ElementContainer.GetChildren())
+        {
+            child.QueueFree();
+        }
+
+        DnaStrandDictionary.Clear();
+        ChromosomeDictionary.Clear();
+        ChromosomeButton = null;
+        DnaStrandButton = null;
+    }
+
+    /**
+     * Unsafe, dictionary may still have references
+     */
+    private void ClearChildren(bool ignoreHidden = false)
+    {
+        foreach (var child in ElementContainer.GetChildren())
+        {
+            if (child.Get("visible").AsBool())
+                child.QueueFree();
+        }
+    }
+
+    private void ChildrenVisibility(bool show = false)
+    {
+        foreach (var child in ElementContainer.GetChildren())
+        {
+            if (child is not TextureButton textureButton) continue;
+            if (show)
+            {
+                textureButton.Show();
+            }
+            else
+            {
+                textureButton.Hide();
+            }
+        }
+    }
+
+    public void CreateElement()
+    {
+        if (DnaStrandButton != null) return;
+        if (ChromosomeButton != null)
+        {
+            var dnaStrand = new DnaStrand();
+            SelectedChromosome.DnaStrands.Add(dnaStrand);
+
+            InitializeDna(dnaStrand);
+        }
+        else if (SelectedNucleus != null)
+        {
+            var chromosome = new Chromosome();
+            SelectedNucleus.Chromosomes.Add(chromosome);
+
+            InitializeChromosome(chromosome);
+        }
+        else if (SelectedNucleus == null)
+        {
+            var nucleus = new Nucleus();
+            nucleus.Name = "Nucleus draft";
+            Populate(nucleus);
+        }
+
+        EmitSignal(nameof(Updated));
+    }
+
+    public void SetNameCurrentElement(string name = "unnamed")
+    {
+        if (DnaStrandButton != null)
+        {
+            SelectedDna.Name = name;
+        }
+        else if (ChromosomeButton != null)
+        {
+            SelectedChromosome.Name = name;
+        }
+        else if (SelectedNucleus != null)
+        {
+            SelectedNucleus.Name = name;
+        }
+    }
+
+    public void RemoveSelectedElement()
+    {
+        if (DnaStrandButton != null)
+        {
+            var dnaButton = DnaStrandButton;
+            DnaStrandDictionary.Remove(DnaStrandButton);
+            dnaButton.QueueFree();
+        }
+        else if (ChromosomeButton != null)
+        {
+            var chromosomeButton = ChromosomeButton;
+            ChromosomeDictionary.Remove(ChromosomeButton);
+            chromosomeButton.QueueFree();
+        }
+        else if (SelectedNucleus != null)
         {
             Initialize();
         }

@@ -91,7 +91,6 @@ public class DnaModelTests
         var chromosome = new Chromosome();
 
         Assert.AreEqual(0, chromosome.Id);
-        Assert.AreEqual(0, chromosome.ParentId);
         Assert.IsNull(chromosome.Name);
         Assert.IsNotNull(chromosome.DnaStrands);
         Assert.AreEqual(0, chromosome.DnaStrands.Count);
@@ -112,11 +111,10 @@ public class DnaModelTests
     [TestMethod]
     public void TestChromosomeSetProperties()
     {
-        var chromosome = new Chromosome { Id = 4, ParentId = 2, Name = "ChromosomeA" };
+        var chromosome = new Chromosome { Id = 4, Name = "ChromosomeA" };
         chromosome.DnaStrands.Add(new DnaStrand());
 
         Assert.AreEqual(4, chromosome.Id);
-        Assert.AreEqual(2, chromosome.ParentId);
         Assert.AreEqual("ChromosomeA", chromosome.Name);
         Assert.AreEqual(1, chromosome.DnaStrands.Count);
     }

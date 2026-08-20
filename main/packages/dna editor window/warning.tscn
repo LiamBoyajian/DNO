@@ -1,0 +1,75 @@
+[gd_scene format=3 uid="uid://behq3lufyv7vy"]
+
+[ext_resource type="Theme" uid="uid://dqxt6qdo5ngjb" path="res://main/packages/dna editor window/Dna_Editor_Window.tres" id="1_f5knb"]
+[ext_resource type="Script" uid="uid://eu1nvfoyj7oc" path="res://main/packages/dna editor window/WarningConfirmation.cs" id="2_xrjdk"]
+
+[sub_resource type="SystemFont" id="SystemFont_pqf5a"]
+font_names = PackedStringArray("Georgia")
+subpixel_positioning = 0
+keep_rounding_remainders = false
+
+[sub_resource type="LabelSettings" id="LabelSettings_xrjdk"]
+font = SubResource("SystemFont_pqf5a")
+font_size = 10
+font_color = Color(0, 0, 0, 1)
+
+[node name="Warning" type="Window" unique_id=799771216 node_paths=PackedStringArray("ConfirmButton", "CancelButton", "SubheadingDetails", "WarningDetails")]
+transparent_bg = true
+oversampling_override = 1.0
+title = "Confirm deletion?"
+initial_position = 1
+size = Vector2i(200, 100)
+unresizable = true
+transparent = true
+popup_window = true
+min_size = Vector2i(90, 90)
+content_scale_size = Vector2i(300, 300)
+theme = ExtResource("1_f5knb")
+theme_type_variation = &"WarningWindow"
+script = ExtResource("2_xrjdk")
+ConfirmButton = NodePath("MarginContainer/VBoxContainer/HBoxContainer/Confirm")
+CancelButton = NodePath("MarginContainer/VBoxContainer/HBoxContainer/Cancel")
+SubheadingDetails = NodePath("MarginContainer/VBoxContainer/subheader")
+WarningDetails = NodePath("MarginContainer/VBoxContainer/warning_details")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=411396920]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/margin_top = 18
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1560318513]
+layout_mode = 2
+
+[node name="subheader" type="Label" parent="MarginContainer/VBoxContainer" unique_id=338151379]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_xrjdk")
+autowrap_mode = 2
+
+[node name="warning_details" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1763609409]
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_xrjdk")
+autowrap_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=5632518]
+layout_mode = 2
+
+[node name="Cancel" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=175893524]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"CancelButton"
+text = "Cancel"
+
+[node name="Confirm" type="Button" parent="MarginContainer/VBoxContainer/HBoxContainer" unique_id=1012335287]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_type_variation = &"ConfirmButton"
+text = "Confirm"

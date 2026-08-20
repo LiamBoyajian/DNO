@@ -68,8 +68,7 @@ public partial class Indexer : PanelContainer
     public void ChangeIndex(int change)
     {
         if (change + Index >= MaxSize || change + Index < 0) return;
-        Index += change; //technically redundant
-        _buttons[Index].ButtonPressed = true; //Will reach PressedHandler
+        _buttons[Index + change].ButtonPressed = true; //Will reach PressedHandler
     }
 
     private void PressedHandler(BaseButton button)
@@ -77,7 +76,17 @@ public partial class Indexer : PanelContainer
         if (button == null) return;
         var index = _buttons.IndexOf(button);
         if (index < 0) return;
-        Index = index;
+        if (Index == index)
+        {
+            GD.Print("some bs");
+            Index = -1;
+            button.ButtonPressed = false;
+        }
+        else
+        {
+            Index = index;
+        }
+
         EmitSignal(nameof(IndexChanged), Index);
     }
 
@@ -90,5 +99,10 @@ public partial class Indexer : PanelContainer
 
         _buttons.Clear();
         MaxSize = 0;
+    }
+
+    public void Deselect()
+    {
+        Index = -1;
     }
 }

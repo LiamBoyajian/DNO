@@ -12,18 +12,6 @@ public partial class DnaStrandDisplay : Container
 {
     public DnaStrand SelectedDna { get; private set; }
 
-    public void DisplayDna(DnaStrand value)
-    {
-        GD.Print(value?.ToString());
-        SelectedDna = value;
-        if (value == null)
-        {
-            GeneEditor.CloseGenes();
-            return;
-        }
-
-        GeneEditor.DisplayGenes(value.Genes);
-    }
 
     [Export] public OptionButton ComparisonSymbolDropdown;
     [Export] public OptionButton EnumDropdown;
@@ -57,5 +45,64 @@ public partial class DnaStrandDisplay : Container
         {
             ComparisonSymbolDropdown.AddItem(comparisonType);
         }
+
+        if (!GeneEditor.Indexer.ValidIndex) Hide();
+    }
+
+    public void DisplayDna(DnaStrand value)
+    {
+        Show();
+        SelectedDna = value;
+        if (value == null)
+        {
+            GeneEditor.Clear();
+            return;
+        }
+
+        GeneEditor.DisplayGenes(value.Genes);
+    }
+
+    public void Clear()
+    {
+        SelectedDna = null;
+        ComparisonSymbolDropdown.Selected = -1;
+        EnumDropdown.Selected = -1;
+        DnaValueText.Text = null;
+        GeneEditor.Clear();
+        Hide();
+    }
+
+    /**
+     * -1 if no selection
+     */
+    public int IndexOfSelectedGene()
+    {
+        return GeneEditor.Indexer.Index;
+    }
+
+    public bool RemoveSelectedGene()
+    {
+        if (!GeneEditor.Indexer.ValidIndex) return false;
+        var selectedGeneIndex = GeneEditor.Indexer.Index;
+        var id = SelectedDna.Genes[selectedGeneIndex].Id;
+
+        SelectedDna.Genes.RemoveAt(selectedGeneIndex);
+        GeneEditor.Indexer.Deselect();
+
+        return DnaDb.Instance.RemoveGene(SelectedDna.Id, id);
+        ;
+    }
+
+    public bool HasSelectedGene()
+    {
+        return GeneEditor.Indexer.ValidIndex;
+    }
+
+    public void CreateGene()
+    {
+        var gene = new Gene();
+        SelectedDna.Genes.Add(gene);
+
+        GeneEditor.DisplayGenes(SelectedDna.Genes);
     }
 }

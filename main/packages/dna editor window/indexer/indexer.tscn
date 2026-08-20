@@ -5,13 +5,14 @@
 [ext_resource type="Texture2D" uid="uid://dapyidnr5vvdy" path="res://main/packages/dna editor window/resources/dna_editor_window_indexer_upbutton.ase_layer_tex" id="3_1via6"]
 [ext_resource type="Texture2D" uid="uid://d3dxm3mjwqovh" path="res://main/packages/dna editor window/resources/dna_editor_window_indexer_downbutton.ase_layer_tex" id="4_yge7k"]
 
-[node name="Indexer" type="PanelContainer" unique_id=1471146507 node_paths=PackedStringArray("_up", "_down")]
+[node name="Indexer" type="PanelContainer" unique_id=1471146507 node_paths=PackedStringArray("_up", "_down", "_elementHolder")]
 custom_minimum_size = Vector2(15, 15)
 size_flags_horizontal = 0
 size_flags_vertical = 0
 script = ExtResource("1_hwmvn")
 _up = NodePath("VBoxContainer/Up")
 _down = NodePath("VBoxContainer/Down")
+_elementHolder = NodePath("VBoxContainer/ElementHolder")
 _dotScene = ExtResource("2_8v7gh")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1424607174]
@@ -19,6 +20,8 @@ layout_mode = 2
 
 [node name="Up" type="TextureButton" parent="VBoxContainer" unique_id=536247342]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 texture_normal = ExtResource("3_1via6")
 
 [node name="ElementHolder" type="VBoxContainer" parent="VBoxContainer" unique_id=1143674262]
@@ -26,4 +29,6 @@ layout_mode = 2
 
 [node name="Down" type="TextureButton" parent="VBoxContainer" unique_id=799678090]
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
 texture_normal = ExtResource("4_yge7k")
