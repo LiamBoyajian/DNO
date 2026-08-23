@@ -25,7 +25,16 @@ public partial class DnaEditorWindow : Window
         AddChild(WarnWindow);
         if (WarnWindow == null) throw new Exception("WarnWindow scene is invalid");
 
-        InfobarDisplay.BackPressed += () => NucleusDisplay.CloseOpenedElement(true);
+        InfobarDisplay.BackPressed += () =>
+        {
+            if (NucleusDisplay.SelectedNucleus == null)
+            {
+                Hide();
+                QueueFree();
+            }
+
+            NucleusDisplay.CloseOpenedElement(true);
+        };
         InfobarDisplay.IdChanged += PopulateItemList;
 
         InfobarDisplay.AddPressed += AddSelectedElement;

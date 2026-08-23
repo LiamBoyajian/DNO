@@ -5,6 +5,9 @@
 [ext_resource type="Script" uid="uid://q70ssyayrj2k" path="res://main/packages/scene/SceneTransitionTemplate.cs" id="2_phde1"]
 [ext_resource type="SpriteFrames" uid="uid://dd7j0d76je8p2" path="res://main/scenes/Lab_Main/centrifuge.aseprite" id="4_0wy4p"]
 [ext_resource type="PackedScene" uid="uid://b0vsxvg7ui4pt" path="res://main/packages/computer/computer.tscn" id="5_0gdys"]
+[ext_resource type="SpriteFrames" uid="uid://wbssvtbdors0" path="res://main/packages/machines/dna_editor_machine/dna_editor_machine.aseprite" id="6_yay7s"]
+[ext_resource type="Script" uid="uid://5pnde06aktom" path="res://main/packages/machines/MachineToPopup.cs" id="7_rpoeo"]
+[ext_resource type="PackedScene" uid="uid://6cqh5ogb7edn" path="res://main/packages/dna editor window/dna_editor_window.tscn" id="8_h1a3h"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
 size = Vector2(608, 12)
@@ -14,6 +17,9 @@ size = Vector2(660, 5)
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_mrq1q"]
 normal = Vector2(0, -5)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aoqhg"]
+size = Vector2(86, 62)
 
 [node name="LabMain" type="Node2D" unique_id=72820539]
 
@@ -59,10 +65,25 @@ position = Vector2(60, 266)
 position = Vector2(369, 204)
 sprite_frames = ExtResource("4_0wy4p")
 
-[node name="Container" type="Container" parent="." unique_id=2065822697]
-offset_left = 199.0
-offset_top = 185.0
-offset_right = 264.0
-offset_bottom = 250.0
+[node name="tapemeasure" type="Container" parent="." unique_id=2065822697]
+visible = false
+offset_left = 34.0
+offset_top = 119.0
+offset_right = 149.0
+offset_bottom = 359.0
 
 [node name="Computa" parent="." unique_id=1679950382 instance=ExtResource("5_0gdys")]
+
+[node name="dna_synth" type="AnimatedSprite2D" parent="." unique_id=906272386]
+position = Vector2(110, 203)
+sprite_frames = ExtResource("6_yay7s")
+script = ExtResource("7_rpoeo")
+PopupScene = ExtResource("8_h1a3h")
+
+[node name="Area2D" type="Area2D" parent="dna_synth" unique_id=959327064]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="dna_synth/Area2D" unique_id=1501006473]
+position = Vector2(0, 19)
+shape = SubResource("RectangleShape2D_aoqhg")
