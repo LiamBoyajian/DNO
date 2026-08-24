@@ -27,7 +27,7 @@ public partial class Tomato(int dbId)
     protected double M = 5;
     protected double B = 5;
     protected Func<double, double> GrowthType = Math.Sqrt;
-    protected double PhotoSynthAmount = 100;
+    protected double PhotoSynthAmount = 5;
 
     protected const int STANDARDUPGRADEVAL = 10;
     protected const int ORGANPURCHASEMULTIPLIER = 20;
@@ -69,8 +69,6 @@ public partial class Tomato(int dbId)
     {
         base._Ready();
 
-        DbId = -1;
-
         GuiManager.NoGrowth = "no_growth";
         GuiManager.Dead = "no_growth";
         GuiManager.Default = "default";
@@ -85,7 +83,8 @@ public partial class Tomato(int dbId)
 
     protected override double Photosynthesize()
     {
-        double waterTaken = Resources[EnumLibrary.Rt.H2O].HasValue(PhotoSynthAmount * GetSunLevel());
+        double waterTaken = Resources[EnumLibrary.Rt.H2O]
+            .HasValue(PhotoSynthAmount * Math.Clamp(GetSunLevel(), 0f, 1f));
 
         if (waterTaken == 0.0)
             return 0;

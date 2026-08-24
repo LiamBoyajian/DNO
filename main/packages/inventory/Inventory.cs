@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Godot;
 using Main.main.packages.items;
+using Main.main.packages.util;
 
 namespace Main.main.packages.inventory;
 
@@ -15,7 +16,7 @@ public partial class Inventory(int size = 1) : Node
     public static Inventory Instance { get; private set; }
 
     //Fields
-    private int _money = 0;
+    private int _money = 5;
     public int SelectedItem { get; private set; } = 0;
 
     [Export] protected string MoneyLabelUnit = "kr";
@@ -50,6 +51,8 @@ public partial class Inventory(int size = 1) : Node
             Slots.Add(inventorySlot);
             inventorySlot.ItemReturned += SlotReturnedItemHandler;
         }
+
+        UpdateAll();
     }
 
     public override void _Process(double delta)
@@ -127,6 +130,14 @@ public partial class Inventory(int size = 1) : Node
         return _money;
     }
 
+    public bool Purchase(int amount)
+    {
+        if (amount < 0 || amount > _money) return false;
+        _money -= amount;
+        UpdateMoney();
+        return true;
+    }
+
     public bool UpdateMoney()
     {
         if (MoneyLabel == null)
@@ -148,5 +159,18 @@ public partial class Inventory(int size = 1) : Node
     public void RequestItemReturn()
     {
         SetSelectedItem(SelectedItem);
+    }
+
+    public bool AddItem(ManagerIItem manager)
+    {
+        foreach (var slot in Slots)
+        {
+            if (slot.HasItem()) continue;
+            slot.AddItem(manager);
+
+            return true;
+        }
+
+        return false;
     }
 }

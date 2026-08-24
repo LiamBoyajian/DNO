@@ -48,7 +48,14 @@ public abstract partial class AbstractMicrochipPlant(int dbId)
 
     public void Init()
     {
-        ConnectToPlant();
+        if (DbId >= 0)
+        {
+            ConnectToPlant();
+        }
+        else
+        {
+            Nucleus = null;
+        }
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -69,6 +76,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId)
         ObtainGlucose();
 
         EnergyHp(ConvertHpToGluRatio, ConvertGluToEnergyRatio);
+
         CheckPromoters();
 
         IsDeadThenDeadFrame();
@@ -78,6 +86,7 @@ public abstract partial class AbstractMicrochipPlant(int dbId)
 
     public void CheckPromoters()
     {
+        if (Nucleus == null) return;
         var completeEnumDictionary = ((IConcatEnumerable)this).GetDictionary();
         foreach (var chromosome in Nucleus.Chromosomes)
         {

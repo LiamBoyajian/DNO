@@ -66,11 +66,10 @@ position = Vector2(369, 204)
 sprite_frames = ExtResource("4_0wy4p")
 
 [node name="tapemeasure" type="Container" parent="." unique_id=2065822697]
-visible = false
-offset_left = 34.0
-offset_top = 119.0
-offset_right = 149.0
-offset_bottom = 359.0
+offset_left = 206.0
+offset_top = 179.0
+offset_right = 261.0
+offset_bottom = 254.0
 
 [node name="Computa" parent="." unique_id=1679950382 instance=ExtResource("5_0gdys")]
 
