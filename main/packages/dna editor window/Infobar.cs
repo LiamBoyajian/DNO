@@ -33,6 +33,9 @@ public partial class Infobar : PanelContainer
     [Signal]
     public delegate void ChangesSavedPressedEventHandler();
 
+    [Signal]
+    public delegate void PrintPressedEventHandler();
+
     public override void _Ready()
     {
         base._Ready();
@@ -50,9 +53,11 @@ public partial class Infobar : PanelContainer
             throw new Exception("Id not set");
         if (SelectedElements == null)
             throw new Exception("SelectedElements not set");
+
         Back.Pressed += () => EmitSignal(nameof(BackPressed));
         Add.Pressed += () => EmitSignal(nameof(AddPressed));
         PushChanges.Pressed += () => EmitSignal(nameof(ChangesSavedPressed));
+
         NameDisplay.TextChanged += EmitNameChanged;
         Delete.Pressed += () => EmitSignal(nameof(DeletePressed));
         Id.TextChanged += EmitIdChanged;

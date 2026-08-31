@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using CommandLine;
 
 namespace Main.main.packages.ResourceDisplay;
@@ -13,15 +14,13 @@ public class EnumGate
 
 
     /**
-     * Values represent the allowed ordinals of the given enum type
+     * Values represent the allowed ordinals of the given enum type (exceptions to the gate)
      */
     public void CreateGate(Type @enumType, params int[] values)
     {
         ArgumentNullException.ThrowIfNull(@enumType);
-
         if (!@enumType.IsEnum) throw new ArgumentException(nameof(@enumType));
-
-        _dictionary.Add(@enumType, values);
+        _dictionary.TryAdd(@enumType, values);
     }
 
     public (Type, int[]) RemoveGate(Type @enumType)

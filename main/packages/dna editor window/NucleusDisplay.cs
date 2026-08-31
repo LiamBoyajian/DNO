@@ -125,12 +125,12 @@ public partial class NucleusDisplay : PanelContainer
         if (button is not TextureButton textureButton) return;
         if (ChromosomeDictionary.TryGetValue(textureButton, out Chromosome chromosome))
         {
-            //SelectedChromosome = chromosome;
+            ChromosomeButton = textureButton;
             Populate(chromosome);
         }
         else if (DnaStrandDictionary.TryGetValue(textureButton, out DnaStrand dnStrand))
         {
-            //SelectedDna = dnStrand;
+            DnaStrandButton = textureButton;
             button.SelfModulate = new Color(5f, 5f, 5f);
         }
 

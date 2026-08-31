@@ -3,6 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://b8whw4nugmwi3" path="res://main/scenes/Delivery/Delivery.aseprite" id="1_wt4i1"]
 [ext_resource type="Script" uid="uid://q70ssyayrj2k" path="res://main/packages/scene/SceneTransitionTemplate.cs" id="2_g1kf6"]
 [ext_resource type="PackedScene" uid="uid://cx6bs6vejxjwf" path="res://main/packages/mc/1x/mc.tscn" id="3_5rc78"]
+[ext_resource type="PackedScene" uid="uid://551noyhxfu5h" path="res://main/packages/chatbubble/chatbubble.tscn" id="4_yrfgr"]
+[ext_resource type="Script" uid="uid://e114ki1k2exn" path="res://main/packages/seller/Seller.cs" id="5_ae1ki"]
+[ext_resource type="PackedScene" uid="uid://dtjyn7kpnnas4" path="res://main/packages/items/seeds/tomato_seed.tscn" id="6_qjstm"]
 
 [sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_5rc78"]
 normal = Vector2(0, -5)
@@ -55,3 +58,9 @@ shape = SubResource("RectangleShape2D_5rc78")
 position = Vector2(81.61896, -46.511658)
 scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_yrfgr")
+
+[node name="Seller" type="AnimatedSprite2D" parent="." unique_id=1932596124]
+position = Vector2(236, 153)
+script = ExtResource("5_ae1ki")
+ChatBubbleScene = ExtResource("4_yrfgr")
+ItemInstances = Array[PackedScene]([ExtResource("6_qjstm")])

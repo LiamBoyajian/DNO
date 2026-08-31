@@ -44,6 +44,7 @@ size = Vector2i(630, 340)
 unresizable = true
 transparent = true
 popup_window = true
+popup_wm_hint = true
 theme = ExtResource("1_0ov3a")
 script = ExtResource("1_c4x1s")
 NucleusDisplay = NodePath("MarginContainer/HFlowContainer/HBoxContainer/NucleusDisplay")
@@ -168,19 +169,15 @@ layout_mode = 2
 [node name="EnumSelectionDisplay" type="OptionButton" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display/DnaComparisonEditor/HFlowContainer" unique_id=1425977929]
 layout_mode = 2
 theme = ExtResource("1_0ov3a")
-item_count = 2
-popup/item_0/text = "Wjat"
-popup/item_0/id = 0
-popup/item_1/text = "zsdrfgvasdfg"
-popup/item_1/id = 1
 
 [node name="Comparison" type="OptionButton" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display/DnaComparisonEditor/HFlowContainer" unique_id=1143184128]
 layout_mode = 2
 
 [node name="Value" type="TextEdit" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display/DnaComparisonEditor/HFlowContainer" unique_id=1994363662]
+custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 size_flags_horizontal = 3
-placeholder_text = "### (optional tag: %)"
+placeholder_text = "### (or ###%)"
 
 [node name="GeneEditor" type="PanelContainer" parent="MarginContainer/HFlowContainer/HBoxContainer/DnaStrandDisplay/selected_dna_display" unique_id=1418138321 node_paths=PackedStringArray("Indexer", "GeneTextEditor")]
 layout_mode = 2
@@ -198,4 +195,4 @@ layout_mode = 2
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("1_0ov3a")
-placeholder_text = "Enter gene name..."
+placeholder_text = "Select gene..."

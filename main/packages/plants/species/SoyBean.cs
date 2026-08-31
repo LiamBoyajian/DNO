@@ -88,15 +88,6 @@ public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
         return Photosynthesize();
     }
 
-    //--------------------------------------------------------------------------
-    // Interface Functions
-    //--------------------------------------------------------------------------
-    protected override double Consume(double amount)
-    {
-        return base.Consume(Resources[EnumLibrary.Rt.Glucose].Take(MyResources[EnumLibrary.Rt.Energy].Max) /
-                            ConvertGluToEnergyRatio);
-    }
-
     protected override double Grow(Enum resource, double amount)
     {
         if (resource is not EnumLibrary.Rt rt)
@@ -130,7 +121,7 @@ public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
             ((Math.Max(Resources[EnumLibrary.Rt.H2O].Amount, Resources[EnumLibrary.Rt.Co2].Amount) * sunlevel) /
              waterAndCo2Min);
         Resources[EnumLibrary.Rt.Glucose].Give(glucoseGenerated);
-        Resources[EnumLibrary.Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
+        //Resources[EnumLibrary.Rt.Oxygen].Give(glucoseGenerated * oxygenByproductRatio);
         Resources[EnumLibrary.Rt.H2O].Take(glucoseGenerated * waterAndCo2Min);
         Resources[EnumLibrary.Rt.Co2].Take(glucoseGenerated * waterAndCo2Min);
 

@@ -3,12 +3,12 @@
 importer="aseprite_wizard.plugin.static-texture-split"
 type="PackedDataContainer"
 uid="uid://d4nyy8hctxqj6"
-path="res://.godot/imported/Main.main.scripts.core.plants.AbstractPlant+Rt.aseprite-effad55ce5cba0f53310d997ad195678.res"
+path="res://.godot/imported/Main.main.packages.plants.enums.EnumLibrary+BasicOrgans.aseprite-d8bc4eeccdc5f10ed801368f90449119.res"
 
 [deps]
 
-source_file="res://main/sprites/IconAseprite/Main.main.scripts.core.plants.AbstractPlant+Rt.aseprite"
-dest_files=["res://.godot/imported/Main.main.scripts.core.plants.AbstractPlant+Rt.aseprite-effad55ce5cba0f53310d997ad195678.res"]
+source_file="res://main/sprites/IconAseprite/Main.main.packages.plants.enums.EnumLibrary+BasicOrgans.aseprite"
+dest_files=["res://.godot/imported/Main.main.packages.plants.enums.EnumLibrary+BasicOrgans.aseprite-d8bc4eeccdc5f10ed801368f90449119.res"]
 
 [params]
 

@@ -11,6 +11,8 @@ public interface IProtein
     public static readonly Dictionary<string, Type> StringToProtein = new()
     {
         ["Dirigent"] = typeof(IDirigent),
+        ["Florigen"] = typeof(IFlorigen),
+        ["Gibberellin"] = typeof(IGibberellin),
     };
 
     private static readonly Dictionary<(Type ConcreteType, Type InterfaceType), MethodInfo> MethodCache = new();
@@ -43,7 +45,14 @@ public interface IProtein
     public double RunProtein() => -1;
 }
 
+public interface IGibberellin : IProtein
+{
+}
+
+public interface IFlorigen : IProtein
+{
+}
+
 public interface IDirigent : IProtein
 {
-    public new double RunProtein();
 }

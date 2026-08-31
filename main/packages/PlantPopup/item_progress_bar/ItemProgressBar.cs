@@ -1,5 +1,6 @@
 using System;
 using Godot;
+using Main.addons.EnumToIcon.EnumToStringDatabase;
 using Main.addons.EnumToIcon.EnumToStringDatabase.main;
 using Main.main.packages.ResourceDisplay;
 
@@ -22,9 +23,9 @@ public partial class ItemProgressBar : BoxContainer, IResourceElement
 
     public void InitializeIcon()
     {
-        if (IconTexture.Texture == null)
+        if (IconTexture.Texture == null && MemoryToDb.GetTextureFromEntry(new Entry(Enum)) is { } texture2D)
         {
-            IconTexture.Texture = GD.Load<Texture2D>(AccessIconsDb.GetEntry(new Entry(Enum))?.Data);
+            IconTexture.Texture = texture2D;
         }
     }
 }

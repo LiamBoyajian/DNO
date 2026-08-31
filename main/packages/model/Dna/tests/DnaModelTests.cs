@@ -35,15 +35,18 @@ public class DnaModelTests
         var promoter = new Promoter();
 
         Assert.IsNull(promoter.Target);
-        Assert.IsNull(promoter.PromoterText);
+        Assert.IsNull(promoter.ComparisonSymbol);
+        Assert.IsFalse(promoter.IsPercent);
+        Assert.AreEqual(0, promoter.ComparisonValue);
     }
 
     [TestMethod]
     public void TestPromoterSetProperties()
     {
-        var promoter = new Promoter { PromoterText = ">=" };
+        var promoter = new Promoter { ComparisonSymbol = ">=", ComparisonValue = 40 };
 
-        Assert.AreEqual(">=", promoter.PromoterText);
+        Assert.AreEqual(">=", promoter.ComparisonSymbol);
+        Assert.AreEqual(40, promoter.ComparisonValue);
     }
 
     // DNASTRAND --------
@@ -167,6 +170,11 @@ public class DnaModelTests
     [TestClass]
     public class PromoterTests
     {
+        private enum TestTarget
+        {
+            WaterAmount
+        }
+
         private class FakeMaterialResource : IMaterialResource
         {
             public double Amount { get; set; }
@@ -174,61 +182,66 @@ public class DnaModelTests
             public double Max { get; set; }
         }
 
+        // Promoter fields are assigned directly - PromoterText has no setter.
+        // It is a read-only string composed as
+        // {Target}{ComparisonSymbol}{ComparisonValue}{%}.
+
         [TestMethod]
         public void TestPromoterDefaults()
         {
             var promoter = new Promoter();
 
             Assert.IsNull(promoter.Target);
-            Assert.AreEqual(null, promoter.PromoterText);
+            Assert.IsNull(promoter.ComparisonSymbol);
             Assert.IsFalse(promoter.IsPercent);
             Assert.AreEqual(0, promoter.ComparisonValue);
         }
 
         [TestMethod]
-        public void TestSetComparisonTypeStandardValue()
+        public void TestPromoterTextComposesSymbolAndValue()
         {
-            var promoter = new Promoter { PromoterText = ">50" };
+            var promoter = new Promoter { ComparisonSymbol = ">", ComparisonValue = 50 };
 
-            Assert.AreEqual(">", promoter.PromoterText);
-            Assert.IsFalse(promoter.IsPercent);
-            Assert.AreEqual(50, promoter.ComparisonValue);
+            Assert.AreEqual(">50", promoter.PromoterText);
         }
 
         [TestMethod]
-        public void TestSetComparisonTypePercent()
+        public void TestPromoterTextAppendsPercentSign()
         {
-            var promoter = new Promoter { PromoterText = ">=75%" };
+            var promoter = new Promoter
+            {
+                ComparisonSymbol = ">=", ComparisonValue = 75, IsPercent = true
+            };
 
-            Assert.AreEqual(">=", promoter.PromoterText);
-            Assert.IsTrue(promoter.IsPercent);
-            Assert.AreEqual(75, promoter.ComparisonValue);
+            Assert.AreEqual(">=75%", promoter.PromoterText);
         }
 
         [TestMethod]
-        public void TestSetComparisonTypeWildcardWithoutDigits()
+        public void TestPromoterTextPrefixesTarget()
         {
-            var promoter = new Promoter { PromoterText = "*=" };
+            var promoter = new Promoter
+            {
+                Target = TestTarget.WaterAmount,
+                ComparisonSymbol = ">=",
+                ComparisonValue = 75,
+                IsPercent = true
+            };
 
-            Assert.AreEqual("*=", promoter.PromoterText);
-            Assert.IsFalse(promoter.IsPercent);
-            Assert.AreEqual(0, promoter.ComparisonValue);
+            Assert.AreEqual("WaterAmount>=75%", promoter.PromoterText);
         }
 
         [TestMethod]
-        public void TestSetComparisonTypeNullHandled()
+        public void TestPromoterTextOnDefaultsIsZero()
         {
-            var promoter = new Promoter { PromoterText = null };
-
-            Assert.AreEqual(null, promoter.PromoterText);
-            Assert.IsFalse(promoter.IsPercent);
-            Assert.AreEqual(0, promoter.ComparisonValue);
+            // No Target, no symbol; ComparisonValue is 0 and is always
+            // appended, so the composed string is "0".
+            Assert.AreEqual("0", new Promoter().PromoterText);
         }
 
         [TestMethod]
         public void TestCompareStandardGreaterThan()
         {
-            var promoter = new Promoter { PromoterText = ">50" };
+            var promoter = new Promoter { ComparisonSymbol = ">", ComparisonValue = 50 };
             var resource = new FakeMaterialResource { Amount = 60, Max = 100 };
 
             Assert.IsTrue(promoter.Compare(resource));
@@ -240,7 +253,7 @@ public class DnaModelTests
         [TestMethod]
         public void TestComparePercentBased()
         {
-            var promoter = new Promoter { PromoterText = ">=50%" };
+            var promoter = new Promoter { ComparisonSymbol = ">=", ComparisonValue = 50, IsPercent = true };
             var resource = new FakeMaterialResource { Amount = 50, Max = 100 };
 
             Assert.IsTrue(promoter.Compare(resource));
@@ -252,7 +265,7 @@ public class DnaModelTests
         [TestMethod]
         public void TestCompareEqualsWithTolerance()
         {
-            var promoter = new Promoter { PromoterText = "==100" };
+            var promoter = new Promoter { ComparisonSymbol = "==", ComparisonValue = 100 };
             var resource = new FakeMaterialResource { Amount = 100.00001, Max = 200 };
 
             Assert.IsTrue(promoter.Compare(resource));
@@ -261,7 +274,7 @@ public class DnaModelTests
         [TestMethod]
         public void TestCompareWildcardAlwaysTrue()
         {
-            var promoter = new Promoter { PromoterText = "*=" };
+            var promoter = new Promoter { ComparisonSymbol = "*=" };
             var resource = new FakeMaterialResource { Amount = 10, Max = 100 };
 
             Assert.IsTrue(promoter.Compare(resource));
@@ -270,7 +283,7 @@ public class DnaModelTests
         [TestMethod]
         public void TestCompareNullResourceReturnsFalse()
         {
-            var promoter = new Promoter { PromoterText = ">0" };
+            var promoter = new Promoter { ComparisonSymbol = ">", ComparisonValue = 0 };
 
             Assert.IsFalse(promoter.Compare(null));
         }

@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://551noyhxfu5h"]
+
+[ext_resource type="Texture2D" uid="uid://p1i2bijt46wm" path="res://main/packages/chatbubble/chatbubble.aseprite" id="1_tsrry"]
+[ext_resource type="Script" uid="uid://bw3gr7egtx11j" path="res://main/packages/chatbubble/ChatBubble.cs" id="2_wowf4"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_hds2b"]
+texture = ExtResource("1_tsrry")
+texture_margin_left = 14.0
+texture_margin_top = 2.0
+texture_margin_right = 2.0
+texture_margin_bottom = 10.0
+axis_stretch_horizontal = 1
+axis_stretch_vertical = 1
+region_rect = Rect2(11, 1, 38, 35)
+
+[sub_resource type="LabelSettings" id="LabelSettings_mrq1q"]
+font_size = 9
+font_color = Color(0, 0, 0, 1)
+
+[node name="PanelContainer" type="PanelContainer" unique_id=1367365851 node_paths=PackedStringArray("Icon", "Text")]
+modulate = Color(0.89411765, 0.8666667, 1, 1)
+anchors_preset = -1
+offset_right = 76.0
+offset_bottom = 37.0
+theme_override_styles/panel = SubResource("StyleBoxTexture_hds2b")
+script = ExtResource("2_wowf4")
+Icon = NodePath("MarginContainer/HBoxContainer/TextureRect")
+Text = NodePath("MarginContainer/HBoxContainer/Label")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1711933987]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer" unique_id=1996564577]
+layout_mode = 2
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer" unique_id=1423485012]
+custom_minimum_size = Vector2(25, 25)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+expand_mode = 4
+stretch_mode = 4
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer" unique_id=796650372]
+layout_mode = 2
+text = "123123"
+label_settings = SubResource("LabelSettings_mrq1q")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=2119981677]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1127357926]

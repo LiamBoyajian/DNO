@@ -39,6 +39,7 @@ public partial class InventorySlot : Panel
         var manager = dataAsObject as ManagerIItem;
         if (dataAsObject is IItem item)
         {
+            //AddItem(dataAsObject);
             manager = ManagerIItem.From(item);
         }
 
@@ -56,6 +57,31 @@ public partial class InventorySlot : Panel
         }
     }
 
+    public void AddItem(ManagerIItem manager)
+    {
+        if (manager != null)
+        {
+            if (GetChildCount() >= 1 && HasItem())
+            {
+                var currentChild = GetManager();
+                currentChild?.Reparent(manager.GetParent());
+                currentChild?.Initialize();
+            }
+            else
+            {
+                if (manager.GetParent() != null)
+                {
+                    manager.Reparent(this);
+                }
+                else
+                {
+                    AddChild(manager);
+                }
+            }
+
+            manager.Initialize();
+        }
+    }
 
     public override Variant _GetDragData(Vector2 atPosition)
     {

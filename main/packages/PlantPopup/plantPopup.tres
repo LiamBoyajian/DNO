@@ -1,17 +1,15 @@
 [gd_resource type="Theme" format=4 uid="uid://b7am0k6ih57f5"]
 
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_xtptm"]
-texture_margin_left = 8.0
-texture_margin_top = 8.0
-texture_margin_right = 8.0
-texture_margin_bottom = 8.0
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_pi6qn"]
+bg_color = Color(0, 0, 0, 0.39215687)
+anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_manvx"]
-bg_color = Color(0.48476416, 0.88649726, 0.9747762, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
+bg_color = Color(0.75277025, 0.51154494, 0.67180026, 1)
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
 border_color = Color(0.8, 0.8, 0.8, 0)
 
 [sub_resource type="Image" id="Image_hfk1h"]
@@ -952,7 +950,7 @@ anti_aliasing = false
 
 [resource]
 ResourceProgressBar/base_type = &"ProgressBar"
-ResourceProgressBar/styles/background = SubResource("StyleBoxTexture_xtptm")
+ResourceProgressBar/styles/background = SubResource("StyleBoxFlat_pi6qn")
 ResourceProgressBar/styles/fill = SubResource("StyleBoxFlat_manvx")
 plantInfoPopup/base_type = &"Window"
 plantInfoPopup/colors/title_color = Color(0.7058824, 0.7058824, 0.7058824, 1)

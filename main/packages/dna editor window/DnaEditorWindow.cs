@@ -13,6 +13,9 @@ public partial class DnaEditorWindow : Window
 
     protected WarningConfirmation WarnWindow;
 
+    [Signal]
+    public delegate void NucleusIdSetEventHandler(int nucleusId);
+
     public override void _Ready()
     {
         base._Ready();
@@ -25,8 +28,21 @@ public partial class DnaEditorWindow : Window
         AddChild(WarnWindow);
         if (WarnWindow == null) throw new Exception("WarnWindow scene is invalid");
 
-        InfobarDisplay.BackPressed += () => NucleusDisplay.CloseOpenedElement(true);
-        InfobarDisplay.IdChanged += PopulateItemList;
+        InfobarDisplay.BackPressed += () =>
+        {
+            if (NucleusDisplay.SelectedNucleus == null)
+            {
+                Hide();
+                QueueFree();
+            }
+
+            NucleusDisplay.CloseOpenedElement(true);
+        };
+        InfobarDisplay.IdChanged += () =>
+        {
+            PopulateItemList();
+            EmitSignal(nameof(NucleusIdSet), NucleusDisplay.SelectedNucleus?.Id ?? -1);
+        };
 
         InfobarDisplay.AddPressed += AddSelectedElement;
         InfobarDisplay.DeletePressed += ConfirmRemoval;
@@ -46,6 +62,8 @@ public partial class DnaEditorWindow : Window
             }
         };
         NucleusDisplay.Updated += UpdateDisplay;
+
+        DnaStrandDisplay.ChangesMade += () => { InfobarDisplay.UnsavedChanges(true); };
 
         WarnWindow.ConfirmButton.Pressed += RemoveSelectedElement;
         WarnWindow.CancelButton.Pressed += () =>
@@ -132,6 +150,8 @@ public partial class DnaEditorWindow : Window
 
     public void PopulateItemList()
     {
+        NucleusDisplay.Clear();
+        DnaStrandDisplay.Hide();
         var requestedNucleusId = InfobarDisplay.GetId();
         var nucleus = DnaDb.Instance.GetNucleus(requestedNucleusId);
         InfobarDisplay.SetTitleSilent(nucleus?.Name);
@@ -201,5 +221,14 @@ public partial class DnaEditorWindow : Window
         var id = NucleusDisplay.SelectedNucleus.Id;
         NucleusDisplay.CloseOpenedElement(true);
         DnaDb.Instance.RemoveNucleus(id);
+    }
+
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        base._UnhandledInput(@event);
+        if (@event.IsAction("ui_close_dialog"))
+        {
+            Hide();
+        }
     }
 }
