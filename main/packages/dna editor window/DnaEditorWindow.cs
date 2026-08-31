@@ -13,6 +13,9 @@ public partial class DnaEditorWindow : Window
 
     protected WarningConfirmation WarnWindow;
 
+    [Signal]
+    public delegate void NucleusIdSetEventHandler(int nucleusId);
+
     public override void _Ready()
     {
         base._Ready();
@@ -35,7 +38,11 @@ public partial class DnaEditorWindow : Window
 
             NucleusDisplay.CloseOpenedElement(true);
         };
-        InfobarDisplay.IdChanged += PopulateItemList;
+        InfobarDisplay.IdChanged += () =>
+        {
+            PopulateItemList();
+            EmitSignal(nameof(NucleusIdSet), NucleusDisplay.SelectedNucleus?.Id ?? -1);
+        };
 
         InfobarDisplay.AddPressed += AddSelectedElement;
         InfobarDisplay.DeletePressed += ConfirmRemoval;
@@ -214,5 +221,14 @@ public partial class DnaEditorWindow : Window
         var id = NucleusDisplay.SelectedNucleus.Id;
         NucleusDisplay.CloseOpenedElement(true);
         DnaDb.Instance.RemoveNucleus(id);
+    }
+
+    public override void _UnhandledInput(InputEvent @event)
+    {
+        base._UnhandledInput(@event);
+        if (@event.IsAction("ui_close_dialog"))
+        {
+            Hide();
+        }
     }
 }

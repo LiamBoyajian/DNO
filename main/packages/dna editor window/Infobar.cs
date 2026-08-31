@@ -9,7 +9,6 @@ public partial class Infobar : PanelContainer
     [Export] public TextureButton Add;
     [Export] public TextureButton Delete;
     [Export] public TextureButton PushChanges;
-    [Export] public TextureButton Print;
     [Export] public TextEdit NameDisplay;
     [Export] public TextEdit Id;
     [Export] public Label SelectedElements;
@@ -58,7 +57,6 @@ public partial class Infobar : PanelContainer
         Back.Pressed += () => EmitSignal(nameof(BackPressed));
         Add.Pressed += () => EmitSignal(nameof(AddPressed));
         PushChanges.Pressed += () => EmitSignal(nameof(ChangesSavedPressed));
-        Print.Pressed += () => EmitSignal(nameof(PrintPressed));
 
         NameDisplay.TextChanged += EmitNameChanged;
         Delete.Pressed += () => EmitSignal(nameof(DeletePressed));

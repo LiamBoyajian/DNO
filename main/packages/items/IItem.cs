@@ -84,6 +84,7 @@ public partial class WrapperIItem : TextureRect
      */
     public IItem GetItem()
     {
+        if (GetChildCount() == 0) return null;
         return GetChild(0) as IItem;
     }
 
@@ -104,6 +105,11 @@ public partial class WrapperIItem : TextureRect
         LayoutMode = 1;
         AnchorsPreset = (int)LayoutPreset.Center;
         Show();
+    }
+
+    public void UpdateTexture()
+    {
+        Texture = GetItem()?.Icon ?? Texture;
     }
 }
 

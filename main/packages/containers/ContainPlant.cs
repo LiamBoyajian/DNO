@@ -13,7 +13,7 @@ using AcceptSeed = Main.main.packages.util.AcceptSeed;
 namespace Main.main.packages.containers;
 
 [GlobalClass]
-public partial class ContainPlant : Sprite2D, IDeployable, IWaterable
+public partial class ContainPlant : Sprite2D, IDeployable, IWaterable, IInjectable
 {
     public MaterialResource Water = new MaterialResource(500.0, 1000.0);
 
@@ -215,5 +215,12 @@ public partial class ContainPlant : Sprite2D, IDeployable, IWaterable
     public double GiveWater(double amount)
     {
         return Water.Give(amount);
+    }
+
+    public void InjectDbId(int id)
+    {
+        if (Plant is not AbstractMicrochipPlant microchipPlant) return;
+        microchipPlant.SetDbId(id);
+        microchipPlant.Init();
     }
 }

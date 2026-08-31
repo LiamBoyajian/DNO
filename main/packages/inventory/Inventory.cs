@@ -26,7 +26,8 @@ public partial class Inventory(int size = 1) : Node
 
 
     //References to scene nodes
-    public Godot.Collections.Array<InventorySlot> Slots;
+    protected Godot.Collections.Array<InventorySlot> Slots;
+
     [Export] protected Label MoneyLabel;
 
 
@@ -91,6 +92,7 @@ public partial class Inventory(int size = 1) : Node
         {
             var previousSlotManager = previousSlot.GetManager();
             previousSlotManager?.ReturnItem();
+            previousSlotManager?.UpdateTexture();
             EmitSignal(nameof(NoSelectedItem));
             if (node == SelectedItem)
             {
@@ -172,5 +174,27 @@ public partial class Inventory(int size = 1) : Node
         }
 
         return false;
+    }
+
+    public IEnumerable<ManagerIItem> GetItems()
+    {
+        ManagerIItem manager = null;
+        foreach (var slot in Slots)
+        {
+            if (!slot.HasItem()) continue;
+
+            manager = slot.GetManager();
+            if (manager == null) continue;
+
+            yield return manager;
+        }
+    }
+
+    public void ReturnAllItems()
+    {
+        foreach (var slot in Slots)
+        {
+            slot.GetManager()?.ReturnItem();
+        }
     }
 }

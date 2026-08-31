@@ -91,7 +91,6 @@ layout_mode = 2
 [node name="Injector" type="AnimatedSprite2D" parent="MarginContainer/MarginContainer/HBoxContainer2/3" unique_id=445264514]
 position = Vector2(17, 17)
 sprite_frames = ExtResource("7_a3cp1")
-animation = &"full"
 script = ExtResource("8_h3bw8")
 
 [node name="4" parent="MarginContainer/MarginContainer/HBoxContainer2" unique_id=2099290406 instance=ExtResource("3_a3cp1")]
