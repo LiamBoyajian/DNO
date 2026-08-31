@@ -35,17 +35,12 @@ public partial class Tomato(int dbId)
 
 
     public new event Action Updated;
-    //public event UpdatedEventHandler
-    //protected int HpToStemRatio = 10;
 
     public override bool Tick(double delta)
     {
         if (!base.Tick(delta))
             return false;
-        //Resources[Rt.Health].ChangeMax(20);
-        //Resources[Rt.Health].Give(100);
-        //Resources[Rt.Energy].Give(100);
-        //Resources[Rt.H2O].Give(30);
+
         UpdatePlantGuiFrame();
         Updated?.Invoke(); //
         return true;
@@ -142,7 +137,9 @@ public partial class Tomato(int dbId)
             if (fruit is null)
                 throw new Exception("Could not find valid Fruit");
 
+
             fruit.ZIndex = R.RandiRange(-3, 3);
+            fruit.ZAsRelative = true;
             fruit.FlipH = (R.Randi() & 1) == 1;
 
             if (!GuiManager.AddFruit(fruit)) return false;

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.static-texture-split-layer"
+type="PortableCompressedTexture2D"
+uid="uid://cu6iqu6doykxo"
+path="res://.godot/imported/dna_editor_window_Print.ase_layer_tex-3eb5e5d57ab16034e010ec42b3275281.res"
+
+[deps]
+
+source_file="res://main/packages/dna editor window/resources/dna_editor_window_Print.ase_layer_tex"
+dest_files=["res://.godot/imported/dna_editor_window_Print.ase_layer_tex-3eb5e5d57ab16034e010ec42b3275281.res"]
+
+[params]
+

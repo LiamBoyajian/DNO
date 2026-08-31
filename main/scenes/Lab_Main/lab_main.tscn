@@ -8,6 +8,9 @@
 [ext_resource type="SpriteFrames" uid="uid://wbssvtbdors0" path="res://main/packages/machines/dna_editor_machine/dna_editor_machine.aseprite" id="6_yay7s"]
 [ext_resource type="Script" uid="uid://5pnde06aktom" path="res://main/packages/machines/MachineToPopup.cs" id="7_rpoeo"]
 [ext_resource type="PackedScene" uid="uid://6cqh5ogb7edn" path="res://main/packages/dna editor window/dna_editor_window.tscn" id="8_h1a3h"]
+[ext_resource type="SpriteFrames" uid="uid://detk78wl11gj5" path="res://main/packages/machines/microchip_stamp/microchip_stamper.aseprite" id="9_jcti7"]
+[ext_resource type="Script" uid="uid://duq2eruvqs832" path="res://main/scenes/Lab_Main/MicrochipPrinter.cs" id="10_h26qc"]
+[ext_resource type="Texture2D" uid="uid://dh64gwn2sivpj" path="res://main/packages/machines/wire/wire.aseprite" id="10_lqnwy"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mrq1q"]
 size = Vector2(608, 12)
@@ -20,6 +23,9 @@ normal = Vector2(0, -5)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aoqhg"]
 size = Vector2(86, 62)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1ygq3"]
+size = Vector2(38, 48)
 
 [node name="LabMain" type="Node2D" unique_id=72820539]
 
@@ -62,14 +68,14 @@ z_index = 3
 position = Vector2(60, 266)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1495138872]
-position = Vector2(369, 204)
+position = Vector2(313, 204)
 sprite_frames = ExtResource("4_0wy4p")
 
 [node name="tapemeasure" type="Container" parent="." unique_id=2065822697]
-offset_left = 206.0
-offset_top = 179.0
-offset_right = 261.0
-offset_bottom = 254.0
+offset_left = 168.0
+offset_top = 206.0
+offset_right = 208.0
+offset_bottom = 256.0
 
 [node name="Computa" parent="." unique_id=1679950382 instance=ExtResource("5_0gdys")]
 
@@ -86,3 +92,25 @@ collision_mask = 2
 [node name="CollisionShape2D" type="CollisionShape2D" parent="dna_synth/Area2D" unique_id=1501006473]
 position = Vector2(0, 19)
 shape = SubResource("RectangleShape2D_aoqhg")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[node name="microchip machine" type="AnimatedSprite2D" parent="." unique_id=733475508]
+position = Vector2(215, 229)
+sprite_frames = ExtResource("9_jcti7")
+script = ExtResource("10_h26qc")
+
+[node name="Area2D" type="Area2D" parent="microchip machine" unique_id=1153163179]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="microchip machine/Area2D" unique_id=596126879]
+shape = SubResource("RectangleShape2D_1ygq3")
+debug_color = Color(0, 0.6, 0.69803923, 0)
+
+[node name="Line2D" type="Line2D" parent="." unique_id=1902461704]
+z_index = -1
+position = Vector2(154, 218)
+points = PackedVector2Array(-3, -13, 9, 5, 21, 9, 34, 6, 46, -6)
+width = 3.0
+default_color = Color(0.49747366, 0.49747372, 0.49747354, 1)
+texture = ExtResource("10_lqnwy")
+texture_mode = 2
+sharp_limit = 1.0

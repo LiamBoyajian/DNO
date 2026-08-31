@@ -17,14 +17,10 @@ public abstract partial class AbstractPlant : Node
     {
         //Arbitrary base values -- should be removed outside of testing
         { EnumLibrary.Rt.Health, new MaterialResource(10.0, 10.0) },
-        { EnumLibrary.Rt.Chlorophyll, new MaterialResource(10.0, 100.0) },
         { EnumLibrary.Rt.Energy, new MaterialResource(10.0, 100.0) },
         { EnumLibrary.Rt.Glucose, new MaterialResource(1000.0, 1000.0) },
         { EnumLibrary.Rt.H2O, new MaterialResource(10.0, 1000.0) },
         { EnumLibrary.Rt.Co2, new MaterialResource(10.0, 1000.0) },
-        { EnumLibrary.Rt.Oxygen, new MaterialResource(10.0, 100.0) },
-
-        { EnumLibrary.Rt.DamagedCells, new MaterialResource(50.0, 100.0) },
     };
 
     //-----------------------------

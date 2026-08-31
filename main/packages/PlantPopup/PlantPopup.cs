@@ -43,8 +43,10 @@ public partial class PlantPopup : Window
         //---------------
         ItemUpgradeDisplay?.EnumGate = new EnumGate();
         ProgressBarDisplay?.EnumGate = new EnumGate();
-        ProgressBarDisplay?.EnumGate.CreateGate(typeof(EnumLibrary.Rt), 0, 3, 4);
+        ProgressBarDisplay?.EnumGate.CreateGate(typeof(EnumLibrary.Rt), 0, 1, 2);
         ProgressBarDisplay?.EnumGate.CreateGate(typeof(EnumLibrary.BasicOrgans));
+
+        ItemUpgradeDisplay?.EnumGate.CreateGate(typeof(EnumLibrary.BasicOrgans));
 
         //Default
         Instance = this;

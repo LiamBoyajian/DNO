@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://c8gbffl8fdjbv" path="res://main/packages/dna editor window/resources/cell_elements_Chromosome.ase_layer_tex" id="9_vn4aq"]
 [ext_resource type="Texture2D" uid="uid://bqwjjrtovp1dl" path="res://main/packages/dna editor window/resources/dna_editor_window_push_changes.ase_layer_tex" id="10_g5rpd"]
 [ext_resource type="Texture2D" uid="uid://d2q2mw3k4wvbp" path="res://main/packages/dna editor window/resources/cell_elements_DnaStrand.ase_layer_tex" id="10_suawh"]
+[ext_resource type="Texture2D" uid="uid://cu6iqu6doykxo" path="res://main/packages/dna editor window/resources/dna_editor_window_Print.ase_layer_tex" id="11_g5rpd"]
 [ext_resource type="Script" uid="uid://jlj287ribsmu" path="res://main/packages/dna editor window/DnaStrandDisplay.cs" id="11_suawh"]
 [ext_resource type="Script" uid="uid://chuq2466psiy6" path="res://main/packages/dna editor window/GeneEditor.cs" id="13_7q5sl"]
 [ext_resource type="PackedScene" uid="uid://dhnbs4qly87h6" path="res://main/packages/dna editor window/indexer/indexer.tscn" id="14_7q5sl"]
@@ -44,6 +45,7 @@ size = Vector2i(630, 340)
 unresizable = true
 transparent = true
 popup_window = true
+popup_wm_hint = true
 theme = ExtResource("1_0ov3a")
 script = ExtResource("1_c4x1s")
 NucleusDisplay = NodePath("MarginContainer/HFlowContainer/HBoxContainer/NucleusDisplay")
@@ -124,6 +126,11 @@ layout_mode = 2
 size_flags_vertical = 4
 texture_normal = ExtResource("9_ac6si")
 texture_disabled = ExtResource("10_g5rpd")
+
+[node name="Print" type="TextureButton" parent="MarginContainer/HFlowContainer/Infobar/HBoxContainer" unique_id=385632248]
+layout_mode = 2
+size_flags_vertical = 4
+texture_normal = ExtResource("11_g5rpd")
 
 [node name="HBoxContainer" type="HSplitContainer" parent="MarginContainer/HFlowContainer" unique_id=1629032669]
 layout_mode = 2

@@ -1,0 +1,14 @@
+[remap]
+
+importer="aseprite_wizard.plugin.noop"
+type="PackedDataContainer"
+uid="uid://c8uluf7xyifg1"
+path="res://.godot/imported/dna_gun.aseprite-ae83165bd75a56563f7df6d312150363.res"
+
+[deps]
+
+source_file="res://main/packages/machines/dna_gun/dna_gun.aseprite"
+dest_files=["res://.godot/imported/dna_gun.aseprite-ae83165bd75a56563f7df6d312150363.res"]
+
+[params]
+

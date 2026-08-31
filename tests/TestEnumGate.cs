@@ -132,7 +132,7 @@ public class TestEnumGate
     {
         int[] temp = new int[3];
         EnumGate.CreateGate(typeof(EnumLibrary.Rt), temp);
-        Assert.IsFalse(EnumGate.Permits(EnumLibrary.Rt.Chlorophyll));
+        Assert.IsFalse(EnumGate.Permits(EnumLibrary.Rt.Co2));
     }
 
     [TestMethod]
@@ -140,7 +140,7 @@ public class TestEnumGate
     {
         int[] temp = new int[3];
         //EnumGate.CreateGate(typeof(EnumLibrary.Rt), temp);
-        Assert.IsTrue(EnumGate.Permits(EnumLibrary.Rt.Chlorophyll));
+        Assert.IsTrue(EnumGate.Permits(EnumLibrary.Rt.Co2));
     }
 
     [TestMethod]
@@ -148,8 +148,8 @@ public class TestEnumGate
     {
         int[] temp = new[] { 1, 2, 3 };
         EnumGate.CreateGate(typeof(EnumLibrary.Rt), temp);
-        Assert.IsTrue(EnumGate.Permits(EnumLibrary.Rt.Chlorophyll));
-        Assert.IsTrue(EnumGate.Permits(EnumLibrary.Rt.Energy));
+        Assert.IsTrue(EnumGate.Permits(EnumLibrary.Rt.Co2));
+        Assert.IsTrue(EnumGate.Permits(EnumLibrary.Rt.H2O));
         Assert.IsTrue(EnumGate.Permits(EnumLibrary.Rt.Glucose));
     }
 }
