@@ -13,6 +13,7 @@ public interface IProtein
         ["Dirigent"] = typeof(IDirigent),
         ["Florigen"] = typeof(IFlorigen),
         ["Gibberellin"] = typeof(IGibberellin),
+        ["Auxin"] = typeof(IAuxin),
     };
 
     private static readonly Dictionary<(Type ConcreteType, Type InterfaceType), MethodInfo> MethodCache = new();
@@ -45,14 +46,34 @@ public interface IProtein
     public double RunProtein() => -1;
 }
 
+/**
+ * Signals fruit formation
+ */
 public interface IGibberellin : IProtein
 {
+    public new double RunProtein();
 }
 
+/**
+ * Signals flower formation
+ */
 public interface IFlorigen : IProtein
 {
+    public new double RunProtein();
 }
 
+/**
+ * Uptakes water
+ */
 public interface IDirigent : IProtein
 {
+    public new double RunProtein();
+}
+
+/**
+ * Signals growth across the plant
+ */
+public interface IAuxin : IProtein
+{
+    public new double RunProtein();
 }

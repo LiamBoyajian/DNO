@@ -1,20 +1,18 @@
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Godot;
-using Main.main.scripts.model;
-using Main.Source.main;
-using PlantGui = Main.main.scripts.core.util.PlantGui;
-using System.Linq;
 using Main.main.packages.model.Dna;
 using Main.main.packages.plants.enums;
 using Main.main.packages.plants.interfaces;
+using Main.main.scripts.core.plants;
+using Main.Source.main;
+using PlantGui = Main.main.scripts.core.util.PlantGui;
 using ContainPlant = Main.main.packages.containers.ContainPlant;
 
-namespace Main.main.scripts.core.plants;
+namespace Main.main.packages.plants;
 
 public abstract partial class AbstractMicrochipPlant(int dbId)
-    : AbstractPlant, IConcatEnumerable, IDirigent, IBroadcastsUpdate
+    : AbstractPlant, IConcatEnumerable, IDirigent, IBroadcastsUpdate, IAuxin
 {
     protected AbstractMicrochipPlant() : this(-1)
     {
@@ -178,10 +176,24 @@ public abstract partial class AbstractMicrochipPlant(int dbId)
     public abstract IMaterialResource GetIMaterialResource(Enum @enum);
 
 
+    protected int WATERUPTAKEAMOUNT = 100;
+
     double IDirigent.RunProtein()
     {
-        var waterUptakeAmount = 100;
-        var result = DrawWater(waterUptakeAmount);
+        var glucoseTaken = Resources[EnumLibrary.Rt.Glucose].Take(WATERUPTAKEAMOUNT / 7.0);
+        var result = DrawWater(glucoseTaken * 7);
+        Updated?.Invoke();
+        return result;
+    }
+
+    protected int GLUCOSETOHEALTH = 10;
+
+    double IAuxin.RunProtein()
+    {
+        var maxGlucoseConsumption = 50;
+        var glucose = Resources[EnumLibrary.Rt.Glucose];
+
+        var result = Resources[EnumLibrary.Rt.Health].Give(glucose.Take(maxGlucoseConsumption) / GLUCOSETOHEALTH);
         Updated?.Invoke();
         return result;
     }

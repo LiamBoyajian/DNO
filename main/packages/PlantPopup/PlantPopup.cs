@@ -230,4 +230,9 @@ public partial class PlantPopup : Window
         Refresh();
         return true;
     }
+
+    public override void _UnhandledKeyInput(InputEvent @event)
+    {
+        if (@event.IsAction("ui_close_dialog")) Hide();
+    }
 }

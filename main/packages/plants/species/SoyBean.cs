@@ -6,7 +6,7 @@ using Main.Source.main;
 
 namespace Main.main.scripts.core.plants.species;
 
-public partial class SoyBean(int dbId) : AbstractMicrochipPlant(dbId)
+public partial class SoyBean(int dbId) : packages.plants.AbstractMicrochipPlant(dbId)
 {
     const double TESTVALUE = 10; //TEST VALUE
 

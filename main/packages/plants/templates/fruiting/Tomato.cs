@@ -13,7 +13,7 @@ namespace Main.main.packages.plants.species;
 
 public partial class Tomato(int dbId)
     : AbstractMicrochipPlant(dbId), IConcatEnumerable, IUpgradable, IObtainable,
-        IBroadcastsUpdate, IShearable, IDirigent
+        IBroadcastsUpdate, IShearable, IDirigent, IGibberellin, IFlorigen, IAuxin
 {
     public Tomato() : this(-1)
     {
@@ -143,7 +143,6 @@ public partial class Tomato(int dbId)
             fruit.FlipH = (R.Randi() & 1) == 1;
 
             if (!GuiManager.AddFruit(fruit)) return false;
-            Organs[key].Increment();
         }
 
         if (key is EnumLibrary.BasicOrgans.Fruit)
@@ -152,11 +151,6 @@ public partial class Tomato(int dbId)
                 return false;
             if (!GuiManager.ConvertFlowerToFruit()) return false;
             Organs[EnumLibrary.BasicOrgans.Flower].Decrement();
-        }
-
-        if (key is EnumLibrary.BasicOrgans.Leaf)
-        {
-            Organs[key].Increment();
         }
 
         Organs[key].Increment();
@@ -328,5 +322,43 @@ public partial class Tomato(int dbId)
         {
             yield return (o.Key, o.Value);
         }
+    }
+
+    //Proteins 
+    double IGibberellin.RunProtein()
+    {
+        var result = CreateOrgan(EnumLibrary.BasicOrgans.Fruit) ? 1 : 0;
+        Updated?.Invoke();
+        return result;
+    }
+
+    double IFlorigen.RunProtein()
+    {
+        var result = CreateOrgan(EnumLibrary.BasicOrgans.Flower) ? 1 : 0;
+        Updated?.Invoke();
+        return result;
+    }
+
+    public int GLUCOSETOHEALTH = 10;
+
+    double IAuxin.RunProtein()
+    {
+        var maxGlucoseConsumption = 50;
+
+        var result = CreateOrgan((EnumLibrary.BasicOrgans)R.RandiRange(0, 3)) ? 1 : 0;
+        Updated?.Invoke();
+        return result;
+    }
+
+    private double ROOTINTAKEMULTIPLIER = 1.05;
+
+    double IDirigent.RunProtein()
+    {
+        var waterMultiplier = Math.Pow(ROOTINTAKEMULTIPLIER, Organs[EnumLibrary.BasicOrgans.Root].Amount);
+
+        var glucoseTaken = Resources[EnumLibrary.Rt.Glucose].Take((WATERUPTAKEAMOUNT * waterMultiplier) / 7.0);
+        var result = DrawWater(glucoseTaken * 7);
+        Updated?.Invoke();
+        return result;
     }
 }

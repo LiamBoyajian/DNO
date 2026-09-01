@@ -8,6 +8,7 @@ using Main.main.packages.plants.enums;
 using Main.main.scripts.core.plants;
 using Main.main.scripts.core.util;
 using Main.Source.main;
+using AbstractMicrochipPlant = Main.main.packages.plants.AbstractMicrochipPlant;
 using AcceptSeed = Main.main.packages.util.AcceptSeed;
 
 namespace Main.main.packages.containers;
