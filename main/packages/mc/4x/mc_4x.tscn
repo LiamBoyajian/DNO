@@ -1,43 +1,8 @@
 [gd_scene format=3 uid="uid://4vlcwftwkvvg"]
 
-[ext_resource type="Texture2D" uid="uid://5n0ty3ksommf" path="res://main/packages/mc/4x/MC.png" id="1_r8ty7"]
+[ext_resource type="SpriteFrames" uid="uid://cwgediwx8sosi" path="res://main/packages/mc/MC.aseprite" id="1_p7htn"]
 [ext_resource type="Script" uid="uid://db824lfx7ay2x" path="res://main/packages/mc/Player.cs" id="2_cagw6"]
 [ext_resource type="Script" uid="uid://dcxe5rlxqdwtl" path="res://main/packages/mc/ItemUsage.cs" id="3_p7htn"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_cagw6"]
-atlas = ExtResource("1_r8ty7")
-region = Rect2(0, 0, 100, 200)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_p7htn"]
-atlas = ExtResource("1_r8ty7")
-region = Rect2(100, 0, 100, 200)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_mrq1q"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cagw6")
-}],
-"loop": 0,
-"name": &"back",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_cagw6")
-}],
-"loop": 2,
-"name": &"front",
-"speed": 5.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_p7htn")
-}],
-"loop": 1,
-"name": &"side",
-"speed": 5.0
-}]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1ygq3"]
 size = Vector2(30, 6)
@@ -53,9 +18,9 @@ radius = 61.204575
 size = Vector2(50, 60)
 
 [node name="Mc4x" type="AnimatedSprite2D" unique_id=2088346730]
-sprite_frames = SubResource("SpriteFrames_mrq1q")
-animation = &"front"
-speed_scale = 0.0
+sprite_frames = ExtResource("1_p7htn")
+animation = &"back_walking"
+speed_scale = 0.01
 script = ExtResource("2_cagw6")
 
 [node name="Base" type="Area2D" parent="." unique_id=1520723876]

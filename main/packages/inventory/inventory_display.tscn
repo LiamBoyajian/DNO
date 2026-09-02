@@ -80,7 +80,7 @@ z_index = -1
 layout_mode = 2
 
 [node name="Shears" type="AnimatedSprite2D" parent="MarginContainer/MarginContainer/HBoxContainer2/2" unique_id=1930087337]
-position = Vector2(29, 17)
+position = Vector2(18, 17)
 sprite_frames = ExtResource("10_iui54")
 script = ExtResource("11_iui54")
 

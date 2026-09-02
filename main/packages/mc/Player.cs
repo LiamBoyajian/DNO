@@ -92,23 +92,45 @@ public partial class Player : AnimatedSprite2D
             if (FacingUnitVector.Y > 0)
             {
                 direction.Y += MovementSpeed * (float)delta;
-                Animation = "front";
+                Animation = "front_default";
             }
             else if (FacingUnitVector.Y < 0)
             {
                 direction.Y -= MovementSpeed * (float)delta;
-                Animation = "back";
+                Animation = "back_default";
             }
             else if (FacingUnitVector.X > 0)
             {
                 direction.X += MovementSpeed * (float)delta;
-                Animation = "side";
+                Animation = "default";
                 FlipH = false;
             }
             else if (FacingUnitVector.X < 0)
             {
                 direction.X -= MovementSpeed * (float)delta;
-                Animation = "side";
+                Animation = "default";
+                FlipH = true;
+            }
+        }
+        else
+        {
+            Play();
+            if (FacingUnitVector == Vector2.Up)
+            {
+                Animation = "front_walking";
+            }
+            else if (FacingUnitVector == Vector2.Right)
+            {
+                Animation = "back_walking";
+            }
+            else if (FacingUnitVector == Vector2.Left)
+            {
+                Animation = "walking";
+                FlipH = false;
+            }
+            else if (FacingUnitVector == Vector2.Down)
+            {
+                Animation = "walking";
                 FlipH = true;
             }
         }
